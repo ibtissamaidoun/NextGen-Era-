@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 class ActiviteController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Affcher la liste des Activites.
      *
      * @return \Illuminate\Http\JsonResponse
      */
