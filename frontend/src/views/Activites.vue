@@ -1,9 +1,9 @@
 <script setup>
 import MasterCard from "@/examples/Cards/MasterCard.vue";
 import DefaultInfoCard from "@/examples/Cards/DefaultInfoCard.vue";
-import PaymentCard from "./components/PaymentCard.vue";
+//import Ajoutoffre from "./components/Ajoutoffre.vue";
 import InvoiceCard from "./components/InvoiceCard.vue";
-import BillingCard from "./components/BillingCard.vue";
+//import offredispo from "./components/Offredispo.vue";
 import TransactionCard from "./components/TransactionCard.vue";
 </script>
 <template>
@@ -57,5 +57,7 @@ import TransactionCard from "./components/TransactionCard.vue";
         <transaction-card />
       </div>
     </div>
+    <!-- LES ACTIVITES AVAILABLES -->
+
   </div>
 </template>

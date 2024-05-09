@@ -5,7 +5,7 @@ import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
-/*import ArgonButton from "@/components/ArgonButton.vue";*/
+//import ArgonButton from "@/components/ArgonButton.vue";
 const body = document.getElementsByTagName("body")[0];
 
 const store = useStore();
@@ -55,7 +55,7 @@ onBeforeUnmount(() => {
                     <argon-switch id="rememberMe" name="remember-me">Remember me</argon-switch>
 
                     <div class="text-center">
-                      <router-link to="/dashboard-Admin">
+                      <router-link to="/dashboard-admin">
                       <button class="text-white font-weight-bolder" style="
                           background-color: #000080;
                           color: #fff;
