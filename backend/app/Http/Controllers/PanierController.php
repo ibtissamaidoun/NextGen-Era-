@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\user;
+use App\Models\panier;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class PanierController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(user $user)
+    public function show(panier $panier)
     {
         //
     }
@@ -42,7 +42,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(user $user)
+    public function edit(panier $panier)
     {
         //
     }
@@ -50,7 +50,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, user $user)
+    public function update(Request $request, panier $panier)
     {
         //
     }
@@ -58,7 +58,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(user $user)
+    public function destroy(panier $panier)
     {
         //
     }

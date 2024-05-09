@@ -8,7 +8,7 @@ use App\Models\demande;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class deviController extends Controller
+class DeviController extends Controller
 {
     /**
      * Afficher tout les devis.

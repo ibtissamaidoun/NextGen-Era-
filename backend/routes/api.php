@@ -94,7 +94,7 @@ Route::apiResource('parents',ParentmodelController::class);
 
 
 Route::apiResource('packs',PackController::class);
-Route::apiResource('paiements',paiementController::class);
+//Route::apiResource('paiements',paiementController::class);
 
 
 //activite

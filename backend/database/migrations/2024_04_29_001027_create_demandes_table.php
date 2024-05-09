@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('demandes', function (Blueprint $table) {
             $table->id();
+            $table->date('date_demande')->nullable();
             $table->date('date_traitement')->nullable();
-            $table->enum('statut',['valide','refuse','en cours','brouillon'])->default('en cours');
+            $table->enum('statut',['valide','refuse','en cours','brouillon','paye'])->default('brouillon');
             $table->text('motif_refus')->nullable();
             $table->timestamps();
             $table->unsignedInteger('administrateur_id')->nullable(); //nullable s'il l'administrateur n'a pas encore traité la demande
@@ -35,7 +36,7 @@ return new class extends Migration
                   ->on('packs')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->unsignedBigInteger('paiement_id');
+            $table->unsignedBigInteger('paiement_id')->nullable();
             $table->foreign('paiement_id')
                   ->references('id')
                   ->on('paiements')
