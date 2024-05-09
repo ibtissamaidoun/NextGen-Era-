@@ -1,9 +1,9 @@
 <script setup>
 //import MasterCard from "@/examples/Cards/MasterCard.vue";
 //import DefaultInfoCard from "@/examples/Cards/DefaultInfoCard.vue";
-import PaymentCard from "./components/PaymentCard.vue";
+import Ajoutoffre from "../views/components/Ajoutoffre.vue";
 //import InvoiceCard from "./components/InvoiceCard.vue";
-import BillingCard from "./components/BillingCard.vue";
+import offredispo from "../views/components/Offredispo.vue";
 //import TransactionCard from "./components/TransactionCard.vue";
 </script>
 
@@ -11,12 +11,12 @@ import BillingCard from "./components/BillingCard.vue";
   <div class="py-4 container-fluid">
     <div class="mt-4 row">
       <div class="col-12">
-        <payment-card />
+        <Ajoutoffre />
       </div>
     </div>
     <div class="mt-4 row">
       <div class="col-12">
-        <billing-card />
+        <offredispo />
       </div>
     </div>
     

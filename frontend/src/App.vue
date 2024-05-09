@@ -15,12 +15,14 @@ Coded by www.creative-tim.com
 <script setup>
 import { computed } from "vue";
 import { useStore } from "vuex";
+// import { useRouter } from "vue-router";
 import Sidenav from "./examples/Sidenav";
 import Configurator from "@/examples/Configurator.vue";
 import Navbar from "@/examples/Navbars/Navbar.vue";
 import AppFooter from "@/examples/Footer.vue";
 
 const store = useStore();
+//const router = useRouter();
 const isNavFixed = computed(() => store.state.isNavFixed);
 const darkMode = computed(() => store.state.darkMode);
 const isAbsolute = computed(() => store.state.isAbsolute);
@@ -32,6 +34,7 @@ const showConfig = computed(() => store.state.showConfig);
 const hideConfigButton = computed(() => store.state.hideConfigButton);
 const toggleConfigurator = () => store.commit("toggleConfigurator");
 
+// Définition des classes de la barre de navigation
 const navClasses = computed(() => {
   return {
     "position-sticky bg-white left-auto top-2 z-index-sticky":
