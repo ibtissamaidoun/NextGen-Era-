@@ -417,5 +417,51 @@ class ActiviteController extends Controller
         }
         
     }
+
+    
+    public function getAvailableActivities()
+{
+    // Retrieve activities without assigned animators
+    $availableActivities = Activite::doesntHave('getAnimateurs')->get();
+
+    // Return available activities as JSON response
+    return response()->json(['available_activities' => $availableActivities]);
+}
+
+public function assignAnimatorToActivity($activityId, $animatorId)
+{
+    // Find the activity
+    $activity = Activite::findOrFail($activityId);
+
+    // Find the animator
+    $animator = animateur::findOrFail($animatorId);
+// Get the first horaire ID associated with the activity (You might need to adjust this logic if there's a specific rule to choose the horaire)
+$horaireId = $activity->horaires->first()->id;
+
+// Attach the animator to the activity with the horaire_id
+$activity->getAnimateurs()->attach($animator->id, ['horaire_id' => $horaireId]);
+
+    return response()->json(['message' => 'Animator assigned to activity successfully', 'activity' => $activity]);
+}
+
+// its still needs some work to filter all the horaires ,and domain
+public function getAvailableAnimatorsForActivity($activityId)
+{
+    // Retrieve the activity
+    $activity = Activite::findOrFail($activityId);
+
+    $horaireId = $activity->horaires->first()->id;
+
+    // Retrieve available animators for the activity
+    $availableAnimators = Animateur::whereDoesntHave('getActivites', function ($query) use ($activityId) {
+        $query->where('activite_id', $activityId);
+    })->whereHas('horaires', function ($query) use ($horaireId) {
+        $query->where('horaires.id', $horaireId);
+    })->get();
+
+    // Return available animators as JSON response
+    return response()->json(['available_animators' => $availableAnimators]);
+}
+
 }
 

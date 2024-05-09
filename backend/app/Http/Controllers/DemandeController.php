@@ -62,4 +62,32 @@ class DemandeController extends Controller
     {
         //
     }
+
+    //taha partie 
+     public function demandes(Request $request)
+    {
+        try {
+            // Retrieve the authenticated parent's ID from the parentmodels table
+            $user = $request->user();
+            $parent = parentmodel::where('user_id', $user->id)->firstOrFail();
+    
+            // Retrieve all demandes associated with the parent
+            $demandes = $parent->demandes()->get();
+    
+            // Return the demandes along with their associated children IDs
+            return response()->json(['demandes' => $demandes], 200);
+        } catch (ModelNotFoundException $e) {
+            // Log the specific exception
+            logger()->error('Error occurred while fetching demandes: ' . $e->getMessage());
+    
+            // Return a response indicating parent not found
+            return response()->json(['message' => 'Parent not found'], 404);
+        } catch (\Exception $e) {
+            // Log any other exceptions
+            logger()->error('Error occurred while fetching demandes: ' . $e->getMessage());
+    
+            // Return an error response
+            return response()->json(['message' => 'An error occurred. Please try again later.'], 500);
+        }
+    }
 }

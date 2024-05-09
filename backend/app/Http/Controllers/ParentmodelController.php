@@ -185,4 +185,20 @@ public function update(Request $request, $id)
         User::where('role', 'parent')->findOrFail($id)->delete();
         return response()->json(['message' => 'parent deleted successfully']);
     }
+
+
+    //taha partie 
+    public function getoffers()
+{
+    $offers = offre::select('titre','id')->get();
+    return response()->json(['offres'=>$offers]);
+   
+}
+
+public function showoffer($id)
+{
+    $offer = offre::findorfail($id);
+    return response()->json([$offer]);
+}
+
 }

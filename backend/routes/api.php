@@ -50,6 +50,13 @@ Route::middleware(['check.role'.':' . User::ROLE_PARENT])->prefix('parent')->gro
 
     // Manipulation des enfants
     Route::apiResource('enfants',EnfantController::class); 
+    // visuasilation des offres disponible 
+    Route::get('/offres', [ParentmodelController::class, 'getoffers']);
+    Route::get('/offres/{id}', [ParentmodelController::class, 'showoffer']);
+    //the father can check the commandes he submitted that are en cours
+    Route::get('demandes',[DemandeController::class,'demandes']);
+    //the parent get different notifications 
+    Route::get('/notifications', [NotificationController::class,'indexparent']);
 });
 
 
@@ -109,11 +116,22 @@ Route::post('activities/{activity}/horaires', [ActiviteController::class, 'choos
 Route::apiResource('horaires',HoraireController::class);
 
 Route::apiResource('offres',offreController::class);
+
+//these two route are disabled , no use , no value ,no logic
 // Define route for attaching activities to an offer
-Route::put('/offers/{offerId}/attach-activities', [OffreController::class, 'attachActivities']);
+//Route::put('/offers/{offerId}/attach-activities', [OffreController::class, 'attachActivities']);
 
 // Define route for detaching activity from offer
-Route::put('/offers/{offerId}/detach-activity', [OffreController::class, 'detachActivity']);
+//Route::put('/offers/{offerId}/detach-activity', [OffreController::class, 'detachActivity']);
+
+//available-activities with available animators, remember that we need also to filter with domaine competence
+//check for the activity with two horaires 
+Route::get('/available-activities', [ActiviteController::class, 'getAvailableActivities']);
+Route::get('/available-activities/{activity_id}/available-animators', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
+Route::post('/available-activities/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
+
+//i need to adjust theese function to generate motife for refuse
+Route::get('/demandes',[AdministrateurController::class,'getdemandes']);
 
 // Consultation des enfants
 Route::apiResource('enfants',EnfantController::class)->only(['index','show']);
@@ -131,3 +149,10 @@ Route::apiResource('demandes',DemandeController::class);
 Route::get('getDevis',[deviController::class, 'getDevis']);
 Route::get('devis',[deviController::class, 'createDevis']);
 Route::get('monPack',[PackController::class,'packPoussible']);
+
+//------test----taha----ostora----//
+// Validate demande route
+Route::post('/demandes/{demande}/validate', [AdministrateurController::class,'validated']);
+
+// Refuse demande route
+Route::post('/demandes/{demande}/refuse',[AdministrateurController::class,'refuse']);

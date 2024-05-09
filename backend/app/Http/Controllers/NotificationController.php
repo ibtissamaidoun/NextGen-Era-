@@ -62,4 +62,30 @@ class NotificationController extends Controller
             ], 403);
         }
     }
+
+    // taha code for dispalying the notification of the authenticated parent
+
+    /**
+     * Afficher les notifications existant (pas logique -> chaque user va voir ses notifiction)
+     */
+    public function indexparent(Request $request)
+    {
+        // Retrieve the authenticated parent user
+        $user = $request->user();
+    
+        // Retrieve the parent model associated with the user
+        $parent = parentmodel::where('user_id', $user->id)->firstOrFail();
+    
+        // Retrieve the notifications for the parent
+        $notifications = $parent->user->notifications()->latest()->get();
+    
+        // Mark notifications as read
+        $notifications->each(function ($notification) {
+            $notification->update(['statut' => 'lu']);
+        });
+        // Return notifications as JSON response
+        return response()->json(['notifications' => $notifications]);
+    }
+
+
 }
