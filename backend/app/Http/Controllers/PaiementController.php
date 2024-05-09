@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse as json;
 
-class paiementController extends Controller
+class PaiementController extends Controller
 {
     /**
      * Display a listing of the resource.

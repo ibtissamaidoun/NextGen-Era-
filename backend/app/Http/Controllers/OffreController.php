@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class offreController extends Controller
+class OffreController extends Controller
 {
     /**
      * Display a listing of the resource.
