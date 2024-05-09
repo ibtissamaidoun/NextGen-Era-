@@ -27,6 +27,9 @@ return new class extends Migration
                 $table->integer('effectif_actuel');
                 $table->integer('age_min');
                 $table->integer('age_max');
+                $table->enum('status',['active','inactive'])->default('inactive');
+                $table->date('date_debut_etud');
+                $table->date('date_fin_etud');
             // fin new
             $table->timestamps();
             // je ne vais pas utiliser enum pour que l'admin ait la possibilité d'ajouter d'autre type
@@ -39,6 +42,7 @@ return new class extends Migration
                   ->on('administrateurs')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
+            
         });
     }
 

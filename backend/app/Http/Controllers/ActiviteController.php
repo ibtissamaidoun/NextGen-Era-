@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Horaire;
 use App\Models\Activite;
 use App\Models\paiement;
+use App\Models\animateur;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
