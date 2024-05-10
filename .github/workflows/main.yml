@@ -25,9 +25,9 @@ jobs:
           cd frontend
           npm test
 
-  backend-test:
-    runs-on: ubuntu-latest
-    services:
+    backend-test:
+     runs-on: ubuntu-latest
+     services:
       postgres:
         image: postgres:latest
         env:
@@ -40,8 +40,7 @@ jobs:
           --health-cmd="pg_isready"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=5  # Adjusted retries
-
+          --health-retries=3
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -55,25 +54,22 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          cd backend
+          cd "backend"
           composer install --prefer-dist --no-progress --no-suggest
-
       - name: Copy .env file
         run: |
-          cd backend
+          cd "backend"
           cp .env.example .env
-
       - name: Generate key
         run: |
-          cd backend
+          cd "backend"
           php artisan key:generate
-
       - name: Run migration
         run: |
-          cd backend
+          cd "backend"
           php artisan migrate
-
       - name: Run backend tests
         run: |
-          cd backend
+          cd "backend"
           php artisan test
+          
