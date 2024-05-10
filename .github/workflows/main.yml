@@ -1,34 +1,42 @@
-name: CI Workflow
+name: CI for Vue.js Project
 
-on: push 
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
- frontend-test:
+  build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'  # Recommended to use LTS version, adjust as needed
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
 
-      - name: Install dependencies
-        run: |
-          cd frontend  # Adjust this to your frontend directory
-          npm install
+    - name: Install dependencies
+      run: |
+        cd frontend  # Change directory to the frontend folder
+        npm install
 
-      
+    - name: Lint code
+      run: |
+        cd frontend  # Ensure all commands run in the correct directory
+        npm run lint
 
-      
+    - name: Run tests
+      run: |
+        cd frontend
+        npm run test
 
-      - name: Build
-        run: |
-          cd frontend  # Adjust this to your frontend directory
-          npm run build
-          
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: dist
-          path: frontend/dist  # Adjust path according to your build output directory
+    - name: Build project
+      run: |
+        cd frontend
+        npm run build
+
+   
