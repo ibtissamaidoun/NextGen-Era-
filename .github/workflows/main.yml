@@ -19,11 +19,7 @@ jobs:
           cd backend
           npm install
 
-      - name: Install Jest
-        run: |
-          cd  Frontend
-          npm install --save-dev jest @babel/preset-env babel-jest
-
+     
       - name: Run frontend tests
         run: |
           cd frontend
