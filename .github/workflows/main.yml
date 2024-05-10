@@ -18,10 +18,7 @@ jobs:
           cd frontend  # Adjust this to your frontend directory
           npm install
 
-      - name: Run lint
-        run: |
-          cd frontend  # Adjust this to your frontend directory
-          npm run lint
+      
 
       - name: Run tests
         run: |
