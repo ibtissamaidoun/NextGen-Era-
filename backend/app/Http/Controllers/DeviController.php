@@ -6,7 +6,9 @@ use Carbon\Carbon;
 use App\Models\devi;
 use App\Models\demande;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class DeviController extends Controller
 {
@@ -284,7 +286,7 @@ class DeviController extends Controller
      * 
      * @param int $demande_id
      * @param int $tva
-     * @return devi
+     * @return 
      */
     public static function createDevis($demande_id = 1, $tva = 20)
     {
@@ -312,21 +314,35 @@ class DeviController extends Controller
         }
         // calcule des tarif
         $prix = deviController::calculerPrix($demande_id, $enfantActivites, $tva);
-        // creer pdf
-
-
-
-        return response()->json([
-            'serie'=>'D'.Carbon::now()->format('yWw'),
+        // Ajout de 14 jours à la date de demande
+        $expiration = Carbon::parse($demande->date_demande)->addWeeks(2)->format('Y-m-d');
+        
+        $data = [
+            'serie'=>'D'.Carbon::now()->format('yWw').$parent->id.$demande->id,
             'demande' => $demande,
+            'expiration' => $expiration,
             'offre'=> $offre,
             'pack'=>$demande->pack()->first(),
             'parent'=>$parent->user,
-            'Activite - Enfant'=>$enfantActivites,
-            'Prix HT'=>$prix['HT'],
-            'Prix avec remise'=>$prix['Remise'],
+            'enfantsActivites'=>$enfantActivites,
+            'optionPaiment'=>$demande->paiement()->first()->option_paiement,
+            'prixHT'=>$prix['HT'],
+            'prixRemise'=>$prix['Remise'],
+            'TVA'=> $tva,
             'TTC'=>$prix['TTC'],
-        ]);
+        ];
+
+
+        // creer pdf
+        $pdf = Pdf::loadView('pdfs.devisTemplateOffre', $data);
+
+        // Store the pdf in local
+        $pdfPath = 'storage/pdfs/devis/'.$data['serie'].'.pdf';
+        //$pdf->save($pdfPath);
+
+        return $pdf->download($data['serie'].'.pdf');  // pour le telechargement
+        
+        //return response()->json($data);
 
 
 

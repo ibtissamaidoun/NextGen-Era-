@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('packs', function (Blueprint $table) {
             $table->id();
-            //$table->string('type');
+            $table->string('type');
             $table->text('description');
-            $table->enum('type',['enfants','activite']);
+            //$table->enum('type',['enfants','activite']);
             $table->integer('remise');
             $table->timestamps();
         });
