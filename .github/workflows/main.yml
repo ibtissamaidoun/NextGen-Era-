@@ -1,10 +1,33 @@
 name: CI Workflow
 
-on:
-  push:
-   
+on: push 
 
 jobs:
+  frontend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install Node dependencies
+        run: |
+          cd backend-folder
+          npm install
+
+      - name: Install Jest
+        run: |
+          cd  Frontend
+          npm install --save-dev jest @babel/preset-env babel-jest
+
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm test
 
   backend-test:
     runs-on: ubuntu-latest
@@ -21,7 +44,8 @@ jobs:
           --health-cmd="pg_isready"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=3
+          --health-retries=5  # Adjusted retries
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -35,21 +59,25 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          cd "backend"
+          cd backend
           composer install --prefer-dist --no-progress --no-suggest
+
       - name: Copy .env file
         run: |
-          cd "backend"
+          cd backend
           cp .env.example .env
+
       - name: Generate key
         run: |
-          cd "backend"
+          cd backend
           php artisan key:generate
+
       - name: Run migration
         run: |
-          cd "backend"
+          cd backend
           php artisan migrate
+
       - name: Run backend tests
         run: |
-          cd "backend"
+          cd backend
           php artisan test
