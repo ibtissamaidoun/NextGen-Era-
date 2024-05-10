@@ -16,7 +16,7 @@ jobs:
 
       - name: Install Node dependencies
         run: |
-          cd backend-folder
+          cd backend
           npm install
 
       - name: Install Jest
