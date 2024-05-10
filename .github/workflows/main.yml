@@ -32,6 +32,35 @@ jobs:
           extensions: mbstring, pdo_pgsql
           tools: composer:v2, phpunit
 
+      - name: Install PHP dependencies
+        run: |
+          cd "backend"
+          composer install --prefer-dist --no-progress --no-suggest
+      - name: Copy .env file
+        run: |
+          cd "backend"
+          cp .env.example .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+      - name: Generate key
+        run: |
+          cd "backend"
+          php artisan key:generate
+      - name: Run migration
+        run: |
+          cd "backend"
+          php artisan migrate
+      - name: Run backend tests
+        run: |
+          cd "backend"
+          php artisan test
+
+          
+
+      
   Frontend-test:
     runs-on: ubuntu-latest
 
@@ -59,30 +88,4 @@ jobs:
     - name: Build project
       run: |
         cd frontend
-        npm run build     - name: Install PHP dependencies
-        run: |
-          cd "backend"
-          composer install --prefer-dist --no-progress --no-suggest
-    - name: Copy .env file
-      run: |
-          cd "backend"
-          cp .env.example .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-    - name: Generate key
-      run: |
-          cd "backend"
-          php artisan key:generate
-    - name: Run migration
-      run: |
-          cd "backend"
-          php artisan migrate
-    - name: Run backend tests
-      run: |
-          cd "backend"
-          php artisan test
-
-      
+        npm run build 
