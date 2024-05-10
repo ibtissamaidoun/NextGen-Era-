@@ -22,10 +22,10 @@ jobs:
         cd frontend  # Change directory to the frontend folder
         npm install
 
-   # - name: Lint code
-    #  run: |
-     #   cd frontend  # Ensure all commands run in the correct directory
-      #  npm run lint
+    - name: Lint code
+      run: |
+        cd frontend  # Ensure all commands run in the correct directory
+        npm run lint
 
    # - name: Run tests
     #  run: |
