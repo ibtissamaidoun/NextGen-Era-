@@ -18,6 +18,7 @@ use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\deviController;
 use App\Http\Controllers\EnfantController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ForgotController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,8 @@ use App\Http\Controllers\NotificationController;
 //routes public
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/register',[AuthController::class,'register']);
+Route::post('/forget',[ForgotController::class,'forget']);
+Route::post('/reset',[ForgotController::class,'reset']);
 
 //route qui necessite l'authentification
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -91,7 +94,7 @@ Route::apiResource('parents',ParentmodelController::class);
 
 
 Route::apiResource('packs',PackController::class);
-Route::apiResource('paiements',paiementController::class);
+//Route::apiResource('paiements',paiementController::class);
 
 
 //activite

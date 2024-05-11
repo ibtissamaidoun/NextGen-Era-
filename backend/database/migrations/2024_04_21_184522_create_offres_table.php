@@ -17,8 +17,8 @@ return new class extends Migration
             $table->text('description');
             $table->integer('remise')->default(0);
             $table->timestamps();
-            $table->date('date_debut_inscription');
-            $table->date('date_fin_inscription');
+            $table->date('date_debut');
+            $table->date('date_fin');
             $table->unsignedInteger('administrateur_id'); // Colonne pour la clé étrangère
             // Définition de la contrainte de clé étrangère
             $table->foreign('administrateur_id')

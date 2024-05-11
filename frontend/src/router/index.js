@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "../views/Dashboard.vue";
+import Dashboardanim from "../views/DashboardAnim.vue";
+import Dashboardparents from "../views/DashboardParents.vue"
 //import utilisateurs from "../views/utilisateurs.vue";
 import Administrateurs from "../views/Administrateurs.vue";
 import Animateurs from "../views/Animateurs.vue";
@@ -14,6 +16,7 @@ import Signin from "../views/Signin.vue";
 import Home from "../Home.vue";
 import Forget from "../views/Forget.vue";
 import Reset from "../views/Reset.vue";
+
 
 
 
@@ -36,47 +39,47 @@ const routes = [
     component: Home,
   },
   {
-    path: "/dashboard-Admin",
+    path: "/dashboard-admin",
     name: "Dashboard",
     component: Dashboard,
   },
   {
-    path: "/Administrateurs",
+    path: "/dashboard-admin/Administrateurs",
     name: "administrateurs",
     component: Administrateurs,
   },
   {
-    path: "/Animateurs",
+    path: "/dashboard-admin/Animateurs",
     name: "animateurs",
     component: Animateurs,
   },
   {
-    path: "/Parents",
+    path: "/dashboard-admin/Parents",
     name: "parents",
     component: Parents,
   },
   {
-    path: "/Offres",
+    path: "/dashboard-admin/Offres",
     name: "Offres",
     component: Offres,
   },
   {
-    path: "/Activites",
+    path: "/dashboard-admin/Activites",
     name: "Activites",
     component: Activites,
   },
   {
-    path: "/Demandes",
+    path: "/dashboard-admin/Demandes",
     name: "Demandes",
     component: Demandes,
   },
   {
-    path: "/rtl-page",
+    path: "/dashboard-admin/rtl-page",
     name: "RTL",
     component: RTL,
   },
   {
-    path: "/profile",
+    path: "/dashboard-admin/profile",
     name: "Profile",
     component: Profile,
   },
@@ -136,6 +139,18 @@ const routes = [
     name:"Echecs",
     component:Echecs,
   },
+  //dashboard-animateurs:
+  {
+    path:"/dashboard-animateurs",
+    name:"Dashboardanim",
+    component:Dashboardanim,
+  },
+  {
+    path:"/dashboard-parents",
+    name:"Dashboardparents",
+    component:Dashboardparents,
+  },
+  
 ];
 
 const router = createRouter({

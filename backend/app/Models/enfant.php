@@ -40,4 +40,17 @@ class enfant extends Model
          return $this->belongsToMany(demande::class, 'enfant_demande_activite')
                      ->withPivot('activite_id');   
      }
+
+     // -----------        paniers         ----------- //
+     public function activitesPanier(): BelongsToMany
+     {
+         return $this->belongsToMany(activite::class, 'paniers')
+                     ->withPivot('parentmodel_id','status');   
+     }
+
+     public function getparentmodels(): BelongsToMany
+     {
+         return $this->belongsToMany(parentmodel::class, 'paniers')
+                     ->withPivot('activite_id','status');   
+     }
 }

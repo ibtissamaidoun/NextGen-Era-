@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TypeActivite;
+use App\Models\panier;
 use Illuminate\Http\Request;
 
-class TypeActiviteController extends Controller
+class PanierController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class TypeActiviteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TypeActivite $typeActivite)
+    public function show(panier $panier)
     {
         //
     }
@@ -42,7 +42,7 @@ class TypeActiviteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TypeActivite $typeActivite)
+    public function edit(panier $panier)
     {
         //
     }
@@ -50,7 +50,7 @@ class TypeActiviteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TypeActivite $typeActivite)
+    public function update(Request $request, panier $panier)
     {
         //
     }
@@ -58,7 +58,7 @@ class TypeActiviteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TypeActivite $typeActivite)
+    public function destroy(panier $panier)
     {
         //
     }

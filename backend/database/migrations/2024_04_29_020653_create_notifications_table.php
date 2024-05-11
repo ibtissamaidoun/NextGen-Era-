@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->enum('statut',['lu','non lu'])->default('non lu');
             $table->text('contenu');
             $table->timestamps();
         });

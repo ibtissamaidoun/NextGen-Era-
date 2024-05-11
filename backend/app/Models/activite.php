@@ -20,7 +20,10 @@ class activite extends Model
                             'effectif_min',
                             'tarif',
                             'effectif_actuel',
-                            'nbr_seances_semaine'];
+                            'nbr_seances_semaine',
+                            'date_debut_etud',
+                            'date_fin_etud',
+                            'status'];
 
 
     public function horaires(): BelongsToMany
@@ -78,6 +81,19 @@ class activite extends Model
         return $this->belongsToMany(enfant::class, 'enfant_demande_activite')
                     ->withPivot('demande_id');   
     }
+
+      // -----------        paniers         ----------- //
+      public function  getparentmodels(): BelongsToMany
+      {
+          return $this->belongsToMany(parentmodel::class, 'paniers')
+                      ->withPivot('enfant_id','status');   
+      }
+      public function  enfantsPanier(): BelongsToMany
+      {
+          return $this->belongsToMany(enfant::class, 'paniers')
+                      ->withPivot('parentmodel_id','status');   
+      }
+  
 
 
 

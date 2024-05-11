@@ -12,7 +12,7 @@ class demande extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['date_traitement','statut','motif_refus','paiement_id','administrateur_id','pack_id','parentmodel_id','offre_id','date_traitement'];
+    protected $fillable = ['date_traitement','statut','motif_refus','paiement_id','administrateur_id','pack_id','parentmodel_id','offre_id','date_traitement','date_demande'];
 
 
     public function parentmodel():BelongsTo

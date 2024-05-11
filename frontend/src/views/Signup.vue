@@ -24,6 +24,10 @@ onBeforeUnmount(() => {
   store.state.showFooter = true;
   body.classList.add("bg-gray-100");
 });
+
+
+
+
 </script>
 <template>
  <div class="container top-0 position-sticky z-index-sticky">
