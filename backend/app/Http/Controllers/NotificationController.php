@@ -71,6 +71,7 @@ class NotificationController extends Controller
      */
     public function indexparent(Request $request)
     {
+        //validation des inputs 
         // Retrieve the authenticated parent user
         $user = $request->user();
     
