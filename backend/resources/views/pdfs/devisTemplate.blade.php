@@ -36,9 +36,6 @@ use Carbon\Carbon;
                 </td>
                 
                 <td  class='info' style='text-align: left;'>
-                    Offre : {{ $offre->titre }}<br>
-                    Période d’offre : {{ $offre->date_debut.' a '.$offre->date_fin }}<br>
-                    Remise : {{ $offre->remise.' %' }}<br>
                     Option de paiement : {{ $optionPaiment }}
                 </td>
             </tr>
@@ -77,10 +74,6 @@ use Carbon\Carbon;
 					<td class="tdPrix">{{ $prixHT }} DH</td>
 				</tr>
                 <tr>
-					<td class="prix">AVEC REMISE</td>
-					<td class="tdPrix">{{ $prixRemise }} DH</td>
-				</tr>
-                <tr>
 					<td class="prix">TVA</td>
 					<td class="tdPrix">{{ $TVA }} %</td>
 				</tr>
@@ -91,11 +84,7 @@ use Carbon\Carbon;
                 
 			</tbody>
 		</table>
-        <div style='padding-bottom: 25px'>
-            <h3 class='description'>DESCRITPION D'OFFRE</h3>
-            <p class='text'>{{ $offre->description }}</p>
-        </div>
-        <div>
+        <div style='padding-bottom: 25px; padding-top: 100px'>
             <p class='text' style="padding-bottom: 15px">Pour accepter ce devis, signez ici et renvoyez : ____________________________________________________<br>ou Acceper sur la plateform.</p><br>
             <p class='text'>Devis établi le : {{ Carbon::now('Africa/Casablanca')->addHours(1)->toDateTimeString() }}</p>
             <p class='merci'>MERCI POUR VOTRE CONFIANCE !</p>
@@ -123,7 +112,7 @@ use Carbon\Carbon;
                 .merci{color: #10278a;font-family: Ford Antenna SemiBold ;font-size: 16px;}
                 .dates{color: #10278a; font-family: Ford Antenna SemiBold ;font-size: 15px;padding-bottom:30px;line-height: 1.6;}
                 .titre{color: #10278a; font-family: Ford Antenna Black ;font-size: 50px;padding-bottom:35px;}
-                .info{font-family: Ford Antenna;font-size: 14px;padding-bottom: 35px;line-height: 1.8; }
+                .info{font-family: Ford Antenna;font-size: 14px;padding-bottom: 35px;line-height: 1.8;vertical-align:text-top; }
                 .image{width:46%; max-width:300px;}
                 .first{border-inline-start-color: black;}
                 .tg  {text-align: left; font-family: Ford Antenna;font-size: smaller;padding:5px 10px;border-collapse:collapse;}

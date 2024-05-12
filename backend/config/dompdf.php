@@ -278,6 +278,19 @@ return array(
          * @var bool
          */
         "enable_html5_parser" => true,
+
+        'fontDir' => storage_path('fonts/Ford Antenna TTF'),  // This is where your fonts are stored.
+        'fontCache' => storage_path('fonts/Ford Antenna TTF'),  // This is where font metrics are cached.
+
+        'font_families' => array(
+            'Ford Antenna' => [
+                'normal' => public_path('fonts/Ford Antenna TTF/FordAntenna-Regular.ttf'),
+                'bold' => public_path('fonts/Ford Antenna TTF/FordAntenna-Bold.ttf'),
+                'italic' => public_path('fonts/Ford Antenna TTF/FordAntenna-Italic.ttf'),
+                'bold_italic' => public_path('fonts/Ford Antenna TTF/FordAntenna-BoldItalic.ttf')
+            ],
+        ),
+        
     ),
 
 

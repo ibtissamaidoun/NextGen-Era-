@@ -36,9 +36,8 @@ use Carbon\Carbon;
                 </td>
                 
                 <td  class='info' style='text-align: left;'>
-                    Offre : {{ $offre->titre }}<br>
-                    Période d’offre : {{ $offre->date_debut.' a '.$offre->date_fin }}<br>
-                    Remise : {{ $offre->remise.' %' }}<br>
+                    Pack : {{ $pack->type }}<br>
+                    Remise : {{ $pack->remise.' %' }}<br>
                     Option de paiement : {{ $optionPaiment }}
                 </td>
             </tr>
@@ -54,9 +53,11 @@ use Carbon\Carbon;
 				<tr>
 				    <th class='prix'>ENFANT</th>
 				    <th class='prix'>ACTIVITE</th>
-				    <th class='prix'>SEANCES / SEMAINE</th>
+				    <th class='prix'>SEANCES</th>
 				    <th class='prix'>EFFICTIF ACTUEL</th>
 				    <th class='prix'>TARIF UNITAIRE</th>
+                    <th class='prix'>REMISE</th>
+				    <th class='prix'>PRIX</th>
 				</tr>
 			</thead>
 			
@@ -67,17 +68,19 @@ use Carbon\Carbon;
 					<td class='td'>{{ $item['activite'] }}</td>
 					<td class='td'>{{ $item['seances'] }}</td>
 					<td class='td'>{{ $item['effictif'] }}</td>
+					<td class='td'>{{ $item['tarifSans'] }}</td>
+					<td class='td'>{{ $item['remise'] }} %</td>
 					<td class='tdPrix' class='dataPrix'>{{ $item['tarif'] }} DH</td>
 				</tr>
                 @endforeach
                 
 				<tr>
-					<td colspan="3" rowspan="4" class='hidden'></td>
+					<td colspan="5" rowspan="4" class='hidden'></td>
 					<td class="prix">SOUS TOTAL</td>
 					<td class="tdPrix">{{ $prixHT }} DH</td>
 				</tr>
                 <tr>
-					<td class="prix">AVEC REMISE</td>
+					<td class="prix">REMISE PACK</td>
 					<td class="tdPrix">{{ $prixRemise }} DH</td>
 				</tr>
                 <tr>
@@ -92,11 +95,11 @@ use Carbon\Carbon;
 			</tbody>
 		</table>
         <div style='padding-bottom: 25px'>
-            <h3 class='description'>DESCRITPION D'OFFRE</h3>
-            <p class='text'>{{ $offre->description }}</p>
+            <h3 class='description'>INFO SUR PACK {{ $pack->type }}</h3>
+            <p class='text'>{{ $pack->description }}</p>
         </div>
         <div>
-            <p class='text' style="padding-bottom: 15px">Pour accepter ce devis, signez ici et renvoyez : ____________________________________________________<br>ou Acceper sur la plateform.</p><br>
+            <p class='text' style="padding-bottom: 15px">Pour accepter ce devis, signez ici et renvoyez : ____________________________________________________<br>ou Acceper sur la plateform.<br></p><br>
             <p class='text'>Devis établi le : {{ Carbon::now('Africa/Casablanca')->addHours(1)->toDateTimeString() }}</p>
             <p class='merci'>MERCI POUR VOTRE CONFIANCE !</p>
         </div>
@@ -119,11 +122,11 @@ use Carbon\Carbon;
                 font-family: 'Ford Antenna Black';
                 src: url({{ public_path('fonts/Ford Antenna TTF/FordAntenna-Black.ttf')}}) format('truetype');
                 }
-                .description{ font-family: Ford Antenna SemiBold ;font-size: 25px;padding-top: 100px}
+                .description{ font-family: Ford Antenna SemiBold ;font-size: 25px;padding-top: 100px; text-transform:uppercase;}
                 .merci{color: #10278a;font-family: Ford Antenna SemiBold ;font-size: 16px;}
                 .dates{color: #10278a; font-family: Ford Antenna SemiBold ;font-size: 15px;padding-bottom:30px;line-height: 1.6;}
                 .titre{color: #10278a; font-family: Ford Antenna Black ;font-size: 50px;padding-bottom:35px;}
-                .info{font-family: Ford Antenna;font-size: 14px;padding-bottom: 35px;line-height: 1.8; }
+                .info{font-family: Ford Antenna;font-size: 14px;padding-bottom: 35px;line-height: 1.8; vertical-align: text-top; }
                 .image{width:46%; max-width:300px;}
                 .first{border-inline-start-color: black;}
                 .tg  {text-align: left; font-family: Ford Antenna;font-size: smaller;padding:5px 10px;border-collapse:collapse;}

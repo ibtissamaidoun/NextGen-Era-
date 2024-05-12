@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use Carbon\Carbon;
 use App\Models\devi;
 use App\Models\demande;
+
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class DeviController extends Controller
 {
@@ -308,7 +308,9 @@ class DeviController extends Controller
                     'activite'=>$activite->titre,
                     'effictif'=>$activite->effectif_actuel.' sur '.$activite->effectif_max,
                     'seances'=>$activite->nbr_seances_semaine,
+                    'tarifSans'=>$activite->tarif,
                     'tarif'=>$tarif,
+                    'remise'=>$remise,
                 ];
             }
         }
@@ -316,13 +318,19 @@ class DeviController extends Controller
         $prix = deviController::calculerPrix($demande_id, $enfantActivites, $tva);
         // Ajout de 14 jours à la date de demande
         $expiration = Carbon::parse($demande->date_demande)->addWeeks(2)->format('Y-m-d');
+
+        // image de NEXGENERA
+        $path = base_path('public\storage\images\OrangeNext@Ai.jpg');
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $imgData = file_get_contents($path);
+        $img = 'data:image/'.$type.';base64,'.base64_encode($imgData);
         
         $data = [
             'serie'=>'D'.Carbon::now()->format('yWw').$parent->id.$demande->id,
             'demande' => $demande,
             'expiration' => $expiration,
             'offre'=> $offre,
-            'pack'=>$demande->pack()->first(),
+            'pack'=> $demande->pack()->first(),
             'parent'=>$parent->user,
             'enfantsActivites'=>$enfantActivites,
             'optionPaiment'=>$demande->paiement()->first()->option_paiement,
@@ -330,19 +338,54 @@ class DeviController extends Controller
             'prixRemise'=>$prix['Remise'],
             'TVA'=> $tva,
             'TTC'=>$prix['TTC'],
+            'image'=> $img,
         ];
 
+        // loader le Devis en html
+        if($data['offre'])
+        {
+            unset($data['pack']);
+            $html = view('pdfs.devisTemplateOffre', $data)->render();
+        }
+        elseif($data['pack'])
+        {
+            unset($data['offre']);
+            $html = view('pdfs.devisTemplatePack', $data)->render();
+        }
+        else
+        {
+            unset($data['pack']);
+            unset($data['offre']);
+            $html = view('pdfs.devisTemplate', $data)->render();
+        }
 
         // creer pdf
-        $pdf = Pdf::loadView('pdfs.devisTemplateOffre', $data);
-
+        $pdf = \App::make('snappy.pdf.wrapper');
+        $output = $pdf->loadHTML($html)->output();
         // Store the pdf in local
-        $pdfPath = 'storage/pdfs/devis/'.$data['serie'].'.pdf';
-        //$pdf->save($pdfPath);
-
-        return $pdf->download($data['serie'].'.pdf');  // pour le telechargement
+        $pdfPath = 'storage/pdfs/devis/'.$data['serie'].date('_His').'.pdf';
+        // enregister localement
+        $pdf->save($pdfPath, true);
         
-        //return response()->json($data);
+        // ajout de path de pdf generer
+        $data['pdfPath'] = $pdfPath;
+
+        // supprimer l'atribut image de table $data
+        unset($data['image']);
+
+
+        //return response()->download($pdfPath);  // pour le telechargement
+        $devis = Devi::create([
+            'tarif_ht'=>$data['prixHT'],
+            'tarif_ttc'=>$data['TTC'],
+            'tva'=>$data['TVA'],
+            'devi_pdf'=>$data['pdfPath'],
+            'parentmodel_id'=>$data['parent']->id,
+            'demande_id'=>$demande_id,
+            //'date_expiration'=>$expiration,
+        ]);
+        
+        return response()->json($data);
 
 
 
