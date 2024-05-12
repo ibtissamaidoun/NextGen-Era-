@@ -16,8 +16,9 @@ import Signin from "../views/Signin.vue";
 import Home from "../Home.vue";
 import Forget from "../views/Forget.vue";
 import Reset from "../views/Reset.vue";
-
-
+import Horaires from "@/views/Horaires.vue";
+import Edt from "@/views/Edt.vue";
+import Activitesanim from "@/views/Activitesanim.vue"
 
 
 import Programmation from "../views/Description/Programmation.vue";
@@ -27,6 +28,7 @@ import CalculMental from "../views/Description/CalculMental.vue";
 import LabChimie from "../views/Description/LabChimie.vue";
 import LabBiologie from "../views/Description/LabBiologie.vue";
 import Echecs from "../views/Description/Echecs.vue";
+
 
 
 
@@ -145,6 +147,24 @@ const routes = [
     name:"Dashboardanim",
     component:Dashboardanim,
   },
+  {
+    path:"/dashboard-animateurs/Horaires",
+    name:"Horaires",
+    component:Horaires,
+  },
+  {
+    path:"/dashboard-animateurs/Edt",
+    name:"Edt",
+    component:Edt,
+  },
+  {
+    path:"/dashboard-animateurs/Activites",
+    name:"Activitesanim",
+    component:Activitesanim,
+  },
+
+
+  //dashboard-parents:
   {
     path:"/dashboard-parents",
     name:"Dashboardparents",

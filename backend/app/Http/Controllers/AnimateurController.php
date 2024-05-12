@@ -82,8 +82,9 @@ class AnimateurController extends Controller
                 ], 500);
         }
     }
-    
 
+
+    
     /**
      * Display the specified heure ------ pas utile ------
      */
