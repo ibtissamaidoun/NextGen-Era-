@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App;
 use Carbon\Carbon;
 use App\Models\devi;
+use App\Models\offre;
 use App\Models\demande;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class DeviController extends Controller
@@ -388,9 +389,55 @@ class DeviController extends Controller
         return response()->json($data);
 
 
-
          
     }
+    public function chooseofferAndGenerateDevis($offerId, Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'enfants' => 'required|array',
+                'enfants.*' => 'exists:enfants,id'
+            ]);
+    
+            $childrenIds = $validated['enfants'];
+    
+            // Retrieve the offer and all associated activities
+            $offer = offre::with('activites')->findOrFail($offerId);
+            $allActivities = $offer->activites;
+    
+            // Check if the offer has associated payment and retrieve the payment ID
+            $payment = $offer->paiement()->first();
+            if (!$payment) {
+                throw new \Exception("No payment associated with the offer.");
+            }
+            $paymentId = $payment->id;
+    
+            // Create a new demande
+            $demande = new Demande([
+                'offre_id' => $offerId,
+                'paiement_id' => $paymentId,
+                'parentmodel_id' => auth()->user()->parentmodel->id,
+                'statut' => 'brouillon'
+            ]);
+            $demande->save();
+    
+            // Fill the pivot table for each child and each activity
+            foreach ($childrenIds as $childId) {
+                foreach ($allActivities as $activity) {
+                    $demande->getActvites()->attach($activity->id, ['enfant_id' => $childId]);
+                }
+            }
+    // the problem i this function create devis
+            // Generate a devis for the parent after filling the pivot table
+           $devis = $this->createDevis($demande->id);
+    
+            return response()->json(['message' => 'Devis generated successfully for selected children and all activities in the offer','devis'=>$devis]);
+        } catch (\Exception $e) {
+            Log::error('Failed to generate devis: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to generate devis: ' . $e->getMessage()], 500);
+        }
+    }
+
 
 
 }

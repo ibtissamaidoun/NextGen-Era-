@@ -20,3 +20,4 @@ Route::get('/', function () {
 });
 
 Route::get('generate-devis',[DeviController::class, 'createDevis']);
+Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseoffchooseofferAndGenerateDevis']);
