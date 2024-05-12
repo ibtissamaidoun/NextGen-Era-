@@ -169,7 +169,7 @@ class AdministrateurController extends Controller
                 'id' => $demande->id,
                 'paiement_option' => $demande->paiement->option_paiement ?? null,
                 'offer_titre' => $demande->offre->titre ?? null,
-                'parent_name' => $demande->parentmodel->user->nom ?? null,
+                'parent_name' => $demande->parentmodel->user->nom.' '. $demande->parentmodel->user->prenom,
             ];
         });
         

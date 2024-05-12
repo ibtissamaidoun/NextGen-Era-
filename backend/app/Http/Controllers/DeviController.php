@@ -6,7 +6,9 @@ use App;
 use Carbon\Carbon;
 use App\Models\devi;
 use App\Models\offre;
+
 use App\Models\demande;
+use App\Models\parentmodel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -289,7 +291,7 @@ class DeviController extends Controller
      * @param int $tva
      * @return 
      */
-    public static function createDevis($demande_id = 1, $tva = 20)
+    public static function createDevis($demande_id, $tva = 20)
     {
         $demande = demande::find($demande_id);
         $parent = $demande->parentmodel()->first();
@@ -332,7 +334,7 @@ class DeviController extends Controller
             'expiration' => $expiration,
             'offre'=> $offre,
             'pack'=> $demande->pack()->first(),
-            'parent'=>$parent->user,
+            'parent'=>$parent->user()->first(),
             'enfantsActivites'=>$enfantActivites,
             'optionPaiment'=>$demande->paiement()->first()->option_paiement,
             'prixHT'=>$prix['HT'],
@@ -381,17 +383,20 @@ class DeviController extends Controller
             'tarif_ttc'=>$data['TTC'],
             'tva'=>$data['TVA'],
             'devi_pdf'=>$data['pdfPath'],
-            'parentmodel_id'=>$data['parent']->id,
+            'parentmodel_id'=>$data['parent']->parentmodel->id,
             'demande_id'=>$demande_id,
             //'date_expiration'=>$expiration,
         ]);
+        $data['devis'] = $devis->id;
         
-        return response()->json($data);
+        return $data;
+
 
 
          
     }
-    public function chooseofferAndGenerateDevis($offerId, Request $request)
+
+    public function chooseofferAndGenerateDevis(Request $request, $offerId)
     {
         try {
             $validated = $request->validate([
@@ -411,15 +416,18 @@ class DeviController extends Controller
                 throw new \Exception("No payment associated with the offer.");
             }
             $paymentId = $payment->id;
+            
+            $user = Auth::User();
+            $parent= $user->parentmodel;
     
             // Create a new demande
-            $demande = new Demande([
+            $demande =Demande::create([
                 'offre_id' => $offerId,
                 'paiement_id' => $paymentId,
-                'parentmodel_id' => auth()->user()->parentmodel->id,
+              'parentmodel_id' =>$parent->id,
                 'statut' => 'brouillon'
             ]);
-            $demande->save();
+       //     dd($demande);
     
             // Fill the pivot table for each child and each activity
             foreach ($childrenIds as $childId) {
@@ -427,17 +435,18 @@ class DeviController extends Controller
                     $demande->getActvites()->attach($activity->id, ['enfant_id' => $childId]);
                 }
             }
-    // the problem i this function create devis
+            // the problem i this function create devis
             // Generate a devis for the parent after filling the pivot table
-           $devis = $this->createDevis($demande->id);
+           $data = $this->createDevis($demande->id, 10);
+           $devis = Devi::findOrFail($data['devis'])->makeHidden(['created_at','updated_at','id']);
     
-            return response()->json(['message' => 'Devis generated successfully for selected children and all activities in the offer','devis'=>$devis]);
-        } catch (\Exception $e) {
+            return response()->json(['message' => 'Devis generated successfully for selected children and all activities in the offer',
+                                        'devis'=>$devis]);
+        }
+        catch (\Exception $e)
+        {
             Log::error('Failed to generate devis: ' . $e->getMessage());
             return response()->json(['message' => 'Failed to generate devis: ' . $e->getMessage()], 500);
         }
     }
-
-
-
 }
