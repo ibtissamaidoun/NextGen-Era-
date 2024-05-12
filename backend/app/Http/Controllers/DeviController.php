@@ -127,7 +127,7 @@ class DeviController extends Controller
         ]);
     }
 
-    // ------ Methodes appelable dans autre Controller ------ //
+    // ------ Methodes appelable dans autre Controller ------  //
 
 
     /**
