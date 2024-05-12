@@ -30,6 +30,7 @@ use App\Http\Controllers\ForgotController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 //routes public
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/register',[AuthController::class,'register']);
@@ -39,6 +40,7 @@ Route::post('/reset',[ForgotController::class,'reset']);
 //route qui necessite l'authentification
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
 
 
