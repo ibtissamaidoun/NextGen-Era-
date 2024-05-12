@@ -36,51 +36,41 @@ class AnimateurController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function storeHeure(Request $request) 
-    {
-        try {
-            // Validation des données de la requête
-            $fields = $request->validate([
-                'horaires' => 'required|array',
-                'horaires.*' => 'integer|exists:horaires,id' 
-            ]);
-           // $user = Auth::User();
-            $animateur = $user->animateur;
+   public function storeHeure(Request $request) 
+{
+    try {
+        // Validation des données de la requête
+        $fields = $request->validate([
+            'horaires' => 'required|array',
+            'horaires.*' => 'integer|exists:horaires,id' 
+        ]);
 
-            // tester les horaires fornis si ils sont deja existant
-            $compteur = 0;
-            $dejaFourni = array();
-            foreach($fields['horaires'] as $horaireId)
-            {
-                if( ! $animateur->horaires()->where('horaire_id',$horaireId)->exists())
+        $user = Auth::User();
+        $animateur = $user->animateur;
 
-                    // save dans database
-                    $animateur->horaires()->attach($horaireId);
-                else
-                {
-                    $compteur++;
-                    $dejaFourni[$compteur] = $horaireId;
-                }
-            }
-            if($compteur)
-            {
-                return response()->json([
-                    'message'=>$compteur.' Horaires deja existes.',
-                    'horaire_id'=> $dejaFourni
-                ]);
-            }
-            // retourner une reponce succes
-            return response()->json([
-                'message'=>'Insersion avec succes !'
-            ], 201);
+        // Nouvelle logique pour la validation
+        if (count($fields['horaires']) > 5) {
+            throw new Exception("Vous ne pouvez pas ajouter plus de 5 horaires à la fois.");
         }
-        catch (\Throwable $th) {
-                return response()->json([
-                    'status' => false,
-                    'message' => $th->getMessage()
-                ], 500);
+
+        // Logique d'ajout d'horaires
+        foreach($fields['horaires'] as $horaireId) {
+            $animateur->horaires()->attach($horaireId);
         }
+
+        // Retourner une réponse de succès
+        return response()->json([
+            'message'=>'Insertion réussie !'
+        ], 201);
     }
+    catch (\Throwable $th) {
+        return response()->json([
+            'status' => false,
+            'message' => $th->getMessage()
+        ], 500);
+    }
+}
+
     
 
     /**
