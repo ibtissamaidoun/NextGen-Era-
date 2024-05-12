@@ -36,7 +36,7 @@ class AnimateurController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-   public function storeHeure(Request $request) 
+  public function storeHeure(Request $request) 
 {
     try {
         // Validation des données de la requête
@@ -48,15 +48,8 @@ class AnimateurController extends Controller
         $user = Auth::User();
         $animateur = $user->animateur;
 
-        // Nouvelle logique pour la validation
-        if (count($fields['horaires']) > 5) {
-            throw new Exception("Vous ne pouvez pas ajouter plus de 5 horaires à la fois.");
-        }
-
-        // Logique d'ajout d'horaires
-        foreach($fields['horaires'] as $horaireId) {
-            $animateur->horaires()->attach($horaireId);
-        }
+        // Logique alternative pour ajouter les horaires
+        $animateur->horaires()->syncWithoutDetaching($fields['horaires']);
 
         // Retourner une réponse de succès
         return response()->json([
@@ -70,7 +63,6 @@ class AnimateurController extends Controller
         ], 500);
     }
 }
-
     
 
     /**
