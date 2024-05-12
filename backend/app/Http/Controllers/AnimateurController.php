@@ -48,11 +48,16 @@ class AnimateurController extends Controller
             $user = Auth::User();
             $animateur = $user->animateur;
     
-            // Logique d'ajout d'horaires modifiée
+            // Nouvelle logique pour vérifier l'existence des horaires
             foreach($fields['horaires'] as $horaireId) {
-                if (!$animateur->horaires()->where('horaire_id',$horaireId)->exists()) {
-                    $animateur->horaires()->attach($horaireId);
+                if (in_array($horaireId, $animateur->horaires->pluck('id')->toArray())) {
+                    throw new Exception("Horaire déjà existant.");
                 }
+            }
+    
+            // Ajout des horaires
+            foreach($fields['horaires'] as $horaireId) {
+                $animateur->horaires()->attach($horaireId);
             }
     
             // Retourner une réponse de succès
@@ -67,7 +72,6 @@ class AnimateurController extends Controller
             ], 500);
         }
     }
-
     /**
      * Display the specified heure ------ pas utile ------
      */
