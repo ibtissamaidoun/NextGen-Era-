@@ -56,13 +56,13 @@ Route::middleware(['check.role'.':' . User::ROLE_PARENT])->prefix('parent')->gro
     // visuasilation des offres disponible 
     Route::get('/offres', [ParentmodelController::class, 'getoffers']);
     Route::get('/offres/{id}', [ParentmodelController::class, 'showoffer']);
+    Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']);
     //the father can check the commandes he submitted that are en cours
     Route::get('demandes',[DemandeController::class,'demandes']);
     //the parent get different notifications 
     Route::get('/notifications', [NotificationController::class,'indexparent']);
 
 
-    Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']);
 });
 
 

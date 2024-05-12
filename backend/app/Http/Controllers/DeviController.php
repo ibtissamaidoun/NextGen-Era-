@@ -155,7 +155,7 @@ class DeviController extends Controller
      * @param int $tva
      * @return array
      */
-    public static function calculerPrix($demande_id = 1,$enfantActivites = [], $tva = 20) : array
+    protected static function calculerPrix($demande_id = 1,$enfantActivites = [], $tva = 20) : array
     {
         $demande = demande::find($demande_id);
         $prixHT = 0;
@@ -290,7 +290,7 @@ class DeviController extends Controller
      * @param int $tva
      * @return 
      */
-    public static function createDevis($demande_id, $tva = 20)
+    protected static function createDevis($demande_id, $tva = 20, $status = true)
     {
         $demande = demande::find($demande_id);
         $parent = $demande->parentmodel()->first();
@@ -303,7 +303,11 @@ class DeviController extends Controller
             // un seul couple [activite - enfant] par demande de type Offre
             $activites = $demande->getActvites()->where('enfant_id',$enfant->id)->orderBy('tarif')->get();
             foreach($activites as $activite){
-                $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
+                if($demande->pack_id)
+                    $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
+                else
+                    $remise = 0;
+
                 $tarif = $activite->tarif*(1 - $remise/100);
                 $enfantActivites[] = [
                     'enfant'=>$enfant->prenom,
@@ -342,7 +346,20 @@ class DeviController extends Controller
             'TTC'=>$prix['TTC'],
             'image'=> $img,
         ];
+        if($status) // generer devis si status est true (par default)
+            $data = DeviController::generateDevis($demande_id, $data);
+        else
+            unset($data['image']);
 
+        return $data;
+
+
+
+         
+    }
+
+    protected static function generateDevis($demande_id, $data)
+    {
         // loader le Devis en html
         if($data['offre'])
         {
@@ -387,12 +404,8 @@ class DeviController extends Controller
             //'date_expiration'=>$expiration,
         ]);
         $data['devis'] = $devis->id;
-        
+
         return $data;
-
-
-
-         
     }
 
     public function chooseofferAndGenerateDevis(Request $request, $offerId)
