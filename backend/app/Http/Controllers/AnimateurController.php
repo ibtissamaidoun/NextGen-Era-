@@ -36,43 +36,54 @@ class AnimateurController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function storeHeure(Request $request) // {hoarires:array(string)}
+    public function storeHeure(Request $request) 
     {
-        // tableux des hauraire preferee
-        // validation d'inputs : l'horaire forni est une heure.
-        // creation d'une instance de 'horaires_disponibilite_animateur'
-
-        $user = Auth::User();
-        $animateur = $user->animateur;
-
-        // tester les horaires fornis si ils sont deja existant
-        $compteur = 0;
-        $dejaFourni = array();
-        foreach($request->horaires as $horaireId)
-        {
-            if( ! $animateur->horaires()->where('horaire_id',$horaireId)->exists())
-
-                // save dans database
-                $animateur->horaires()->attach($horaireId);
-            else
-            {
-                $compteur++;
-                $dejaFourni[$compteur] = $horaireId;
-            }
-        }
-        if($compteur)
-        {
-            return response()->json([
-                'message'=>$compteur.' Horaires deja existes.',
-                'horaire_id'=> $dejaFourni
+        try {
+            // Validation des données de la requête
+            $fields = $request->validate([
+                'horaires' => 'required|array',
+                'horaires.*' => 'integer|exists:horaires,id' 
             ]);
+            $user = Auth::User();
+            $animateur = $user->animateur;
+
+            // tester les horaires fornis si ils sont deja existant
+            $compteur = 0;
+            $dejaFourni = array();
+            foreach($fields['horaires'] as $horaireId)
+            {
+                if( ! $animateur->horaires()->where('horaire_id',$horaireId)->exists())
+
+                    // save dans database
+                    $animateur->horaires()->attach($horaireId);
+                else
+                {
+                    $compteur++;
+                    $dejaFourni[$compteur] = $horaireId;
+                }
+            }
+            if($compteur)
+            {
+                return response()->json([
+                    'message'=>$compteur.' Horaires deja existes.',
+                    'horaire_id'=> $dejaFourni
+                ]);
+            }
+            // retourner une reponce succes
+            return response()->json([
+                'message'=>'Insersion avec succes !'
+            ], 201);
         }
-        // retourner une reponce succes
-        return response()->json([
-            'message'=>'Insersion avec succes !'
-        ], 201);
+        catch (\Throwable $th) {
+                return response()->json([
+                    'status' => false,
+                    'message' => $th->getMessage()
+                ], 500);
+        }
     }
 
+
+    
     /**
      * Display the specified heure ------ pas utile ------
      */
@@ -94,7 +105,9 @@ class AnimateurController extends Controller
     public function updateHeure($horaire, Request $request) // id horaire, {horaire:string}
     {
         // validation d'inputs : l'horaire forni est une heure
-
+        $fields = $request->validate([
+            'horaires' => 'required|integer|exists:horaires,id' 
+        ]);
         // modification d'une instance de 'horaires_disponibilite_animateur'
         $user = Auth::User();
         $animateur_id = ($user->animateur)->id;

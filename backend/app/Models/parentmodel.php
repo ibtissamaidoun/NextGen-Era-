@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,4 +30,16 @@ class parentmodel extends Model
     {
         return $this->hasMany(devi::class );
     }
+
+    // -----------        paniers         ----------- //
+    public function getEnfants(): BelongsToMany
+{
+    return $this->belongsToMany(enfant::class, 'paniers')
+                ->withPivot('activite_id','status');   
+}
+    public function getActvites(): BelongsToMany
+{
+    return $this->belongsToMany(activite::class, 'paniers')
+                ->withPivot('enfant_id','status');   
+}
 }

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\administrateur;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\demande;
+use App\Models\notification;
 
 class AdministrateurController extends Controller
 {

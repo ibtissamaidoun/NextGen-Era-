@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_notification', function (Blueprint $table) {
-            $table->timestamps();
+            $table->date('date_notification');
+            $table->enum('statut',['lu','non lu'])->default('non lu');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                   ->references('id')
@@ -25,7 +26,7 @@ return new class extends Migration
                   ->on('notifications')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->primary(['notification_id', 'user_id']);
+            $table->primary(['notification_id', 'user_id','date_notification']);
         });
     }
 

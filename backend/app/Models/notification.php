@@ -16,6 +16,6 @@ class notification extends Model
     
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(user::class, 'user_notification');   
+        return $this->belongsToMany(user::class, 'user_notification')->withPivot('date_notification','statut');   
     }
 }

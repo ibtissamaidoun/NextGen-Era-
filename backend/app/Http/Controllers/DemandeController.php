@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\demande;
 use Illuminate\Http\Request;
-
+use App\Models\parentmodel;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 class DemandeController extends Controller
 {
     /**
