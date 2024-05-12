@@ -59,6 +59,16 @@ Route::middleware(['check.role'.':' . User::ROLE_PARENT])->prefix('parent')->gro
     Route::get('/offres', [ParentmodelController::class, 'getoffers']);
     Route::get('/offres/{id}', [ParentmodelController::class, 'showoffer']);
     Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']);
+    Route::get('demandes/{demande_id}',[DeviController::class,'overview']);
+    Route::get('downloadDevis/{demande_id}',[DeviController::class,'downloadDevis']);
+
+    // Valider et refuser devis
+    Route::post('devis/{devis}/validate',[DeviController::class, 'validateDevis']); // by Taha
+    Route::post('devis/{devis}/refuse', [deviController::class, 'refuseDevis']); // by Sakhri
+    // Motif au cas de refus
+    Route::post('devis/{devis}/refuse/motif',[DeviController::class, 'motifRefuse']);
+
+
     //the father can check the commandes he submitted that are en cours
     Route::get('demandes',[DemandeController::class,'demandes']);
     //the parent get different notifications 

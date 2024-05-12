@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App;
 use Carbon\Carbon;
 use App\Models\devi;
-use App\Models\offre;
+use App\Models\User;
 
+use App\Models\offre;
 use App\Models\demande;
 use App\Models\parentmodel;
+use App\Models\notification;
 use Illuminate\Http\Request;
+use App\Models\administrateur;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -127,7 +130,7 @@ class DeviController extends Controller
         ]);
     }
 
-    // ------ Methodes appelable dans autre Controller ------  //
+    // ------ Methodes appelable dans autre Controller ------ //
 
 
     /**
@@ -350,7 +353,9 @@ class DeviController extends Controller
         if($status) // generer devis si status est true (par default)
             $data = DeviController::generateDevis($demande_id, $data);
         else
-            unset($data['image']);
+        {
+            unset($data['image'], $data['TTC'], $data['TVA'], $data['prixRemise'], $data['prixHT'], $data['serie'], $data['parent']);
+        }
 
         return $data;
 
@@ -383,7 +388,7 @@ class DeviController extends Controller
         $pdf = \App::make('snappy.pdf.wrapper');
         $output = $pdf->loadHTML($html)->output();
         // Store the pdf in local
-        $pdfPath = 'storage/pdfs/devis/'.$data['serie'].date('_His').'.pdf';
+        $pdfPath = 'storage/pdfs/devis/'.$data['serie'].'.pdf';  // .date('_His')
         // enregister localement
         $pdf->save($pdfPath, true);
         
@@ -438,7 +443,8 @@ class DeviController extends Controller
                 'offre_id' => $offerId,
                 'paiement_id' => $paymentId,
               'parentmodel_id' =>$parent->id,
-                'statut' => 'brouillon'
+                'statut' => 'brouillon',
+                'date_demande' => now(),
             ]);
        //     dd($demande);
     
@@ -461,5 +467,99 @@ class DeviController extends Controller
             Log::error('Failed to generate devis: ' . $e->getMessage());
             return response()->json(['message' => 'Failed to generate devis: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function overview($demandeId)
+    {
+        $data = DeviController::createDevis($demandeId, 20, false);
+        if (is_array($data) && isset($data['error'])) {
+            // handle error, for example, return it as a response
+            return response()->json(['error' => $data['error']], $data['status_code'] ?? 500);
+        }
+
+        return response()->json($data);
+    }
+
+
+    public function downloadDevis($demande_id)
+    {
+        $user = Auth::User();
+        $parent = $user->parentmodel;
+        $demande = $parent->demande()->find($demande_id);
+
+        $devis = $demande->devi;
+        $devisPath = $devis->devi_pdf;
+        return response()->download($devisPath);
+    }
+
+    public function refuseDevis($devis_id)
+    {
+        $user = Auth::User();
+        $parent = $user->parentmodel;
+       
+        $devis = $parent->devis()->find($devis_id);
+        $demande = $devis->demande()->first();
+
+        $devis->statut = 'refuse';
+        $devis->save();
+
+        // notification pour tout les admin :(
+        $notification = new  notification([
+            'type' => 'Devis Refused',
+            'contenu' => 'A devis has been refused.'
+        ]);
+        $notification->save();
+        $admins = administrateur::all();
+        foreach($admins as $admin)
+            $notification->users()->attach($admin->id, ['date_notification' => now()]);
+
+        return response()->json([
+            'message' => 'devis refuser avec succes',
+        ]);
+    }
+    public function motifRefuse(Request $request, $devis_id) // {motif:text}
+    {
+        // validate input ...
+
+        $user = Auth::User();
+        $parent = $user->parentmodel;
+       
+        $devis = $parent->devis()->find($devis_id);
+        
+        $devis->motif_refus = $request['motif'];
+        $devis->save();
+
+        return response()->json([
+            'message' => 'votre motif a ete bien envoyer.',
+            'devis' => $devis,
+        ]);
+    }
+
+    public function validateDevis($devisId)
+    {
+        // Retrieve the devis :)
+        $devis = devi::findOrFail($devisId);
+        $devis->statut = 'valide';
+        $devis->save();
+
+        // Retrieve the  demande :(
+        $demande = demande::findOrFail($devis->demande_id);
+        $demande->statut = 'en cours';
+        $demande->save();
+
+        // Generate a notification for all admins
+        $notification = new  notification([
+            'type' => 'Devis Validated',
+            'contenu' => 'A devis has been validated.'
+        ]);
+        $notification->save();
+        $admins = User::where('role', 'admin')->get();
+        foreach($admins as $admin)
+            $notification->users()->attach($admin->id, ['date_notification' => now()]);
+
+        return response()->json([
+            'message' => 'devis validee avec succes.',
+        ]);
+     
     }
 }
