@@ -44,7 +44,7 @@ class AnimateurController extends Controller
                 'horaires' => 'required|array',
                 'horaires.*' => 'integer|exists:horaires,id' 
             ]);
-            $user = Auth::User();
+           // $user = Auth::User();
             $animateur = $user->animateur;
 
             // tester les horaires fornis si ils sont deja existant
