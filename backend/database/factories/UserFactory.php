@@ -24,7 +24,7 @@ class UserFactory extends Factory
     {
         return [
             'nom' => $this->faker->lastName,
-            'prénom' => $this->faker->firstName,
+            'prenom' => $this->faker->firstName,
             'email' => $this->faker->unique()->safeEmail,
             'telephone_portable' => $this->faker->regexify('0[67][0-9]{8}'), // Génère un numéro de téléphone commençant par 06 ou 07 et composé de 10 chiffres
             'telephone_fixe' => $this->faker->optional()->regexify('05[0-9]{8}'), 
