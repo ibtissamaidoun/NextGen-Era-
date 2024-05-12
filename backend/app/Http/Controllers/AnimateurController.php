@@ -44,9 +44,9 @@ class AnimateurController extends Controller
                 'horaires' => 'required|array',
                 'horaires.*' => 'integer|exists:horaires,id' 
             ]);
-    
             $user = Auth::User();
             $animateur = $user->animateur;
+
     
             // Nouvelle logique pour vérifier l'existence des horaires
             foreach($fields['horaires'] as $horaireId) {
@@ -61,17 +61,45 @@ class AnimateurController extends Controller
             }
     
             // Retourner une réponse de succès
+
+
+            // tester les horaires fornis si ils sont deja existant
+            $compteur = 0;
+            $dejaFourni = array();
+            foreach($fields['horaires'] as $horaireId)
+            {
+                if( ! $animateur->horaires()->where('horaire_id',$horaireId)->exists())
+
+                    // save dans database
+                    $animateur->horaires()->attach($horaireId);
+                else
+                {
+                    $compteur++;
+                    $dejaFourni[$compteur] = $horaireId;
+                }
+            }
+            if($compteur)
+            {
+                return response()->json([
+                    'message'=>$compteur.' Horaires deja existes.',
+                    'horaire_id'=> $dejaFourni
+                ]);
+            }
+            // retourner une reponce succes
+
             return response()->json([
-                'message'=>'Insertion réussie !'
+                'message'=>'Insersion avec succes !'
             ], 201);
         }
         catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
+                return response()->json([
+                    'status' => false,
+                    'message' => $th->getMessage()
+                ], 500);
         }
     }
+    
+
     /**
      * Display the specified heure ------ pas utile ------
      */
