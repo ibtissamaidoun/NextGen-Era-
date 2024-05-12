@@ -60,6 +60,9 @@ Route::middleware(['check.role'.':' . User::ROLE_PARENT])->prefix('parent')->gro
     Route::get('demandes',[DemandeController::class,'demandes']);
     //the parent get different notifications 
     Route::get('/notifications', [NotificationController::class,'indexparent']);
+
+
+    Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']);
 });
 
 
