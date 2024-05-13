@@ -12,18 +12,20 @@ use Carbon\Carbon;
     <div class="invoice-box">
         <table cellpadding="0" cellspacing="0">
             <tr class="top" >
-                <td class='titre'>
-                    DEVIS
+                <td class='titre'style="text-transform:uppercase;">
+                    {{ $type }}
                 </td>
                 <td rowspan="2" style="text-align: right;  vertical-align: top;">
                     <img src="{{ $image }}"  class='image'>
                 </td>
             </tr>
             <tr>
-                <td class='dates'>
-                    Nº DEVIS : {{ $serie }}<br>
+                <td class='dates' style="text-transform:uppercase;">
+                    Nº {{$type}} : {{ $serie }}<br>
                     DATE DEMANDE : {{ $demande->date_demande }}<br>
+                    @if( strtoupper($type) == 'DEVIS')
                     DATE D'EXPIRATION : {{ $expiration }}<br>
+                    @endif
                 </td>
             </tr>
             </tr>
@@ -92,12 +94,18 @@ use Carbon\Carbon;
 			</tbody>
 		</table>
         <div style='padding-bottom: 25px'>
+            @if(strtoupper($type) == 'DEVIS')
             <h3 class='description'>DESCRITPION D'OFFRE</h3>
             <p class='text'>{{ $offre->description }}</p>
+            @elseif (strtoupper($type) == 'FACTURE')
+            <h3 class='description'>LE PAIEMENT</h3>
+            <p class='text'>{{ $prixOP }}<br>sur une period de {{ $period }}.</p>
+            @endif
+            
         </div>
         <div>
             <p class='text' style="padding-bottom: 15px">Pour accepter ce devis, signez ici et renvoyez : ____________________________________________________<br>ou Acceper sur la plateform.</p><br>
-            <p class='text'>Devis établi le : {{ Carbon::now('Africa/Casablanca')->addHours(1)->toDateTimeString() }}</p>
+            <p class='text'>{{ ucwords($type) }} établi le : {{ Carbon::now('Africa/Casablanca')->addHours(1)->toDateTimeString() }}</p>
             <p class='merci'>MERCI POUR VOTRE CONFIANCE !</p>
         </div>
         

@@ -288,17 +288,21 @@ class DeviController extends Controller
     }
 
     /**
-     * Creation d'une instance de devis pour les Offre
+     * Creation d'une instance de (Devis, Facture) pour les Offre et les Activites si statue=true,
+     * sinon il calcule la data des devis et des factures sans creer une instance.
      * 
      * @param int $demande_id
+     * @param string $type
+     * @param bool $status
      * @param int $tva
      * @return 
      */
-    protected static function createDevis($demande_id, $tva = 20, $status = true)
+    protected static function createDevis($demande_id, $type = 'Devis' ,$status = true ,$tva = 20) // on work
     {
         $demande = demande::find($demande_id);
         $parent = $demande->parentmodel()->first();
         $offre = $demande->offre()->first();
+        $pack = $demande->pack()->first();
         $enfants = $demande->getEnfants()->distinct('id')->get();
 
         $enfantActivites = [];
@@ -331,16 +335,56 @@ class DeviController extends Controller
 
         // image de NEXGENERA
         $path = base_path('public\storage\images\OrangeNext@Ai.jpg');
-        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $typeImg = pathinfo($path, PATHINFO_EXTENSION);
         $imgData = file_get_contents($path);
-        $img = 'data:image/'.$type.';base64,'.base64_encode($imgData);
+        $img = 'data:image/'.$typeImg.';base64,'.base64_encode($imgData);
+
+
+        // prix/option de paiment
+        if($offre)
+        {
+            $start = Carbon::parse($offre->date_debut);
+            $end = Carbon::parse($offre->date_fin);
+        }
+        else
+        {
+            $start = Carbon::parse($activites[0]->date_debut_etud);
+            $end = Carbon::parse($activites[0]->date_fin_etud);
+        }
+
+        switch ($demande->paiement()->first()->option_paiement) {
+            case 'mensuel': 
+                    $period = $start->diffInMonths($end);
+                    $prixOP = $prix['TTC']/$period;
+                    $prixOP = $prixOP.' DH / mois';
+                    $periodMsg = $period.' mois';
+                    break;
+            case 'trimestriel':
+                $period = $start->diffInMonths($end)/3;
+                $prixOP = $prix['TTC']/$period;
+                $prixOP = $prixOP.' DH / trimestre';
+                $periodMsg = $period.' trimestres';
+                break;
+            case 'semestriel':
+                $period = $start->diffInMonths($end)/6;
+                $prixOP = $prix['TTC']/$period;
+                $prixOP = $prixOP.' DH / semestre';
+                $periodMsg = $period.' semestres';
+                break;
+            case 'annuel':
+                $period = $start->diffInYears($end);
+                $prixOP = $prix['TTC']/$period;
+                $prixOP = $prixOP.' DH / annee';
+                $periodMsg = $period.' annees';
+                break;
+        }
         
         $data = [
             'serie'=>'D'.Carbon::now()->format('yWw').$parent->id.$demande->id,
             'demande' => $demande,
             'expiration' => $expiration,
             'offre'=> $offre,
-            'pack'=> $demande->pack()->first(),
+            'pack'=> $pack,
             'parent'=>$parent->user()->first(),
             'enfantsActivites'=>$enfantActivites,
             'optionPaiment'=>$demande->paiement()->first()->option_paiement,
@@ -349,20 +393,26 @@ class DeviController extends Controller
             'TVA'=> $tva,
             'TTC'=>$prix['TTC'],
             'image'=> $img,
+            'type' => $type,
+            'prixOP' => $prixOP,
+            'period' => $periodMsg,
         ];
         if($status) // generer devis si status est true (par default)
-            $data = DeviController::generateDevis($demande_id, $data);
-        else
+        {
+            $data = DeviController::generateDevis($demande_id, $data); 
+        }
+        else  // pour les factures et le overview de devis
         {
             unset($data['image'], $data['TTC'], $data['TVA'], $data['prixRemise'], $data['prixHT'], $data['serie'], $data['parent']);
         }
 
-        return $data;
-
-
-
-         
+        return $data;   
     }
+    /**
+     *  -- apres action de anass
+     *  ->>>  TODO : 1- Need to planifier les factures et automatiser l'envoie des facture
+     *               2- generation des recu apres payement des facture (is_paye = true)
+     * */ 
 
     protected static function generateDevis($demande_id, $data)
     {
@@ -446,7 +496,6 @@ class DeviController extends Controller
                 'statut' => 'brouillon',
                 'date_demande' => now(),
             ]);
-       //     dd($demande);
     
             // Fill the pivot table for each child and each activity
             foreach ($childrenIds as $childId) {
@@ -454,13 +503,16 @@ class DeviController extends Controller
                     $demande->getActvites()->attach($activity->id, ['enfant_id' => $childId]);
                 }
             }
-            // the problem i this function create devis
-            // Generate a devis for the parent after filling the pivot table
-           $data = $this->createDevis($demande->id, 10);
+
+            // check the validation of demande
+            
+
+           // Generate a devis for the parent after filling the pivot table
+           $data = $this->createDevis($demande->id, 'facture');
            $devis = Devi::findOrFail($data['devis'])->makeHidden(['created_at','updated_at','id']);
     
             return response()->json(['message' => 'Devis generated successfully for selected children and all activities in the offer',
-                                        'devis'=>$devis]);
+                                     'devis'=>$devis]);
         }
         catch (\Exception $e)
         {
@@ -479,8 +531,6 @@ class DeviController extends Controller
 
         return response()->json($data);
     }
-
-
     public function downloadDevis($demande_id)
     {
         $user = Auth::User();
@@ -491,7 +541,33 @@ class DeviController extends Controller
         $devisPath = $devis->devi_pdf;
         return response()->download($devisPath);
     }
+    public function validateDevis($devisId)
+    {
+        // Retrieve the devis :)
+        $devis = devi::findOrFail($devisId);
+        $devis->statut = 'valide';
+        $devis->save();
 
+        // Retrieve the  demande :(
+        $demande = demande::findOrFail($devis->demande_id);
+        $demande->statut = 'en cours';
+        $demande->save();
+
+        // Generate a notification for all admins
+        $notification = new  notification([
+            'type' => 'Devis Validated',
+            'contenu' => 'A devis has been validated.'
+        ]);
+        $notification->save();
+        $admins = User::where('role', 'admin')->get();
+        foreach($admins as $admin)
+            $notification->users()->attach($admin->id, ['date_notification' => now()]);
+
+        return response()->json([
+            'message' => 'devis validee avec succes.',
+        ]);
+     
+    }
     public function refuseDevis($devis_id)
     {
         $user = Auth::User();
@@ -533,33 +609,5 @@ class DeviController extends Controller
             'message' => 'votre motif a ete bien envoyer.',
             'devis' => $devis,
         ]);
-    }
-
-    public function validateDevis($devisId)
-    {
-        // Retrieve the devis :)
-        $devis = devi::findOrFail($devisId);
-        $devis->statut = 'valide';
-        $devis->save();
-
-        // Retrieve the  demande :(
-        $demande = demande::findOrFail($devis->demande_id);
-        $demande->statut = 'en cours';
-        $demande->save();
-
-        // Generate a notification for all admins
-        $notification = new  notification([
-            'type' => 'Devis Validated',
-            'contenu' => 'A devis has been validated.'
-        ]);
-        $notification->save();
-        $admins = User::where('role', 'admin')->get();
-        foreach($admins as $admin)
-            $notification->users()->attach($admin->id, ['date_notification' => now()]);
-
-        return response()->json([
-            'message' => 'devis validee avec succes.',
-        ]);
-     
     }
 }

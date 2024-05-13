@@ -164,9 +164,11 @@ Route::apiResource('devis',deviController::class);
 Route::apiResource('notifications',NotificationController::class);
 Route::apiResource('demandes',DemandeController::class);
 
-Route::get('getDevis',[deviController::class, 'getDevis']);
-Route::get('devis',[deviController::class, 'createDevis']);
-Route::get('monPack',[PackController::class,'packPoussible']);
+Route::get('getDevis',[deviController::class, 'getDevis']); // 
+Route::get('devis',[deviController::class, 'createDevis']); // marche
+Route::get('monPack',[PackController::class,'packPoussible']); // marche
+
+Route::get('offres/demandes/{demande}/validation',[DemandeController::class, '']);
 
 //------test----taha----ostora----//
 // Validate demande route

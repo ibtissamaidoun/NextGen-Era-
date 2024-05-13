@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\demande;
-use Illuminate\Http\Request;
 use App\Models\parentmodel;
+use App\Models\notification;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 class DemandeController extends Controller
 {
     /**
@@ -90,5 +93,95 @@ class DemandeController extends Controller
             // Return an error response
             return response()->json(['message' => 'An error occurred. Please try again later.'], 500);
         }
+    }
+
+
+    // unbelivable collaboration with two of the greatest the industry Taha & Sakhri
+    protected static function checkDemandeOffre( $demande_id )
+    {
+        $demande = demande::findOrFail($demande_id);
+        $activities = $demande->offre()->first()->activites;
+
+        $statut = true;
+
+        // Retrieve all children associated with the demande, the power of relations
+        $children = $demande->getEnfants()->distinct('id')->get();
+        $childrenCount = $children->count();
+
+        // Check if adding these children exceeds the maximum capacity for any activity, its smart from my part
+        foreach ($activities as $activity) {
+            if ($activity->effectif_actuel + $childrenCount > $activity->effectif_max) {
+                $error =  'Validation denied. Maximum capacity reached for one or more activities.';
+                $statut = false;
+            }
+
+            // check the age of all children if is in the range of all activities
+            foreach($children as $child)
+            {
+                $date_naissance = Carbon::parse($child->date_de_naissance);
+                $age = $date_naissance->diffInYears(Carbon::now());
+                if( $age > $activity->age_max || $age < $activity->age_min){
+                    $error = 'Validation denied. Maximum or minimum age is exided for one or more activities.';
+                    $statut = false;
+                }
+            }
+        }
+
+        if($statut)
+            // Generate a notification for all admins
+            $notification =notification::create([
+                'type' => 'Demande Validated',
+                'contenu' => 'Your demande has been validated.',
+            ]);
+        else
+            // Generate a notification for all admins
+            $notification =notification::create([
+                'type' => 'Demande Refused',
+                'contenu' => $error,
+            ]);
+
+        $parent = $demande->parentmodel()->first();
+
+        $notification->users()->attach($parent->id, ['date_notification' => now()]);
+        // true if all goes fine || false if not done
+        return $statut;
+    }
+
+    public function payeDemande($demande_id)
+    {
+        
+        $statut = DemandeController::checkDemandeOffre($demande_id);
+
+        if(! $statut)
+            return response()->json([ 'message' => 'Demande non valider !' ]);
+
+
+        $demande = demande::findOrFail($demande_id);
+        $activities = $demande->offre()->first()->activites;
+
+        // Retrieve all children associated with the demande, the power of relations
+        $children = $demande->getEnfants()->distinct('id')->get();
+        
+        // If capacity is not exceeded, add children to activities and update their schedules in emploi du temps
+        foreach ($children as $child) 
+        {
+            foreach ($activities as $activity) 
+            { 
+                $activity->effectif_actuel += 1;
+                $activity->save();
+
+                $horaires = $activity->horaires()->get();
+                $child->activites()->attach($activity->id,['horaire_1' => $horaires[0]->id,
+                                                           'horaire_2' => $horaires[1]->id]);
+            }
+        }
+        // Update the status of the demande :) i am happy if it reaches this
+        $demande->statut = 'paye';
+        $demande->save();
+        
+        // notifier le parent 
+        
+
+        return response()->json(['message' => 'Demande validated and children placed in activities successfully.']);
     }
 }
