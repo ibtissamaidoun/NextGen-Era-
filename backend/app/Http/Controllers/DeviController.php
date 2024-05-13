@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App;
 use Carbon\Carbon;
 use App\Models\devi;
-use App\Models\offre;
+use App\Models\User;
 
+use App\Models\offre;
 use App\Models\demande;
 use App\Models\notification;
 use App\Models\parentmodel;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\administrateur;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -121,7 +122,7 @@ class DeviController extends Controller
         ]);
     }
 
-    // ------ Methodes appelable dans autre Controller ------  //
+    // ------ Methodes appelable dans autre Controller ------ //
 
 
     /**
@@ -290,7 +291,7 @@ class DeviController extends Controller
         $pdf = \App::make('snappy.pdf.wrapper');
         $output = $pdf->loadHTML($html)->output();
         // Store the pdf in local
-        $pdfPath = 'storage/pdfs/devis/' . $data['serie'] . date('_His') . '.pdf';
+        $pdfPath = 'storage/pdfs/devis/'.$data['serie'].'.pdf';  // .date('_His')
         // enregister localement
         $pdf->save($pdfPath, true);
 
@@ -344,9 +345,9 @@ class DeviController extends Controller
             $demande = Demande::create([
                 'offre_id' => $offerId,
                 'paiement_id' => $paymentId,
-                'parentmodel_id' => $parent->id,
+              'parentmodel_id' =>$parent->id,
                 'statut' => 'brouillon',
-                'date_demande' => now()
+                'date_demande' => now(),
             ]);
             //     dd($demande);
 
@@ -369,6 +370,74 @@ class DeviController extends Controller
             return response()->json(['message' => 'Failed to generate devis: ' . $e->getMessage()], 500);
         }
     }
+
+    public function overview($demandeId)
+    {
+        $data = DeviController::createDevis($demandeId, 20, false);
+        if (is_array($data) && isset($data['error'])) {
+            // handle error, for example, return it as a response
+            return response()->json(['error' => $data['error']], $data['status_code'] ?? 500);
+        }
+
+        return response()->json($data);
+    }
+
+
+    public function downloadDevis($demande_id)
+    {
+        $user = Auth::User();
+        $parent = $user->parentmodel;
+        $demande = $parent->demande()->find($demande_id);
+
+        $devis = $demande->devi;
+        $devisPath = $devis->devi_pdf;
+        return response()->download($devisPath);
+    }
+
+    public function refuseDevis($devis_id)
+    {
+        $user = Auth::User();
+        $parent = $user->parentmodel;
+       
+        $devis = $parent->devis()->find($devis_id);
+        $demande = $devis->demande()->first();
+
+        $devis->statut = 'refuse';
+        $devis->save();
+
+        // notification pour tout les admin :(
+        $notification = new  notification([
+            'type' => 'Devis Refused',
+            'contenu' => 'A devis has been refused.'
+        ]);
+        $notification->save();
+        $admins = administrateur::all();
+        foreach($admins as $admin)
+            $notification->users()->attach($admin->id, ['date_notification' => now()]);
+
+        return response()->json([
+            'message' => 'devis refuser avec succes',
+        ]);
+    }
+    public function motifRefuse(Request $request, $devis_id) // {motif:text}
+    {
+        // validate input ...
+
+        $user = Auth::User();
+        $parent = $user->parentmodel;
+       
+        $devis = $parent->devis()->find($devis_id);
+        
+        $devis->motif_refus = $request['motif'];
+        $devis->save();
+
+        return response()->json([
+            'message' => 'votre motif a ete bien envoyer.',
+            'devis' => $devis,
+        ]);
+    }
+
+ 
 
 
 
@@ -434,15 +503,7 @@ class DeviController extends Controller
 
         return $data;
     }
-    public function overview($demandeId)
-    {
-        $data = DeviController::createDevis($demandeId, 20, false);
-        if (is_array($data) && isset($data['error'])) {
-            // handle error, for example, return it as a response
-            return response()->json(['error' => $data['error']], $data['status_code'] ?? 500);
-        }
-        return response()->json($data);
-    }
+  
 
     public function validatedevis($devisId)
     {
@@ -470,11 +531,11 @@ class DeviController extends Controller
         $demande = demande::findOrFail($demandeid);
         $activities = $demande->offre()->first()->activites;
 
-        // Retrieve all children associated with the demande, the power of relations
+        // Retrieve all children associated with the demande
         $children = $demande->getEnfants();
         $childrenCount = $children->count();
 
-        // Check if adding these children exceeds the maximum capacity for any activity, its smart from my part
+        // Check if adding these children exceeds the maximum capacity for any activity
         foreach ($activities as $activity) {
             if ($activity->effectif_actuel + $childrenCount > $activity->effectif_max) {
                 return response()->json(['error' => 'Validation denied. Maximum capacity reached for one or more activities.'], 422);
@@ -488,20 +549,22 @@ class DeviController extends Controller
             foreach ($children as $child) {
                 $child->activites()->attach($activity->id);
                 
-                $horaires = $activity->horaires()->get();
+                // Retrieve horaires attached to the activity in the pivot table using activity id
+                $horaires = $activity->getHoraires()->get();
                 $Data = [
-                    'horaire_1' => $horaires[0]->heure_debut ?? null,
-                    'horaire_2' => $horaires[1]->heure_debut ?? null
+                    'horaire_1' => $horaires->where('activite_id', $activity->id)->first()->heure_debut ?? null,
+                    'horaire_2' => $horaires->where('activite_id', $activity->id)->skip(1)->first()->heure_debut ?? null
                 ];
                 $child->activites()->updateExistingPivot($activity->id, $Data);
             }
         }
-        // Update the status of the demande :) i am happy if it reaches this
+        // Update the status of the demande
         $demande->statut = 'paye';
         $demande->save();
-        //horaires affect the activities horairfes to the emploi du temps
 
         return response()->json(['message' => 'Demande validated and children placed in activities successfully.']);
     }
+
+    
 }
 
