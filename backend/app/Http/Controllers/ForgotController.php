@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Notifications\ForgetPasswordNotification;
 class ForgotController extends Controller
 {
 
@@ -24,12 +25,10 @@ class ForgotController extends Controller
             'token' => $token,
             'created_at' => now()
         ]);
-        Mail::send('emails.reset', ['token' => $token], function($message) use ($email) {
-            $message->to($email);
-            $message->subject('Reset your password');
-        });
-        return response()->json(['message' => 'Reset link sent to your email address',
-                                 'token' => $token],202);
+        $user->notify(new ForgetPasswordNotification($token));
+
+        return response()->json(['message' => 'Reset link sent to your email address'], 202);
+        
     }
 
     public function reset(Request $request) {

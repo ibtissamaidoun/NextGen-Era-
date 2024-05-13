@@ -27,7 +27,7 @@ const getRoute = () => {
         <sidenav-item
           to="/dashboard-animateurs"
           :class="getRoute() === 'dashboard-animateurs' ? 'active' : ''"
-          :navText="isRTL ? 'لوحة القيادة' : 'Dashboard Animateurs'"
+          :navText="isRTL ? 'لوحة القيادة' : 'Dashboard'"
         >
           <template v-slot:icon>
             <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
@@ -38,32 +38,23 @@ const getRoute = () => {
       
       <li class="nav-item">
         <sidenav-item
-          to="/Animateurs"
-          :class="getRoute() === 'animateurs' ? 'active' : ''"
-          :navText="isRTL ? 'الواقع الافتراضي' : 'animateurs'"
+          to="/dashboard-animateurs/Horaires"
+          :class="getRoute() === 'Horaires' ? 'active' : ''"
+          :navText="isRTL ? 'الجداول' : 'Horaires'"
         >
           <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-      <li class="nav-item">
-        <sidenav-item
-          to="/Parents"
-          :class="getRoute() === 'Parents' ? 'active' : ''"
-          :navText="isRTL ? 'الواقع الافتراضي' : 'Parents'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
+            <i
+              class="ni ni-time-alarm text-warning text-sm opacity-10"
+            ></i>
           </template>
         </sidenav-item>
       </li>
 
       <li class="nav-item">
         <sidenav-item
-          to="/Offres"
-          :class="getRoute() === 'Offres' ? 'active' : ''"
-          :navText="isRTL ? 'الجداول' : 'Offres'"
+          to="/dashboard-animateurs/Edt"
+          :class="getRoute() === 'Edt' ? 'active' : ''"
+          :navText="isRTL ? 'الجداول' : 'Edt'"
         >
           <template v-slot:icon>
             <i
@@ -75,42 +66,17 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/Activites"
+          to="/dashboard-animateurs/Activites"
           :class="getRoute() === 'Activites' ? 'active' : ''"
-          :navText="isRTL ? 'الفواتیر' : 'Activites'"
+          :navText="isRTL ? 'الجداول' : 'Activites'"
         >
           <template v-slot:icon>
-            <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
+            <i
+              class="ni ni-controller text-warning text-sm opacity-10"
+            ></i>
           </template>
         </sidenav-item>
       </li>
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/Demandes"
-          :class="getRoute() === 'Demandes' ? 'active' : ''"
-          :navText="isRTL ? 'الواقع الافتراضي' : 'Demandes'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/rtl-page"
-          :class="getRoute() === 'rtl-page' ? 'active' : ''"
-          navText="RTL"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
       <li class="mt-3 nav-item">
         <h6
           v-if="isRTL"
@@ -120,7 +86,7 @@ const getRoute = () => {
           صفحات المرافق
         </h6>
 
-        <h6
+      <h6
           v-else
           class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6"
           :class="isRTL ? 'me-4' : 'ms-2'"
@@ -131,7 +97,7 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/profile"
+          to="/dashboard-admin/profile"
           :class="getRoute() === 'profile' ? 'active' : ''"
           :navText="isRTL ? 'حساب تعريفي' : 'Profile'"
         >
@@ -153,19 +119,12 @@ const getRoute = () => {
         </sidenav-item>
       </li>
 
-      <li class="nav-item">
-        <sidenav-item
-          to="/signup"
-          :class="getRoute() === 'signup' ? 'active' : ''"
-          :navText="isRTL ? 'اشتراك' : 'Sign Up'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-collection text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
+      
     </ul>
   </div>
+      
+   
+  
 
   <div class="pt-3 mx-3 mt-3 sidenav-footer">
     <sidenav-card

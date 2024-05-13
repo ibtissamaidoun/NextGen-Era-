@@ -30,6 +30,7 @@ use App\Http\Controllers\ForgotController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 //routes public
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/register',[AuthController::class,'register']);
@@ -39,6 +40,7 @@ Route::post('/reset',[ForgotController::class,'reset']);
 //route qui necessite l'authentification
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
 
 
@@ -56,10 +58,13 @@ Route::middleware(['check.role'.':' . User::ROLE_PARENT])->prefix('parent')->gro
     // visuasilation des offres disponible 
     Route::get('/offres', [ParentmodelController::class, 'getoffers']);
     Route::get('/offres/{id}', [ParentmodelController::class, 'showoffer']);
+    Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']);
     //the father can check the commandes he submitted that are en cours
     Route::get('demandes',[DemandeController::class,'demandes']);
     //the parent get different notifications 
     Route::get('/notifications', [NotificationController::class,'indexparent']);
+
+
 });
 
 

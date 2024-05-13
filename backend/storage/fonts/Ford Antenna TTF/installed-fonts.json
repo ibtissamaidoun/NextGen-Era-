@@ -1,0 +1,14 @@
+{
+    "ford antenna": {
+        "normal": "ford_antenna_normal_99c5c81dfcdde353cc9f6d40f7cb8f69"
+    },
+    "ford antenna semibold": {
+        "bold": "ford_antenna_semibold_bold_beac9d34f4448b03f991c60c91340a8d"
+    },
+    "ford antenna cond": {
+        "normal": "ford_antenna_cond_normal_430e97dea1d643db533d1abd302a41e5"
+    },
+    "ford antenna black": {
+        "900": "ford_antenna_black_900_649c132c160e63cf478704dd48a59bf4"
+    }
+}

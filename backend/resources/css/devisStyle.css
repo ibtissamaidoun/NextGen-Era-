@@ -1,0 +1,49 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.invoice-box {
+    max-width: 800px;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #eee;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.details, .tg {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.details td, .details th, .tg td, .tg th {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.details tr.top td {
+    font-size: 16px;
+}
+
+.tg thead th {
+    background-color: #f2f2f2;
+    color: black;
+}
+
+.tg th, .tg td {
+    text-align: left;
+    padding: 10px;
+}
+
+.tg th {
+    background-color: #fe8827;
+    color: white;
+}
+
+@media only screen and (max-width: 600px) {
+    .invoice-box table {
+        width: 100%;
+        display: block;
+        text-align: center;
+    }
+}
