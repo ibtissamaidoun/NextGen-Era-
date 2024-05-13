@@ -21,7 +21,8 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     
-    protected $fillable = ['nom', 'prenom','mot_de_passe','email','role','telephone_portable','telephone_fixe'];
+    protected $fillable = ['nom', 'prenom', 'email', 'telephone_portable', 'telephone_fixe', 'photo_path', 'domaine_competence','mot_de_passe','fonction','role'];
+
     protected $hidden = ['mot_de_passe'];
 
     public function parentmodel():HasOne
