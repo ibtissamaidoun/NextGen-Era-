@@ -97,6 +97,13 @@ class DemandeController extends Controller
 
 
     // unbelivable collaboration with two of the greatest the industry Taha & Sakhri
+
+    /**
+     * check if the demande is OK (return true) with the detadase or NOT (return false)
+     * the user is notified in both cases
+     * TRUE -> go pay
+     * FALSE -> demande annuler
+     */
     protected static function checkDemandeOffre( $demande_id )
     {
         $demande = demande::findOrFail($demande_id);
@@ -146,7 +153,13 @@ class DemandeController extends Controller
         // true if all goes fine || false if not done
         return $statut;
     }
-
+    /**
+     * -->TODO: associated with one facture
+     * if payed :
+     *     - affect children to there activities.
+     *     - demande statut = paye.
+     * the user is notified -->TODO: with recu.
+     */
     public function payeDemande($demande_id)
     {
         
@@ -178,9 +191,19 @@ class DemandeController extends Controller
         // Update the status of the demande :) i am happy if it reaches this
         $demande->statut = 'paye';
         $demande->save();
+
+        // TODO : facture paye
+
+        // TODO : create recu
         
         // notifier le parent 
-        
+        $notification =notification::create([
+            'type' => 'Facture Payee',
+            'contenu' => 'Votre Facture de'.'date facture Y-m'.' a ete bien payee',
+        ]);
+        $parent = $demande->parentmodel()->first();
+        $notification->users()->attach($parent->id, ['date_notification' => now()]);
+
 
         return response()->json(['message' => 'Demande validated and children placed in activities successfully.']);
     }
