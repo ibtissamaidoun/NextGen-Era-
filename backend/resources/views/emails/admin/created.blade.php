@@ -8,6 +8,6 @@
     <p>Your admin account has been created successfully. Here are your login details:</p>
     <p><strong>Email:</strong> {{ $user->email }}</p>
     <p><strong>Password:</strong> {{ $password }}</p>
-    <p>Please change your password after your first login.</p>
+    <p>Please change your password after your first login and update your personal data.</p>
 </body>
 </html>

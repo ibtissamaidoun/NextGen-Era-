@@ -164,7 +164,7 @@ class ProfileController extends Controller
     public function updatePassword(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
+        
         $request->validate([
             'mot_de_passe' => 'required|string|min:8|confirmed',
         ]);
