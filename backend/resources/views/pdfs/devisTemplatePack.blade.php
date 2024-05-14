@@ -119,15 +119,15 @@ use Carbon\Carbon;
 		<style type="text/css">
                 @font-face {
                 font-family: 'Ford Antenna';
-                src: url({{ public_path('fonts/Ford Antenna TTF/FordAntenna-Regular.ttf')}}) format('truetype');
+                src: url({{ storage_path('fonts/Ford Antenna TTF/FordAntenna-Regular.ttf')}}) format('truetype');
                 }
                 @font-face {
                 font-family: 'Ford Antenna SemiBold';
-                src: url({{ public_path('fonts/Ford Antenna TTF/FordAntenna-Semibold.ttf')}}) format('truetype');
+                src: url({{ storage_path('fonts/Ford Antenna TTF/FordAntenna-Semibold.ttf')}}) format('truetype');
                 }
                 @font-face {
                 font-family: 'Ford Antenna Black';
-                src: url({{ public_path('fonts/Ford Antenna TTF/FordAntenna-Black.ttf')}}) format('truetype');
+                src: url({{ storage_path('fonts/Ford Antenna TTF/FordAntenna-Black.ttf')}}) format('truetype');
                 }
                 .description{ font-family: Ford Antenna SemiBold ;font-size: 25px;padding-top: 100px; text-transform:uppercase;}
                 .merci{color: #10278a;font-family: Ford Antenna SemiBold ;font-size: 16px;}

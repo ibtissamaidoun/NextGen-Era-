@@ -96,7 +96,7 @@ class DemandeController extends Controller
     }
 
 
-    // unbelivable collaboration with two of the greatest the industry Taha & Sakhri
+    // unbelivable collaboration with two of the greatest in the industry Taha & Sakhri
 
     /**
      * check if the demande is OK (return true) with the detadase or NOT (return false)

@@ -581,4 +581,5 @@ class DeviController extends Controller
             'devis' => $devis,
         ]);
     }
+
 }
