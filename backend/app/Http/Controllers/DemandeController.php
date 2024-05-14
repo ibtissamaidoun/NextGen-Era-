@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\enfant;
 use App\Models\demande;
 use App\Models\parentmodel;
 use App\Models\notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DemandeController extends Controller
@@ -103,8 +105,10 @@ class DemandeController extends Controller
      * the user is notified in both cases
      * TRUE -> go pay
      * FALSE -> demande annuler
+     * 
+     * @param bool $statut
      */
-    protected static function checkDemandeOffre( $demande_id )
+    public static function checkDemandeOffre( $demande_id )
     {
         $demande = demande::findOrFail($demande_id);
         $activities = $demande->offre()->first()->activites;
@@ -154,11 +158,14 @@ class DemandeController extends Controller
         return $statut;
     }
     /**
-     * -->TODO: associated with one facture
+     * admin valide la demande
+     * 
+     * 
      * if payed :
-     *     - affect children to there activities.
+     *     - affect children to there activities. -> EDT
      *     - demande statut = paye.
-     * the user is notified -->TODO: with recu.
+     *     - the user is notified.
+     * -->TODO: create recu.
      */
     public function payeDemande($demande_id)
     {
@@ -170,26 +177,54 @@ class DemandeController extends Controller
 
 
         $demande = demande::findOrFail($demande_id);
-        $activities = $demande->offre()->first()->activites;
+        $activities = $demande->getActvites()->distinct('id')->get();
 
         // Retrieve all children associated with the demande, the power of relations
         $children = $demande->getEnfants()->distinct('id')->get();
-        
-        // If capacity is not exceeded, add children to activities and update their schedules in emploi du temps
-        foreach ($children as $child) 
+
+        // --->>> FOR ACTIVITES
+        if($demande->pack()->first() && ! $demande->offre()->first())
         {
-            foreach ($activities as $activity) 
-            { 
+            $data = DeviController::createDevis($demande_id);
+            $activiteStudents = $data['enfantsActivites'];
+            foreach($activiteStudents as $actStud)
+            {
+                $child = $actStud['enfantData'];
+                
+                $activity = $actStud['activiteData'];
                 $activity->effectif_actuel += 1;
                 $activity->save();
 
+                // retrieve the activity horaires
                 $horaires = $activity->horaires()->get();
+                // remplire la table EDT
                 $child->activites()->attach($activity->id,['horaire_1' => $horaires[0]->id,
                                                            'horaire_2' => $horaires[1]->id]);
             }
         }
+        // --->>> FOR OFFRE
+        elseif( !$demande->pack()->first() && $demande->offre()->first())
+        {
+            // If capacity is not exceeded, add children to activities and update their schedules in emploi du temps
+            foreach ($children as $child) 
+            {
+                foreach ($activities as $activity) 
+                { 
+                    $activity->effectif_actuel += 1;
+                    $activity->save();
+                    
+                    // retrieve the activity horaires
+                    $horaires = $activity->horaires()->get();
+                    // remplire la table EDT
+                    $child->activites()->attach($activity->id,['horaire_1' => $horaires[0]->id,
+                                                               'horaire_2' => $horaires[1]->id]);
+                }
+            }
+        }
+
         // Update the status of the demande :) i am happy if it reaches this
         $demande->statut = 'paye';
+        $demande->administrateur_id = (Auth::user())->administrateur->id;
         $demande->save();
 
         // TODO : facture paye
@@ -199,7 +234,7 @@ class DemandeController extends Controller
         // notifier le parent 
         $notification =notification::create([
             'type' => 'Facture Payee',
-            'contenu' => 'Votre Facture de'.'date facture Y-m'.' a ete bien payee',
+            'contenu' => 'Votre Facture de '.Carbon::now()->format('Y-m').' a ete bien payee',
         ]);
         $parent = $demande->parentmodel()->first();
         $notification->users()->attach($parent->id, ['date_notification' => now()]);
@@ -207,4 +242,10 @@ class DemandeController extends Controller
 
         return response()->json(['message' => 'Demande validated and children placed in activities successfully.']);
     }
+
+    /**
+     * TODO : delete demande refused -Fuction-
+     */
+
+     
 }

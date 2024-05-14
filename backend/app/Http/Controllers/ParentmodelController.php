@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\horaire;
 use App\Models\User;
+use App\Models\offre;
 use App\Models\parentmodel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\offre;
 
 class ParentmodelController extends Controller
 {
@@ -190,16 +192,50 @@ public function update(Request $request, $id)
 
     //taha partie 
     public function getoffers()
-{
-    $offers = offre::select('titre','id')->get();
-    return response()->json(['offres'=>$offers]);
-   
-}
+    {
+        $offers = offre::select('titre','id')->get();
+        return response()->json(['offres'=>$offers]);
+    
+    }
 
-public function showoffer($id)
-{
-    $offer = offre::findorfail($id);
-    return response()->json([$offer]);
-}
+    public function showoffer($id)
+    {
+        $offer = offre::findorfail($id);
+        return response()->json([$offer]);
+    }
+
+    /**
+     * 3ajarreb
+    */
+    public function EDT(Request $request)
+    {
+        $user = Auth::user();
+        $parent = $user->parentmodel;
+        // Retrieve the child_id from the request
+        $child_id = $request->child_id;
+        $child = $parent->enfants()->find($child_id);
+        $activites = $child->activites()->select(['id','titre'])->get();
+        $data = [];
+        foreach($activites as $activite)
+        {
+            $horaires = [horaire::find($activite->pivot->horaire_1),
+                         horaire::find($activite->pivot->horaire_2)];
+            foreach($horaires as $horaire)
+            {
+                $animateur = $activite->getAnimateurs()->where('horaire_id',$horaire->id)->first();
+                $user = $animateur->user;
+
+                $data[] = [
+                    'activite' => $activite->titre,
+                    'animateur' => $user->nom.' '.$user->prenom,
+                    'jour_semaine' => $horaire->jour_semaine,
+                    'heure_debut' => $horaire->heure_debut,
+                    'heure_fin' => $horaire->heure_fin,
+                ];
+            }
+        }
+        // Send the data to the parent
+        return response()->json(['child_activities' => $data]);
+    }
 
 }

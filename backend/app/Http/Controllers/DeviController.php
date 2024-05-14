@@ -16,6 +16,12 @@ use App\Models\administrateur;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ *  !!!!! BE CAREFUL WITH THIS CODE IT'S THE MAIN BRAIN OF ALL THE PROJECT LOGIC, IF IT GOES WE GOES !!!!!
+ * 
+ * AT FIRST ONLY WE AND GOD KNOWS HOW IT WORKS , NOW ONLY GOD KNOWS.
+ */
+
 class DeviController extends Controller
 {
     /**
@@ -297,7 +303,7 @@ class DeviController extends Controller
      * @param int $tva
      * @return 
      */
-    protected static function createDevis($demande_id, $type = 'Devis' ,$status = true ,$tva = 20) // on work
+    public static function createDevis($demande_id, $type = 'Devis' ,$status = true ,$tva = 20) // on work
     {
         $demande = demande::find($demande_id);
         $parent = $demande->parentmodel()->first();
@@ -319,7 +325,9 @@ class DeviController extends Controller
                 $tarif = $activite->tarif*(1 - $remise/100);
                 $enfantActivites[] = [
                     'enfant'=>$enfant->prenom,
+                    'enfantData'=>$enfant,
                     'activite'=>$activite->titre,
+                    'activiteData'=>$activite,
                     'effictif'=>$activite->effectif_actuel.' sur '.$activite->effectif_max,
                     'seances'=>$activite->nbr_seances_semaine,
                     'tarifSans'=>$activite->tarif,
@@ -410,7 +418,7 @@ class DeviController extends Controller
     }
     /**
      *  -- apres action de anass
-     *  ->>>  TODO : 1- Need to planifier les factures et automatiser l'envoie des facture
+     *  ->>>  TODO : 1- // annuler // Need to planifier les factures et automatiser l'envoie des facture
      *               2- generation des recu apres payement des facture (is_paye = true)
      * */ 
 
@@ -435,7 +443,7 @@ class DeviController extends Controller
         }
 
         // creer pdf
-        $pdf = \App::make('snappy.pdf.wrapper');
+        $pdf = \App::make('snappy.pdf.wrapper'); // !!!!! DON'T CHANGE THIS LINE, IT WORKS PERFECTLY FINE !!!!! ///
         $output = $pdf->loadHTML($html)->output();
         // Store the pdf in local
         $pdfPath = 'storage/pdfs/devis/'.$data['serie'].'.pdf';  // .date('_His')
@@ -464,6 +472,17 @@ class DeviController extends Controller
         return $data;
     }
 
+    /**
+     * 1. the parent  chooses childrens to enroll after he clicked on the offer
+     * 2. we retrieve the activities attached to the offer
+     * 3.retrieve the paiement id
+     * 4. retrieve the auth parent
+     * 5. create demande
+     * 6. check if the demande is valid
+     * 7.if true generate devis ,:) happy happy
+     * 8. if false return sad :( :(
+     * 9. notify the user in both cases
+     */
     public function chooseofferAndGenerateDevis(Request $request, $offerId)
     {
         try {
@@ -492,7 +511,7 @@ class DeviController extends Controller
             $demande =Demande::create([
                 'offre_id' => $offerId,
                 'paiement_id' => $paymentId,
-              'parentmodel_id' =>$parent->id,
+                'parentmodel_id' =>$parent->id,
                 'statut' => 'brouillon',
                 'date_demande' => now(),
             ]);
@@ -504,15 +523,19 @@ class DeviController extends Controller
                 }
             }
 
-            // check the validation of demande
-            
-
-           // Generate a devis for the parent after filling the pivot table
-           $data = $this->createDevis($demande->id, 'facture');
-           $devis = Devi::findOrFail($data['devis'])->makeHidden(['created_at','updated_at','id']);
-    
-            return response()->json(['message' => 'Devis generated successfully for selected children and all activities in the offer',
-                                     'devis'=>$devis]);
+            // check the validation of demande + send notification in both cases
+            if(! DemandeController::checkDemandeOffre($demande->id) )
+                return response()->json(['message' => 'Demands doesn\'t meet the requirements.']);
+            else
+            {
+                // Generate a devis for the parent after filling the pivot table
+                $data = $this->createDevis($demande->id);
+                $devis = Devi::findOrFail($data['devis'])->makeHidden(['created_at','updated_at']);
+                
+         
+                 return response()->json(['message' => 'Devis generated successfully for selected children and all activities in the offer',
+                                          'devis'=>$devis]);
+            }
         }
         catch (\Exception $e)
         {
@@ -523,19 +546,26 @@ class DeviController extends Controller
 
     public function overview($demandeId)
     {
-        $data = DeviController::createDevis($demandeId, 20, false);
+        $data = DeviController::createDevis($demandeId, 'devis', false);
         if (is_array($data) && isset($data['error'])) {
             // handle error, for example, return it as a response
             return response()->json(['error' => $data['error']], $data['status_code'] ?? 500);
         }
-
+        foreach($data['enfantsActivites'] as $key => $item)
+        {
+            $newData = [
+                'enfant'=>$item['enfant'],
+                'activite'=>$item['activite'],
+            ];
+            $data['enfantsActivites'][$key] = $newData;
+        }
         return response()->json($data);
     }
     public function downloadDevis($demande_id)
     {
         $user = Auth::User();
         $parent = $user->parentmodel;
-        $demande = $parent->demande()->find($demande_id);
+        $demande = $parent->demandes()->find($demande_id);
 
         $devis = $demande->devi;
         $devisPath = $devis->devi_pdf;
@@ -556,7 +586,7 @@ class DeviController extends Controller
         // Generate a notification for all admins
         $notification = new  notification([
             'type' => 'Devis Validated',
-            'contenu' => 'A devis has been validated.'
+            'contenu' => 'A devis has been validated of the user Nº'.$demande->parentmodel->id,
         ]);
         $notification->save();
         $admins = User::where('role', 'admin')->get();
@@ -575,20 +605,21 @@ class DeviController extends Controller
        
         $devis = $parent->devis()->find($devis_id);
         $demande = $devis->demande()->first();
+        $demande->update(['statut' => 'refuse']);
 
         $devis->statut = 'refuse';
         $devis->save();
 
         // notification pour tout les admin :(
-        $notification = new  notification([
-            'type' => 'Devis Refused',
-            'contenu' => 'A devis has been refused.'
-        ]);
-        $notification->save();
-        $admins = administrateur::all();
-        foreach($admins as $admin)
-            $notification->users()->attach($admin->id, ['date_notification' => now()]);
-
+                    /**$notification = new  notification([
+                        'type' => 'Devis Refused',
+                        'contenu' => 'A devis has been refused.'
+                    ]);
+                    $notification->save();
+                    $admins = administrateur::all();
+                    foreach($admins as $admin)
+                        $notification->users()->attach($admin->id, ['date_notification' => now()]);
+                    */
         return response()->json([
             'message' => 'devis refuser avec succes',
         ]);
