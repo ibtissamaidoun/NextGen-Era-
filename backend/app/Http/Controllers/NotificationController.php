@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\administrateur;
+use App\Models\animateur;
 use App\Models\notification;
 use Illuminate\Http\Request;
 use App\Models\parentmodel;
@@ -69,9 +71,8 @@ class NotificationController extends Controller
     /**
      * Afficher les notifications existant (pas logique -> chaque user va voir ses notifiction)
      */
-    public function indexparent(Request $request)
+    public function indexParent(Request $request)
     {
-        //validation des inputs 
         // Retrieve the authenticated parent user
         $user = $request->user();
     
@@ -85,9 +86,52 @@ class NotificationController extends Controller
         $notifications->each(function ($notification) {
             $notification->update(['statut' => 'lu']);
         });
+        
         // Return notifications as JSON response
         return response()->json(['notifications' => $notifications]);
     }
 
+    public function indexAnimator(Request $request)
+    {
+        // Retrieve the authenticated animator user
+        $user = $request->user();
+    
+        // Retrieve the animator model associated with the user
+        $animator = animateur::where('user_id', $user->id)->firstOrFail();
+    
+        // Retrieve the notifications for the animator
+        $notifications = $animator->user->notifications()->latest()->get();
+    
+        // Mark notifications as read
+        $notifications->each(function ($notification) {
+            $notification->update(['statut' => 'lu']);
+        });
+        
+        // Return notifications as JSON response
+        return response()->json(['notifications' => $notifications]);
+    }
 
+    public function indexAdmin(Request $request)
+    {
+        // Retrieve the authenticated admin user
+        $user = $request->user();
+    
+        // Retrieve the admin model associated with the user
+        $admin = administrateur::where('user_id', $user->id)->firstOrFail();
+    
+        // Retrieve the notifications for the admin
+        $notifications = $admin->user->notifications()->latest()->get();
+    
+        // Mark notifications as read
+        $notifications->each(function ($notification) {
+            $notification->update(['statut' => 'lu']);
+        });
+        
+        // Return notifications as JSON response
+        return response()->json(['notifications' => $notifications]);
+    }
 }
+
+
+
+
