@@ -50,7 +50,7 @@ class activite extends Model
 
 
      public function paiements(): BelongsToMany
-     {
+  {
          return $this->belongsToMany(paiement::class, 'paiement_activite')
                      ->withPivot('remise');   
       }

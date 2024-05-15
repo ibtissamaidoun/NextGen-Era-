@@ -53,15 +53,14 @@ class ActiviteController extends Controller
             'tarif' => 'required|numeric|min:0',
             'effectif_min' => 'required|integer|min:0',
             'effectif_max' => 'required|integer|min:0|gte:effectif_min',
-            'effectif_actuel'=>  'required|integer|lte:effectif_max',
+            'effectif_actuel' => 'required|integer|lte:effectif_max',
             'age_min' => 'required|integer|min:0',
             'age_max' => 'required|integer|min:0|gte:age_min',
-
             'option_paiement' => 'required|array',
             'remise' => 'required|array|min:0|max:100',
+            'date_debut_etud'=>'required|date',
+            'date_fin_etud'=>'required|date',
         ]);
-
-        // If validation fails, return a response with validation errors
         if ($validator->fails()) {
             return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422);
         }
@@ -162,25 +161,35 @@ class ActiviteController extends Controller
         
         // Validate the incoming request data
         $validatedData = $request->validate([
-            // Validation rules for activity fields
-            'titre' => 'sometimes|required|string|max:255',
-            'description' => 'sometimes|required|string',
-            'objectifs' => 'sometimes|required|string',
-            'image_pub' => 'sometimes|required|image|max:2048',
-            'fiche_pdf' => 'nullable|sometimes|file|max:2048',
-            'lien_youtube' => 'sometimes|required|string',
-            'type_activite' => 'sometimes|required|string',
-            'domaine_activite' => 'sometimes|required|string',
-            'nbr_seances_semaine' => 'sometimes|required|integer|min:1',
-            'tarif' => 'sometimes|required|numeric|min:0',
-            'effectif_min' => 'sometimes|required|integer|min:0',
-            'effectif_max' => 'sometimes|required|integer|min:0|gte:effectif_min',
-            'age_min' => 'sometimes|required|integer|min:0',
-            'age_max' => 'sometimes|required|integer|min:0|gte:age_min',
-        ]);    
+            'titre' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string',
+            'objectifs' => 'sometimes|string',
+            'image_pub' => 'sometimes|image|max:2048',
+            'fiche_pdf' => 'nullable|file|mimes:pdf|max:2048',
+            'lien_youtube' => 'sometimes|string|url',
+            'type_activite' => 'sometimes|string',
+            'domaine_activite' => 'sometimes|string',
+            'nbr_seances_semaine' => 'sometimes|integer|min:1',
+            'tarif' => 'sometimes|numeric|min:0',
+            'effectif_min' => 'sometimes|integer|min:0',
+            'effectif_max' => 'sometimes|integer|min:0|gte:effectif_min',
+            'age_min' => 'sometimes|integer|min:0',
+            'age_max' => 'sometimes|integer|min:0|gte:age_min',
+        ]);
+
+        // Handle file uploads
+        if ($request->hasFile('image_pub')) {
+            $validatedData['image_pub'] = $request->file('image_pub')->store('images', 'public');
+        }
+
+        if ($request->hasFile('fiche_pdf')) {
+            $validatedData['fiche_pdf'] = $request->file('fiche_pdf')->store('pdfs', 'public');
+        }
+
         // Update the activity with the validated data
-        $activity->update($validatedData);
-    
+        $activity->fill($validatedData);
+        $activity->save();
+
         // Return a success message along with the updated activity as JSON response
         return response()->json(['message' => 'Activity updated successfully', 'activity' => $activity]);
     }
@@ -291,9 +300,9 @@ class ActiviteController extends Controller
             return response()->json(['message' => 'Activity not found'], 404);
         }
 
-        // Validate the incoming request data to ensure the horaire ID is provided and valid
+        
         $validatedData = $request->validate([
-            'horaire_id' => 'required|exists:horaires,id',  // Ensure the horaire ID exists in the database
+            'horaire_id' => 'required|integer|exists:horaires,id',  // Ensure the horaire ID exists in the database
         ]);
 
         // Fetch the existing horaire from the database
@@ -319,6 +328,10 @@ class ActiviteController extends Controller
     public function storeOP(Request $request, $activiteId)
     {
         // validate input....
+        $fields= $request->validate([
+            'paiement_id' => 'required|integer|exists:paiements,id',  
+            'remise' => 'required|numeric|min:0|max:100'
+        ]);
         
         if( ! $activite = Activite::find($activiteId))
         {
@@ -330,10 +343,10 @@ class ActiviteController extends Controller
         if( paiement::find($request->paiement_id))
         {
             // paiement existe
-            if ( ! $activite->paiements()->find($request->paiement_id) )
+            if ( ! $activite->paiements()->find($fields['paiement_id']) )
             {
                 // pas d'occurence
-                $activite->paiements()->attach($request->paiement_id,['remise' => $request->remise]);
+                $activite->paiements()->attach($fields(['paiement_id']),['remise' =>$fields['remise']]);
 
                 return response()->json([
                     'message' => 'le mode de paiment est cree avec succes',
@@ -358,38 +371,42 @@ class ActiviteController extends Controller
     public function updateOP(Request $request, $activiteId, $paiementId)
     {
         // validate input....
+        $fields= $request->validate([
+            'paiement_id' => 'required|integer|exists:paiements,id',  
+            'remise' => 'required|numeric|min:0|max:100'
+        ]);
         
         if( ! $activite = Activite::find($activiteId))
         {
             return response()->json([
                 'message' => 'l\'activite choisie n\'existe pas',
-            ], 403);
+            ], 404);
         }
         
         if( paiement::find($paiementId) && paiement::find($request->paiement_id))
         {
             // paiement existe
-            if ( ! $activite->paiements()->where('paiement_id','!=',$paiementId)->find($request->paiement_id) )
+            if ( ! $activite->paiements()->where('paiement_id','!=',$paiementId)->find($fields['paiement_id']) )
             {
                 // pas d'occurence
-                $activite->paiements()->updateExistingPivot($paiementId,['paiement_id'=> $request->paiement_id, 'remise' => $request->remise]);
+                $activite->paiements()->updateExistingPivot($paiementId,['paiement_id'=> $fields['$paiementId'], 'remise' =>$fields['remise']]);
                 return response()->json([
                     'message' => 'le mode de paiment est mise a jour avec succes',
                     'paiements' => $activite->paiements,
-                ], 201);
+                ], 200);
             }
             else
             {
                 return response()->json([
                     'message' => 'le nouveau mode de paiment va creer des occurences',
-                ], 403);
+                ], 409);
             }
         }
         else
         {
             return response()->json([
                 'message' => 'le mode de paiment choisie n\'existe pas',
-            ], 403);
+            ], 404);
         }
 
     }

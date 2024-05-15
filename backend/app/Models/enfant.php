@@ -25,7 +25,8 @@ class enfant extends Model
 
     public function activites(): BelongsToMany
     {
-        return $this->belongsToMany(activite::class, 'emploi_de_temps')->withPivot('horaire_1','horaire_2');   
+        return $this->belongsToMany(activite::class, 'emploi_de_temps')
+                    ->withPivot(['horaire_1','horaire_2']);   
      }
 
    // -----------        enfant_demande_activite         ----------- //

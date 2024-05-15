@@ -2,11 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use Carbon\Carbon;
 use App\Models\devi;
+use App\Models\User;
+
+use App\Models\offre;
+use App\Models\enfant;
 use App\Models\demande;
+use App\Models\activite;
+use App\Models\parentmodel;
+use App\Models\notification;
 use Illuminate\Http\Request;
+use App\Models\administrateur;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+
+/**
+ *  !!!!! BE CAREFUL WITH THIS CODE IT'S THE MAIN BRAIN OF ALL THE PROJECT LOGIC, IF IT GOES WE GOES !!!!!
+ * 
+ * AT FIRST ONLY WE AND GOD KNOWS HOW IT WORKS , NOW ONLY GOD KNOWS.
+ */
 
 class DeviController extends Controller
 {
@@ -21,22 +38,18 @@ class DeviController extends Controller
     {
         $user = Auth::User();
 
-        if($user && $user->role == 'parent')
-        {
-            $devis = ($user->parentmodel)->devis()->get()->setHidden(['parentmodel_id','updated_at']);
+        if ($user && $user->role == 'parent') {
+            $devis = ($user->parentmodel)->devis()->get()->setHidden(['parentmodel_id', 'updated_at']);
             $data = [
-                'devis'=>$devis,
+                'devis' => $devis,
             ];
-        }
-        else
-        {
+        } else {
             // admin
-            $deviss = devi::get()->makeHidden(['created_at','updated_at']);
+            $deviss = devi::get()->makeHidden(['created_at', 'updated_at']);
             $data = [];
-            foreach($deviss as $devis)
-            {
-                $parentData = $devis->parentmodel()->first()->makeHidden(['created_at','updated_at','user_id']);
-                $userData = $parentData->user()->first()->makeHidden(['created_at','updated_at','role','id']);
+            foreach ($deviss as $devis) {
+                $parentData = $devis->parentmodel()->first()->makeHidden(['created_at', 'updated_at', 'user_id']);
+                $userData = $parentData->user()->first()->makeHidden(['created_at', 'updated_at', 'role', 'id']);
                 $data[] = [
                     'devis' => $devis,
                     'parent' => array_merge($parentData->toArray(), $userData->toArray()),
@@ -45,7 +58,6 @@ class DeviController extends Controller
         }
 
         return $data;
-
     }
 
     /**
@@ -67,13 +79,12 @@ class DeviController extends Controller
     public function show($devi)
     {
         $user = Auth::User();
-        try{
-            if($user && $user->role == 'parent')
+        try {
+            if ($user && $user->role == 'parent')
                 $devis = ($user->parentmodel)->devis()->find($devi)->setHidden(['parentmodel_id']);
             else
                 $devis = devi::with('parentmodel')->find($devi);
-        }
-        catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'error' => $th->getMessage(),
@@ -87,7 +98,7 @@ class DeviController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,$devis)
+    public function update(Request $request, $devis)
     {
         //
     }
@@ -98,19 +109,17 @@ class DeviController extends Controller
     public function destroy($devi)
     {
         $user = Auth::User();
-        try{
-            if($user && $user->role == 'parent'){
+        try {
+            if ($user && $user->role == 'parent') {
                 $devis = ($user->parentmodel)->devis()->find($devi);
-                if(!$devis)
+                if (!$devis)
                     return response()->json([
                         'message' => 'Acces non autorisee'
                     ], 403);
             }
-            
+
             $devis->delete();
-            
-        }
-        catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage()
@@ -132,18 +141,18 @@ class DeviController extends Controller
      * @param int $demande_id
      * @return array
      */
-    public static function getDevis(int $parent, int $demande = null) : array
+    public static function getDevis(int $parent, int $demande = null): array
     {
-        if($demande)
-        $data = devi::where('parentmodel_id', $parent)->where('demande_id',$demande)->first()->makeHidden(['parentmodel_id','demande_id']);
+        if ($demande)
+            $data = devi::where('parentmodel_id', $parent)->where('demande_id', $demande)->first()->makeHidden(['parentmodel_id', 'demande_id']);
         else
-        $data = devi::where('parentmodel_id', $parent)->get()->makeHidden(['parentmodel_id']);
+            $data = devi::where('parentmodel_id', $parent)->get()->makeHidden(['parentmodel_id']);
 
-       return $data->toArray();
+        return $data->toArray();
     }
 
 
-        /**
+    /**
      * Calcule de prix d'un devis
      * 
      * @param int $demande_id
@@ -151,23 +160,20 @@ class DeviController extends Controller
      * @param int $tva
      * @return array
      */
-    public static function calculerPrix($demande_id = 1,$enfantActivites = [], $tva = 20) : array
+    protected static function calculerPrix($demande_id, $enfantActivites = [], $tva = 20): array
     {
         $demande = demande::find($demande_id);
         $prixHT = 0;
 
-        if($pack = $demande->pack()->first())
-        {
-            if($pack->id == 1) // Pack Multi-Activités
+        if ($pack = $demande->pack()->first()) {
+            if ($pack->id == 1) // Pack Multi-Activités
             {
                 $prixRemise = 0;
                 $remiseComule = 0;
-                foreach ($enfantActivites as $key => $enfantActivite)
-                {
-                    if($key == 0) // la 1er activite
+                foreach ($enfantActivites as $key => $enfantActivite) {
+                    if ($key == 0) // la 1er activite
                         $remise = 0;
-                    else
-                    {   
+                    else {
                         // augmentation de 5%
                         $remiseComule += 10;
                         // ne depasse pas remise% de remise
@@ -177,39 +183,34 @@ class DeviController extends Controller
                     $prixHT += $enfantActivite['tarif'];
                     $prixRemise += $enfantActivite['tarif'] * (1 - $remise);
                 }
-                
             }
-            if($pack->id == 2) // Pack Familial
+            if ($pack->id == 2) // Pack Familial
             {
                 $countEnfants = count($enfantActivites);
                 $prixRemise = 0;
-                for($i = 0; $i < $countEnfants; $i++)
-                {
-                    
-                    $remise = min($i*10, $pack->remise) / 100;
+                for ($i = 0; $i < $countEnfants; $i++) {
+
+                    $remise = min($i * 10, $pack->remise) / 100;
                     $prixRemise += $enfantActivites[0]['tarif'] * (1 - $remise);
                 }
                 $prixHT += $enfantActivites[0]['tarif'] * $countEnfants;
             }
-            if($pack->id == 3) // Pack nombre d'Activites ( +eurs enfants -> +eurs activites)
+            if ($pack->id == 3) // Pack nombre d'Activites ( +eurs enfants -> +eurs activites)
             {
                 $enfants = $demande->getEnfants()->distinct('id')->get();
-                
+
                 $prixRemise = 0;
-                
-                foreach($enfants as $enfant)
-                {
-                    $activites = $demande->getActvites()->where('enfant_id',$enfant->id)->orderBy('tarif')->get();
-    
+
+                foreach ($enfants as $enfant) {
+                    $activites = $demande->getActvites()->where('enfant_id', $enfant->id)->orderBy('tarif')->get();
+
                     $remiseComule = 10;
-                    foreach ($activites as $key => $activite)
-                    {
+                    foreach ($activites as $key => $activite) {
                         $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
-                        $tarif = $activite->tarif*(1 - $remise/100);
-                        if($key == 0) // la 1er activite de cette enfant
+                        $tarif = $activite->tarif * (1 - $remise / 100);
+                        if ($key == 0) // la 1er activite de cette enfant
                             $remise = 0;
-                        else
-                        {   
+                        else {
                             // augmentation de remise%
                             $remiseComule += 10;
                             // ne depasse pas 45% de remise
@@ -221,27 +222,24 @@ class DeviController extends Controller
                     }
                 }
             }
-            if($pack->id == 4) // Pack nombre d’enfants ( +eurs enfants -> +eurs activites)
+            if ($pack->id == 4) // Pack nombre d’enfants ( +eurs enfants -> +eurs activites)
             {
                 $activites = $demande->getActvites()->distinct('id')->get();
-                
-                $prixRemise = 0;
-                
-                foreach($activites as $activite)
-                {
-                    $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
-                    $tarif = $activite->tarif*(1 - $remise/100);
 
-                    $enfants = $demande->getEnfants()->where('activite_id',$activite->id)->get();
-    
+                $prixRemise = 0;
+
+                foreach ($activites as $activite) {
+                    $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
+                    $tarif = $activite->tarif * (1 - $remise / 100);
+
+                    $enfants = $demande->getEnfants()->where('activite_id', $activite->id)->get();
+
                     $remiseComule = 10;
-                    foreach ($enfants as $key => $enfant)
-                    {
-    
-                        if($key == 0) // la 1er activite de cette enfant
+                    foreach ($enfants as $key => $enfant) {
+
+                        if ($key == 0) // la 1er activite de cette enfant
                             $remise = 0;
-                        else
-                        {   
+                        else {
                             // augmentation de remise%
                             $remiseComule += 10;
                             // ne depasse pas 45% de remise
@@ -253,44 +251,43 @@ class DeviController extends Controller
                     }
                 }
             }
-
-        }
-        elseif($offre = $demande->offre()->first())
-        {
-            foreach($enfantActivites as $enfantActivite)
+        } elseif ($offre = $demande->offre()->first()) {
+            foreach ($enfantActivites as $enfantActivite)
                 $prixHT += $enfantActivite['tarif'];
 
-            $prixRemise = $prixHT*(1 - $offre->remise/100);
-        }
-        else
-        {
-            foreach($enfantActivites as $enfantActivite)
+            $prixRemise = $prixHT * (1 - $offre->remise / 100);
+        } else {
+            foreach ($enfantActivites as $enfantActivite)
                 $prixHT += $enfantActivite['tarif'];
             $prixRemise = $prixHT;
         }
 
 
-        $TTC = $prixRemise*(1 + $tva/100);
+        $TTC = $prixRemise * (1 + $tva / 100);
 
-            return [
-                'HT'=>$prixHT,
-                'Remise'=>$prixRemise,
-                'TTC'=>$TTC,
-            ];
+        return [
+            'HT' => $prixHT,
+            'Remise' => $prixRemise,
+            'TTC' => $TTC,
+        ];
     }
 
     /**
-     * Creation d'une instance de devis pour les Offre
+     * Creation d'une instance de (Devis, Facture) pour les Offre et les Activites si statue=true,
+     * sinon il calcule la data des devis et des factures sans creer une instance.
      * 
      * @param int $demande_id
+     * @param string $type
+     * @param bool $status
      * @param int $tva
-     * @return devi
+     * @return 
      */
-    public static function createDevis($demande_id = 1, $tva = 20)
+    public static function createDevis($demande_id, $type = 'Devis' ,$status = true ,$tva = 20) // on work
     {
         $demande = demande::find($demande_id);
         $parent = $demande->parentmodel()->first();
         $offre = $demande->offre()->first();
+        $pack = $demande->pack()->first();
         $enfants = $demande->getEnfants()->distinct('id')->get();
 
         $enfantActivites = [];
@@ -299,39 +296,324 @@ class DeviController extends Controller
             // un seul couple [activite - enfant] par demande de type Offre
             $activites = $demande->getActvites()->where('enfant_id',$enfant->id)->orderBy('tarif')->get();
             foreach($activites as $activite){
-                $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
+                if($demande->pack_id)
+                    $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
+                else
+                    $remise = 0;
+
                 $tarif = $activite->tarif*(1 - $remise/100);
                 $enfantActivites[] = [
                     'enfant'=>$enfant->prenom,
+                    'enfantData'=>$enfant,
                     'activite'=>$activite->titre,
+                    'activiteData'=>$activite,
                     'effictif'=>$activite->effectif_actuel.' sur '.$activite->effectif_max,
                     'seances'=>$activite->nbr_seances_semaine,
+                    'tarifSans'=>$activite->tarif,
                     'tarif'=>$tarif,
+                    'remise'=>$remise,
                 ];
             }
         }
         // calcule des tarif
         $prix = deviController::calculerPrix($demande_id, $enfantActivites, $tva);
-        // creer pdf
+        // Ajout de 14 jours à la date de demande
+        $expiration = Carbon::parse($demande->date_demande)->addWeeks(2)->format('Y-m-d');
+
+        // image de NEXGENERA
+        $path = base_path('public\storage\images\OrangeNext@Ai.jpg');
+        $typeImg = pathinfo($path, PATHINFO_EXTENSION);
+        $imgData = file_get_contents($path);
+        $img = 'data:image/'.$typeImg.';base64,'.base64_encode($imgData);
 
 
+        // prix/option de paiment
+        if($offre)
+        {
+            $start = Carbon::parse($offre->date_debut);
+            $end = Carbon::parse($offre->date_fin);
+        }
+        else
+        {
+            $start = Carbon::parse($activites[0]->date_debut_etud);
+            $end = Carbon::parse($activites[0]->date_fin_etud);
+        }
 
-        return response()->json([
-            'serie'=>'D'.Carbon::now()->format('yWw'),
+        switch ($demande->paiement()->first()->option_paiement) {
+            case 'mensuel': 
+                    $period = $start->diffInMonths($end);
+                    $prixOP = $prix['TTC']/$period;
+                    $prixOP = $prixOP.' DH / mois';
+                    $periodMsg = $period.' mois';
+                    break;
+            case 'trimestriel':
+                $period = $start->diffInMonths($end)/3;
+                $prixOP = $prix['TTC']/$period;
+                $prixOP = $prixOP.' DH / trimestre';
+                $periodMsg = $period.' trimestres';
+                break;
+            case 'semestriel':
+                $period = $start->diffInMonths($end)/6;
+                $prixOP = $prix['TTC']/$period;
+                $prixOP = $prixOP.' DH / semestre';
+                $periodMsg = $period.' semestres';
+                break;
+            case 'annuel':
+                $period = $start->diffInYears($end);
+                $prixOP = $prix['TTC']/$period;
+                $prixOP = $prixOP.' DH / annee';
+                $periodMsg = $period.' annees';
+                break;
+        }
+        
+        $data = [
+            'serie'=>'D'.Carbon::now()->format('yWw').$parent->id.$demande->id,
             'demande' => $demande,
+            'expiration' => $expiration,
             'offre'=> $offre,
-            'pack'=>$demande->pack()->first(),
-            'parent'=>$parent->user,
-            'Activite - Enfant'=>$enfantActivites,
-            'Prix HT'=>$prix['HT'],
-            'Prix avec remise'=>$prix['Remise'],
+            'pack'=> $pack,
+            'parent'=>$parent->user()->first(),
+            'enfantsActivites'=>$enfantActivites,
+            'optionPaiment'=>$demande->paiement()->first()->option_paiement,
+            'prixHT'=>$prix['HT'],
+            'prixRemise'=>$prix['Remise'],
+            'TVA'=> $tva,
             'TTC'=>$prix['TTC'],
+            'image'=> $img,
+            'type' => $type,
+            'prixOP' => $prixOP,
+            'period' => $periodMsg,
+        ];
+        if($status) // generer devis si status est true (par default)
+        {
+            $data = DeviController::generateDevis($demande_id, $data); 
+        }
+        else  // pour les factures et le overview de devis
+        {
+            unset($data['image'], $data['TTC'], $data['TVA'], $data['prixRemise'], $data['prixHT'], $data['serie'], $data['parent']);
+        }
+
+        return $data;   
+    }
+    /**
+     *  -- apres action de anass
+     *  ->>>  TODO : 1- // annuler // Need to planifier les factures et automatiser l'envoie des facture
+     *               2- generation des recu apres payement des facture (is_paye = true)
+     * */ 
+
+    protected static function generateDevis($demande_id, $data)
+    {
+        // loader le Devis en html
+        if ($data['offre']) {
+            unset($data['pack']);
+            $html = view('pdfs.devisTemplateOffre', $data)->render();
+        } elseif ($data['pack']) {
+            unset($data['offre']);
+            $html = view('pdfs.devisTemplatePack', $data)->render();
+        } else {
+            unset($data['pack']);
+            unset($data['offre']);
+            $html = view('pdfs.devisTemplate', $data)->render();
+        }
+
+        // creer pdf
+        $pdf = \App::make('snappy.pdf.wrapper'); // !!!!! DON'T CHANGE THIS LINE, IT WORKS PERFECTLY FINE !!!!! ///
+        $output = $pdf->loadHTML($html)->output();
+        // Store the pdf in local
+        $pdfPath = 'storage/pdfs/devis/'.$data['serie'].'.pdf';  // .date('_His')
+        // enregister localement
+        $pdf->save($pdfPath, true);
+
+        // ajout de path de pdf generer
+        $data['pdfPath'] = $pdfPath;
+
+        // supprimer l'atribut image de table $data
+        unset($data['image']);
+
+
+        //return response()->download($pdfPath);  // pour le telechargement
+        $devis = Devi::create([
+            'tarif_ht' => $data['prixHT'],
+            'tarif_ttc' => $data['TTC'],
+            'tva' => $data['TVA'],
+            'devi_pdf' => $data['pdfPath'],
+            'parentmodel_id' => $data['parent']->parentmodel->id,
+            'demande_id' => $demande_id,
+            //'date_expiration'=>$expiration,
         ]);
+        $data['devis'] = $devis->id;
 
-
-
-         
+        return $data;
     }
 
+    /**
+     * 1. the parent  chooses childrens to enroll after he clicked on the offer 
+     * 2. we retrieve the activities attached to the offer
+     * 3.retrieve the paiement id
+     * 4. retrieve the auth parent
+     * 5. create demande
+     * 6. check if the demande is valid
+     * 7.if true generate devis ,:) happy happy
+     * 8. if false return sad :( :(
+     * 9. notify the user in both cases
+     */
+    public function chooseofferAndGenerateDevis(Request $request, $offerId)
+    {
+        try {
+            $validated = $request->validate([
+                'enfants' => 'required|array',
+                'enfants.*' => 'exists:enfants,id'
+            ]);
+
+            $childrenIds = $validated['enfants'];
+
+            // Retrieve the offer and all associated activities
+            $offer = offre::with('activites')->findOrFail($offerId);
+            $allActivities = $offer->activites;
+
+            // Check if the offer has associated payment and retrieve the payment ID
+            $payment = $offer->paiement()->first();
+            if (!$payment) {
+                throw new \Exception("No payment associated with the offer.");
+            }
+            $paymentId = $payment->id;
+
+            $user = Auth::User();
+            $parent = $user->parentmodel;
+
+            // Create a new demande
+            $demande = Demande::create([
+                'offre_id' => $offerId,
+                'paiement_id' => $paymentId,
+                'parentmodel_id' =>$parent->id,
+                'statut' => 'brouillon',
+                'date_demande' => now(),
+            ]);
+    
+            // Fill the pivot table for each child and each activity
+            foreach ($childrenIds as $childId) {
+                foreach ($allActivities as $activity) {
+                    $demande->getActvites()->attach($activity->id, ['enfant_id' => $childId]);
+                }
+            }
+
+            // check the validation of demande + send notification in both cases
+            if(! DemandeController::checkDemandeOffre($demande->id) )
+                return response()->json(['message' => 'Demands doesn\'t meet the requirements.']);
+            else
+            {
+                // Generate a devis for the parent after filling the pivot table
+                $data = $this->createDevis($demande->id);
+                $devis = Devi::findOrFail($data['devis'])->makeHidden(['created_at','updated_at']);
+                
+         
+                 return response()->json(['message' => 'Devis generated successfully for selected children and all activities in the offer',
+                                          'devis'=>$devis]);
+            }
+        }
+        catch (\Exception $e)
+        {
+            Log::error('Failed to generate devis: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to generate devis: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function overview($demandeId)
+    {
+        $data = DeviController::createDevis($demandeId, 'devis', false);
+        if (is_array($data) && isset($data['error'])) {
+            // handle error, for example, return it as a response
+            return response()->json(['error' => $data['error']], $data['status_code'] ?? 500);
+        }
+        foreach($data['enfantsActivites'] as $key => $item)
+        {
+            $newData = [
+                'enfant'=>$item['enfant'],
+                'activite'=>$item['activite'],
+            ];
+            $data['enfantsActivites'][$key] = $newData;
+        }
+        return response()->json($data);
+    }
+    public function downloadDevis($demande_id)
+    {
+        $user = Auth::User();
+        $parent = $user->parentmodel;
+        $demande = $parent->demandes()->find($demande_id);
+
+        $devis = $demande->devi;
+        $devisPath = $devis->devi_pdf;
+        return response()->download($devisPath);
+    }
+    public function validateDevis($devisId)
+    {
+        // Retrieve the devis :)
+        $devis = devi::findOrFail($devisId);
+        $devis->statut = 'valide';
+        $devis->save();
+
+        // Retrieve the  demande :(
+        $demande = demande::findOrFail($devis->demande_id);
+        $demande->statut = 'en cours';
+        $demande->save();
+
+        // Generate a notification for all admins
+        $notification = new  notification([
+            'type' => 'Devis Validated',
+            'contenu' => 'A devis has been validated of the user Nº'.$demande->parentmodel->id,
+        ]);
+        $notification->save();
+        $admins = User::where('role', 'admin')->get();
+        foreach($admins as $admin)
+            $notification->users()->attach($admin->id, ['date_notification' => now()]);
+
+        return response()->json([
+            'message' => 'devis validee avec succes.',
+        ]);
+     
+    }
+    public function refuseDevis($devis_id)
+    {
+        $user = Auth::User();
+        $parent = $user->parentmodel;
+       
+        $devis = $parent->devis()->find($devis_id);
+        $demande = $devis->demande()->first();
+        $demande->update(['statut' => 'refuse']);
+
+        $devis->statut = 'refuse';
+        $devis->save();
+
+        // notification pour tout les admin :(
+                    /**$notification = new  notification([
+                        'type' => 'Devis Refused',
+                        'contenu' => 'A devis has been refused.'
+                    ]);
+                    $notification->save();
+                    $admins = administrateur::all();
+                    foreach($admins as $admin)
+                        $notification->users()->attach($admin->id, ['date_notification' => now()]);
+                    */
+        return response()->json([
+            'message' => 'devis refuser avec succes',
+        ]);
+    }
+    public function motifRefuse(Request $request, $devis_id) // {motif:text}
+    {
+        // validate input ...
+
+        $user = Auth::User();
+        $parent = $user->parentmodel;
+       
+        $devis = $parent->devis()->find($devis_id);
+        
+        $devis->motif_refus = $request['motif'];
+        $devis->save();
+
+        return response()->json([
+            'message' => 'votre motif a ete bien envoyer.',
+            'devis' => $devis,
+        ]);
+    }     
 
 }

@@ -45,7 +45,7 @@ class AdministrateurController extends Controller
                 'nullable',
                 'regex:/^05[0-9]{8}$/i', // format validation
             ],
-            'mot_de_passe' => 'required|string|min:8',
+            'mot_de_passe' => 'required|string|min:6|confirmed',
 
         ]);
 
@@ -110,14 +110,14 @@ class AdministrateurController extends Controller
           //  'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i', // format validation
         ],
         'telephone_portable' => [
-            'required',
+            'required|regex:/^0[67]\d{8}$/',
          //   'regex:/^(06|07)[0-9]{8}$/i', // format validation
         ],
         'telephone_fixe' => [
-            'nullable',
+            'nullable|regex:/^0[5]\d{8}$/',
         //    'regex:/^05[0-9]{8}$/i', // format validation
         ],
-        'mot_de_passe' => 'nullable|string|min:8',
+        'mot_de_passe' => 'nullable|string|min:8|confirmed',
     ]);
 
     DB::beginTransaction();
@@ -169,7 +169,7 @@ class AdministrateurController extends Controller
                 'id' => $demande->id,
                 'paiement_option' => $demande->paiement->option_paiement ?? null,
                 'offer_titre' => $demande->offre->titre ?? null,
-                'parent_name' => $demande->parentmodel->user->nom ?? null,
+                'parent_name' => $demande->parentmodel->user->nom.' '. $demande->parentmodel->user->prenom,
             ];
         });
         
