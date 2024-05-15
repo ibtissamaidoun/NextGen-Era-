@@ -444,7 +444,7 @@ class DeviController extends Controller
     }
 
     /**
-     * 1. the parent  chooses childrens to enroll after he clicked on the offer
+     * 1. the parent  chooses childrens to enroll after he clicked on the offer 
      * 2. we retrieve the activities attached to the offer
      * 3.retrieve the paiement id
      * 4. retrieve the auth parent
