@@ -1,2 +1,2 @@
-## GETNEXT-ERA
-...
+## GETNEXT-ERA-
+GINF1
