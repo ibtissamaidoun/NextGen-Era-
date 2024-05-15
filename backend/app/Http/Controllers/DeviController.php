@@ -157,7 +157,7 @@ class DeviController extends Controller
      * @param int $tva
      * @return array
      */
-    protected static function calculerPrix($demande_id = 1, $enfantActivites = [], $tva = 20): array
+    protected static function calculerPrix($demande_id, $enfantActivites = [], $tva = 20): array
     {
         $demande = demande::find($demande_id);
         $prixHT = 0;
