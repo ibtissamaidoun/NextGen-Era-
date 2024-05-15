@@ -138,14 +138,14 @@ public function update(Request $request, $offerId)
         
         // Validate incoming request
         $validated = $request->validate([
-            'titre' => 'required|string|max:255',
-            'description' => 'required|string',
+            'titre' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string',
             'remise' => 'nullable|integer|min:0',
-            'date_debut_inscription' => 'required|date',
-            'date_fin_inscription' => 'required|date|after_or_equal:date_debut_inscription',
-            'administrateur_id' => 'required|exists:administrateurs,id',
-            'paiement_id' => 'required|exists:paiements,id',
-            'activites' => 'required|array',
+            'date_debut_inscription' => 'sometimes|date',
+            'date_fin_inscription' => 'sometimes|date|after_or_equal:date_debut_inscription',
+            'administrateur_id' => 'sometimes|exists:administrateurs,id',
+            'paiement_id' => 'sometimes|exists:paiements,id',
+            'activites' => 'sometimes|array',
             'activites.*.id' => 'exists:activites,id', // Ensure each activity ID exists
         ]); 
 

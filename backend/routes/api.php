@@ -97,7 +97,13 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
     Route::put('profile/{id}/password', [ProfileController::class, 'updatePassword'])->name('animateur.profile.update-password');
     Route::post('profile/{id}/photo', [ProfileController::class, 'updatePhoto'])->name('animateur.profile.update-photo');
     Route::delete('profile/{id}', [ProfileController::class, 'deleteprofile'])->name('animateur.profile.delete-profile');
+
+
+    //notification
+    Route::get('notifications', [NotificationController::class, 'indexanimateur']);
 });
+
+
 
 
 // Routes réservées à l'admin
@@ -180,6 +186,9 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
     Route::put('profile/{id}/password', [ProfileController::class, 'updatePassword']);
     Route::post('profile/{id}/photo', [ProfileController::class, 'updatePhoto']);
     Route::delete('profile/{id}', [ProfileController::class, 'deleteprofile']);
+
+    //notification
+    Route::get('notifications', [NotificationController::class, 'indexadmin']);
 });
 
 

@@ -90,7 +90,7 @@ class AnimateursController extends Controller
     {
         $animateur = User::where('role', 'animateur')
                          ->where('id', $id)
-                         ->with(['animateur.horaires', 'animateur.horaires']) // Corrected the relationship paths
+                         ->with(['animateur.horaires']) // Corrected the relationship paths
                          ->first();
 
         if (!$animateur) {

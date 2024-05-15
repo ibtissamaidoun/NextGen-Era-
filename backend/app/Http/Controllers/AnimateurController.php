@@ -47,27 +47,7 @@ class AnimateurController extends Controller
             ]);
             $user = Auth::User();
             $animateur = $user->animateur;
-<<<<<<< HEAD
-
-    
-            // Nouvelle logique pour vérifier l'existence des horaires
-            foreach($fields['horaires'] as $horaireId) {
-                if (in_array($horaireId, $animateur->horaires->pluck('id')->toArray())) {
-                    throw new Exception("Horaire déjà existant.");
-                }
-            }
-    
-            // Ajout des horaires
-            foreach($fields['horaires'] as $horaireId) {
-                $animateur->horaires()->attach($horaireId);
-            }
-    
-            // Retourner une réponse de succès
-
-
-=======
             $this->authorize('manageHeures', $animateur); //gestion d'autorization: les animateur peuvent manager leurs propres horaire
->>>>>>> ad10055956715293744fe1e087a064285f95dc89
             // tester les horaires fornis si ils sont deja existant
             $compteur = 0;
             $dejaFourni = array();
