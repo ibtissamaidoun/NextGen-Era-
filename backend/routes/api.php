@@ -58,7 +58,14 @@ Route::middleware(['check.role'.':' . User::ROLE_PARENT])->prefix('parent')->gro
     // visuasilation des offres disponible 
     Route::get('/offres', [ParentmodelController::class, 'getoffers']);
     Route::get('/offres/{id}', [ParentmodelController::class, 'showoffer']);
+<<<<<<< HEAD
     Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']); // this one
+=======
+    Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']);
+<<<<<<< HEAD
+    Route::get('/demandes/{demandeid}',[DeviController::class,'overview']);
+=======
+>>>>>>> 9a7d2949af0dd6773563939a0f805ce42c9ce445
     Route::get('demandes/{demande_id}',[DeviController::class,'overview']);
     Route::get('downloadDevis/{demande_id}',[DeviController::class,'downloadDevis']);
 
@@ -69,6 +76,7 @@ Route::middleware(['check.role'.':' . User::ROLE_PARENT])->prefix('parent')->gro
     Route::post('devis/{devis}/refuse/motif',[DeviController::class, 'motifRefuse']);
 
 
+>>>>>>> 333fb85239675b48b893033b4a034a2d636f7245
     //the father can check the commandes he submitted that are en cours
     Route::get('demandes',[DemandeController::class,'demandes']);
     //the parent get different notifications 

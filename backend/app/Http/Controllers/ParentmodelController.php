@@ -205,7 +205,7 @@ public function update(Request $request, $id)
     }
 
     /**
-     * 3ajarreb
+     * Display the edt for the choosen child
     */
     public function EDT(Request $request)
     {

@@ -9,8 +9,8 @@ use App\Models\User;
 
 use App\Models\offre;
 use App\Models\demande;
-use App\Models\parentmodel;
 use App\Models\notification;
+use App\Models\parentmodel;
 use Illuminate\Http\Request;
 use App\Models\administrateur;
 use Illuminate\Support\Facades\Log;
@@ -35,22 +35,18 @@ class DeviController extends Controller
     {
         $user = Auth::User();
 
-        if($user && $user->role == 'parent')
-        {
-            $devis = ($user->parentmodel)->devis()->get()->setHidden(['parentmodel_id','updated_at']);
+        if ($user && $user->role == 'parent') {
+            $devis = ($user->parentmodel)->devis()->get()->setHidden(['parentmodel_id', 'updated_at']);
             $data = [
-                'devis'=>$devis,
+                'devis' => $devis,
             ];
-        }
-        else
-        {
+        } else {
             // admin
-            $deviss = devi::get()->makeHidden(['created_at','updated_at']);
+            $deviss = devi::get()->makeHidden(['created_at', 'updated_at']);
             $data = [];
-            foreach($deviss as $devis)
-            {
-                $parentData = $devis->parentmodel()->first()->makeHidden(['created_at','updated_at','user_id']);
-                $userData = $parentData->user()->first()->makeHidden(['created_at','updated_at','role','id']);
+            foreach ($deviss as $devis) {
+                $parentData = $devis->parentmodel()->first()->makeHidden(['created_at', 'updated_at', 'user_id']);
+                $userData = $parentData->user()->first()->makeHidden(['created_at', 'updated_at', 'role', 'id']);
                 $data[] = [
                     'devis' => $devis,
                     'parent' => array_merge($parentData->toArray(), $userData->toArray()),
@@ -59,7 +55,6 @@ class DeviController extends Controller
         }
 
         return $data;
-
     }
 
     /**
@@ -81,13 +76,12 @@ class DeviController extends Controller
     public function show($devi)
     {
         $user = Auth::User();
-        try{
-            if($user && $user->role == 'parent')
+        try {
+            if ($user && $user->role == 'parent')
                 $devis = ($user->parentmodel)->devis()->find($devi)->setHidden(['parentmodel_id']);
             else
                 $devis = devi::with('parentmodel')->find($devi);
-        }
-        catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'error' => $th->getMessage(),
@@ -101,7 +95,7 @@ class DeviController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,$devis)
+    public function update(Request $request, $devis)
     {
         //
     }
@@ -112,19 +106,17 @@ class DeviController extends Controller
     public function destroy($devi)
     {
         $user = Auth::User();
-        try{
-            if($user && $user->role == 'parent'){
+        try {
+            if ($user && $user->role == 'parent') {
                 $devis = ($user->parentmodel)->devis()->find($devi);
-                if(!$devis)
+                if (!$devis)
                     return response()->json([
                         'message' => 'Acces non autorisee'
                     ], 403);
             }
-            
+
             $devis->delete();
-            
-        }
-        catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage()
@@ -146,18 +138,18 @@ class DeviController extends Controller
      * @param int $demande_id
      * @return array
      */
-    public static function getDevis(int $parent, int $demande = null) : array
+    public static function getDevis(int $parent, int $demande = null): array
     {
-        if($demande)
-        $data = devi::where('parentmodel_id', $parent)->where('demande_id',$demande)->first()->makeHidden(['parentmodel_id','demande_id']);
+        if ($demande)
+            $data = devi::where('parentmodel_id', $parent)->where('demande_id', $demande)->first()->makeHidden(['parentmodel_id', 'demande_id']);
         else
-        $data = devi::where('parentmodel_id', $parent)->get()->makeHidden(['parentmodel_id']);
+            $data = devi::where('parentmodel_id', $parent)->get()->makeHidden(['parentmodel_id']);
 
-       return $data->toArray();
+        return $data->toArray();
     }
 
 
-        /**
+    /**
      * Calcule de prix d'un devis
      * 
      * @param int $demande_id
@@ -165,23 +157,20 @@ class DeviController extends Controller
      * @param int $tva
      * @return array
      */
-    protected static function calculerPrix($demande_id = 1,$enfantActivites = [], $tva = 20) : array
+    protected static function calculerPrix($demande_id = 1, $enfantActivites = [], $tva = 20): array
     {
         $demande = demande::find($demande_id);
         $prixHT = 0;
 
-        if($pack = $demande->pack()->first())
-        {
-            if($pack->id == 1) // Pack Multi-Activités
+        if ($pack = $demande->pack()->first()) {
+            if ($pack->id == 1) // Pack Multi-Activités
             {
                 $prixRemise = 0;
                 $remiseComule = 0;
-                foreach ($enfantActivites as $key => $enfantActivite)
-                {
-                    if($key == 0) // la 1er activite
+                foreach ($enfantActivites as $key => $enfantActivite) {
+                    if ($key == 0) // la 1er activite
                         $remise = 0;
-                    else
-                    {   
+                    else {
                         // augmentation de 5%
                         $remiseComule += 10;
                         // ne depasse pas remise% de remise
@@ -191,39 +180,34 @@ class DeviController extends Controller
                     $prixHT += $enfantActivite['tarif'];
                     $prixRemise += $enfantActivite['tarif'] * (1 - $remise);
                 }
-                
             }
-            if($pack->id == 2) // Pack Familial
+            if ($pack->id == 2) // Pack Familial
             {
                 $countEnfants = count($enfantActivites);
                 $prixRemise = 0;
-                for($i = 0; $i < $countEnfants; $i++)
-                {
-                    
-                    $remise = min($i*10, $pack->remise) / 100;
+                for ($i = 0; $i < $countEnfants; $i++) {
+
+                    $remise = min($i * 10, $pack->remise) / 100;
                     $prixRemise += $enfantActivites[0]['tarif'] * (1 - $remise);
                 }
                 $prixHT += $enfantActivites[0]['tarif'] * $countEnfants;
             }
-            if($pack->id == 3) // Pack nombre d'Activites ( +eurs enfants -> +eurs activites)
+            if ($pack->id == 3) // Pack nombre d'Activites ( +eurs enfants -> +eurs activites)
             {
                 $enfants = $demande->getEnfants()->distinct('id')->get();
-                
+
                 $prixRemise = 0;
-                
-                foreach($enfants as $enfant)
-                {
-                    $activites = $demande->getActvites()->where('enfant_id',$enfant->id)->orderBy('tarif')->get();
-    
+
+                foreach ($enfants as $enfant) {
+                    $activites = $demande->getActvites()->where('enfant_id', $enfant->id)->orderBy('tarif')->get();
+
                     $remiseComule = 10;
-                    foreach ($activites as $key => $activite)
-                    {
+                    foreach ($activites as $key => $activite) {
                         $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
-                        $tarif = $activite->tarif*(1 - $remise/100);
-                        if($key == 0) // la 1er activite de cette enfant
+                        $tarif = $activite->tarif * (1 - $remise / 100);
+                        if ($key == 0) // la 1er activite de cette enfant
                             $remise = 0;
-                        else
-                        {   
+                        else {
                             // augmentation de remise%
                             $remiseComule += 10;
                             // ne depasse pas 45% de remise
@@ -235,27 +219,24 @@ class DeviController extends Controller
                     }
                 }
             }
-            if($pack->id == 4) // Pack nombre d’enfants ( +eurs enfants -> +eurs activites)
+            if ($pack->id == 4) // Pack nombre d’enfants ( +eurs enfants -> +eurs activites)
             {
                 $activites = $demande->getActvites()->distinct('id')->get();
-                
-                $prixRemise = 0;
-                
-                foreach($activites as $activite)
-                {
-                    $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
-                    $tarif = $activite->tarif*(1 - $remise/100);
 
-                    $enfants = $demande->getEnfants()->where('activite_id',$activite->id)->get();
-    
+                $prixRemise = 0;
+
+                foreach ($activites as $activite) {
+                    $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
+                    $tarif = $activite->tarif * (1 - $remise / 100);
+
+                    $enfants = $demande->getEnfants()->where('activite_id', $activite->id)->get();
+
                     $remiseComule = 10;
-                    foreach ($enfants as $key => $enfant)
-                    {
-    
-                        if($key == 0) // la 1er activite de cette enfant
+                    foreach ($enfants as $key => $enfant) {
+
+                        if ($key == 0) // la 1er activite de cette enfant
                             $remise = 0;
-                        else
-                        {   
+                        else {
                             // augmentation de remise%
                             $remiseComule += 10;
                             // ne depasse pas 45% de remise
@@ -267,30 +248,25 @@ class DeviController extends Controller
                     }
                 }
             }
-
-        }
-        elseif($offre = $demande->offre()->first())
-        {
-            foreach($enfantActivites as $enfantActivite)
+        } elseif ($offre = $demande->offre()->first()) {
+            foreach ($enfantActivites as $enfantActivite)
                 $prixHT += $enfantActivite['tarif'];
 
-            $prixRemise = $prixHT*(1 - $offre->remise/100);
-        }
-        else
-        {
-            foreach($enfantActivites as $enfantActivite)
+            $prixRemise = $prixHT * (1 - $offre->remise / 100);
+        } else {
+            foreach ($enfantActivites as $enfantActivite)
                 $prixHT += $enfantActivite['tarif'];
             $prixRemise = $prixHT;
         }
 
 
-        $TTC = $prixRemise*(1 + $tva/100);
+        $TTC = $prixRemise * (1 + $tva / 100);
 
-            return [
-                'HT'=>$prixHT,
-                'Remise'=>$prixRemise,
-                'TTC'=>$TTC,
-            ];
+        return [
+            'HT' => $prixHT,
+            'Remise' => $prixRemise,
+            'TTC' => $TTC,
+        ];
     }
 
     /**
@@ -425,18 +401,13 @@ class DeviController extends Controller
     protected static function generateDevis($demande_id, $data)
     {
         // loader le Devis en html
-        if($data['offre'])
-        {
+        if ($data['offre']) {
             unset($data['pack']);
             $html = view('pdfs.devisTemplateOffre', $data)->render();
-        }
-        elseif($data['pack'])
-        {
+        } elseif ($data['pack']) {
             unset($data['offre']);
             $html = view('pdfs.devisTemplatePack', $data)->render();
-        }
-        else
-        {
+        } else {
             unset($data['pack']);
             unset($data['offre']);
             $html = view('pdfs.devisTemplate', $data)->render();
@@ -449,7 +420,7 @@ class DeviController extends Controller
         $pdfPath = 'storage/pdfs/devis/'.$data['serie'].'.pdf';  // .date('_His')
         // enregister localement
         $pdf->save($pdfPath, true);
-        
+
         // ajout de path de pdf generer
         $data['pdfPath'] = $pdfPath;
 
@@ -459,12 +430,12 @@ class DeviController extends Controller
 
         //return response()->download($pdfPath);  // pour le telechargement
         $devis = Devi::create([
-            'tarif_ht'=>$data['prixHT'],
-            'tarif_ttc'=>$data['TTC'],
-            'tva'=>$data['TVA'],
-            'devi_pdf'=>$data['pdfPath'],
-            'parentmodel_id'=>$data['parent']->parentmodel->id,
-            'demande_id'=>$demande_id,
+            'tarif_ht' => $data['prixHT'],
+            'tarif_ttc' => $data['TTC'],
+            'tva' => $data['TVA'],
+            'devi_pdf' => $data['pdfPath'],
+            'parentmodel_id' => $data['parent']->parentmodel->id,
+            'demande_id' => $demande_id,
             //'date_expiration'=>$expiration,
         ]);
         $data['devis'] = $devis->id;
@@ -490,25 +461,25 @@ class DeviController extends Controller
                 'enfants' => 'required|array',
                 'enfants.*' => 'exists:enfants,id'
             ]);
-    
+
             $childrenIds = $validated['enfants'];
-    
+
             // Retrieve the offer and all associated activities
             $offer = offre::with('activites')->findOrFail($offerId);
             $allActivities = $offer->activites;
-    
+
             // Check if the offer has associated payment and retrieve the payment ID
             $payment = $offer->paiement()->first();
             if (!$payment) {
                 throw new \Exception("No payment associated with the offer.");
             }
             $paymentId = $payment->id;
-            
+
             $user = Auth::User();
-            $parent= $user->parentmodel;
-    
+            $parent = $user->parentmodel;
+
             // Create a new demande
-            $demande =Demande::create([
+            $demande = Demande::create([
                 'offre_id' => $offerId,
                 'paiement_id' => $paymentId,
                 'parentmodel_id' =>$parent->id,
