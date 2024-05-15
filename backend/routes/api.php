@@ -58,11 +58,24 @@ Route::middleware(['check.role'.':' . User::ROLE_PARENT])->prefix('parent')->gro
     // visuasilation des offres disponible 
     Route::get('/offres', [ParentmodelController::class, 'getoffers']);
     Route::get('/offres/{id}', [ParentmodelController::class, 'showoffer']);
-    Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']);
+    Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']); // this one
+
+    Route::get('/demandes/{demandeid}',[DeviController::class,'overview']);
+
+    Route::get('downloadDevis/{demande_id}',[DeviController::class,'downloadDevis']);
+
+    // Valider et refuser devis
+    Route::post('devis/{devis}/validate',[DeviController::class, 'validateDevis']); // by Taha
+    Route::post('devis/{devis}/refuse', [deviController::class, 'refuseDevis']); // by Sakhri
+    // Motif au cas de refus
+    Route::post('devis/{devis}/refuse/motif',[DeviController::class, 'motifRefuse']);
+
     //the father can check the commandes he submitted that are en cours
     Route::get('demandes',[DemandeController::class,'demandes']);
     //the parent get different notifications 
     Route::get('/notifications', [NotificationController::class,'indexparent']);
+    // edt for a given student from Request
+    Route::get('/EDT',[ParentmodelController::class,'EDT']);
 
 
 });
@@ -107,7 +120,7 @@ Route::get('activities', [ActiviteController::class, 'index']);
 
 Route::post('activities', [ActiviteController::class, 'store']);
 Route::get('activities/{activity}', [ActiviteController::class, 'show']);
-Route::put('activities/{activity}', [ActiviteController::class, 'update']);
+Route::put('activities/{activity}', [ActiviteController::class, 'update']); // need to be revised
 Route::delete('activities/{activity}', [ActiviteController::class, 'destroy']);
 
 // option de paiement d activite (avec remise) --- new
@@ -144,6 +157,7 @@ Route::get('/demandes',[AdministrateurController::class,'getdemandes']);
 // Consultation des enfants
 Route::apiResource('enfants',EnfantController::class)->only(['index','show']);
 
+Route::post('/demandes/{demande}/validate',[DemandeController::class, 'payeDemande']);
 });
 
 
@@ -154,9 +168,10 @@ Route::apiResource('devis',deviController::class);
 Route::apiResource('notifications',NotificationController::class);
 Route::apiResource('demandes',DemandeController::class);
 
-Route::get('getDevis',[deviController::class, 'getDevis']);
-Route::get('devis',[deviController::class, 'createDevis']);
-Route::get('monPack',[PackController::class,'packPoussible']);
+Route::get('getDevis',[deviController::class, 'getDevis']); // 
+Route::get('devis',[deviController::class, 'createDevis']); // marche
+Route::get('monPack',[PackController::class,'packPoussible']); // marche
+
 
 //------test----taha----ostora----//
 // Validate demande route
@@ -164,3 +179,5 @@ Route::post('/demandes/{demande}/validate', [AdministrateurController::class,'va
 
 // Refuse demande route
 Route::post('/demandes/{demande}/refuse',[AdministrateurController::class,'refuse']);
+
+
