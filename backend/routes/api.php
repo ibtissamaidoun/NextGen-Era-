@@ -77,7 +77,17 @@ Route::middleware(['check.role'.':' . User::ROLE_PARENT])->prefix('parent')->gro
     // edt for a given student from Request
     Route::get('/EDT',[ParentmodelController::class,'EDT']);
 
-
+    /* ----- PANIER ----- */
+    Route::post('activite/{activity_id}/add', [deviController::class,'addToPanier']);
+    Route::prefix('panier')->group(function (){
+        
+        Route::put('activite/{activity_id}/enfants/{enfant_id}', [deviController::class,'modifyPanier']);
+        Route::get('show', [DeviController::class, 'showPanier']);
+        Route::delete('delete', [DeviController::class, 'SupprimerPanier']);
+        Route::post('valide',[DeviController::class, 'validerPanier']);
+        /* --- ACTIVITÉS DE PANIER --- */
+        Route::delete('activites/{activite}', [DeviController::class, 'deleteActiviteFromPanier']);
+    });
 });
 
 

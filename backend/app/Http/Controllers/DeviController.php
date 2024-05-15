@@ -8,11 +8,14 @@ use App\Models\devi;
 use App\Models\User;
 
 use App\Models\offre;
+use App\Models\enfant;
 use App\Models\demande;
-use App\Models\notification;
+use App\Models\activite;
 use App\Models\parentmodel;
+use App\Models\notification;
 use Illuminate\Http\Request;
 use App\Models\administrateur;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -612,5 +615,166 @@ class DeviController extends Controller
             'devis' => $devis,
         ]);
     }
+    /**
+     * Ajouter au panier une activité avec ses enfants.
+     */
+    public function addToPanier(Request $request, $activity_id)
+    {
+        $activite = activite::findOrFail($activity_id);
+        $parent_id = Auth::user()->parentmodel->id;
 
+        // i changed the validation according to mr gpt recommendation :)
+        $validatedData = $request->validate([
+            'enfants' => 'required|array',
+            'enfants.*' => [
+                'required',
+                'exists:enfants,id',
+                Rule::exists('enfants', 'id')->where(function ($query) use ($parent_id) {
+                    $query->where('parentmodel_id', $parent_id);
+                }),
+            ],
+        ]);
+
+        foreach ($validatedData['enfants'] as $enfant_id)
+        {
+            $enfant = enfant::findOrFail($enfant_id);
+            
+            $enfant->activitesPanier()->attach($activity_id, [
+                'parentmodel_id' => $parent_id,
+                'status' => 'en attente'
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'article ajouteé a votre panier avec succes',
+            'Panier' => DeviController::getPanier($parent_id),
+
+        ]);
+    }  
+
+    /**
+     * Modifier le painer en modifiant un enfant d'une activité choisie
+     */
+    public function modifyPanier(Request $request, $activity_id, $enfant_id)
+    {
+        $parent = Auth::user()->parentmodel;
+
+        $activite = $parent->getActivites()->find($activity_id);
+
+        // i changed the validation according to mr gpt recommendation :)
+        $validatedData = $request->validate([
+            'enfant' => [
+                'sometimes',
+                'exists:enfants,id',
+            ],
+        ]);
+        if(! $parent->getEnfants()->find($enfant_id) || ! $activite)
+            return response()->json([ 'Error' => 'enfant non existant ou activité non existant']);
+        // non redendance
+        if( ! $activite->enfantsPanier()->where('id',$validatedData['enfant'])->where('id','<>',$enfant_id)->exists() ){
+           
+            $activite->enfantsPanier()->updateExistingPivot($enfant_id, ['enfant_id'=> $validatedData['enfant']]);
+        }
+        else
+        {
+            return response()->json([
+                'Error' => 'enfant deja existant, dans cette activité',
+            ]);    
+        }
+
+
+        return response()->json([
+            'message' => 'Panier Modifier avec succes',
+            'Panier' => DeviController::getPanier($parent->id),
+        ]);
+    }
+
+    public function deleteActiviteFromPanier($activite_id)
+    {
+        $parent = Auth::user()->parentmodel;
+        try{
+            $parent->getActivites()->detach($activite_id);
+    
+            return response()->json([
+                'message' => 'Activite supprimer de panier avec succes',
+                'Panier' => DeviController::getPanier($parent->id),
+            ]);
+
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['Error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * retourner le panier courant d'un etulisateur donneé
+     *  type de retour  Panier[ Activité{id, titre}, Enfants[{id, nom, prenom}] ]
+     * 
+     * @param int $parent_id
+     * @return array
+     */
+    protected static function getPanier($parent_id)
+    {
+        
+        $panier = [];
+        foreach(parentmodel::find($parent_id)->getActivites()->select(['id', 'titre'])->distinct('id')->get()->makeHidden('pivot') as $activite)
+        {
+            $enfants = array();
+            foreach($activite->enfantsPanier()->select(['id', 'prenom','nom'])->wherePivot('parentmodel_id', $parent_id)->orderBy('id')->get()->makeHidden('pivot') as $enfant){
+                $enfants[] = $enfant;
+            };
+            $panier[] = [
+                'Activite' => $activite,
+                'Enfants' => $enfants,
+            ];
+        }
+
+        return $panier;
+    }
+
+    /**
+     * Affiche le panier d'etulisateur courant
+     */
+    public function showPanier()
+    {
+        $parent_id = Auth::user()->parentmodel->id;
+        return response()->json( ['Panier' => DeviController::getPanier($parent_id)] );
+    }
+
+    /**
+     * Supprimer le panier d'etulisateur courant
+     */
+    public function SupprimerPanier()
+    {
+    
+        $parent = Auth::user()->parentmodel;
+
+        // ya rbi tkhdm :) // khedmat yalili :]
+        $parent->getActivites()->wherePivot('parentmodel_id', $parent->id)->detach();
+
+        return response()->json([
+            'message' => 'Votre panier est videé avec succes.']);
+    }
+
+    /**
+     * Valider le panier afin de proceder la demande 
+     * 1- creation de demande
+     * 2- remplire la table pivot 'enfant_demande_activite' ==> PGSQL
+     */
+    public function validerPanier()
+    {
+        $parent = Auth::user()->parentmodel;
+        $activites = $parent->getActivites()->distinct('id')->get();
+
+        foreach($activites as $activite)
+            $activite->getparentmodels()->updateExistingPivot($parent->id, ['status' => 'valide']);
+
+        /**
+         * le Travail de Anass de remplire la table pivot et creer la demande.
+         */
+
+        return response()->json([
+            'message' => 'Votre panier est validé.']);
+    }
 }
