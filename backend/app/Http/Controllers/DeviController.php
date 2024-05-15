@@ -8,11 +8,14 @@ use App\Models\devi;
 use App\Models\User;
 
 use App\Models\offre;
+use App\Models\enfant;
 use App\Models\demande;
-use App\Models\notification;
+use App\Models\activite;
 use App\Models\parentmodel;
+use App\Models\notification;
 use Illuminate\Http\Request;
 use App\Models\administrateur;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -611,6 +614,6 @@ class DeviController extends Controller
             'message' => 'votre motif a ete bien envoyer.',
             'devis' => $devis,
         ]);
-    }
+    }     
 
 }

@@ -15,12 +15,12 @@ class DatabaseSeeder extends Seeder
         $this->call(AdministrateursTableSeeder::class);
         $this->call(AnimateursTableSeeder::class);
         $this->call(ParentmodelsTableSeeder::class);
+        $this->call(PacksTableSeeder::class); 
         $this->call(HorairesTableSeeder::class);
         $this->call(EnfantsTableSeeder::class);
         $this->call(PaiementsTableSeeder::class);
-        $this->call(OffresTableSeeder::class);
         $this->call(ActivitesTableSeeder::class); 
-        $this->call(PacksTableSeeder::class); 
+        $this->call(OffresTableSeeder::class);
         $this->call(DemandesTableSeeder::class); 
         $this->call(DevisTableSeeder::class); 
         $this->call(FacturesTableSeeder::class);

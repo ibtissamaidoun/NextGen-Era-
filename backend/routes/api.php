@@ -78,6 +78,9 @@ Route::middleware(['check.role'.':' . User::ROLE_PARENT])->prefix('parent')->gro
     Route::get('/EDT',[ParentmodelController::class,'EDT']);
 
 
+    
+
+
 });
 
 
