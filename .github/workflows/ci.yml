@@ -131,5 +131,6 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera_database:version2
 
-        file: docker-compose
+        file: docker-compose.yml
+        
     
