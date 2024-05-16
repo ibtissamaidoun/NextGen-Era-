@@ -60,17 +60,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     Route::get('/offres', [ParentmodelController::class, 'getoffers']);
     Route::get('/offres/{id}', [ParentmodelController::class, 'showoffer']);
     Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']); // this one
-
-    Route::get('/demandes/{demandeid}',[DeviController::class,'overview']);
-
-    Route::get('downloadDevis/{demande_id}',[DeviController::class,'downloadDevis']);
-
-    // Valider et refuser devis
-    Route::post('devis/{devis}/validate',[DeviController::class, 'validateDevis']); // by Taha
-    Route::post('devis/{devis}/refuse', [deviController::class, 'refuseDevis']); // by Sakhri
-    // Motif au cas de refus
-    Route::post('devis/{devis}/refuse/motif',[DeviController::class, 'motifRefuse']);
-
+    
     //the father can check the commandes he submitted that are en cours
     Route::get('demandes', [DemandeController::class, 'demandes']);
     //the parent get different notifications 
@@ -78,15 +68,15 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     // edt for a given student from Request
     Route::get('/EDT',[ParentmodelController::class,'EDT']);
 
-<<<<<<< HEAD
-
+    
     //profile(needs to be tested)
     Route::get('profile', [ProfileController::class, 'getprofileparent']);
     Route::put('profile/{id}', [ProfileController::class, 'updateparent']);
     Route::put('profile/{id}/password', [ProfileController::class, 'updatePassword']);
     Route::post('profile/{id}/photo', [ProfileController::class, 'updatePhoto']);
     Route::delete('profile/{id}', [ProfileController::class, 'deleteprofile']);
-=======
+    
+    
     /* ----- PANIER ----- */
     Route::post('activite/{activity_id}/add', [deviController::class,'addToPanier']);
     Route::prefix('panier')->group(function (){
@@ -94,12 +84,31 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
         Route::put('activite/{activity_id}/enfants/{enfant_id}', [deviController::class,'modifyPanier']);
         Route::get('show', [DeviController::class, 'showPanier']);
         Route::delete('delete', [DeviController::class, 'SupprimerPanier']);
-        Route::post('valide',[DeviController::class, 'validerPanier']);
+        Route::get('valide',[DeviController::class, 'validerPanier']);
         /* --- ACTIVITÉS DE PANIER --- */
         Route::delete('activites/{activite}', [DeviController::class, 'deleteActiviteFromPanier']);
-        
     });
->>>>>>> feature/afterDevis
+
+    /* ---- DEMANDE ---- */
+    Route::prefix('demandes')->group(function (){
+        Route::post('{demande}/delete', [DemandeController::class , 'deleteDemande']);
+        Route::get('{id}/check', [DemandeController::class, 'checkDemandeAndGeneratePacks']);
+        Route::post('{demande}/pack',[DemandeController::class, 'chosePack']);
+        Route::post('{demande}/OP',[DemandeController::class, 'choseOP']);
+        Route::post('{demande}/submit',[DemandeController::class, 'finishDemande']); // + Devis
+    });
+
+    /* --- DEVIS --- */
+    Route::get('demandes/{demandeid}/overview',[DeviController::class,'overview']);
+    Route::get('demandes/{demande_id}/downloadDevis',[DeviController::class,'downloadDevis']);
+    // Valider et refuser devis
+    Route::post('devis/{devis}/validate',[DeviController::class, 'validateDevis']); // by Taha
+    Route::post('devis/{devis}/refuse', [deviController::class, 'refuseDevis']); // by Sakhri
+    // Motif au cas de refus
+    Route::post('devis/{devis}/refuse/motif',[DeviController::class, 'motifRefuse']);
+
+    /* --- FACTURE --- */
+    Route::get('demandes/{demande_id}/facture',[DeviController::class, 'createFacture']);
 });
 
 
@@ -170,10 +179,10 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
     //activite
     Route::get('activities', [ActiviteController::class, 'index']);
 
-Route::post('activities', [ActiviteController::class, 'store']);
-Route::get('activities/{activity}', [ActiviteController::class, 'show']);
-Route::put('activities/{activity}', [ActiviteController::class, 'update']); // need to be revised
-Route::delete('activities/{activity}', [ActiviteController::class, 'destroy']);
+    Route::post('activities', [ActiviteController::class, 'store']);
+    Route::get('activities/{activity}', [ActiviteController::class, 'show']);
+    Route::put('activities/{activity}', [ActiviteController::class, 'update']); // need to be revised
+    Route::delete('activities/{activity}', [ActiviteController::class, 'destroy']);
 
     // option de paiement d activite (avec remise) --- new
     Route::post('activities/{activity}/paiements', [ActiviteController::class, 'storeOP']);
@@ -185,8 +194,10 @@ Route::delete('activities/{activity}', [ActiviteController::class, 'destroy']);
     Route::get('activities/{activity}/horaires', [ActiviteController::class, 'indexhoraires']);
     Route::delete('activities/{activity}/horaires/{horaires}', [ActiviteController::class, 'detachhoraire']);
     Route::post('activities/{activity}/horaires', [ActiviteController::class, 'choosehoraire']);
-    //horaire
-    Route::apiResource('horaires', HoraireController::class);
+
+
+    //horaire --not functional
+    //Route::apiResource('horaires', HoraireController::class);
 
     Route::apiResource('offres', offreController::class);
 
@@ -232,6 +243,7 @@ Route::post('/demandes/{demande}/validate',[DemandeController::class, 'payeDeman
 Route::apiResource('devis', deviController::class);
 Route::apiResource('notifications', NotificationController::class);
 Route::apiResource('demandes', DemandeController::class);
+Route::get('checkDemande/{id}',[DemandeController::class, 'checkDemande']);
 
 // Route::get('getDevis',[deviController::class, 'getDevis']);    // marche
 // Route::get('devis',[deviController::class, 'createDevis']);    // marche

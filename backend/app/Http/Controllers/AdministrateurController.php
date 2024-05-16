@@ -151,7 +151,7 @@ class AdministrateurController extends Controller
         DB::rollback();
         return response()->json(['message' => 'Failed to update admin: ' . $e->getMessage()], 409);
     }
-}
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -200,24 +200,24 @@ class AdministrateurController extends Controller
 
     // Return success response
     return response()->json(['message' => 'Demande validated successfully']);
-}
-public function refuse(Demande $demande)
-{
-    // Update demande status to refused
-    $demande->update(['statut' => 'refuse']);
-    $parent = $demande->parentmodel->user;
+    }
+    public function refuse(Demande $demande)
+    {
+        // Update demande status to refused
+        $demande->update(['statut' => 'refuse']);
+        $parent = $demande->parentmodel->user;
 
-    // Create a notification for the parent
-    notification::create([
-        'type' => 'demande refused',
-        'statut' => 'non lu',
-        'contenu' => 'Your demande has been refused.',
-    ]);
+        // Create a notification for the parent
+        notification::create([
+            'type' => 'demande refused',
+            'statut' => 'non lu',
+            'contenu' => 'Your demande has been refused.',
+        ]);
 
-    // Attach the notification to the parent
-    $parent->notifications()->attach(notification::latest()->first()->id);
+        // Attach the notification to the parent
+        $parent->notifications()->attach(notification::latest()->first()->id);
 
-    // Return success response
-    return response()->json(['message' => 'Demande refused successfully']);
-}
+        // Return success response
+        return response()->json(['message' => 'Demande refused successfully']);
+    }
 }
