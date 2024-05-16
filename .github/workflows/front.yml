@@ -2,6 +2,8 @@ name: CI for Vue.js Project
 
 on:
   push:
+    branches:
+      - main
     
 
 jobs:
