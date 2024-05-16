@@ -112,7 +112,7 @@ class PackController extends Controller
     /**
      * identification des packs poussibles en se basent sur la demande
      */
-    public static function packPoussible($demande_id = 2)
+    public static function packPoussible($demande_id = 1)
     {
         $demande = demande::find($demande_id);
         $countActivites = $demande->getActvites()->distinct('id')->count();

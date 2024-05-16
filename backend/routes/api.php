@@ -78,6 +78,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     // edt for a given student from Request
     Route::get('/EDT',[ParentmodelController::class,'EDT']);
 
+<<<<<<< HEAD
 
     //profile(needs to be tested)
     Route::get('profile', [ProfileController::class, 'getprofileparent']);
@@ -85,6 +86,20 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     Route::put('profile/{id}/password', [ProfileController::class, 'updatePassword']);
     Route::post('profile/{id}/photo', [ProfileController::class, 'updatePhoto']);
     Route::delete('profile/{id}', [ProfileController::class, 'deleteprofile']);
+=======
+    /* ----- PANIER ----- */
+    Route::post('activite/{activity_id}/add', [deviController::class,'addToPanier']);
+    Route::prefix('panier')->group(function (){
+        
+        Route::put('activite/{activity_id}/enfants/{enfant_id}', [deviController::class,'modifyPanier']);
+        Route::get('show', [DeviController::class, 'showPanier']);
+        Route::delete('delete', [DeviController::class, 'SupprimerPanier']);
+        Route::post('valide',[DeviController::class, 'validerPanier']);
+        /* --- ACTIVITÉS DE PANIER --- */
+        Route::delete('activites/{activite}', [DeviController::class, 'deleteActiviteFromPanier']);
+        
+    });
+>>>>>>> feature/afterDevis
 });
 
 
@@ -218,9 +233,9 @@ Route::apiResource('devis', deviController::class);
 Route::apiResource('notifications', NotificationController::class);
 Route::apiResource('demandes', DemandeController::class);
 
-Route::get('getDevis',[deviController::class, 'getDevis']); // 
-Route::get('devis',[deviController::class, 'createDevis']); // marche
-Route::get('monPack',[PackController::class,'packPoussible']); // marche
+// Route::get('getDevis',[deviController::class, 'getDevis']);    // marche
+// Route::get('devis',[deviController::class, 'createDevis']);    // marche
+// Route::get('monPack',[PackController::class,'packPoussible']); // marche
 
 Route::get('getDevis', [deviController::class, 'getDevis']);
 Route::get('devis', [deviController::class, 'createDevis']);
