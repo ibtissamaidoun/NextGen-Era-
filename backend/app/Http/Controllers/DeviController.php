@@ -8,11 +8,14 @@ use App\Models\devi;
 use App\Models\User;
 
 use App\Models\offre;
+use App\Models\enfant;
 use App\Models\demande;
-use App\Models\notification;
+use App\Models\activite;
 use App\Models\parentmodel;
+use App\Models\notification;
 use Illuminate\Http\Request;
 use App\Models\administrateur;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -157,7 +160,7 @@ class DeviController extends Controller
      * @param int $tva
      * @return array
      */
-    protected static function calculerPrix($demande_id = 1, $enfantActivites = [], $tva = 20): array
+    protected static function calculerPrix($demande_id, $enfantActivites = [], $tva = 20): array
     {
         $demande = demande::find($demande_id);
         $prixHT = 0;
@@ -444,7 +447,7 @@ class DeviController extends Controller
     }
 
     /**
-     * 1. the parent  chooses childrens to enroll after he clicked on the offer
+     * 1. the parent  chooses childrens to enroll after he clicked on the offer 
      * 2. we retrieve the activities attached to the offer
      * 3.retrieve the paiement id
      * 4. retrieve the auth parent
@@ -611,6 +614,6 @@ class DeviController extends Controller
             'message' => 'votre motif a ete bien envoyer.',
             'devis' => $devis,
         ]);
-    }
+    }     
 
 }
