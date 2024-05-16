@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\demande;
+use App\Mail\AdminCreated;
+use Illuminate\Support\Str;
+use App\Models\notification;
 use Illuminate\Http\Request;
 use App\Models\administrateur;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Models\demande;
-use App\Models\notification;
+use Illuminate\Support\Facades\Mail;
 
 class AdministrateurController extends Controller
 {
@@ -29,48 +32,49 @@ class AdministrateurController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nom' => 'required|string',
-            'prenom' => 'required|string',
             'email' => [
                 'required',
                 'email',
                 'unique:users,email',
-               'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i', // format validation
+                'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i', // format validation
             ],
-            'telephone_portable' => [
-                'required',
-                'regex:/^(06|07)[0-9]{8}$/i', // format validation
-            ],
-            'telephone_fixe' => [
-                'nullable',
-                'regex:/^05[0-9]{8}$/i', // format validation
-            ],
-            'mot_de_passe' => 'required|string|min:6|confirmed',
-
         ]);
 
         DB::beginTransaction();
         try {
-            $user = User::create([
-                'nom' => $request->nom,
-                'prenom' => $request->prenom,
-                'email' => $request->email,
-                'telephone_portable' => $request->telephone_portable,
-                'telephone_fixe' => $request->telephone_fixe,
-                'mot_de_passe' => Hash::make($request->mot_de_passe),
-                'role' => 'admin'  // Automatically assign the role of 'admin'
+            // Generate a random password
+            $randomPassword = Str::random(10);
 
+            // Extract the first part of the email to use as the default name
+            $emailParts = explode('@', $request->email);
+            $defaultNom = $emailParts[0]; // Use the part before the "@" as the default name
+            $defaultPrenom = $emailParts[0]; // Example default surname
+            $defaultTelephonePortable = '0700000000'; // Example default mobile phone
+            $defaultTelephoneFixe = '0500000000'; // Example default landline phone
+            $role = 'admin';
+
+            $user = User::create([
+                'nom' => $defaultNom,
+                'prenom' => $defaultPrenom,
+                'email' => $request->email,
+                'telephone_portable' => $defaultTelephonePortable,
+                'telephone_fixe' => $defaultTelephoneFixe,
+                'mot_de_passe' => Hash::make($randomPassword),
+                'role' => $role  // Automatically assign the role of 'admin'
             ]);
             $administrateur = new administrateur([
                 'user_id'=> $user->id
             ]);
             $administrateur->save();
 
+            // Send the random password by email
+            Mail::to($request->email)->send(new AdminCreated($user, $randomPassword));
+
             DB::commit();
             return response()->json([
                 'id'=>$administrateur->id,
                 'user_id'=>$user->id,
-                'message'=>'Admin created successfulyy'
+                'message'=>'Admin created successfully'
             ]);
         } catch(\Exception $e){
             DB::rollback();
@@ -178,42 +182,5 @@ class AdministrateurController extends Controller
         
     }
 
-    public function validated(Demande $demande)
-{
-    // Update demande status to validated
-    $demande->update(['statut' => 'valide']);
-
-
    
-    // Retrieve parent associated with the demande
-    $parent = $demande->parentmodel->user;
-
-    // Enroll children in activities
-    $activities = $demande->offre->activities;
-    foreach ($activities as $activity) {
-        $activity->enrollChildren($parent->children);
-    }
-
-    // Return success response
-    return response()->json(['message' => 'Demande validated successfully']);
-}
-public function refuse(Demande $demande)
-{
-    // Update demande status to refused
-    $demande->update(['statut' => 'refuse']);
-    $parent = $demande->parentmodel->user;
-
-    // Create a notification for the parent
-    notification::create([
-        'type' => 'demande_refused',
-        'statut' => 'non lu',
-        'contenu' => 'Your demande has been refused.',
-    ]);
-
-    // Attach the notification to the parent
-    $parent->notifications()->attach(notification::latest()->first()->id);
-
-    // Return success response
-    return response()->json(['message' => 'Demande refused successfully']);
-}
 }

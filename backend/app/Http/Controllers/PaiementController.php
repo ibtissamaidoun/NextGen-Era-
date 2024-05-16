@@ -27,15 +27,17 @@ class PaiementController extends Controller
         // ------------- fin solution.
         
         // Validation des entrées
-        
-
+        $fields=$request->validate([
+            'option_paiement'=>'required|in:mensuel,trimestriel,semestriel,annuel',
+            'remise'=> 'required|integer|min:0|max:100',
+        ]);
 
         // Si les données sont validées et que l'option de paiement est unique
-        if (!Paiement::firstWhere('option_paiement', $request['option_paiement'])) {
+        if (!Paiement::firstWhere('option_paiement',$fields['option_paiement'])) {
             // Création du nouveau mode de paiement
             $paiement = Paiement::create([
-                'option_paiement' => $request['option_paiement'],
-                'remise' => $request['remise']
+                'option_paiement' =>$fields['option_paiement'],
+                'remise' =>$fields['remise']
             ]);
 
             return response()->json([
@@ -65,16 +67,20 @@ class PaiementController extends Controller
     public function update(Request $request, $paiement_id)
     {
         // valider request ...
+        $fields=$request->validate([
+            'option_paiement'=>'sometimes|required|in:mensuel,trimestriel,semestriel,annuel',
+            'remise'=> 'sometimes|required|integer|min:0|max:100',
+        ]);
 
         // data validee
         if( $paiement = paiement::find($paiement_id) )
         {
             // mode trouvee
-            if(! Paiement::where('option_paiement',$request->option_paiement)->where('id','!=',$paiement_id)->first() ){
+            if(! Paiement::where('option_paiement',$fields['option_paiement'])->where('id','!=',$paiement_id)->first() ){
                 // la modification de mode du paiement ne creer pas de occurence
                 $paiement->update([
-                    'option_paiement'=> $request['option_paiement'],
-                    'remise'=> $request['remise']
+                    'option_paiement'=>$fields['option_paiement'],
+                    'remise'=>$fields['remise']
                 ]);
 
                 return response()->json([

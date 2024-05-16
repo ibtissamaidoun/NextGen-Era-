@@ -42,8 +42,8 @@ const darkMode = () => {
     <div class="shadow-lg card">
       <div class="pt-3 pb-0 bg-transparent card-header">
         <div class="" :class="isRTL ? 'float-end' : 'float-start'">
-          <h5 class="mt-3 mb-0">Argon Configurator</h5>
-          <p>See our dashboard options.</p>
+          <h5 class="mt-3 mb-0">NextGen Era</h5>
+          <p>S'amusez avec nos styles</p>
         </div>
         <div
           class="mt-4"
@@ -60,7 +60,7 @@ const darkMode = () => {
       <div class="pt-0 card-body pt-sm-3">
         <!-- Sidebar Backgrounds -->
         <div>
-          <h6 class="mb-0">Sidebar Colors</h6>
+          <h6 class="mb-0">Les couleurs de la barre latérale</h6>
         </div>
         <a href="#" class="switch-trigger background-color">
           <div
@@ -101,8 +101,8 @@ const darkMode = () => {
         </a>
         <!-- Sidenav Type -->
         <div class="mt-3">
-          <h6 class="mb-0">Sidenav Type</h6>
-          <p class="text-sm">Choose between 2 different sidenav types.</p>
+          <h6 class="mb-0">Le type de la barre latérale</h6>
+          <p class="text-sm">Choisis entre 2 types différent de la barre latérale.</p>
         </div>
         <div class="d-flex gap-2">
           <button
@@ -110,8 +110,8 @@ const darkMode = () => {
             class="btn w-100 px-3 mb-2"
             :class="
               sidebarType === 'bg-white'
-                ? 'bg-gradient-success'
-                : 'btn-outline-success'
+                ? 'bg-gradient-warning'
+                : 'btn-outline-warning'
             "
             @click="setSidebarType('bg-white')"
           >
@@ -122,8 +122,8 @@ const darkMode = () => {
             class="btn w-100 px-3 mb-2"
             :class="
               sidebarType === 'bg-default'
-                ? 'bg-gradient-success'
-                : 'btn-outline-success'
+                ? 'bg-gradient-dark'
+                : 'btn-outline-dark'
             "
             @click="setSidebarType('bg-default')"
           >

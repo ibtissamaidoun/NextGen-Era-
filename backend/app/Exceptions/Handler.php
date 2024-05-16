@@ -46,8 +46,13 @@ class Handler extends ExceptionHandler
         });
     }
 
+<<<<<<< HEAD
 
 
+=======
+=======
+>>>>>>> 7a44967d99b59a8e167334ae27ae4d60fd702d72
+>>>>>>> 8f199a8aa4fffd101cc68951901daa796589a012
     public function render($request, Throwable $exception)
     {
         if ($request->expectsJson() || $request->is('api/*')) {

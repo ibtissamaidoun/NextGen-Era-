@@ -7,6 +7,9 @@ use App\Models\animateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use App\Mail\AnimateurCreated;
 
 class AnimateursController extends Controller
 {
@@ -27,72 +30,74 @@ class AnimateursController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nom' => 'required|string',
-            'prenom' => 'required|string',
             'email' => [
                 'required',
                 'email',
                 'unique:users,email',
-               'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i', // format validation
+                'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i', // format validation
             ],
-            'telephone_portable' => [
-                'required',
-                'regex:/^(06|07)[0-9]{8}$/i', // format validation
-            ],
-            'telephone_fixe' => [
-                'nullable',
-                'regex:/^05[0-9]{8}$/i', // format validation
-            ],
-            'mot_de_passe' => 'required|string|min:8|confirmed',
-            'domaine_competence'=>'required|string',
-
         ]);
+
         DB::beginTransaction();
         try {
-            $user = User::create([
-                'nom' => $request->nom,
-                'prenom' => $request->prenom,
-                'email' => $request->email,
-                'telephone_portable' => $request->telephone_portable,
-                'telephone_fixe' => $request->telephone_fixe,
-                'mot_de_passe' => Hash::make($request->mot_de_passe),
-                'role' => 'animateur'  // Automatically assign the role of 'animateur'
+            // Generate a random password
+            $randomPassword = Str::random(10);
 
+            // Extract the first part of the email to use as the default name
+            $emailParts = explode('@', $request->email);
+            $defaultNom = $emailParts[0]; // Use the part before the "@" as the default name
+            $defaultPrenom = 'DefaultSurname'; // Example default surname
+            $defaultTelephonePortable = '0700000000'; // Example default mobile phone
+            $defaultTelephoneFixe = '0500000000'; // Example default landline phone
+            $defaultDomaineCompetence = 'General'; // Example default domain of competence
+
+            $user = User::create([
+                'nom' => $defaultNom,
+                'prenom' => $defaultPrenom,
+                'email' => $request->email,
+                'telephone_portable' => $defaultTelephonePortable,
+                'telephone_fixe' => $defaultTelephoneFixe,
+                'mot_de_passe' => Hash::make($randomPassword),
+                'role' => 'animateur'  // Automatically assign the role of 'animateur'
             ]);
-            $animateur= new animateur([
-                'domaine_competence'=>$request->domaine_competence,
-                'user_id'=> $user->id
+
+            $animateur = new animateur([
+                'user_id' => $user->id,
+                'domaine_competence' => $defaultDomaineCompetence
             ]);
             $animateur->save();
+
+            // Send the random password by email
+            Mail::to($request->email)->send(new AnimateurCreated($user, $randomPassword));
+
             DB::commit();
             return response()->json([
-                'id'=>$animateur->id,
-                'user_id'=>$user->id,
-                'message'=>'Animateur created successfulyy'
+                'id' => $animateur->id,
+                'user_id' => $user->id,
+                'message' => 'Animateur created successfully and password sent by email'
             ]);
-    } catch(\Exception $e){
-        DB::rollback();
+        } catch(\Exception $e){
+            DB::rollback();
 
-        // and return an error message
-        return response()->json(['message' => 'Failed to create admin: ' . $e->getMessage()], 409);
+            // and return an error message
+            return response()->json(['message' => 'Failed to create animateur: ' . $e->getMessage()], 409);
+        }
     }
-}
     /**
      * Display the specified resource.
      */
     public function show($id)
     {
         $animateur = User::where('role', 'animateur')
-        ->where('id', $id)
-        ->with(['animateur.horaires', 'animateur.gethoraires']) // Adjusted the relationship paths
-        ->first();
+                         ->where('id', $id)
+                         ->with(['animateur.horaires']) // Corrected the relationship paths
+                         ->first();
 
-if (!$animateur) {
-return response()->json(['message' => 'Animateur not found'], 404);
-}
+        if (!$animateur) {
+            return response()->json(['message' => 'Animateur not found'], 404);
+        }
 
-return response()->json($animateur);
-    
+        return response()->json($animateur);
     }
 
    
@@ -101,65 +106,79 @@ return response()->json($animateur);
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-{
-    $user = User::where('role', 'animateur')->findOrFail($id);
+    {
+        $user = User::where('role', 'animateur')->findOrFail($id);
 
-    $request->validate([
-        'nom' => 'required|string',
-        'prenom' => 'required|string',
-        'email' => [
-            'required',
-            'email',
-            'unique:users,email,' . $user->id,
-            'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i', // format validation
-        ],
-        'telephone_portable' => [
-            'required',
-            'regex:/^(06|07)[0-9]{8}$/i', // format validation
-        ],
-        'telephone_fixe' => [
-            'nullable',
-            'regex:/^05[0-9]{8}$/i', // format validation
-        ],
-        'mot_de_passe' => 'nullable|string|min:8|confirmed',
-        'domaine_competence' => 'required|string',
-    ]);
+        $request->validate([
+            'nom' => 'sometimes|required|string',
+            'prenom' => 'sometimes|required|string',
+            'email' => [
+                'sometimes',
+                'required',
+                'email',
+                'unique:users,email,' . $user->id,
+                'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i', // format validation
+            ],
+            'telephone_portable' => [
+                'sometimes',
+                'required',
+                'regex:/^(06|07)[0-9]{8}$/i', // format validation
+            ],
+            'telephone_fixe' => [
+                'sometimes',
+                'nullable',
+                'regex:/^05[0-9]{8}$/i', // format validation
+            ],
+            'domaine_competence' => 'sometimes|required|string',
+        ]);
 
-    DB::beginTransaction();
-    try {
-        // Update user information
-        $userData = [
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'telephone_portable' => $request->telephone_portable,
-            'telephone_fixe' => $request->telephone_fixe,
-        ];
 
-        // Update password if provided
-        if ($request->has('mot_de_passe')) {
-            $userData['mot_de_passe'] = Hash::make($request->mot_de_passe);
+        DB::beginTransaction();
+        try {
+            // Update user information
+            $userData = $request->only(['nom', 'prenom', 'email', 'telephone_portable', 'telephone_fixe']);
+            $user->update($userData);
+
+            // Update the domaine competence if provided
+            if ($request->has('domaine_competence')) {
+                $animateur = animateur::where('user_id', $id)->firstOrFail();
+                $animateur->update(['domaine_competence' => $request->domaine_competence]);
+            }
+
+            DB::commit();
+
+            return response()->json(['user' => $user, 'message' => 'Animateur updated successfully']);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            // Return an error message
+            return response()->json(['message' => 'Failed to update animateur: ' . $e->getMessage()], 409);
         }
-
-        $user->update($userData);
-
-        // Update the domaine competence
-        if ($request->has('domaine_competence')) {
-            $animateur = animateur::where('user_id', $id)->firstorfail();
-            $animateur->update(['domaine_competence' => $request->domaine_competence]);
-        }
-
-        DB::commit();
-
-        return response()->json(['user' => $user, 'message' => 'Animateur updated successfully']);
-    } catch (\Exception $e) {
-        DB::rollback();
-
-        // Return an error message
-        return response()->json(['message' => 'Failed to update animateur: ' . $e->getMessage()], 409);
     }
-}
 
+    public function updatePassword(Request $request, $id)
+    {
+        $user = User::where('role', 'animateur')->findOrFail($id);
+
+        $request->validate([
+            'mot_de_passe' => 'required|string|min:8|confirmed',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $user->update([
+                'mot_de_passe' => Hash::make($request->mot_de_passe),
+            ]);
+
+            DB::commit();
+
+            return response()->json(['message' => 'Password updated successfully']);
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return response()->json(['message' => 'Failed to update password: ' . $e->getMessage()], 409);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.

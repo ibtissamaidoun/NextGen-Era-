@@ -60,11 +60,11 @@ class HoraireController extends Controller
             return response()->json(['message' => 'Horaire not found'], 404);
         }
 
-        $validated = Validator::make($request->all(), [
-            'jour_semaine' => 'in:Lundi,Mardi,Mercredi,Jeudi,Vendredi,Samedi,Dimanche',
-            'heure_debut' => 'date_format:H:i',
-            'heure_fin' => 'date_format:H:i|after:heure_debut',
-        ])->validate();
+        $validated = $request->validate([
+            'jour_semaine' => 'sometimes|required|in:Lundi,Mardi,Mercredi,Jeudi,Vendredi,Samedi,Dimanche',
+            'heure_debut' => 'sometimes|required|date_format:H:i',
+            'heure_fin' => 'sometimes|required|date_format:H:i|after:heure_debut',
+        ]);
 
         $horaire->update($validated);
 

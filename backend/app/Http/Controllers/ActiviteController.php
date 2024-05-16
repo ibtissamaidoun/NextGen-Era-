@@ -53,11 +53,13 @@ class ActiviteController extends Controller
             'tarif' => 'required|numeric|min:0',
             'effectif_min' => 'required|integer|min:0',
             'effectif_max' => 'required|integer|min:0|gte:effectif_min',
-            'effectif_actuel' => 'required|integer|gte:effectif_min|lte:effectif_max',
+            'effectif_actuel' => 'required|integer|lte:effectif_max',
             'age_min' => 'required|integer|min:0',
             'age_max' => 'required|integer|min:0|gte:age_min',
             'option_paiement' => 'required|array',
             'remise' => 'required|array|min:0|max:100',
+            'date_debut_etud'=>'required|date',
+            'date_fin_etud'=>'required|date',
         ]);
         if ($validator->fails()) {
             return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422);
@@ -152,32 +154,42 @@ class ActiviteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) // sakhri khso ykemla
     {
         // Find the activity by its ID
         $activity = Activite::findOrFail($id);
         
         // Validate the incoming request data
         $validatedData = $request->validate([
-            // Validation rules for activity fields
-            'titre' => 'sometimes|required|string|max:255',
-            'description' => 'sometimes|required|string',
-            'objectifs' => 'sometimes|required|string',
-            'image_pub' => 'sometimes|required|image|max:2048',
+            'titre' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string',
+            'objectifs' => 'sometimes|string',
+            'image_pub' => 'sometimes|image|max:2048',
             'fiche_pdf' => 'nullable|file|mimes:pdf|max:2048',
-            'lien_youtube' => 'sometimes|required|string|url',
-            'type_activite' => 'sometimes|required|string',
-            'domaine_activite' => 'sometimes|required|string',
-            'nbr_seances_semaine' => 'sometimes|required|integer|min:1',
-            'tarif' => 'sometimes|required|numeric|min:0',
-            'effectif_min' => 'sometimes|required|integer|min:0',
-            'effectif_max' => 'sometimes|required|integer|min:0|gte:effectif_min',
-            'age_min' => 'sometimes|required|integer|min:0',
-            'age_max' => 'sometimes|required|integer|min:0|gte:age_min',
-        ]);    
+            'lien_youtube' => 'sometimes|string|url',
+            'type_activite' => 'sometimes|string',
+            'domaine_activite' => 'sometimes|string',
+            'nbr_seances_semaine' => 'sometimes|integer|min:1',
+            'tarif' => 'sometimes|numeric|min:0',
+            'effectif_min' => 'sometimes|integer|min:0',
+            'effectif_max' => 'sometimes|integer|min:0|gte:effectif_min',
+            'age_min' => 'sometimes|integer|min:0',
+            'age_max' => 'sometimes|integer|min:0|gte:age_min',
+        ]);
+
+        // Handle file uploads
+        if ($request->hasFile('image_pub')) {
+            $validatedData['image_pub'] = $request->file('image_pub')->store('images', 'public');
+        }
+
+        if ($request->hasFile('fiche_pdf')) {
+            $validatedData['fiche_pdf'] = $request->file('fiche_pdf')->store('pdfs', 'public');
+        }
+
         // Update the activity with the validated data
-        $activity->update($validatedData);
-    
+        $activity->fill($validatedData);
+        $activity->save();
+
         // Return a success message along with the updated activity as JSON response
         return response()->json(['message' => 'Activity updated successfully', 'activity' => $activity]);
     }
@@ -210,17 +222,17 @@ class ActiviteController extends Controller
      * @param  int  $horaireId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function showHoraire($activityId, $horaireId)
-    {
-        // Find the horaire by its ID
-        $horaire = Horaire::find($horaireId);
-        // If the horaire doesn't exist, return a 404 response
-        if (!$horaire) {
-            return response()->json(['message' => 'Horaire not found'], 404);
-        }
-        // Return the horaire as JSON response
-        return response()->json($horaire);
-    }
+    // public function showHoraire($activityId, $horaireId)
+    // {
+    //     // Find the horaire by its ID
+    //     $horaire = Horaire::find($horaireId);
+    //     // If the horaire doesn't exist, return a 404 response
+    //     if (!$horaire) {
+    //         return response()->json(['message' => 'Horaire not found'], 404);
+    //     }
+    //     // Return the horaire as JSON response
+    //     return response()->json($horaire);
+    // }
 
     /**
      * List all horaires for a specific activity.
@@ -228,20 +240,20 @@ class ActiviteController extends Controller
      * @param  int  $activityId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function indexHoraires($activityId)
-    {
-        // Find the activity by its ID
-        $activity = Activite::find($activityId);
-        // If the activity doesn't exist, return a 404 response
-        if (!$activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
-        }
+    // public function indexHoraires($activityId)
+    // {
+    //     // Find the activity by its ID
+    //     $activity = Activite::find($activityId);
+    //     // If the activity doesn't exist, return a 404 response
+    //     if (!$activity) {
+    //         return response()->json(['message' => 'Activity not found'], 404);
+    //     }
 
-        // Retrieve all horaires associated with the activity
-        $horaires = $activity->horaires()->get();
-        // Return the horaires as JSON response
-        return response()->json($horaires);
-    }
+    //     // Retrieve all horaires associated with the activity
+    //     $horaires = $activity->horaires()->get();
+    //     // Return the horaires as JSON response
+    //     return response()->json($horaires);
+    // }
 
     /**
      * Delete a specific horaire from an activity.
@@ -250,27 +262,27 @@ class ActiviteController extends Controller
      * @param  int  $horaireId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function detachHoraire($activityId, $horaireId)
-    {
-        // Find the activity by its ID
-        $activity = Activite::find($activityId);
-        // If the activity doesn't exist, return a 404 response
-        if (!$activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
-        }
+    // public function detachHoraire($activityId, $horaireId)
+    // {
+    //     // Find the activity by its ID
+    //     $activity = Activite::find($activityId);
+    //     // If the activity doesn't exist, return a 404 response
+    //     if (!$activity) {
+    //         return response()->json(['message' => 'Activity not found'], 404);
+    //     }
 
-        // Find the horaire by its ID
-        $horaire = Horaire::find($horaireId);
-        // If the horaire doesn't exist, return a 404 response
-        if (!$horaire) {
-            return response()->json(['message' => 'Horaire not found'], 404);
-        }
+    //     // Find the horaire by its ID
+    //     $horaire = Horaire::find($horaireId);
+    //     // If the horaire doesn't exist, return a 404 response
+    //     if (!$horaire) {
+    //         return response()->json(['message' => 'Horaire not found'], 404);
+    //     }
 
-        // Detach the horaire from the activity
-        $activity->horaires()->detach($horaireId);
-        // Return success message as JSON response
-        return response()->json(['message' => 'Horaire association with the activity removed successfully']);
-    }
+    //     // Detach the horaire from the activity
+    //     $activity->horaires()->detach($horaireId);
+    //     // Return success message as JSON response
+    //     return response()->json(['message' => 'Horaire association with the activity removed successfully']);
+    // }
 
     /**
      * Store a new horaire for a specific activity.

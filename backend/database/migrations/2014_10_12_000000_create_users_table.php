@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('telephone_portable');
             $table->string('telephone_fixe')->nullable();
             $table->string('mot_de_passe');
+            $table->string('photo_path')->nullable(); // Added photo path column
             $table->enum('role',['parent','admin','animateur'])->default('parent');
+            
             $table->timestamps();
         });
          // contrainte de format d'email valid

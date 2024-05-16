@@ -21,7 +21,7 @@ class EnfantController extends Controller
             $parent = $user->parentmodel;
             $enfants= $parent->enfants()->select(['id','nom','prenom'])->get();
         }
-        else
+        else //si user est un admin il peut voir tout les enfants
             $enfants = Enfant::select(['id','nom','prenom'])->get();
     
         return response()->json(['enfants'=>$enfants]);
@@ -33,6 +33,19 @@ class EnfantController extends Controller
     public function store(Request $request)
         {
             // validate the input ....
+            $fields = $request->validate(
+                [
+                    'nom'=> 'required|string',
+                    'prenom'=> 'required|string',
+                    'date_de_naissance' => [
+                        'required',
+                        'date',
+                        'before:' . now()->subYears(6)->toDateString(), //enfant a au moin 6 ans 
+                        'after:' . now()->subYears(17)->toDateString(), //enfant a au plus 17 ans
+                    ],
+                    'niveau_etude' => 'required|in:Primaire,College,Lycee',
+                ]
+                );
 
 
             $user = Auth::User();
@@ -104,6 +117,19 @@ class EnfantController extends Controller
     public function update(Request $request, $enfant_id)
     {
         // validate input ...
+        $fields=$request->validate(
+            [
+                'nom' => 'sometimes|string|max:255',
+                'prenom' => 'sometimes|string|max:255',
+                'date_de_naissance' => [
+                    'sometimes',
+                    'date',
+                    'before:' . now()->subYears(6)->toDateString(),
+                    'after:' . now()->subYears(17)->toDateString(),
+                ],
+                'niveau_etude' => 'sometimes|in:Primaire,College,Lycee',
+            ]
+            );
 
         //valide data
         $user = Auth::User();
