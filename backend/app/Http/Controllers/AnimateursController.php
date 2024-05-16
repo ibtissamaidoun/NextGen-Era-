@@ -121,7 +121,7 @@ return response()->json($animateur);
             'nullable',
             'regex:/^05[0-9]{8}$/i', // format validation
         ],
-        'mot_de_passe' => 'nullable|string|min:8|confirmed',
+        'mot_de_passe' => 'required|string|min:8|confirmed',
         'domaine_competence' => 'required|string',
     ]);
 

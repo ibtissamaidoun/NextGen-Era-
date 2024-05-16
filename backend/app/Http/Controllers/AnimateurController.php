@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
+use App\Models\enfant;
+use App\Models\horaire;
 use App\Models\activite;
 use App\Models\animateur;
-use App\Models\horaire;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\enfant;
 
 class AnimateurController extends Controller
 {
@@ -47,7 +48,6 @@ class AnimateurController extends Controller
             ]);
             $user = Auth::User();
             $animateur = $user->animateur;
-<<<<<<< HEAD
 
     
             // Nouvelle logique pour vérifier l'existence des horaires
@@ -65,9 +65,7 @@ class AnimateurController extends Controller
             // Retourner une réponse de succès
 
 
-=======
             $this->authorize('manageHeures', $animateur); //gestion d'autorization: les animateur peuvent manager leurs propres horaire
->>>>>>> ad10055956715293744fe1e087a064285f95dc89
             // tester les horaires fornis si ils sont deja existant
             $compteur = 0;
             $dejaFourni = array();
