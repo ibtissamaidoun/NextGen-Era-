@@ -47,6 +47,7 @@ class AuthControllerTest extends TestCase
         $telephone_fixe = "0567834567";
         $email = "test11119@gmail.com";
         $mot_de_passe = "testing";
+        $fonction = 'Enseignant';
 
         $response = $this->post('/api/register', [
             'nom'=>$nom,
@@ -57,6 +58,7 @@ class AuthControllerTest extends TestCase
             'role' => 'parent',
             'mot_de_passe' => $mot_de_passe,
             'mot_de_passe_confirmation' => $mot_de_passe,
+            'fonction' => $fonction,
         ]);
 
         $response->assertStatus(202);
@@ -68,6 +70,11 @@ class AuthControllerTest extends TestCase
             'telephone_fixe' => $telephone_fixe,
             'email' => $email,
             'role' => 'parent',
+        ]);
+        $user = User::where('email', $email)->first();
+        $this->assertDatabaseHas('parentmodels', [
+            'fonction' => $fonction,
+            'user_id' => $user->id
         ]);
 
         $response->assertJsonStructure([

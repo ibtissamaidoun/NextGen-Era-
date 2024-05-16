@@ -51,43 +51,56 @@ class OffreController extends Controller
         return response()->json(['message'=>'offre deleted successfuly']);
     }
 
-    public function attachactivity(Request $request, $offerId)
-{
-    $offer = offre::find($offerId);
+//     public function attachactivity(Request $request, $offerId)
+// {
+//     $offer = offre::find($offerId);
 
+<<<<<<< HEAD
     $validatedata= $request->validate([
         'activite_id'=>'required|integer|exists:activites,id',
     ]);
+=======
+//     $validatedata= $request->validate([
+//         'activite_id'=>'required|exists:activites,id',
+//     ]);
+>>>>>>> 7a44967d99b59a8e167334ae27ae4d60fd702d72
 
-    $activite = Activite::find($validatedata['activite_id']);
+//     $activite = Activite::find($validatedata['activite_id']);
 
-    $offer->getActivites()->attach($activite->id);
-}
+//     $offer->getActivites()->attach($activite->id);
+// }
 
 
-public function detachActivity(Request $request, $offerId)
-{
-    // Find the offer by its ID
-    $offer = Offre::find($offerId);
+// public function detachActivity(Request $request, $offerId)
+// {
+//     // Find the offer by its ID
+//     $offer = Offre::find($offerId);
     
+<<<<<<< HEAD
     // Validate the incoming request data to ensure activite_id is provided and valid
     $validatedData = $request->validate([
         'activite_id' => 'required|integer|exists:activites,id',
     ]);
+=======
+//     // Validate the incoming request data to ensure activite_id is provided and valid
+//     $validatedData = $request->validate([
+//         'activite_id' => 'required|exists:activites,id',
+//     ]);
+>>>>>>> 7a44967d99b59a8e167334ae27ae4d60fd702d72
     
-    // Find the activity by its ID
-    $activite = Activite::find($validatedData['activite_id']);
+//     // Find the activity by its ID
+//     $activite = Activite::find($validatedData['activite_id']);
     
-    // Check if the activity is currently associated with the offer
-    if ($offer->getActivites()->find($activite->id)) {
-        // Detach the activity from the offer
-        $offer->getActivites()->detach($activite->id);
-        return response()->json(['message' => 'Activity detached successfully from the offer']);
-    } else {
-        return response()->json(['message' => 'This activity is not associated with the specified offer'], 404);
-    }
-}
-
+//     // Check if the activity is currently associated with the offer
+//     if ($offer->getActivites()->find($activite->id)) {
+//         // Detach the activity from the offer
+//         $offer->getActivites()->detach($activite->id);
+//         return response()->json(['message' => 'Activity detached successfully from the offer']);
+//     } else {
+//         return response()->json(['message' => 'This activity is not associated with the specified offer'], 404);
+//     }
+// }
+// admin id should be returned by the user authentification admin
 public function store(Request $request)
 {
     try {
@@ -98,7 +111,11 @@ public function store(Request $request)
             'remise' => 'nullable|integer|min:0|max:100',
             'date_debut_inscription' => 'required|date',
             'date_fin_inscription' => 'required|date|after_or_equal:date_debut_inscription',
+<<<<<<< HEAD
             'administrateur_id' => 'required|integer|exists:administrateurs,id',
+=======
+          //  'administrateur_id' => 'required|exists:administrateurs,id',
+>>>>>>> 7a44967d99b59a8e167334ae27ae4d60fd702d72
             'paiement_id' => 'required|exists:paiements,id',
             'activites' => 'required|array',
             'activites.*.id' => 'exists:activites,id', // Ensure each activity ID exists

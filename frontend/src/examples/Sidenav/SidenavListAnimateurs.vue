@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 
 import SidenavItem from "./SidenavItem.vue";
-import SidenavCard from "./SidenavCard.vue";
+//import SidenavCard from "./SidenavCard.vue";
 
 const store = useStore();
 const isRTL = computed(() => store.state.isRTL);
@@ -19,11 +19,11 @@ const getRoute = () => {
 <template>
     
         <div
-    class="collapse navbar-collapse w-auto h-auto h-100"
+    class="collapse navbar-collapse w-auto h-auto p-4"
     id="sidenav-collapse-main"
   >
     <ul class="navbar-nav">
-        <li class="nav-item">
+        <!-- <li class="nav-item">
         <sidenav-item
           to="/dashboard-animateurs"
           :class="getRoute() === 'dashboard-animateurs' ? 'active' : ''"
@@ -33,7 +33,7 @@ const getRoute = () => {
             <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> -->
       
       
       <li class="nav-item">
@@ -44,7 +44,7 @@ const getRoute = () => {
         >
           <template v-slot:icon>
             <i
-              class="ni ni-time-alarm text-warning text-sm opacity-10"
+              class="ni ni-time-alarm text-primary text-sm opacity-10"
             ></i>
           </template>
         </sidenav-item>
@@ -72,7 +72,7 @@ const getRoute = () => {
         >
           <template v-slot:icon>
             <i
-              class="ni ni-controller text-warning text-sm opacity-10"
+              class="ni ni-controller text-info text-sm opacity-10"
             ></i>
           </template>
         </sidenav-item>
@@ -125,28 +125,5 @@ const getRoute = () => {
       
    
   
-
-  <div class="pt-3 mx-3 mt-3 sidenav-footer">
-    <sidenav-card
-      :card="{
-        title: 'Need Help?',
-        description: 'Please check our docs',
-        links: [
-          {
-            label: 'Documentation',
-            route:
-              'https://www.creative-tim.com/learning-lab/vue/overview/argon-dashboard/',
-            color: 'dark',
-          },
-          {
-            label: 'Buy now',
-            route:
-              'https://www.creative-tim.com/product/vue-argon-dashboard-pro?ref=vadp',
-            color: 'success',
-          },
-        ],
-      }"
-    />
-  </div>
     
   </template>

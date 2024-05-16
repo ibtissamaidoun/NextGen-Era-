@@ -28,19 +28,20 @@ const closeMenu = () => {
 };
 </script>
 <template>
+  
   <nav
-    class="navbar  navbar-expand-lg px-0 mx-3 shadow border-radius-xl"
+    class="navbar  navbar-expand-lg px-0 mx-3 shadow border-radius-xl "
     :class="isRTL ? 'top-0 position-sticky z-index-sticky' : ''"
     v-bind="$attrs"
     id="navbarBlur"
     data-scroll="true"
   >
-    <div class="px-3 py-1 container-fluid">
+    <div class="px-3 py-1 container-fluid ">
       <breadcrumbs
         :current-page="currentRouteName"
         :current-directory="currentDirectory"
       />
-      <h3 style="font-family: Helvetica Neue">Animateurs </h3>
+      <h4  style="font-family: Helvetica Neue">Animateurs </h4>
 
       <div
         class="mt-2 collapse navbar-collapse mt-sm-0 me-md-0 me-sm-4"
@@ -48,7 +49,7 @@ const closeMenu = () => {
         id="navbar"
       >
         <div
-          class="pe-md-5 d-flex align-items-center"
+          class="pe-md-12 d-flex align-middle text-center"
           :class="isRTL ? 'me-md-auto' : 'ms-md-auto'"
         >
           <div class="input-group">
@@ -223,8 +224,8 @@ const closeMenu = () => {
   </nav>
 </template>
 <style scoped>
-h3{
-  color:navy;
+h4{
+  color:#000080;
   
 }
 </style>

@@ -11,6 +11,7 @@ class ForgotController extends Controller
 {
 
     public function forget(Request $request) {
+        try {
         $fields = $request->validate([
             'email' => 'required|email'
         ]);
@@ -20,7 +21,7 @@ class ForgotController extends Controller
         }
         $email=$fields['email'];
         $token = Str::random(60);
-        DB::table('password_reset_tokens')->updateOrInsert(['email' => $email], [ 
+        DB::table('password_reset_tokens')->updateOrInsert(['email' => $email], [
             'email' => $email,
             'token' => $token,
             'created_at' => now()
@@ -28,10 +29,18 @@ class ForgotController extends Controller
         $user->notify(new ForgetPasswordNotification($token));
 
         return response()->json(['message' => 'Reset link sent to your email address'], 202);
-        
+    }
+    catch (\Throwable $th) {
+        return response()->json([
+            'status' => false,
+            'message' => $th->getMessage()
+        ], 500);
+    }
+
     }
 
     public function reset(Request $request) {
+        try{
         $fields = $request->validate([
             'mot_de_passe'=> 'required|string|confirmed'
         ]);
@@ -50,6 +59,13 @@ class ForgotController extends Controller
         DB::table('password_reset_tokens')->where('token', $token)->delete();
         });
         return response()->json(['message'=> 'Your password is reset successfully'],202);
+        }
+        catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
 
 }
 
