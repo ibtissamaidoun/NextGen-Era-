@@ -6,13 +6,16 @@ use App;
 use Carbon\Carbon;
 use App\Models\devi;
 use App\Models\User;
-
 use App\Models\offre;
+
+use App\Models\enfant;
 use App\Models\demande;
-use App\Models\notification;
+use App\Models\activite;
 use App\Models\parentmodel;
+use App\Models\notification;
 use Illuminate\Http\Request;
 use App\Models\administrateur;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -157,7 +160,7 @@ class DeviController extends Controller
      * @param int $tva
      * @return array
      */
-    protected static function calculerPrix($demande_id = 1, $enfantActivites = [], $tva = 20): array
+    protected static function calculerPrix($demande_id , $enfantActivites = [], $tva = 20): array
     {
         $demande = demande::find($demande_id);
         $prixHT = 0;
@@ -612,5 +615,53 @@ class DeviController extends Controller
             'devis' => $devis,
         ]);
     }
+
+    public function addToPanier(Request $request, $activity_id)
+    {
+        $activite = activite::findOrFail($activity_id);
+        $parent_id = Auth::user()->parentmodel->id;
+// i changed the validation according to mr gpt recommendation :(
+        $validatedData = $request->validate([
+            'enfants' => 'required|array',
+            'enfants.*' => [
+                'required',
+                'exists:enfants,id',
+                Rule::exists('enfants', 'id')->where(function ($query) use ($parent_id) {
+                    $query->where('parentmodel_id', $parent_id);
+                }),
+            ],
+        ]);
+
+        foreach ($validatedData['enfants'] as $enfant_id) {
+            $enfant = enfant::findOrFail($enfant_id);
+            $enfant->activitesPanier()->attach($activity_id, [
+                'parentmodel_id' => $parent_id,
+                'status' => 'en attente'
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'well done dear friend , i think we made it.',
+        ]);
+
+
+    }
+
+    public function SupprimerPanier(Request $request)
+    {
+    
+        $user = $request->user();
+        $parent_id = $user->parentmodel->id;
+
+        // ya rbi tkhdm :) 
+        $user->parentmodel->getActvites()->wherePivot('parentmodel_id', $parent_id)->detach();
+
+        return response()->json([
+            'message' => 'we made it dear friend , the panier is succesfully empty :)'
+        ]);
+    }
+    
+
+
 
 }

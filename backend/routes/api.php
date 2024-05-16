@@ -204,6 +204,10 @@ Route::post('/demandes/{demande}/validate',[DemandeController::class, 'payeDeman
 
     //notification
     Route::get('notifications', [NotificationController::class, 'indexadmin']);
+
+    Route::post('/activite/{activity_id}/add', [deviController::class,'addToPanier']);
+
+    
 });
 
 
@@ -231,3 +235,4 @@ Route::post('/demandes/{demande}/refuse',[AdministrateurController::class,'refus
 
 
 Route::post('/demandes/{demande}/refuse', [AdministrateurController::class, 'refuse']);
+
