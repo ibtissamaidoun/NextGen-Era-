@@ -109,6 +109,6 @@ jobs:
         with:
           context: frontend/
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/Nextgenera_app:version
+          tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera_app:version
 
           file: frontend/Dockerfile
