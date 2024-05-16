@@ -89,26 +89,47 @@ jobs:
       run: |
         cd frontend
         npm run build 
-  build:
-    needs: [ Frontend-test]
+  build-and-push:
     runs-on: ubuntu-latest
+    needs: [Frontend-test,backend-test]  # S'assure que les tests frontend sont passés avant de construire les images
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      #- name: Set up Docker Buildx
-      # uses: docker/setup-buildx-action@v1
+    # Connexion à DockerHub
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Docker Build and Push
-        uses: docker/build-push-action@v3
-        with:
-          context: frontend/
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera_app:version
+    # Build et Push de l'image du Frontend
+    - name: Docker Build and Push Frontend
+      uses: docker/build-push-action@v3
+      with:
+        context: frontend/
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera_frontend:version
 
-          file: frontend/Dockerfile
+        file: frontend/Dockerfile
+
+    # Build et Push de l'image du Backend
+    - name: Docker Build and Push Backend
+      uses: docker/build-push-action@v3
+      with:
+        context: backend/
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera_backend:version1
+
+        file: backend/Dockerfile
+
+    # Build et Push de l'image de la Base de données Backend
+    - name: Docker Build and Push Backend Database
+      uses: docker/build-push-action@v3
+      with:
+        context: backend/database
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera_database:version2
+
+        file: backend/database/Dockerfile
+    
