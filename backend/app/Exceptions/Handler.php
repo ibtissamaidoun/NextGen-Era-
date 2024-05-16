@@ -6,8 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
 class Handler extends ExceptionHandler
-{
-    /**
+{       /**
      * A list of exception types with their corresponding custom log levels.
      *
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
@@ -46,13 +45,7 @@ class Handler extends ExceptionHandler
         });
     }
 
-<<<<<<< HEAD
 
-
-=======
-=======
->>>>>>> 7a44967d99b59a8e167334ae27ae4d60fd702d72
->>>>>>> 8f199a8aa4fffd101cc68951901daa796589a012
     public function render($request, Throwable $exception)
     {
         if ($request->expectsJson() || $request->is('api/*')) {

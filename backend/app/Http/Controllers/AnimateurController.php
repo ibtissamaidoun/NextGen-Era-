@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\User;
 use App\Models\enfant;
-<<<<<<< HEAD
+
 use App\Models\horaire;
-=======
->>>>>>> 7a44967d99b59a8e167334ae27ae4d60fd702d72
+
+
 use App\Models\activite;
 use App\Models\animateur;
 use Illuminate\Http\Request;
@@ -28,11 +28,9 @@ class AnimateurController extends Controller
         $user = Auth::User();
         $animateur = $user->animateur; // $animateur = Auth::user()
 
-<<<<<<< HEAD
-       
-=======
+
         $this->authorize('manageHeures', $animateur);//gestion d'autorization: les animateur peuvent manager leurs propres horaire
->>>>>>> 8f199a8aa4fffd101cc68951901daa796589a012
+
         if( $animateur->horaires()->exists() )
         {
             $horaires = $animateur->horaires()->get()->makeHidden(['pivot','created_at','updated_at']);
@@ -55,27 +53,11 @@ class AnimateurController extends Controller
             ]);
             $user = Auth::User();
             $animateur = $user->animateur;
-<<<<<<< HEAD
-    
-            // Nouvelle logique pour vérifier l'existence des horaires
-            foreach($fields['horaires'] as $horaireId) {
-                if (in_array($horaireId, $animateur->horaires->pluck('id')->toArray())) {
-                    throw new Exception("Horaire déjà existant.");
-                }
-            }
-    
-            // Ajout des horaires
-            foreach($fields['horaires'] as $horaireId) {
-                $animateur->horaires()->attach($horaireId);
-            }
-    
-            // Retourner une réponse de succès
 
-
-=======
+  
 
             $this->authorize('manageHeures', $animateur); //gestion d'autorization: les animateur peuvent manager leurs propres horaire
->>>>>>> 8f199a8aa4fffd101cc68951901daa796589a012
+
             // tester les horaires fornis si ils sont deja existant
 
             $compteur = 0;
@@ -135,25 +117,16 @@ class AnimateurController extends Controller
     {
         // validation d'inputs : l'horaire forni est une heure
         $fields = $request->validate([
-<<<<<<< HEAD
-            'horaires' => 'required|integer|exists:horaires,id' 
-        ]);
-=======
+
             'new_horaire_id' => 'required|integer|exists:horaires,id'
         ]);
 
 
->>>>>>> 8f199a8aa4fffd101cc68951901daa796589a012
         // modification d'une instance de 'horaires_disponibilite_animateur'
         $user = Auth::User();
         $animateur_id = ($user->animateur)->id;
         $animateur = animateur::find($animateur_id); // $animateur = Auth::user()
-<<<<<<< HEAD
 
-
-        if( $animateur->horaires()->where('horaire_id',$horaire)->exists() && 
-            ! $animateur->horaires()->where('horaire_id',$request->horaire)->exists())
-=======
         $horaireInstance = Horaire::findOrFail($horaire);//on recupere instance horaire d'apres id horaire
         $this->authorize('update', $horaireInstance);
         // Vérification des autorisations
@@ -161,7 +134,7 @@ class AnimateurController extends Controller
 
         if( $animateur->horaires()->where('horaire_id',$horaire)->exists() &&
             ! $animateur->horaires()->where('horaire_id',$fields['new_horaire_id'])->exists())
->>>>>>> 8f199a8aa4fffd101cc68951901daa796589a012
+
 
             $animateur->horaires()->updateExistingPivot($horaire,['horaire_id'=>$request->horaire]);
         else
@@ -185,12 +158,11 @@ class AnimateurController extends Controller
         $user = Auth::User();
         $animateur_id = ($user->animateur)->id;
         $animateur = animateur::find($animateur_id); // $animateur = Auth::user()
-<<<<<<< HEAD
-=======
+
         $horaireInstance = Horaire::findOrFail($horaire);//on recupere instance horaire d'apres id horaire
         // Vérification des autorisations
         $this->authorize('delete', $horaireInstance); //seuls les animateurs responsables d'un horaire donné peuvent le supprimer
->>>>>>> 8f199a8aa4fffd101cc68951901daa796589a012
+
 
 
         // test si l'heure a supprimer existante ou non
@@ -301,14 +273,11 @@ class AnimateurController extends Controller
         $user = Auth::User();
         $animateur_id = ($user->animateur)->id;
         $animateur = Animateur::with('getActivites')->findOrFail($animateur_id);
-<<<<<<< HEAD
 
-        // search for the specified activite 
-=======
         $activite = Activite::findOrFail($id);
         //$this->authorize('view', $activite);
         // search for the specified activite
->>>>>>> 8f199a8aa4fffd101cc68951901daa796589a012
+
         foreach ($animateur->getActivites as $act)
         {
             if( $act->id == $id)
@@ -334,14 +303,13 @@ class AnimateurController extends Controller
         $user = Auth::User();
         $animateur_id = ($user->animateur)->id;
         $animateur = Animateur::with('getActivites')->findOrFail($animateur_id);
-<<<<<<< HEAD
-=======
+
         $activiteInstance = Activite::findOrFail($activite);
         $enfant = enfant::findOrFail($etudiant);
 
         // Appliquer la policy
         //$this->authorize('viewStudent', [$activiteInstance, $enfant]);
->>>>>>> 8f199a8aa4fffd101cc68951901daa796589a012
+
 
 
         foreach ($animateur->getActivites as $act)
