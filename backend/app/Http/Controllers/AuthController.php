@@ -65,6 +65,7 @@ class AuthController extends Controller
             return response()->json(['token' => $token],202);
         }
         catch (\Throwable $th) {
+            DB::rollback(); 
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage()
