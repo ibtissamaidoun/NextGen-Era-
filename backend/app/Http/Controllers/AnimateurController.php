@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\enfant;
 use App\Models\activite;
 use App\Models\animateur;
 use App\Models\horaire;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\enfant;
 
 class AnimateurController extends Controller
 {
@@ -17,7 +17,7 @@ class AnimateurController extends Controller
     /**
      * Display a listing of heures affectees
      */
-    public function indexHeures() //good
+    public function indexHeures()
     {
         //debut
 
@@ -49,6 +49,7 @@ class AnimateurController extends Controller
             $animateur = $user->animateur;
             $this->authorize('manageHeures', $animateur); //gestion d'autorization: les animateur peuvent manager leurs propres horaire
             // tester les horaires fornis si ils sont deja existant
+
             $compteur = 0;
             $dejaFourni = array();
             foreach($fields['horaires'] as $horaireId)
@@ -71,7 +72,6 @@ class AnimateurController extends Controller
                 ]);
             }
             // retourner une reponce succes
-
             return response()->json([
                 'message'=>'Insersion avec succes !'
             ], 201);
@@ -287,7 +287,7 @@ class AnimateurController extends Controller
         $animateur_id = ($user->animateur)->id;
         $animateur = Animateur::with('getActivites')->findOrFail($animateur_id);
         $activiteInstance = Activite::findOrFail($activite);
-        $enfant = Enfant::findOrFail($etudiant);
+        $enfant = enfant::findOrFail($etudiant);
 
         // Appliquer la policy
         //$this->authorize('viewStudent', [$activiteInstance, $enfant]);

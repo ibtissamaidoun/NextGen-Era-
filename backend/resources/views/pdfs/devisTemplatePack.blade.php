@@ -12,18 +12,20 @@ use Carbon\Carbon;
     <div class="invoice-box">
         <table cellpadding="0" cellspacing="0">
             <tr class="top" >
-                <td class='titre'>
-                    DEVIS
+                <td class='titre' style="text-transform:uppercase;">
+                    {{ $type }}
                 </td>
                 <td rowspan="2" style="text-align: right;  vertical-align: top;">
                     <img src="{{ $image }}"  class='image'>
                 </td>
             </tr>
             <tr>
-                <td class='dates'>
-                    Nº DEVIS : {{ $serie }}<br>
+                <td class='dates' style="text-transform:uppercase;">
+                    Nº {{$type}} : {{ $serie }}<br>
                     DATE DEMANDE : {{ $demande->date_demande }}<br>
+                    @if( strtoupper($type) == 'DEVIS')
                     DATE D'EXPIRATION : {{ $expiration }}<br>
+                    @endif
                 </td>
             </tr>
             </tr>
@@ -95,8 +97,13 @@ use Carbon\Carbon;
 			</tbody>
 		</table>
         <div style='padding-bottom: 25px'>
+            @if(strtoupper($type) == 'DEVIS')
             <h3 class='description'>INFO SUR PACK {{ $pack->type }}</h3>
             <p class='text'>{{ $pack->description }}</p>
+            @elseif (strtoupper($type) == 'FACTURE')
+            <h3 class='description'>LE PAIEMENT</h3>
+            <p class='text'>{{ $prixOP }}<br>sur une period de {{ $period }}.</p>
+            @endif
         </div>
         <div>
             <p class='text' style="padding-bottom: 15px">Pour accepter ce devis, signez ici et renvoyez : ____________________________________________________<br>ou Acceper sur la plateform.<br></p><br>
@@ -112,15 +119,15 @@ use Carbon\Carbon;
 		<style type="text/css">
                 @font-face {
                 font-family: 'Ford Antenna';
-                src: url({{ public_path('fonts/Ford Antenna TTF/FordAntenna-Regular.ttf')}}) format('truetype');
+                src: url({{ storage_path('fonts/Ford Antenna TTF/FordAntenna-Regular.ttf')}}) format('truetype');
                 }
                 @font-face {
                 font-family: 'Ford Antenna SemiBold';
-                src: url({{ public_path('fonts/Ford Antenna TTF/FordAntenna-Semibold.ttf')}}) format('truetype');
+                src: url({{ storage_path('fonts/Ford Antenna TTF/FordAntenna-Semibold.ttf')}}) format('truetype');
                 }
                 @font-face {
                 font-family: 'Ford Antenna Black';
-                src: url({{ public_path('fonts/Ford Antenna TTF/FordAntenna-Black.ttf')}}) format('truetype');
+                src: url({{ storage_path('fonts/Ford Antenna TTF/FordAntenna-Black.ttf')}}) format('truetype');
                 }
                 .description{ font-family: Ford Antenna SemiBold ;font-size: 25px;padding-top: 100px; text-transform:uppercase;}
                 .merci{color: #10278a;font-family: Ford Antenna SemiBold ;font-size: 16px;}

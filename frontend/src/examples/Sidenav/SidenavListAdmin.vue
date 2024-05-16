@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 
 import SidenavItem from "./SidenavItem.vue";
-import SidenavCard from "./SidenavCard.vue";
+
 
 const store = useStore();
 const isRTL = computed(() => store.state.isRTL);

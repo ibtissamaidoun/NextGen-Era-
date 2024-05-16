@@ -25,8 +25,8 @@ return new class extends Migration
                   ->on('activites')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->time('horaire_1');
-            $table->time('horaire_2')->nullable();// il peut qu'il aura qu'une seule séance
+            $table->integer('horaire_1');
+            $table->integer('horaire_2')->nullable();// il peut qu'il aura qu'une seule séance
              $table->primary(['activite_id', 'enfant_id']);
         });
     }
