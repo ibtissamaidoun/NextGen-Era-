@@ -154,7 +154,7 @@ class ActiviteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) // sakhri khso ykemla
     {
         // Find the activity by its ID
         $activity = Activite::findOrFail($id);
@@ -222,17 +222,17 @@ class ActiviteController extends Controller
      * @param  int  $horaireId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function showHoraire($activityId, $horaireId)
-    {
-        // Find the horaire by its ID
-        $horaire = Horaire::find($horaireId);
-        // If the horaire doesn't exist, return a 404 response
-        if (!$horaire) {
-            return response()->json(['message' => 'Horaire not found'], 404);
-        }
-        // Return the horaire as JSON response
-        return response()->json($horaire);
-    }
+    // public function showHoraire($activityId, $horaireId)
+    // {
+    //     // Find the horaire by its ID
+    //     $horaire = Horaire::find($horaireId);
+    //     // If the horaire doesn't exist, return a 404 response
+    //     if (!$horaire) {
+    //         return response()->json(['message' => 'Horaire not found'], 404);
+    //     }
+    //     // Return the horaire as JSON response
+    //     return response()->json($horaire);
+    // }
 
     /**
      * List all horaires for a specific activity.
@@ -240,20 +240,20 @@ class ActiviteController extends Controller
      * @param  int  $activityId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function indexHoraires($activityId)
-    {
-        // Find the activity by its ID
-        $activity = Activite::find($activityId);
-        // If the activity doesn't exist, return a 404 response
-        if (!$activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
-        }
+    // public function indexHoraires($activityId)
+    // {
+    //     // Find the activity by its ID
+    //     $activity = Activite::find($activityId);
+    //     // If the activity doesn't exist, return a 404 response
+    //     if (!$activity) {
+    //         return response()->json(['message' => 'Activity not found'], 404);
+    //     }
 
-        // Retrieve all horaires associated with the activity
-        $horaires = $activity->horaires()->get();
-        // Return the horaires as JSON response
-        return response()->json($horaires);
-    }
+    //     // Retrieve all horaires associated with the activity
+    //     $horaires = $activity->horaires()->get();
+    //     // Return the horaires as JSON response
+    //     return response()->json($horaires);
+    // }
 
     /**
      * Delete a specific horaire from an activity.
@@ -262,27 +262,27 @@ class ActiviteController extends Controller
      * @param  int  $horaireId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function detachHoraire($activityId, $horaireId)
-    {
-        // Find the activity by its ID
-        $activity = Activite::find($activityId);
-        // If the activity doesn't exist, return a 404 response
-        if (!$activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
-        }
+    // public function detachHoraire($activityId, $horaireId)
+    // {
+    //     // Find the activity by its ID
+    //     $activity = Activite::find($activityId);
+    //     // If the activity doesn't exist, return a 404 response
+    //     if (!$activity) {
+    //         return response()->json(['message' => 'Activity not found'], 404);
+    //     }
 
-        // Find the horaire by its ID
-        $horaire = Horaire::find($horaireId);
-        // If the horaire doesn't exist, return a 404 response
-        if (!$horaire) {
-            return response()->json(['message' => 'Horaire not found'], 404);
-        }
+    //     // Find the horaire by its ID
+    //     $horaire = Horaire::find($horaireId);
+    //     // If the horaire doesn't exist, return a 404 response
+    //     if (!$horaire) {
+    //         return response()->json(['message' => 'Horaire not found'], 404);
+    //     }
 
-        // Detach the horaire from the activity
-        $activity->horaires()->detach($horaireId);
-        // Return success message as JSON response
-        return response()->json(['message' => 'Horaire association with the activity removed successfully']);
-    }
+    //     // Detach the horaire from the activity
+    //     $activity->horaires()->detach($horaireId);
+    //     // Return success message as JSON response
+    //     return response()->json(['message' => 'Horaire association with the activity removed successfully']);
+    // }
 
     /**
      * Store a new horaire for a specific activity.
