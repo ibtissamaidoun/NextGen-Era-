@@ -167,9 +167,9 @@ class AdministrateurController extends Controller
         $filteredDemandes = $demandes->map(function ($demande) {
             return [
                 'id' => $demande->id,
-                'paiement_option' => $demande->paiement->option_paiement ?? null,
-                'offer_titre' => $demande->offre->titre ?? null,
                 'parent_name' => $demande->parentmodel->user->nom.' '. $demande->parentmodel->user->prenom,
+                'offer_titre' => $demande->offre->titre ?? null,
+                'paiement_option' => $demande->paiement->option_paiement ?? null,
             ];
         });
         
@@ -205,7 +205,7 @@ public function refuse(Demande $demande)
 
     // Create a notification for the parent
     notification::create([
-        'type' => 'demande_refused',
+        'type' => 'demande refused',
         'statut' => 'non lu',
         'contenu' => 'Your demande has been refused.',
     ]);
@@ -216,4 +216,5 @@ public function refuse(Demande $demande)
     // Return success response
     return response()->json(['message' => 'Demande refused successfully']);
 }
+
 }

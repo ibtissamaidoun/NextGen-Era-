@@ -87,6 +87,7 @@ Route::middleware(['check.role'.':' . User::ROLE_PARENT])->prefix('parent')->gro
         Route::post('valide',[DeviController::class, 'validerPanier']);
         /* --- ACTIVITÉS DE PANIER --- */
         Route::delete('activites/{activite}', [DeviController::class, 'deleteActiviteFromPanier']);
+        
     });
 });
 
@@ -178,9 +179,9 @@ Route::apiResource('devis',deviController::class);
 Route::apiResource('notifications',NotificationController::class);
 Route::apiResource('demandes',DemandeController::class);
 
-Route::get('getDevis',[deviController::class, 'getDevis']); // 
-Route::get('devis',[deviController::class, 'createDevis']); // marche
-Route::get('monPack',[PackController::class,'packPoussible']); // marche
+// Route::get('getDevis',[deviController::class, 'getDevis']);    // marche
+// Route::get('devis',[deviController::class, 'createDevis']);    // marche
+// Route::get('monPack',[PackController::class,'packPoussible']); // marche
 
 
 //------test----taha----ostora----//

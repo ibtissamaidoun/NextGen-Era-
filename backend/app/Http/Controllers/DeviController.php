@@ -136,15 +136,16 @@ class DeviController extends Controller
 
     /**
      * Affichage de detail d'un devis associer a une demande et un parent
+     * for the admin and the parent it self
      * 
      * @param int $parentmodel_id
      * @param int $demande_id
      * @return array
      */
-    public static function getDevis(int $parent, int $demande = null): array
+    public static function getDevis(int $parent = 1, int $demande = null): array
     {
         if ($demande)
-            $data = devi::where('parentmodel_id', $parent)->where('demande_id', $demande)->first()->makeHidden(['parentmodel_id', 'demande_id']);
+            $data = devi::where('parentmodel_id', $parent)->where('demande_id', $demande)->first()->makeHidden(['parentmodel_id']);
         else
             $data = devi::where('parentmodel_id', $parent)->get()->makeHidden(['parentmodel_id']);
 
@@ -165,98 +166,102 @@ class DeviController extends Controller
         $demande = demande::find($demande_id);
         $prixHT = 0;
 
-        if ($pack = $demande->pack()->first()) {
-            if ($pack->id == 1) // Pack Multi-Activités
+        if ($pack = $demande->pack()->first())
+        {
+            switch($pack->id)
             {
-                $prixRemise = 0;
-                $remiseComule = 0;
-                foreach ($enfantActivites as $key => $enfantActivite) {
-                    if ($key == 0) // la 1er activite
-                        $remise = 0;
-                    else {
-                        // augmentation de 5%
-                        $remiseComule += 10;
-                        // ne depasse pas remise% de remise
-                        $remise = min($remiseComule, $pack->remise) / 100;
-                    }
-                    // cumuler les prix calculer avec remise
-                    $prixHT += $enfantActivite['tarif'];
-                    $prixRemise += $enfantActivite['tarif'] * (1 - $remise);
-                }
-            }
-            if ($pack->id == 2) // Pack Familial
-            {
-                $countEnfants = count($enfantActivites);
-                $prixRemise = 0;
-                for ($i = 0; $i < $countEnfants; $i++) {
-
-                    $remise = min($i * 10, $pack->remise) / 100;
-                    $prixRemise += $enfantActivites[0]['tarif'] * (1 - $remise);
-                }
-                $prixHT += $enfantActivites[0]['tarif'] * $countEnfants;
-            }
-            if ($pack->id == 3) // Pack nombre d'Activites ( +eurs enfants -> +eurs activites)
-            {
-                $enfants = $demande->getEnfants()->distinct('id')->get();
-
-                $prixRemise = 0;
-
-                foreach ($enfants as $enfant) {
-                    $activites = $demande->getActvites()->where('enfant_id', $enfant->id)->orderBy('tarif')->get();
-
-                    $remiseComule = 10;
-                    foreach ($activites as $key => $activite) {
-                        $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
-                        $tarif = $activite->tarif * (1 - $remise / 100);
-                        if ($key == 0) // la 1er activite de cette enfant
-                            $remise = 0;
-                        else {
-                            // augmentation de remise%
-                            $remiseComule += 10;
-                            // ne depasse pas 45% de remise
-                            $remise = min($remiseComule, $pack->remise) / 100;
+                // Pack Multi-Activités
+                case 1: $prixRemise = 0;
+                        $remiseComule = 0;
+                        foreach ($enfantActivites as $key => $enfantActivite) {
+                            if ($key == 0) // la 1er activite
+                                $remise = 0;
+                            else {
+                                // augmentation de 5%
+                                $remiseComule += 10;
+                                // ne depasse pas remise% de remise
+                                $remise = min($remiseComule, $pack->remise) / 100;
+                            }
+                            // cumuler les prix calculer avec remise
+                            $prixHT += $enfantActivite['tarif'];
+                            $prixRemise += $enfantActivite['tarif'] * (1 - $remise);
+                            break;
                         }
-                        // cumuler les prix calculer avec remise
-                        $prixHT += $tarif;
-                        $prixRemise += $tarif * (1 - $remise);
-                    }
-                }
-            }
-            if ($pack->id == 4) // Pack nombre d’enfants ( +eurs enfants -> +eurs activites)
-            {
-                $activites = $demande->getActvites()->distinct('id')->get();
+                // Pack Familial
+                case 2: $countEnfants = count($enfantActivites);
+                        $prixRemise = 0;
+                        for ($i = 0; $i < $countEnfants; $i++) {
 
-                $prixRemise = 0;
-
-                foreach ($activites as $activite) {
-                    $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
-                    $tarif = $activite->tarif * (1 - $remise / 100);
-
-                    $enfants = $demande->getEnfants()->where('activite_id', $activite->id)->get();
-
-                    $remiseComule = 10;
-                    foreach ($enfants as $key => $enfant) {
-
-                        if ($key == 0) // la 1er activite de cette enfant
-                            $remise = 0;
-                        else {
-                            // augmentation de remise%
-                            $remiseComule += 10;
-                            // ne depasse pas 45% de remise
-                            $remise = min($remiseComule, $pack->remise) / 100;
+                            $remise = min($i * 10, $pack->remise) / 100;
+                            $prixRemise += $enfantActivites[0]['tarif'] * (1 - $remise);
                         }
-                        // cumuler les prix calculer avec remise
-                        $prixHT += $tarif;
-                        $prixRemise += $tarif * (1 - $remise);
-                    }
-                }
+                        $prixHT += $enfantActivites[0]['tarif'] * $countEnfants;
+                        break;
+                // Pack nombre d'Activites ( +eurs enfants -> +eurs activites)
+                case 3: $enfants = $demande->getEnfants()->distinct('id')->get();
+
+                        $prixRemise = 0;
+
+                        foreach ($enfants as $enfant) {
+                            $activites = $demande->getActvites()->where('enfant_id', $enfant->id)->orderBy('tarif')->get();
+
+                            $remiseComule = 10;
+                            foreach ($activites as $key => $activite) {
+                                $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
+                                $tarif = $activite->tarif * (1 - $remise / 100);
+                                if ($key == 0) // la 1er activite de cette enfant
+                                    $remise = 0;
+                                else {
+                                    // augmentation de remise%
+                                    $remiseComule += 10;
+                                    // ne depasse pas 45% de remise
+                                    $remise = min($remiseComule, $pack->remise) / 100;
+                                }
+                                // cumuler les prix calculer avec remise
+                                $prixHT += $tarif;
+                                $prixRemise += $tarif * (1 - $remise);
+                            }
+                        }
+                        break;
+                // Pack nombre d’enfants ( +eurs enfants -> +eurs activites)
+                case 4: $activites = $demande->getActvites()->distinct('id')->get();
+
+                        $prixRemise = 0;
+
+                        foreach ($activites as $activite) {
+                            $remise = $activite->paiements()->find($demande->paiement()->first()->id)->pivot->remise;
+                            $tarif = $activite->tarif * (1 - $remise / 100);
+
+                            $enfants = $demande->getEnfants()->where('activite_id', $activite->id)->get();
+
+                            $remiseComule = 10;
+                            foreach ($enfants as $key => $enfant) {
+
+                                if ($key == 0) // la 1er activite de cette enfant
+                                    $remise = 0;
+                                else {
+                                    // augmentation de remise%
+                                    $remiseComule += 10;
+                                    // ne depasse pas 45% de remise
+                                    $remise = min($remiseComule, $pack->remise) / 100;
+                                }
+                                // cumuler les prix calculer avec remise
+                                $prixHT += $tarif;
+                                $prixRemise += $tarif * (1 - $remise);
+                            }
+                        }
+                        break;   
             }
-        } elseif ($offre = $demande->offre()->first()) {
+        }
+        elseif ($offre = $demande->offre()->first())
+        {
             foreach ($enfantActivites as $enfantActivite)
                 $prixHT += $enfantActivite['tarif'];
 
             $prixRemise = $prixHT * (1 - $offre->remise / 100);
-        } else {
+        }
+        else // pack basique
+        {
             foreach ($enfantActivites as $enfantActivite)
                 $prixHT += $enfantActivite['tarif'];
             $prixRemise = $prixHT;
@@ -431,7 +436,6 @@ class DeviController extends Controller
         unset($data['image']);
 
 
-        //return response()->download($pdfPath);  // pour le telechargement
         $devis = Devi::create([
             'tarif_ht' => $data['prixHT'],
             'tarif_ttc' => $data['TTC'],
