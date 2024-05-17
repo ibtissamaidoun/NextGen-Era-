@@ -71,10 +71,6 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true
-    {
-    "scripts": {
-        "lint": "phpcs --standard=PSR12 app/"
-    }
-}
+    
 
 }

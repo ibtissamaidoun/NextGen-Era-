@@ -51,17 +51,32 @@ async function submitLogin() {
       sessionStorage.setItem('token', response.data.token);
       const role = response.data.role;
       switch (role) {
-        case 'parent':
-          router.push('/dashboard-parents');
+        case "admin":
+          store.dispatch('navigateTo', {
+            route: '/dashboard-admin',
+            navbar: true,
+            sidenav: true,
+            footer: true,
+            hideConfigButton: false
+          });
           break;
-        case 'admin':
-          router.push('/dashboard-admin');
-          break;
-        case 'animateur':
-          router.push('/dashboard-animateurs');
+        case "animateur":
+          store.dispatch('navigateTo', {
+            route: '/dashboard-animateurs',
+            navbar: true,
+            sidenav: true,
+            footer: true,
+            hideConfigButton: false
+          });
           break;
         default:
-          router.push('/');
+          store.dispatch('navigateTo', {
+            route: '/dashboard-parents',
+            navbar: true,
+            sidenav: true,
+            footer: true,
+            hideConfigButton: false
+          });
           break;
       }
     }
