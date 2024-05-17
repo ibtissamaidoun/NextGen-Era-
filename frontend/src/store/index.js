@@ -1,4 +1,6 @@
+// src/store/index.js
 import { createStore } from "vuex";
+import router from '@/router'; // Importez le routeur
 
 export default createStore({
   state: {
@@ -38,16 +40,31 @@ export default createStore({
       state.sidebarType = payload;
     },
     navbarFixed(state) {
-      if (state.isNavFixed === false) {
-        state.isNavFixed = true;
-      } else {
-        state.isNavFixed = false;
-      }
+      state.isNavFixed = !state.isNavFixed;
+    },
+    updateShowNavbar(state, value) {
+      state.showNavbar = value;
+    },
+    updateShowSidenav(state, value) {
+      state.showSidenav = value;
+    },
+    updateShowFooter(state, value) {
+      state.showFooter = value;
+    },
+    updateHideConfigButton(state, value) {
+      state.hideConfigButton = value;
     },
   },
   actions: {
     toggleSidebarColor({ commit }, payload) {
       commit("sidebarType", payload);
+    },
+    navigateTo({ commit }, { route, navbar, sidenav, footer, hideConfigButton }) {
+      commit('updateShowNavbar', navbar);
+      commit('updateShowSidenav', sidenav);
+      commit('updateShowFooter', footer);
+      commit('updateHideConfigButton', hideConfigButton);
+      router.push(route);
     },
   },
   getters: {},

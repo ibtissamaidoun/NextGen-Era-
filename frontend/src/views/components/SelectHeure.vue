@@ -74,39 +74,23 @@
   }
   </style>
     <script>
+    import axiosInstance from '@/main';
+
     export default {
       data() {
         return {
-          horaires: [
-            {
-              heure: "12:00-13:30",
-            },
-            {
-              heure: "13:30-15:00", 
-            },
-            {
-              heure: "10:30-12:00"
-            },
-            {
-              heure: "18:00-19:30"
-            },
-            {
-              heure: "19:30-21:00"
-            },
-            {
-              heure: "16:30-18:00"
-            },
-            {
-              heure: "21:00-22:00"
-            },
-            {
-              heure: "21:00-22:00"
-            },
-            
-            
-            
-          ]
+          horaires: []
+        }},
+      
+        async created(){
+          let response = await axiosInstance.get("animateur/horaires");
+          this.horaires = response.data;
+    },
+     catch (error) {
+      console.error('Erreur lors de la récupération des horaires:', error);
+    }
         };
-      }
-    };
+  
+   
+   
     </script>

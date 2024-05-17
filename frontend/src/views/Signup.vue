@@ -1,6 +1,12 @@
 <script setup>
 import { onBeforeUnmount, onBeforeMount } from "vue";
 import { useStore } from "vuex";
+import { ref } from "vue";
+import { useRouter } from 'vue-router'; // Importer le routeur Vue Router
+
+//import axios from "axios";
+import axiosInstance from '@/main';
+
 
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";
@@ -8,6 +14,17 @@ import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonCheckbox from "@/components/ArgonCheckbox.vue";
 /*import ArgonButton from "@/components/ArgonButton.vue"; */
 const body = document.getElementsByTagName("body")[0];
+const user = ref ({
+  nom : "",
+  prenom : "",
+  email : "",
+  telephone_portable : "",
+  telephone_fixe : "",
+  mot_de_passe : "",
+  mot_de_passe_confirmation : ""
+})
+
+
 
 const store = useStore();
 onBeforeMount(() => {
@@ -24,7 +41,20 @@ onBeforeUnmount(() => {
   store.state.showFooter = true;
   body.classList.add("bg-gray-100");
 });
-
+const router = useRouter();
+const HandleSubmit = async (e)=>{
+  e.preventDefault()
+//  console.log(user.value)
+  const response = await axiosInstance.post("/register",user.value);
+  if(response.status == 202){
+    // Stocker le token dans le sessionStorage
+    sessionStorage.setItem('token', response.data.token);
+    
+    router.push('/signin'); // Rediriger vers la route '/signup'
+  }
+  
+  console.log(response)
+}
 
 
 
@@ -180,37 +210,42 @@ onBeforeUnmount(() => {
               </div>
             </div>
             <div class="card-body">
-              <form role="form">
+              <form role="form" @submit="HandleSubmit">
                 <argon-input
                   id="nom"
                   type="text"
                   placeholder="Nom"
                   aria-label="Nom"
+                  v-model="user.nom"
                 />
                 <argon-input
                   id="prenom"
                   type="text"
                   placeholder="Prénom"
                   aria-label="Prénom"
+                  v-model="user.prenom"
                 />
                 <argon-input
                   id="tele"
                   type="text"
                   placeholder="Numéro de téléphone"
                   aria-label="Numéro de téléphone"
+                  v-model="user.telephone_portable"
                 />
                 <argon-input
                   id="tele"
                   type="text"
                   placeholder="Numéro de fixe"
                   aria-label="Numéro de fixe"
+                  v-model="user.telephone_fixe"
                 />
-                <argon-input id="email" type="email"  placeholder="Email" aria-label="Email"/>
-                <argon-input  id="password" type="password" placeholder="Mot de passe"  aria-label="Mot de passe"/>
+                <argon-input id="email" type="email"  placeholder="Email" aria-label="Email" v-model="user.email"/>
+                <argon-input  id="password" type="password" placeholder="Mot de passe"  aria-label="Mot de passe" v-model="user.mot_de_passe"/>
                 <argon-input
                   id="password_confirmation" name="mot_de_passe_confirmation" type="password"
                   placeholder="Confirmez le mot de passe" aria-label="Confirmez le mot de passe"
-                />
+                  v-model="user.mot_de_passe_confirmation"
+                  />
                 <argon-checkbox checked>
                   <label class="form-check-label" for="flexCheckDefault">
                     J'accepte les 
@@ -220,7 +255,7 @@ onBeforeUnmount(() => {
                   </label>
                 </argon-checkbox>
                 <div class="text-center">
-                  <router-link to="/signin">
+                 <!-- <router-link to="/signin">-->
                     <button class="text-white font-weight-bolder" style="
                           background-color: #000080;
                           color: #fff;
@@ -230,7 +265,7 @@ onBeforeUnmount(() => {
                           padding: 8px;
                           width:100%;
                       " >S'inscrire</button>
-                  </router-link>
+                <!--  </router-link> -->
                 </div>
                 <p class="text-sm mt-3 mb-0">
                   Avez-vous déjà un compte?
