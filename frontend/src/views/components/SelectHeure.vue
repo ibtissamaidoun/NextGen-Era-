@@ -8,12 +8,19 @@
           <table class="table align-items-center  mb-0">
             <thead>
               <tr>
+                <th  class="text-uppercase text-secondary opacity-7">jour </th>
                 <th
                   class="text-uppercase text-secondary opacity-7"
                 >
-                  Heures disponibles 
-                </th>
                 
+                  heures debut
+                </th>
+                <th
+                  class="text-uppercase text-secondary opacity-7"
+                >
+                
+                  Heures fin 
+                </th>
                 <th
                   class="text-center  text-secondary  opacity-7"
                 >
@@ -28,32 +35,41 @@
               <tr v-for="(activity, index) in horaires" :key="index" class="bg-gray-100">
                 <td class="text-center">
                   <div>
-                    <h6>{{ activity.heure }}</h6>
+                    <h6>{{ activity.jour_semaine }}</h6>
                   </div>
                 </td>
-                
-               
+                <td class="text-center">
+                  <div>
+                    <h6>{{ activity.heure_debut }}</h6>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <div>
+                    <h6>{{ activity.heure_fin }}</h6>
+                  </div>
+                </td>
                 <td class="align-middle text-center">
                   <i class="ni ni-check-bold" style="color:orange"></i>
                 </td>
-              
+               
                 
                 <td class="align-middle">
-                <a
+
+                <button
                   class="btn btn-link text-danger text-gradient px-3 mb-0"
-                  href="javascript:;"
+                 
                 >
                 <i class="fa fa-pencil" aria-hidden="true"></i>
-                </a>
+              </button>
               
               </td>
                 <td class="align-middle">
-                  <a
-                    class="btn btn-link text-warning text-gradient px-3 mb-0"
-                    href="javascript:;"
+                  <button
+                  class="btn btn-link text-danger text-gradient px-3 mb-0"
+                 @click="deleteAnimateur( activity.id,index)"
                   >
                   <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-                  </a>
+                </button>
                 </td>
               </tr>
             </tbody>
@@ -83,13 +99,27 @@
         }},
       
         async created(){
+          try {
           let response = await axiosInstance.get("animateur/horaires");
           this.horaires = response.data;
-    },
-     catch (error) {
+          console.log(response.data);
+        }
+        catch (error) {
       console.error('Erreur lors de la récupération des horaires:', error);
     }
-        };
+    },
+    
+        
+    methods: {
+    async deleteAnimateur(horaire_id, index) {
+
+      try {
+        this.horaires.splice(index, 1); // Supprime l'entrée du tableau local
+        await axiosInstance.delete("animateur/horaires/"+horaire_id); // Remplacez par l'URL correcte
+        
+      } catch (error) {
+        console.error('Erreur lors de la suppression de l\'animateur:', error);
+      }}}}
   
    
    
