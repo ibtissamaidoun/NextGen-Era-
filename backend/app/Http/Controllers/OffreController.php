@@ -55,15 +55,11 @@ class OffreController extends Controller
 // {
 //     $offer = offre::find($offerId);
 
-<<<<<<< HEAD
-    $validatedata= $request->validate([
-        'activite_id'=>'required|integer|exists:activites,id',
-    ]);
-=======
+
 //     $validatedata= $request->validate([
 //         'activite_id'=>'required|exists:activites,id',
 //     ]);
->>>>>>> 7a44967d99b59a8e167334ae27ae4d60fd702d72
+
 
 //     $activite = Activite::find($validatedata['activite_id']);
 
@@ -76,17 +72,12 @@ class OffreController extends Controller
 //     // Find the offer by its ID
 //     $offer = Offre::find($offerId);
     
-<<<<<<< HEAD
-    // Validate the incoming request data to ensure activite_id is provided and valid
-    $validatedData = $request->validate([
-        'activite_id' => 'required|integer|exists:activites,id',
-    ]);
-=======
+
 //     // Validate the incoming request data to ensure activite_id is provided and valid
 //     $validatedData = $request->validate([
 //         'activite_id' => 'required|exists:activites,id',
 //     ]);
->>>>>>> 7a44967d99b59a8e167334ae27ae4d60fd702d72
+
     
 //     // Find the activity by its ID
 //     $activite = Activite::find($validatedData['activite_id']);
@@ -111,11 +102,10 @@ public function store(Request $request)
             'remise' => 'nullable|integer|min:0|max:100',
             'date_debut_inscription' => 'required|date',
             'date_fin_inscription' => 'required|date|after_or_equal:date_debut_inscription',
-<<<<<<< HEAD
-            'administrateur_id' => 'required|integer|exists:administrateurs,id',
-=======
+
+
           //  'administrateur_id' => 'required|exists:administrateurs,id',
->>>>>>> 7a44967d99b59a8e167334ae27ae4d60fd702d72
+
             'paiement_id' => 'required|exists:paiements,id',
             'activites' => 'required|array',
             'activites.*.id' => 'exists:activites,id', // Ensure each activity ID exists

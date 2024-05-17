@@ -11,17 +11,17 @@
               <th
                 class="text-uppercase text-secondary opacity-7"
               >
-                Administrateurs
+                Animateurs
               </th>
               <th
                 class="text-center  text-secondary  opacity-7"
               >
-                Statuts
+               telephone_portable
               </th>
               <th
                 class="text-center  text-secondary  opacity-7"
               >
-                Employés
+                date_creation
               </th>
               
               <th class="text-secondary opacity-7"> Editer</th>
@@ -75,245 +75,25 @@
                 >
               </td>
             </tr>
-            <tr>
-              <td>
-                <div class="d-flex px-2 py-1">
-                  <div>
-                    <img
-                      src="../../assets/img/team-3.jpg"
-                      class="avatar avatar-sm me-3"
-                      alt="user2"
-                    />
-                  </div>
-                  <div class="d-flex flex-column justify-content-center">
-                    <h6 class="mb-0 text-sm">Alexa Liras</h6>
-                    <p class="text-xs text-secondary mb-0">
-                      alexa@creative-tim.com
-                    </p>
-                  </div>
-                </div>
-              </td>
-              
-              <td class="align-middle text-center text-sm">
-                <span class="badge badge-sm bg-gradient-secondary"
-                  >Hors ligne</span
-                >
-              </td>
-              <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold"
-                  >11/01/19</span
-                >
-              </td>
-              <td class="align-middle">
-                <a
-                  href="javascript:;"
-                  class="text-secondary font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Edit user"
-                  >Edit</a
-                >
-              </td>
-              <td class="align-middle">
-                <a
-                  href="javascript:;"
-                  class="text-secondary font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Edit user"
-                  >Delete</a
-                >
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="d-flex px-2 py-1">
-                  <div>
-                    <img
-                      src="../../assets/img/team-4.jpg"
-                      class="avatar avatar-sm me-3"
-                      alt="user3"
-                    />
-                  </div>
-                  <div class="d-flex flex-column justify-content-center">
-                    <h6 class="mb-0 text-sm">Laurent Perrier</h6>
-                    <p class="text-xs text-secondary mb-0">
-                      laurent@creative-tim.com
-                    </p>
-                  </div>
-                </div>
-              </td>
-              
-              <td class="align-middle text-center text-sm">
-                <span class="badge badge-sm bg-gradient-success">En ligne</span>
-              </td>
-              <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold"
-                  >19/09/17</span
-                >
-              </td>
-              <td class="align-middle">
-                <a
-                  href="javascript:;"
-                  class="text-secondary font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Edit user"
-                  >Edit</a
-                >
-              </td>
-              <td class="align-middle">
-                <a
-                  href="javascript:;"
-                  class="text-secondary font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Edit user"
-                  >Delete</a
-                >
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="d-flex px-2 py-1">
-                  <div>
-                    <img
-                      src="../../assets/img/team-3.jpg"
-                      class="avatar avatar-sm me-3"
-                      alt="user4"
-                    />
-                  </div>
-                  <div class="d-flex flex-column justify-content-center">
-                    <h6 class="mb-0 text-sm">Michael Levi</h6>
-                    <p class="text-xs text-secondary mb-0">
-                      michael@creative-tim.com
-                    </p>
-                  </div>
-                </div>
-              </td>
-              
-              <td class="align-middle text-center text-sm">
-                <span class="badge badge-sm bg-gradient-success">En ligne</span>
-              </td>
-              <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold"
-                  >24/12/08</span
-                >
-              </td>
-              <td class="align-middle">
-                <a
-                  href="javascript:;"
-                  class="text-secondary font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Edit user"
-                  >Edit</a
-                >
-              </td>
-              <td class="align-middle">
-                <a
-                  href="javascript:;"
-                  class="text-secondary font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Edit user"
-                  >Delete</a
-                >
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="d-flex px-2 py-1">
-                  <div>
-                    <img
-                      src="../../assets/img/team-2.jpg"
-                      class="avatar avatar-sm me-3"
-                      alt="user5"
-                    />
-                  </div>
-                  <div class="d-flex flex-column justify-content-center">
-                    <h6 class="mb-0 text-sm">Richard Gran</h6>
-                    <p class="text-xs text-secondary mb-0">
-                      richard@creative-tim.com
-                    </p>
-                  </div>
-                </div>
-              </td>
-              
-              <td class="align-middle text-center text-sm">
-                <span class="badge badge-sm bg-gradient-secondary"
-                  >Hors ligne</span
-                >
-              </td>
-              <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold"
-                  >04/10/21</span
-                >
-              </td>
-              <td class="align-middle">
-                <a
-                  href="javascript:;"
-                  class="text-secondary font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Edit user"
-                  >Edit</a
-                >
-              </td>
-              <td class="align-middle">
-                <a
-                  href="javascript:;"
-                  class="text-secondary font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Edit user"
-                  >Delete</a
-                >
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="d-flex px-2 py-1">
-                  <div>
-                    <img
-                      src="../../assets/img/team-4.jpg"
-                      class="avatar avatar-sm me-3"
-                      alt="user6"
-                    />
-                  </div>
-                  <div class="d-flex flex-column justify-content-center">
-                    <h6 class="mb-0 text-sm">Miriam Eric</h6>
-                    <p class="text-xs text-secondary mb-0">
-                      miriam@creative-tim.com
-                    </p>
-                  </div>
-                </div>
-              </td>
-              
-              <td class="align-middle text-center text-sm">
-                <span class="badge badge-sm bg-gradient-secondary"
-                  >Hors ligne</span
-                >
-              </td>
-              <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold"
-                  >14/09/20</span
-                >
-              </td>
-              <td class="align-middle">
-                <a
-                  href="javascript:;"
-                  class="text-secondary font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Edit user"
-                  >Edit</a
-                >
-              </td>
-              <td class="align-middle">
-                <a
-                  href="javascript:;"
-                  class="text-secondary font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Edit user"
-                  >Delete</a
-                >
-              </td>
-            </tr>
+       
           </tbody>
         </table>
       </div>
     </div>
   </div>
 </template>
+<script setup>
+//import { ref } from "vue";
+import axiosInstance from '@/main';
+import { onBeforeMount } from 'vue';
+//const Animateurs= ref( [nom,prenom,email,telephone_fixe]); //ref pour creer var
+
+onBeforeMount(async() => {
+   let response= await axiosInstance.get('/admin/animateurs');
+   console.log(response);
+
+ // code to DB
+});
+
+
+</script>

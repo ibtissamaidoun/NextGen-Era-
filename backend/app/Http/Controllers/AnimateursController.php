@@ -18,7 +18,7 @@ class AnimateursController extends Controller
      */
     public function index()
     {
-        $animateurs = User::where('role','animateur')->select('id','nom','prenom')->get();
+        $animateurs = User::where('role','animateur')->get();//->select('id','nom','prenom')->get();
 
         return response()->json([$animateurs]);
     }
