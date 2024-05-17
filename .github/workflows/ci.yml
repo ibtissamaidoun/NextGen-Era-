@@ -89,6 +89,55 @@ jobs:
       run: |
         cd frontend
         npm run build 
+  backend-lint-and-security:
+    runs-on: ubuntu-latest
+    needs: [backend-test, Frontend-test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP with extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_pgsql
+
+      - name: Install PHP dependencies
+        run: |
+          cd "backend"
+          composer install --prefer-dist --no-progress --no-suggest
+      - name: Run PHP lint
+        run: |
+          cd "backend"
+          composer lint  # Assurez-vous d'avoir un script lint configuré dans votre composer.json
+      - name: Run security check
+        run: |
+          cd "backend"
+          composer audit
+  frontend-lint-and-security:
+    runs-on: ubuntu-latest
+    needs: [Frontend-test, backend-test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          cd frontend  # Change directory to the frontend folder
+          npm install
+      - name: Run lint
+        run: |
+          cd frontend  # Ensure all commands run in the correct directory
+          npm run lint
+      - name: Run security check
+        run: |
+          cd frontend
+          npm audit
   build-and-push:
     runs-on: ubuntu-latest
     needs: [Frontend-test,backend-test]  # S'assure que les tests frontend sont passés avant de construire les images
