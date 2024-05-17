@@ -16,7 +16,7 @@ class OffreController extends Controller
      */
     public function index()
     {
-        $offres= offre::select('id','titre','remise','date_debut_inscription','date_fin_inscription')->get();
+        $offres= offre::select('id','titre','remise','date_debut','date_fin')->get();
         return response()->json(['offre'=>$offres]);
     }
 

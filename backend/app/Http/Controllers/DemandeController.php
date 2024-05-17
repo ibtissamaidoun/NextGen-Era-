@@ -72,8 +72,7 @@ class DemandeController extends Controller
         //
     }
 
-    //taha partie , //pour parent
-    public function demandes(Request $request)
+    
     //taha partie 
     public function demandes(Request $request)
     {

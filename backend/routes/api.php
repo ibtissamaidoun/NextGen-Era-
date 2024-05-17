@@ -61,6 +61,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     Route::get('/offres/{id}', [ParentmodelController::class, 'showoffer']);
     Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']); // this one
     
+    
     //the father can check the commandes he submitted that are en cours
     Route::get('demandes', [DemandeController::class, 'demandes']);
     Route::delete('demandes/{demande_id}',[DemandeController::class,'deleteDemande']);
