@@ -21,10 +21,9 @@
   },
   "dependencies": {
     "@popperjs/core": "2.11.8",
-<<<<<<< HEAD
-=======
+
     "axios": "^1.6.8",
->>>>>>> 17164381d436cb2ff5c91382aada38c92a31a2cf
+
     "bootstrap": "5.3.3",
     "chart.js": "4.4.1",
     "core-js": "3.36.0",
