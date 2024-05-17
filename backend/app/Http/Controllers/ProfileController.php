@@ -15,7 +15,7 @@ class ProfileController extends Controller
 {
     public function updateanimateur(Request $request, $id)
     {
-        $user = User::where('role', 'animateur')->findOrFail($id);
+        $user = User::where('role', 'animateur')->find($id);
 
         $request->validate([
             'nom' => 'sometimes|required|string',
@@ -122,7 +122,8 @@ class ProfileController extends Controller
     public function updatePhoto(Request $request)
 {
     // Retrieve the authenticated user
-    $user = User::find(auth()->id());
+    $user= $request->user();
+
     // Validate the photo input
     $request->validate([
         'photo' => 'required|image|max:2048', // Ensure the uploaded file is an image and within size limits

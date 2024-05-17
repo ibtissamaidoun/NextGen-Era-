@@ -71,14 +71,16 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     // Motif au cas de refus
     Route::post('devis/{devis}/refuse/motif',[DeviController::class, 'motifRefuse']);
 
-    //the father can check the commandes he submitted that are en cours
+    //the father can check the commandes he submitted that are en cours and he can also delete the demandes he want to cancel
     Route::get('demandes', [DemandeController::class, 'demandes']);
+    Route::delete('demandes/{demande_id}',[DemandeController::class,'deleteDemande']);
+
+
     //the parent get different notifications 
     Route::get('/notifications', [NotificationController::class,'indexparent']);
     // edt for a given student from Request
     Route::get('/EDT',[ParentmodelController::class,'EDT']);
 
-<<<<<<< HEAD
 
     //profile(needs to be tested)
     Route::get('profile', [ProfileController::class, 'getprofileparent']);
@@ -86,7 +88,6 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     Route::put('profile/{id}/password', [ProfileController::class, 'updatePassword']);
     Route::post('profile/{id}/photo', [ProfileController::class, 'updatePhoto']);
     Route::delete('profile/{id}', [ProfileController::class, 'deleteprofile']);
-=======
     /* ----- PANIER ----- */
     Route::post('activite/{activity_id}/add', [deviController::class,'addToPanier']);
     Route::prefix('panier')->group(function (){
@@ -99,7 +100,6 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
         Route::delete('activites/{activite}', [DeviController::class, 'deleteActiviteFromPanier']);
         
     });
->>>>>>> feature/afterDevis
 });
 
 
@@ -242,12 +242,4 @@ Route::get('devis', [deviController::class, 'createDevis']);
 Route::get('monPack', [PackController::class, 'packPoussible']);
 
 //------test----taha----ostora----//
-// Validate demande route
-Route::post('/demandes/{demande}/validate', [AdministrateurController::class, 'validated']);
-
-// Refuse demande route
-Route::post('/demandes/{demande}/refuse',[AdministrateurController::class,'refuse']);
-
-
-Route::post('/demandes/{demande}/refuse', [AdministrateurController::class, 'refuse']);
 

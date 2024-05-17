@@ -69,46 +69,58 @@ class DemandeController extends Controller
         //
     }
 
-    //taha partie 
-     public function demandes(Request $request)
+    //taha partie , //pour parent
+    public function demandes(Request $request)
     {
         try {
             // Retrieve the authenticated parent's ID from the parentmodels table
             $user = $request->user();
             $parent = parentmodel::where('user_id', $user->id)->firstOrFail();
-    
+
             // Retrieve all demandes associated with the parent
-            $demandes = $parent->demandes()->get();
-    
+            $demandes = $parent->demandes()->where('statut', 'en cours')->get();
+
             // Return the demandes along with their associated children IDs
             return response()->json(['demandes' => $demandes], 200);
         } catch (ModelNotFoundException $e) {
             // Log the specific exception
             logger()->error('Error occurred while fetching demandes: ' . $e->getMessage());
-    
+
             // Return a response indicating parent not found
             return response()->json(['message' => 'Parent not found'], 404);
         } catch (\Exception $e) {
             // Log any other exceptions
             logger()->error('Error occurred while fetching demandes: ' . $e->getMessage());
-    
+
             // Return an error response
             return response()->json(['message' => 'An error occurred. Please try again later.'], 500);
         }
     }
 
 
+    public function deleteDemande($demande_id)
+    {
+        $demande = demande::findOrFail($demande_id);
+
+        if ($demande->statut === 'en cours') {
+            $demande->delete();
+            return response()->json(['message' => 'we are sorry thet you refused to pay :('], 200);
+        } else {
+            return response()->json(['message' => 'Only demandes with status "en cours" can be deleted'], 400);
+        }
+    }
+
     // unbelivable collaboration with two of the greatest in the industry Taha & Sakhri
 
     /**
-     * check if the demande is OK (return true) with the detadase or NOT (return false)
+     * check if the demande is OK (return true) with the detadase or NOT (reurn false)
      * the user is notified in both cases
      * TRUE -> go pay
      * FALSE -> demande annuler
      * 
      * @param bool $statut
      */
-    public static function checkDemandeOffre( $demande_id )
+    public static function checkDemandeOffre($demande_id)
     {
         $demande = demande::findOrFail($demande_id);
         $activities = $demande->offre()->first()->activites;
@@ -127,26 +139,25 @@ class DemandeController extends Controller
             }
 
             // check the age of all children if is in the range of all activities
-            foreach($children as $child)
-            {
+            foreach ($children as $child) {
                 $date_naissance = Carbon::parse($child->date_de_naissance);
                 $age = $date_naissance->diffInYears(Carbon::now());
-                if( $age > $activity->age_max || $age < $activity->age_min){
+                if ($age > $activity->age_max || $age < $activity->age_min) {
                     $error = 'Validation denied. Maximum or minimum age is exided for one or more activities.';
                     $statut = false;
                 }
             }
         }
 
-        if($statut)
+        if ($statut)
             // Generate a notification for all admins
-            $notification =notification::create([
+            $notification = notification::create([
                 'type' => 'Demande Validated',
                 'contenu' => 'Your demande has been validated.',
             ]);
         else
             // Generate a notification for all admins
-            $notification =notification::create([
+            $notification = notification::create([
                 'type' => 'Demande Refused',
                 'contenu' => $error,
             ]);
@@ -169,11 +180,11 @@ class DemandeController extends Controller
      */
     public function payeDemande($demande_id)
     {
-        
+
         $statut = DemandeController::checkDemandeOffre($demande_id);
 
-        if(! $statut)
-            return response()->json([ 'message' => 'Demande non valider !' ]);
+        if (!$statut)
+            return response()->json(['message' => 'Demande non valider !']);
 
 
         $demande = demande::findOrFail($demande_id);
@@ -183,14 +194,12 @@ class DemandeController extends Controller
         $children = $demande->getEnfants()->distinct('id')->get();
 
         // --->>> FOR ACTIVITES
-        if($demande->pack()->first() && ! $demande->offre()->first())
-        {
+        if ($demande->pack()->first() && !$demande->offre()->first()) {
             $data = DeviController::createDevis($demande_id);
             $activiteStudents = $data['enfantsActivites'];
-            foreach($activiteStudents as $actStud)
-            {
+            foreach ($activiteStudents as $actStud) {
                 $child = $actStud['enfantData'];
-                
+
                 $activity = $actStud['activiteData'];
                 $activity->effectif_actuel += 1;
                 $activity->save();
@@ -198,26 +207,27 @@ class DemandeController extends Controller
                 // retrieve the activity horaires
                 $horaires = $activity->horaires()->get();
                 // remplire la table EDT
-                $child->activites()->attach($activity->id,['horaire_1' => $horaires[0]->id,
-                                                           'horaire_2' => $horaires[1]->id]);
+                $child->activites()->attach($activity->id, [
+                    'horaire_1' => $horaires[0]->id,
+                    'horaire_2' => $horaires[1]->id
+                ]);
             }
         }
         // --->>> FOR OFFRE
-        elseif( !$demande->pack()->first() && $demande->offre()->first())
-        {
+        elseif (!$demande->pack()->first() && $demande->offre()->first()) {
             // If capacity is not exceeded, add children to activities and update their schedules in emploi du temps
-            foreach ($children as $child) 
-            {
-                foreach ($activities as $activity) 
-                { 
+            foreach ($children as $child) {
+                foreach ($activities as $activity) {
                     $activity->effectif_actuel += 1;
                     $activity->save();
-                    
+
                     // retrieve the activity horaires
                     $horaires = $activity->horaires()->get();
                     // remplire la table EDT
-                    $child->activites()->attach($activity->id,['horaire_1' => $horaires[0]->id,
-                                                               'horaire_2' => $horaires[1]->id]);
+                    $child->activites()->attach($activity->id, [
+                        'horaire_1' => $horaires[0]->id,
+                        'horaire_2' => $horaires[1]->id
+                    ]);
                 }
             }
         }
@@ -230,11 +240,11 @@ class DemandeController extends Controller
         // TODO : facture paye
 
         // TODO : create recu
-        
+
         // notifier le parent 
-        $notification =notification::create([
+        $notification = notification::create([
             'type' => 'Facture Payee',
-            'contenu' => 'Votre Facture de '.Carbon::now()->format('Y-m').' a ete bien payee',
+            'contenu' => 'Votre Facture de ' . Carbon::now()->format('Y-m') . ' a ete bien payee',
         ]);
         $parent = $demande->parentmodel()->first();
         $notification->users()->attach($parent->id, ['date_notification' => now()]);
@@ -247,5 +257,5 @@ class DemandeController extends Controller
      * TODO : delete demande refused -Fuction-
      */
 
-     
+
 }

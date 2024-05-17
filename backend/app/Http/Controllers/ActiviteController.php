@@ -158,6 +158,7 @@ class ActiviteController extends Controller
     {
         // Find the activity by its ID
         $activity = Activite::findOrFail($id);
+
         
         // Validate the incoming request data
         $validatedData = $request->validate([
@@ -177,6 +178,7 @@ class ActiviteController extends Controller
             'age_max' => 'sometimes|integer|min:0|gte:age_min',
         ]);
 
+        dd($request->all());
         // Handle file uploads
         if ($request->hasFile('image_pub')) {
             $validatedData['image_pub'] = $request->file('image_pub')->store('images', 'public');

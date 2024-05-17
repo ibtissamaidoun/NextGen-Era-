@@ -182,42 +182,6 @@ class AdministrateurController extends Controller
         
     }
 
-    public function validated(Demande $demande)
-{
-    // Update demande status to validated
-    $demande->update(['statut' => 'valide']);
+   //taha naya has deleted this useless code 
 
-
-   
-    // Retrieve parent associated with the demande
-    $parent = $demande->parentmodel->user;
-
-    // Enroll children in activities
-    $activities = $demande->offre->activities;
-    foreach ($activities as $activity) {
-        $activity->enrollChildren($parent->children);
-    }
-
-    // Return success response
-    return response()->json(['message' => 'Demande validated successfully']);
-}
-public function refuse(Demande $demande)
-{
-    // Update demande status to refused
-    $demande->update(['statut' => 'refuse']);
-    $parent = $demande->parentmodel->user;
-
-    // Create a notification for the parent
-    notification::create([
-        'type' => 'demande refused',
-        'statut' => 'non lu',
-        'contenu' => 'Your demande has been refused.',
-    ]);
-
-    // Attach the notification to the parent
-    $parent->notifications()->attach(notification::latest()->first()->id);
-
-    // Return success response
-    return response()->json(['message' => 'Demande refused successfully']);
-}
 }

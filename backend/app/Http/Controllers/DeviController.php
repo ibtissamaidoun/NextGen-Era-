@@ -774,12 +774,24 @@ class DeviController extends Controller
         foreach($activites as $activite)
             $activite->getparentmodels()->updateExistingPivot($parent->id, ['status' => 'valide']);
 
-        /**
-         * le Travail de Anass de remplire la table pivot et creer la demande.
-         */
+        // Anass's work to fill the pivot table and create the demande.
+        $demande = Demande::create([
+            'parentmodel_id' => $parent->id,
+            'date_demande' => now(),
+            'statut' => 'en_attente'
+        ]);
+
+        foreach ($parent->getEnfants as $enfant) {
+            foreach ($enfant->getActivites as $activite) {
+                $demande->activites()->attach($activite->id, [
+                    'enfant_id' => $enfant->id,
+                    'status' => 'en_attente'
+                ]);
+            }
+        }
 
         return response()->json([
-            'message' => 'Votre panier est validé.']);
+            'message' => 'Votre panier est validé et la demande est créée.']);
     }
 
 }
