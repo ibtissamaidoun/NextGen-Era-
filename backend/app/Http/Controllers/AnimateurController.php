@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\User;
 use App\Models\enfant;
-<<<<<<< HEAD
+
 use App\Models\horaire;
-=======
->>>>>>> 7a44967d99b59a8e167334ae27ae4d60fd702d72
+
 use App\Models\activite;
 use App\Models\animateur;
 use Illuminate\Http\Request;
