@@ -151,7 +151,7 @@ class AdministrateurController extends Controller
         DB::rollback();
         return response()->json(['message' => 'Failed to update admin: ' . $e->getMessage()], 409);
     }
-}
+    }
 
     /**
      * Remove the specified resource from storage.

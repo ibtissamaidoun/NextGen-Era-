@@ -86,15 +86,19 @@ use Carbon\Carbon;
                 
 			</tbody>
 		</table>
-        @elseif (strtoupper($type) == 'FACTURE')
+            @if (strtoupper($type) == 'FACTURE')
             <div style='padding-bottom: 25px'>
                 <h3 class='description'>LE PAIEMENT</h3>
                 <p class='text'>{{ $prixOP }}<br>sur une period de {{ $period }}.</p>
             </div>
-        @endif
+            @endif
         <div style='padding-bottom: 25px; padding-top: 100px'>
-            <p class='text' style="padding-bottom: 15px">Pour accepter ce devis, signez ici et renvoyez : ____________________________________________________<br>ou Acceper sur la plateform.</p><br>
+            @if(strtoupper($type) == 'DEVIS')
+            <p class='text' style="padding-bottom: 15px">Pour accepter ce devis, signez ici et renvoyez : ____________________________________________________<br>ou Acceper sur la plateform.<br></p><br>
             <p class='text'>Devis établi le : {{ Carbon::now('Africa/Casablanca')->addHours(1)->toDateTimeString() }}</p>
+            @elseif (strtoupper($type) == 'FACTURE')
+            <p class='text'>Facture établi le : {{ Carbon::now('Africa/Casablanca')->addHours(1)->toDateTimeString() }}</p>
+            @endif
             <p class='merci'>MERCI POUR VOTRE CONFIANCE !</p>
         </div>
         

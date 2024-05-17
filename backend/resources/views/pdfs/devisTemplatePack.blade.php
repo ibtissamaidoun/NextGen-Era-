@@ -106,8 +106,12 @@ use Carbon\Carbon;
             @endif
         </div>
         <div>
+            @if(strtoupper($type) == 'DEVIS')
             <p class='text' style="padding-bottom: 15px">Pour accepter ce devis, signez ici et renvoyez : ____________________________________________________<br>ou Acceper sur la plateform.<br></p><br>
             <p class='text'>Devis établi le : {{ Carbon::now('Africa/Casablanca')->addHours(1)->toDateTimeString() }}</p>
+            @elseif (strtoupper($type) == 'FACTURE')
+            <p class='text'>Facture établi le : {{ Carbon::now('Africa/Casablanca')->addHours(1)->toDateTimeString() }}</p>
+            @endif
             <p class='merci'>MERCI POUR VOTRE CONFIANCE !</p>
         </div>
         
