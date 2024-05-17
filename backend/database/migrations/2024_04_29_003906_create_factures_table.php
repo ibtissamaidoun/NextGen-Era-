@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('factures', function (Blueprint $table) {
             $table->id();
-            $table->string('facture_pdf',255);
+            $table->string('facture_pdf',255)->unique();
             $table->unsignedBigInteger('devi_id');
             $table->foreign('devi_id')
             ->references('id')

@@ -24,7 +24,9 @@ use Carbon\Carbon;
                     Nº {{$type}} : {{ $serie }}<br>
                     DATE DEMANDE : {{ $demande->date_demande }}<br>
                     @if( strtoupper($type) == 'DEVIS')
-                    DATE D'EXPIRATION : {{ $expiration }}<br>
+                    DATE D'EXPIRATION : {{ $expiration }} (24 HEURES)*<br>
+                    @elseif(strtoupper($type) == 'FACTURE')
+                    DATE LIMITE POUR PAYER : {{ $expiration }} (15 JOURS)*<br>
                     @endif
                 </td>
             </tr>
@@ -99,10 +101,13 @@ use Carbon\Carbon;
         <div style='padding-bottom: 25px'>
             @if(strtoupper($type) == 'DEVIS')
             <h3 class='description'>INFO SUR PACK {{ $pack->type }}</h3>
-            <p class='text'>{{ $pack->description }}</p>
+            <p class='text'>{{ $pack->description }}<br><br>
+                * : Votre Demande sera annulée si vous passer la date limite (24 heures) déjà motionnée au début sans réponse.
+            </p>
             @elseif (strtoupper($type) == 'FACTURE')
             <h3 class='description'>LE PAIEMENT</h3>
-            <p class='text'>{{ $prixOP }}<br>sur une period de {{ $period }}.</p>
+                <p class='text'>{{ $prixOP }}<br>sur une period de {{ $period }}.<br><br>
+                * : Votre Demande sera annulée si vous passer la date limite (15 jours après acceptation de devis) déjà motionnée au début sans payé.</p>
             @endif
         </div>
         <div>

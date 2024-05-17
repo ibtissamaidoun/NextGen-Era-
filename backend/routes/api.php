@@ -113,6 +113,9 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
 
     /* --- FACTURE --- */
     Route::get('demandes/{demande_id}/facture',[DeviController::class, 'createFacture']);
+    Route::get('demandes/{demande_id}/downloadFacture', [DeviController::class, 'downloadFacture']);
+    /** --- PDFs --- */
+    Route::delete('demandes/{demande_id}/{type}/delete',[DeviController::class, 'deletePDF']);
 });
 
 

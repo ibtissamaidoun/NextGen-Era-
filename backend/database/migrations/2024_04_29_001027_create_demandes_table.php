@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('date_demande')->nullable();
             $table->date('date_traitement')->nullable();
-            $table->enum('statut',['valide','refuse','en cours','brouillon','paye'])->default('brouillon');
+            $table->enum('statut',['valide','refuse','en cours','brouillon','paye','annule'])->default('brouillon');
             $table->text('motif_refus')->nullable();
             $table->timestamps();
             $table->unsignedInteger('administrateur_id')->nullable(); //nullable s'il l'administrateur n'a pas encore traité la demande
