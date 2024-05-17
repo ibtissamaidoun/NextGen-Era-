@@ -56,9 +56,9 @@ class OffreController extends Controller
 //     $offer = offre::find($offerId);
 
 
-//     $validatedata= $request->validate([
-//         'activite_id'=>'required|exists:activites,id',
-//     ]);
+//    $validatedata= $request->validate([
+//       'activite_id'=>'required|integer|exists:activites,id',
+//   ]);
 
 
 //     $activite = Activite::find($validatedata['activite_id']);
@@ -73,10 +73,10 @@ class OffreController extends Controller
 //     $offer = Offre::find($offerId);
     
 
-//     // Validate the incoming request data to ensure activite_id is provided and valid
-//     $validatedData = $request->validate([
-//         'activite_id' => 'required|exists:activites,id',
-//     ]);
+    // Validate the incoming request data to ensure activite_id is provided and valid
+ //   $validatedData = $request->validate([
+ //       'activite_id' => 'required|integer|exists:activites,id',
+ //   ]);
 
     
 //     // Find the activity by its ID
@@ -102,10 +102,7 @@ public function store(Request $request)
             'remise' => 'nullable|integer|min:0|max:100',
             'date_debut_inscription' => 'required|date',
             'date_fin_inscription' => 'required|date|after_or_equal:date_debut_inscription',
-
-
-          //  'administrateur_id' => 'required|exists:administrateurs,id',
-
+            'administrateur_id' => 'required|integer|exists:administrateurs,id',
             'paiement_id' => 'required|exists:paiements,id',
             'activites' => 'required|array',
             'activites.*.id' => 'exists:activites,id', // Ensure each activity ID exists

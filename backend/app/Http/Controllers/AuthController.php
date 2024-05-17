@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\parentmodel;
+use Carbon\Carbon;
 use App\Models\User;
+use App\Enums\TokenAbility;
+use App\Models\parentmodel;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\Sanctum;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
+
 class AuthController extends Controller
 {
     public function login(Request $request)
@@ -28,9 +31,11 @@ class AuthController extends Controller
         {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-        $token = $user->createToken('MyAppToken')->plainTextToken;//généeration de token
+        $token = $user->createToken('access_token', [TokenAbility::ACCESS_API->value], Carbon::now()->addMinutes(config('sanctum.expiration')));
+        $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], Carbon::now()->addMinutes(config('sanctum.rt_expiration')));
         return response()->json([
-            'token' => $token,
+            'token' => $token->plainTextToken,
+            'refresh_token' => $refreshToken->plainTextToken,
             'role' => $user->role, // Ajoutez cette ligne
         ],202);//renvoyer les données au client
     }
@@ -61,8 +66,13 @@ class AuthController extends Controller
             ]);
             $parent->save();
             DB::commit();
-            $token = $user->createToken('MyAppToken')->plainTextToken;
-            return response()->json(['token' => $token],202);
+            $token = $user->createToken('access_token', [TokenAbility::ACCESS_API->value], Carbon::now()->addMinutes(config('sanctum.expiration')));
+            $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], Carbon::now()->addMinutes(config('sanctum.rt_expiration')));
+
+            return response()->json([
+                'token' => $token->plainTextToken,
+                'refresh_token' => $refreshToken->plainTextToken
+            ], 202);
         }
         catch (\Throwable $th) {
             DB::rollback(); 
@@ -84,6 +94,23 @@ class AuthController extends Controller
             return response()->json(['message' => 'Logged out successfully'], 200);
         }
     }
+
+    public function refreshToken(Request $request)
+{
+    $user = $request->user();
+    $accessTokenExpiration = config('sanctum.expiration');
+
+    if (!$accessTokenExpiration) {
+        return response()->json(['message' => 'Token expiration time not configured'], 500);
+    }
+
+    // Utilisez Carbon pour définir l'expiration du token
+    $accessTokenExpiresAt = Carbon::now()->addMinutes($accessTokenExpiration);
+
+    $accessToken = $user->createToken('access_token', [TokenAbility::ACCESS_API->value], $accessTokenExpiresAt);
+
+    return response()->json(['token' => $accessToken->plainTextToken]);
+}
 
     public function userProfile(){
         return response()->json(auth()->user());
