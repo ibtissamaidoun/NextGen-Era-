@@ -2,11 +2,7 @@ name: CI for Vue.js Project
 
 on:
   push:
-<<<<<<< HEAD
-    
-=======
-   
->>>>>>> 17164381d436cb2ff5c91382aada38c92a31a2cf
+
 
 jobs:
   build-and-test:
@@ -19,20 +15,15 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-<<<<<<< HEAD
         node-version: '20'
-=======
-        node-version: '16'
->>>>>>> 17164381d436cb2ff5c91382aada38c92a31a2cf
+
 
     - name: Install dependencies
       run: |
         cd frontend  # Change directory to the frontend folder
         npm install
 
-<<<<<<< HEAD
-   
-=======
+
     - name: Lint code
       run: |
         cd frontend  # Ensure all commands run in the correct directory
@@ -42,15 +33,11 @@ jobs:
     #  run: |
      #   cd frontend
       #  npm run test
->>>>>>> 17164381d436cb2ff5c91382aada38c92a31a2cf
+
 
     - name: Build project
       run: |
         cd frontend
         npm run build
 
-<<<<<<< HEAD
-    
-=======
-   
->>>>>>> 17164381d436cb2ff5c91382aada38c92a31a2cf
+
