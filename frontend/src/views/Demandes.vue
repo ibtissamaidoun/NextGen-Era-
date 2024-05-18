@@ -1,7 +1,7 @@
 <script setup>
 
-import Gestionadmin from "./components/Gestionadmin.vue";
-import Gestionanim from "./components/Gestionanim.vue";
+
+import Gestiondemande from "./components/Gestiondemande.vue";
 
 </script>
 <template>
@@ -9,13 +9,8 @@ import Gestionanim from "./components/Gestionanim.vue";
   
     <div class="mt-4 row">
       <div class="col-12">
-        <Gestionadmin />
+        <Gestiondemande />
       </div>
-    </div>
-    <div class="mt-4 row">
-      <div class="col-12">
-        <Gestionanim />
-      </div>
-    </div>
+  </div>
   </div>
 </template>

@@ -40,7 +40,7 @@ const closeMenu = () => {
         :current-page="currentRouteName"
         :current-directory="currentDirectory"
       />
-      <h3 style="font-family: Helvetica Neue">Admin </h3>
+      <h3 style="font-family: Helvetica Neue">Administrateurs </h3>
 
       <div
         class="mt-2 collapse navbar-collapse mt-sm-0 me-md-0 me-sm-4"

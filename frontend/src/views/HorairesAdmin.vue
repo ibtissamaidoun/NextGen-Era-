@@ -1,24 +1,21 @@
 <script setup>
-
-
-import Ajoutadmin from "./components/Ajoutadmin.vue";
-import Gestionadmin from "./components/Gestionadmin.vue";
-
-
+import GestionHeures from "./components/GestionHeures.vue";
+import AjoutHeure from "./components/AjoutHeure.vue"
 </script>
+
 <template>
   <div class="py-4 container-fluid">
+    <!-- POP UP EDITER -->
     <div class="mt-4 row">
       <div class="col-12">
-        <Ajoutadmin />
+       <ajoutHeure /> 
       </div>
-    </div>
+    </div> 
     <div class="mt-4 row">
       <div class="col-12">
-        <Gestionadmin />
+       <GestionHeures /> 
       </div>
-    </div>
-    
+    </div>  
     
   </div>
 </template>
