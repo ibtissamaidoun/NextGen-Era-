@@ -2,7 +2,7 @@ name: CI for Vue.js Project
 
 on:
   push:
-    
+
 
 jobs:
   build-and-test:
@@ -17,16 +17,27 @@ jobs:
       with:
         node-version: '20'
 
+
     - name: Install dependencies
       run: |
         cd frontend  # Change directory to the frontend folder
         npm install
 
-   
+
+    - name: Lint code
+      run: |
+        cd frontend  # Ensure all commands run in the correct directory
+        npm run lint
+
+   # - name: Run tests
+    #  run: |
+     #   cd frontend
+      #  npm run test
+
 
     - name: Build project
       run: |
         cd frontend
         npm run build
 
-    
+
