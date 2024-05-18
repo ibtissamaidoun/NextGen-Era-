@@ -11,7 +11,7 @@ use App\Models\Administrateur;
 use App\Models\Paiement;
 use App\Models\Activite;
 
-/*  class OffreControllerTest extends TestCase
+  class OffreControllerTest extends TestCase
 {
      use RefreshDatabase, WithoutMiddleware;
     public function testdeleteunsuccefully()
@@ -155,5 +155,5 @@ use App\Models\Activite;
         $this->assertTrue($offre->getActivites()->first()->id === $activite->id);
     }
 }
- */
+ 
 
