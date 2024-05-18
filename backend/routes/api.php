@@ -48,14 +48,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
-
-
-
-
-
-
-
-
 // Routes réservées aux parents
 Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->group(function () {
 

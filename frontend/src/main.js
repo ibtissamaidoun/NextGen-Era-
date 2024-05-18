@@ -6,7 +6,8 @@ import "./assets/css/nucleo-icons.css";
 import "./assets/css/nucleo-svg.css";
 import ArgonDashboard from "./argon-dashboard";
 import axios from 'axios'
-
+import 'bootstrap/dist/css/bootstrap.css'
+import { BootstrapVue3 } from 'bootstrap-vue-3'
 // Configuration global d'Axios
 const axiosInstance = axios.create({
     baseURL: 'http://127.0.0.1:8000/api', // Remplacez par l'URL de votre API
@@ -27,3 +28,9 @@ appInstance.use(router);
 appInstance.use(ArgonDashboard);
 appInstance.mount("#app");
 appInstance.mount(Home);
+appInstance.use(BootstrapVue3)
+
+
+
+
+

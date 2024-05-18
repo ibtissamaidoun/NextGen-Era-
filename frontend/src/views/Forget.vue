@@ -1,44 +1,61 @@
 <script setup>
-import { onBeforeUnmount, onBeforeMount } from "vue";
+//import Vue from 'vue';
+// import BootstrapVue from 'bootstrap-vue';
+
+// Vue.use(BootstrapVue);
+
+
+import { ref, onBeforeUnmount, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import ArgonInput from "@/components/ArgonInput.vue";
-
+import axiosInstance from "@/main"; 
 
 const store = useStore();
+const email = ref('');
+
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
   store.state.showNavbar = false;
   store.state.showSidenav = false;
   store.state.showFooter = false;
-
 });
+
 onBeforeUnmount(() => {
   store.state.hideConfigButton = false;
   store.state.showNavbar = true;
   store.state.showSidenav = true;
   store.state.showFooter = true;
-
 });
+
+const recoverPassword = async () => {
+  try {
+    const response = await axiosInstance.post('/forget', { email: email.value });
+    console.log(response.data.message); // Utiliser console.log ou une bibliothèque de notification
+  } catch (error) {
+    if (error.response && error.response.data) {
+      alert(error.response.data.message);
+    } else {
+      alert("Erreur de réseau ou réponse non structurée");
+    }
+  }
+};
 </script>
 <template >
     <div class="box">
     <h3>Récupération de votre mot de passe</h3>
   
     <div class="mb-3">
-      <argon-input id="email" type="email" placeholder="Email" name="email" size="lg"/>
+      <argon-input v-model="email" id="email" type="email" placeholder="Email" name="email" size="lg"/>
     </div>
 
    <h5>
-    <a class='lien' style="text-align: center"  data-bs-target="#collapseFour"  type="button" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="collapseFour">Récupérer</a>
+    <button class='lien' @click="recoverPassword" style="text-align: center"  data-bs-target="#collapseFour"  type="button" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="collapseFour">Récupérer</button>
   </h5>
   <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
      <div class="accordion-body">Veuillez vérifier votre boîte e-mail pour les instructions de récupération de mot de passe</div>
   </div>
     </div>
   </template>
-  
- 
-  
   <style >
   body{
     background-color: grey;
