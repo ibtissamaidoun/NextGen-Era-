@@ -102,7 +102,9 @@ jobs:
           composer install --prefer-dist --no-progress --no-suggest
           
       - name: Copy .env example
-        run: cp .env.example .env
+        run: |
+          cd "backend"
+          cp .env.example .env
         
       - name: Generate key
         run: |
