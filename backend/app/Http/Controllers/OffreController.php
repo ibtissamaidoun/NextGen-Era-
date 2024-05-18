@@ -32,22 +32,23 @@ class OffreController extends Controller
      */
   //this function woriks well dont touch it , at first only i and god knows how it works , now only god knows .
   //remember if an error occurs , its propably the admin_id or other id
-    
-   
-    
-   
+
+
+
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
+
         $offre = offre::find($id);
         if(!$offre)
         {
             return response()->json(['message'=>'offre non trouve'],404);
-        
+
         }
-    +    $offre->delete();
+        $offre->delete();
         return response()->json(['message'=>'ofrre deleted successfuly']);
     }
 
@@ -69,15 +70,15 @@ class OffreController extends Controller
 // {
 //     // Find the offer by its ID
 //     $offer = Offre::find($offerId);
-    
+
 //     // Validate the incoming request data to ensure activite_id is provided and valid
 //     $validatedData = $request->validate([
 //         'activite_id' => 'required|exists:activites,id',
 //     ]);
-    
+
 //     // Find the activity by its ID
 //     $activite = Activite::find($validatedData['activite_id']);
-    
+
 //     // Check if the activity is currently associated with the offer
 //     if ($offer->getActivites()->find($activite->id)) {
 //         // Detach the activity from the offer
@@ -102,7 +103,7 @@ public function store(Request $request)
             'paiement_id' => 'required|exists:paiements,id',
             'activites' => 'required|array',
             'activites.*.id' => 'exists:activites,id', // Ensure each activity ID exists
-        ]); 
+        ]);
 
         // Create the new offer
         $offer = new Offre([
@@ -119,7 +120,7 @@ public function store(Request $request)
         foreach ($validated['activites'] as $activity) {
             $offer->getActivites()->attach($activity['id'], ['paiement_id' => $validated['paiement_id']]);
         }
-        
+
         // Return success response
         return response()->json(['message' => 'Offer created successfully', 'offer' => $offer], 201);
     } catch (\Exception $e) {
@@ -135,7 +136,7 @@ public function update(Request $request, $offerId)
     try {
         // Find the offer by its ID
         $offer = Offre::findOrFail($offerId);
-        
+
         // Validate incoming request
         $validated = $request->validate([
             'titre' => 'sometimes|string|max:255',
@@ -147,7 +148,7 @@ public function update(Request $request, $offerId)
             'paiement_id' => 'sometimes|exists:paiements,id',
             'activites' => 'sometimes|array',
             'activites.*.id' => 'exists:activites,id', // Ensure each activity ID exists
-        ]); 
+        ]);
 
         // Update the offer's attributes
         $offer->titre = $validated['titre'];
@@ -165,7 +166,7 @@ public function update(Request $request, $offerId)
         foreach ($validated['activites'] as $activity) {
             $offer->getActivites()->attach($activity['id'], ['paiement_id' => $validated['paiement_id']]);
         }
-        
+
         // Return success response
         return response()->json(['message' => 'Offer updated successfully', 'offer' => $offer]);
     } catch (\Exception $e) {
@@ -176,5 +177,6 @@ public function update(Request $request, $offerId)
         return response()->json(['message' => 'Failed to update offer', 'error' => $e->getMessage()], 500);
     }
 }
+
 
 }
