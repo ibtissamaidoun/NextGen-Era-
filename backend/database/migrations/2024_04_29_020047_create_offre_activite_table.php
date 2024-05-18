@@ -23,7 +23,7 @@ return new class extends Migration
                   ->references('id')
                   ->on('activites')
                   ->onDelete('cascade')
-                  ->onUpdate('cascade');  
+                  ->onUpdate('cascade');
             $table->primary([ 'offre_id','activite_id']);
         });
     }

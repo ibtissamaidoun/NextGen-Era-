@@ -30,7 +30,7 @@ class ParentmodelController extends Controller
      */
     public function store(Request $request)
 {
-    // Validate the incoming request data
+    // Validation des donnes
     $request->validate([
         'nom' => 'required|string',
         'prenom' => 'required|string',
