@@ -56,9 +56,11 @@ class OffreController extends Controller
 // {
 //     $offer = offre::find($offerId);
 
-//     $validatedata= $request->validate([
-//         'activite_id'=>'required|exists:activites,id',
-//     ]);
+
+//    $validatedata= $request->validate([
+//       'activite_id'=>'required|integer|exists:activites,id',
+//   ]);
+
 
 //     $activite = Activite::find($validatedata['activite_id']);
 
@@ -96,10 +98,10 @@ public function store(Request $request)
         $validated = $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
-            'remise' => 'nullable|integer|min:0',
+            'remise' => 'nullable|integer|min:0|max:100',
             'date_debut_inscription' => 'required|date',
             'date_fin_inscription' => 'required|date|after_or_equal:date_debut_inscription',
-          //  'administrateur_id' => 'required|exists:administrateurs,id',
+            'administrateur_id' => 'required|integer|exists:administrateurs,id',
             'paiement_id' => 'required|exists:paiements,id',
             'activites' => 'required|array',
             'activites.*.id' => 'exists:activites,id', // Ensure each activity ID exists
@@ -139,14 +141,14 @@ public function update(Request $request, $offerId)
 
         // Validate incoming request
         $validated = $request->validate([
-            'titre' => 'sometimes|string|max:255',
-            'description' => 'sometimes|string',
-            'remise' => 'nullable|integer|min:0',
-            'date_debut_inscription' => 'sometimes|date',
-            'date_fin_inscription' => 'sometimes|date|after_or_equal:date_debut_inscription',
-            'administrateur_id' => 'sometimes|exists:administrateurs,id',
-            'paiement_id' => 'sometimes|exists:paiements,id',
-            'activites' => 'sometimes|array',
+            'titre' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|required|string',
+            'remise' => 'nullable|integer|min:0|max:100',
+            'date_debut_inscription' => 'sometimes|required|date',
+            'date_fin_inscription' => 'sometimes|required|date|after_or_equal:date_debut_inscription',
+            'administrateur_id' => 'sometimes|required|exists:administrateurs,id',
+            'paiement_id' => 'sometimes|required|exists:paiements,id',
+            'activites' => 'sometimes|required|array',
             'activites.*.id' => 'exists:activites,id', // Ensure each activity ID exists
         ]);
 

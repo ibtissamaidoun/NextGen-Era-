@@ -1,4 +1,2 @@
 
-## GETTNEXT-ERA
-..
-
+## GETNEXT-ERA

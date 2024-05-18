@@ -1,25 +1,26 @@
 <?php
 
 use App\Models\User;
+use App\Enums\TokenAbility;
 use Illuminate\Http\Request;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\deviController;
 use App\Http\Controllers\PackController;
 use App\Http\Controllers\offreController;
+use App\Http\Controllers\EnfantController;
+use App\Http\Controllers\ForgotController;
+use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\HoraireController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActiviteController;
 use App\Http\Controllers\paiementController;
 use App\Http\Controllers\AnimateurController;
 use App\Http\Controllers\AnimateursController;
 use App\Http\Controllers\ParentmodelController;
-use App\Http\Controllers\AdministrateurController;
-use App\Http\Controllers\DemandeController;
-use App\Http\Controllers\deviController;
-use App\Http\Controllers\EnfantController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ForgotController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdministrateurController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,10 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forget', [ForgotController::class, 'forget']);
 Route::post('/reset', [ForgotController::class, 'reset']);
+Route::post('/refresh-token', [AuthController::class, 'refreshToken'])->middleware([
+    'auth:sanctum',
+    'ability:' . TokenAbility::ISSUE_ACCESS_TOKEN->value,
+]);
 
 //route qui necessite l'authentification
 Route::middleware(['auth:sanctum'])->group(function () {
