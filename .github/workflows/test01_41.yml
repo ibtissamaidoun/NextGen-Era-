@@ -95,14 +95,20 @@ jobs:
           php-version: '8.2'
           extensions: mbstring, pdo_pgsql
           tools: composer:v2, phpunit
+          
       - name: Install PHP dependencies
         run: |
           cd "backend"
           composer install --prefer-dist --no-progress --no-suggest
+          
+      - name: Copy .env example
+        run: cp .env.example .env
+        
       - name: Generate key
         run: |
           cd "backend"
           php artisan key:generate
+          
       - name: Run integration tests
         run: |
           cd "backend"
