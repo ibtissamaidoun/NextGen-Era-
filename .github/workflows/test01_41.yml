@@ -91,7 +91,6 @@ jobs:
 
       - name: Set up PHP with extensions
         uses: shivammathur/setup-php@v2
-      
         with:
           php-version: '8.2'
           extensions: mbstring, pdo_pgsql
@@ -100,14 +99,15 @@ jobs:
         run: |
           cd "backend"
           composer install --prefer-dist --no-progress --no-suggest
-      - name: Run integration tests
-        run: |
-          cd "backend"
-          php artisan test --testsuite=Feature 
       - name: Generate key
         run: |
           cd "backend"
           php artisan key:generate
+      - name: Run integration tests
+        run: |
+          cd "backend"
+          php artisan test --testsuite=Feature 
+     
   frontend-test:
     runs-on: ubuntu-latest
     steps:
