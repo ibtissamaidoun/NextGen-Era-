@@ -74,15 +74,15 @@ class DemandeController extends Controller
 
     
     //taha partie 
-    public function demandes(Request $request)
+    public function demandes()
     {
         try {
             // Retrieve the authenticated parent's ID from the parentmodels table
-            $user = $request->user();
-            $parent = parentmodel::where('user_id', $user->id)->firstOrFail();
+            $user = auth()->user();
+            $parent = $user->parentmodel;
 
             // Retrieve all demandes associated with the parent
-            $demandes = $parent->demandes()->where('statut','en cours')->get();
+            $demandes = $parent->demandes()->get(); // ->where('statut','en cours')
     
             // Return the demandes along with their associated children IDs
             return response()->json(['demandes' => $demandes], 200);
@@ -232,9 +232,9 @@ class DemandeController extends Controller
         $demande->administrateur_id = (Auth::user())->administrateur->id;
         $demande->save();
 
-        // TODO : facture paye
-
         // TODO : create recu
+
+
 
         // notifier le parent 
         $notification = notification::create([

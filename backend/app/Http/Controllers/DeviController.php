@@ -15,7 +15,6 @@ use App\Models\activite;
 use App\Models\parentmodel;
 use App\Models\notification;
 use Illuminate\Http\Request;
-use App\Models\administrateur;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -359,11 +358,13 @@ class DeviController extends Controller
         if ($offre) {
             $start = Carbon::parse($offre->date_debut);
             $end = Carbon::parse($offre->date_fin);
-        } elseif ($pack) {
+           
+        }
+        elseif ($pack)
+        {
             $start = Carbon::parse($activites[0]->date_debut_etud);
             $end = Carbon::parse($activites[0]->date_fin_etud);
         }
-
         /**
          * PREPARATION DE L'AFFICHAGE DES PRIX PAR O.P.
          */
@@ -374,31 +375,33 @@ class DeviController extends Controller
                 $prixOP = $prixOP . ' DH / mois';
                 $periodMsg = $period . ' mois';
                 break;
-            case 'trimestriel':
+                case 'trimestriel':
                 $period = $start->diffInMonths($end) / 3;
                 $prixOP = $prix['TTC'] / $period;
                 $prixOP = $prixOP . ' DH / trimestre';
                 $periodMsg = $period . ' trimestres';
                 break;
-            case 'semestriel':
-                $period = $start->diffInMonths($end) / 6;
-                $prixOP = $prix['TTC'] / $period;
-                $prixOP = $prixOP . ' DH / semestre';
-                $periodMsg = $period . ' semestres';
-                break;
-            case 'annuel':
-                $period = $start->diffInYears($end);
-                $prixOP = $prix['TTC'] / $period;
-                $prixOP = $prixOP . ' DH / annee';
-                $periodMsg = $period . ' annees';
-                break;
-        }
-
+                case 'semestriel':
+                    $period = $start->diffInMonths($end) / 6;
+                    $prixOP = $prix['TTC'] / $period;
+                    $prixOP = $prixOP . ' DH / semestre';
+                    $periodMsg = $period . ' semestres';
+                    break;
+                    case 'annuel':
+                        $period = $start->diffInYears($end);
+                        $prixOP = $prix['TTC'] / $period;
+                        $prixOP = $prixOP . ' DH / annee';
+                        $periodMsg = $period . ' annees';
+                        break;
+                    }
+                    
+        
         /**
          * CALCULE DE DATE D'ÉXPIRATION DE DEVIS APRES 24 HEURES +1 FOR AJUSTMENT
          */
         $expiration = Carbon::parse($demande->date_demande.' '.date('H:i'))->addHours(25)->format('Y-m-d H:i');
-
+        
+        //dd($expiration);
         /**
          * LA DATA POUR GÉNÉRER LE PDF POUR LE DEVIS ET LA FACTURE
          */
@@ -421,7 +424,6 @@ class DeviController extends Controller
             'period' => $periodMsg,
         ];
         
-
         /**
          * CODE DE GENERATION DE PDF SI STATUT = TRUE, SINON JUST RETOURNE LA DATA
          */
@@ -437,7 +439,7 @@ class DeviController extends Controller
                 $data['devis_id'] = $devis->id;
                 $data['serie'] = 'F'.Carbon::now()->format('yWw').$parent->id.$demande->id;
                 /** EXPIRATION DE FACTURE APRES 15 JOURES */
-                $data['expiration'] = Carbon::parse($demande->updated_at.' '.date('H:i'))->addDays(15)->format('Y-m-d H:i');
+                $data['expiration'] = Carbon::parse($demande->updated_at)->addDays(15)->format('Y-m-d H:i');
                 $data = DeviController::generateDevis($demande_id, $data, 'facture');
                 unset($data['devis_id']);
             }
@@ -619,20 +621,23 @@ class DeviController extends Controller
         $devisPath = $devis->devi_pdf;
         return response()->download($devisPath);
     }
-    public function validateDevis($devisId)
+    public function validateDevis($demande_id)
     {
         // Retrieve the devis :)
-        $devis = devi::findOrFail($devisId);
+        $demande = demande::findOrFail($demande_id);
+        $devis = $demande->devi;
         $devis->statut = 'valide';
         $devis->save();
 
         // Retrieve the  demande :(
-        $demande = demande::findOrFail($devis->demande_id);
         $demande->statut = 'en cours';
         $demande->save();
 
+        
         $data = DeviController::createDevis($demande->id, 'facture');
 
+        $facture = facture::findOrFail($data['facture'])->makeHidden(['created_at','updated_at']);
+    
         // Generate a notification for all admins
         $notification = new  notification([
             'type' => 'Devis Validated',
@@ -641,46 +646,38 @@ class DeviController extends Controller
         $notification->save();
         $admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin)
-            $notification->users()->attach($admin->id, ['date_notification' => now()]);
+            $notification->users()->attach($admin->id, ['date_notification' => date('Y-m-d')]);
+
 
         return response()->json([
-            'message' => 'devis validee avec succes.',
+            'message' => 'devis validee avec succes. Facture generated successfully for selected children in all activities in the offer',
+            'facture'=>$facture
         ]);
     }
-    public function refuseDevis($devis_id)
+    public function refuseDevis($demande_id)
     {
         $user = Auth::User();
         $parent = $user->parentmodel;
-
-        $devis = $parent->devis()->find($devis_id);
-        $demande = $devis->demande()->first();
+        
+        $demande = $parent->demandes()->findOrFail($demande_id);
         $demande->update(['statut' => 'refuse']);
-
+        
+        $devis = $demande->devi;
         $devis->statut = 'refuse';
         $devis->save();
 
-        // notification pour tout les admin :(
-        /**$notification = new  notification([
-                        'type' => 'Devis Refused',
-                        'contenu' => 'A devis has been refused.'
-                    ]);
-                    $notification->save();
-                    $admins = administrateur::all();
-                    foreach($admins as $admin)
-                        $notification->users()->attach($admin->id, ['date_notification' => now()]);
-         */
         return response()->json([
             'message' => 'devis refusé avec succes',
         ]);
     }
-    public function motifRefuse(Request $request, $devis_id) // {motif:text}
+    public function motifRefuse(Request $request, $demande_id) // {motif:text}
     {
         // validate input ...
 
         $user = Auth::User();
         $parent = $user->parentmodel;
-
-        $devis = $parent->devis()->find($devis_id);
+        $demande = $parent->demandes()->findOrFail($demande_id);
+        $devis = $demande->devi;
 
         $devis->motif_refus = $request['motif'];
         $devis->save();
@@ -906,8 +903,21 @@ class DeviController extends Controller
                 break;      
         }
 
-        //return response()->json(['message' => $type.' supprimmeé avec succes.']);
+        return response()->json(['message' => 'votre '.strtolower($type).' supprimmeé avec succes.']);
     }
 
-    
+
+    /**
+     * Genérer une Facture REÇU + PDF 
+     */
+    public function createRecu($demande_id)
+    {
+        $data = DeviController::createDevis($demande_id, 'facture');
+
+        $facture = facture::findOrFail($data['facture'])->makeHidden(['created_at','updated_at']);
+        
+         return response()->json(['message' => 'Facture generated successfully for selected children in all activities in the offer',
+                                  'facture'=>$facture]);
+    }
+
 }

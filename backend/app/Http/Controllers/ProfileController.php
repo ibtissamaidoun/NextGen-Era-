@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\administrateur;
 use App\Models\User;
 use App\Models\animateur;
 use App\Models\parentmodel;
 use Illuminate\Http\Request;
+use App\Models\administrateur;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    public function updateanimateur(Request $request, $id)
+    public function updateanimateur(Request $request)
     {
-        $user = User::where('role', 'animateur')->find($id);
+        $user = Auth::user();
 
         $request->validate([
             'nom' => 'sometimes|required|string',
@@ -48,7 +49,7 @@ class ProfileController extends Controller
 
             // Update the domaine competence if provided
             if ($request->has('domaine_competence')) {
-                $animateur = animateur::where('user_id', $id)->firstOrFail();
+                $animateur = animateur::where('user_id', $user->id)->firstOrFail();
                 $animateur->update(['domaine_competence' => $request->domaine_competence]);
             }
 
@@ -63,9 +64,9 @@ class ProfileController extends Controller
         }
     }
 
-    public function updateParent(Request $request, $id)
+    public function updateParent(Request $request)
     {
-        $user = User::where('role', 'parent')->findOrFail($id);
+        $user = auth::user();
 
         $request->validate([
             'nom' => 'sometimes|required|string',
@@ -81,22 +82,22 @@ class ProfileController extends Controller
             $userData = $request->only(['nom', 'prenom', 'email', 'telephone_portable', 'telephone_fixe']);
             $user->update($userData);
 
-            $parent = parentmodel::where('user_id', $id)->firstOrFail();
+            $parent = parentmodel::where('user_id', $user->id)->firstOrFail();
             if ($request->has('fonction')) {
                 $parent->update(['fonction' => $request->fonction]);
             }
 
             DB::commit();
-            return response()->json(['user' => $user, 'message' => 'Parent updated successfully']);
+            return response()->json(['user' => $user->with('parentmodel')->find($user->id), 'message' => 'Parent updated successfully']);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json(['message' => 'Failed to update parent: ' . $e->getMessage()], 409);
         }
     }
 
-    public function updateadmin(Request $request, $id)
+    public function updateadmin(Request $request)
     {
-        $user = User::where('role', 'admin')->findOrFail($id);
+        $user = Auth::user();
 
         $request->validate([
             'nom' => 'sometimes|required|string',
@@ -122,7 +123,7 @@ class ProfileController extends Controller
     public function updatePhoto(Request $request)
 {
     // Retrieve the authenticated user
-    $user= $request->user();
+    $user = $request->user();
 
     // Validate the photo input
     $request->validate([
@@ -162,9 +163,9 @@ class ProfileController extends Controller
     }
 }
 
-    public function updatePassword(Request $request, $id)
+    public function updatePassword(Request $request)
     {
-        $user = User::findOrFail($id);
+        $user = Auth::User();
         
         $request->validate([
             'mot_de_passe' => 'required|string|min:8|confirmed',
@@ -240,10 +241,10 @@ class ProfileController extends Controller
     }
 
     
-//delete for all types of users
-    public function deleteprofile($id)
+    //delete for all types of users
+    public function deleteprofile()
     {
-        $user = User::findOrFail($id); // Find the user by ID
+        $user = auth()->user(); // Find the user by ID
 
         DB::beginTransaction();
         try {
