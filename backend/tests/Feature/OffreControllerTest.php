@@ -1,159 +1,195 @@
 <?php
-
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\User;
 use App\Models\Offre;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\Activite;
+use App\Models\Paiement;
+use App\Models\Administrateur;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use App\Models\Administrateur;
-use App\Models\Paiement;
-use App\Models\Activite;
 
-/*  class OffreControllerTest extends TestCase
+class OffreControllerTest extends TestCase
 {
-     use RefreshDatabase, WithoutMiddleware;
-    public function testdeleteunsuccefully()
-    {
-        $IdNotExiste = 999;  // veux dire que id not existe
-        $response = $this->deleteJson("api/offres/{$IdNotExiste}");
-        $response->assertStatus(404);
-        $response->assertJson(['message' => 'offre non trouve']);
-    }
-    public function testdeletesuccefully()
-    {
+    use RefreshDatabase, WithoutMiddleware;
 
-        $offre = Offre::factory()->create();
-        $response = $this->deleteJson("api/offres/{$offre->id}");
-        $this->assertDatabaseMissing('offres', ['id' => $offre->id]);
-        $response->assertStatus(200);
-        $response->assertJson(['message' => 'offre deleted successfuly']);
+    public function testDeleteUnsuccessfully()
+    {
+        $nonExistentId = 999;
+        $response = $this->deleteJson("/api/admin/offres/{$nonExistentId}");
+        $response->dump();
+        $response->assertStatus(404);
+        $response->assertJson(['message' => 'Offre non trouvée']);
     }
+
+    public function testDeleteSuccessfully()
+    {
+        $user = User::factory()->create();
+        $administrateur = Administrateur::factory()->create(['user_id' => $user->id]);
+        $paiement = Paiement::factory()->create();
+        $offre = Offre::factory()->create([
+            'administrateur_id' => $administrateur->id,
+            'paiement_id' => $paiement->id,
+        ]);
+
+        $response = $this->actingAs($user)->deleteJson("/api/admin/offres/{$offre->id}");
+        $response->dump();
+        $response->assertStatus(204);
+        $this->assertDatabaseMissing('offres', ['id' => $offre->id]);
+    }
+
     public function testStoreInvalidData()
     {
-        $response = $this->postJson('/api/offres', [
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->postJson('/api/admin/offres', [
             'titre' => '',
             'description' => '',
-            'date_debut_inscription' => '',
-            'date_fin_inscription' => '',
+            'date_debut' => '',
+            'date_fin' => '',
+            'paiement_id' => '',
             'activites' => []
         ]);
 
+        $response->dump();
         $response->assertStatus(422);
-        $response->assertJsonStructure([
-            'message',
-            'errors'
-        ]);
+        $response->assertJsonValidationErrors(['titre', 'description', 'date_debut', 'date_fin', 'paiement_id', 'activites']);
     }
 
     public function testStoreValidData()
-    {
-        $administrateur = Administrateur::factory()->create();
-        $paiement = Paiement::factory()->create();
-        $activite = Activite::factory()->create();
+{
+    $user = User::factory()->create();
+    $administrateur = Administrateur::factory()->create(['user_id' => $user->id]);
+    $paiement = Paiement::factory()->create();
+    $activite = Activite::factory()->create();
 
-        $validData = [
+    $validData = [
+        'titre' => 'Nouvelle Offre',
+        'description' => 'Description de l\'offre.',
+        'remise' => 10,
+        'date_debut' => '2024-01-01',
+        'date_fin' => '2024-01-31',
+        'paiement_id' => $paiement->id,
+        'activites' => [['id' => $activite->id]]
+    ];
+
+    $response = $this->actingAs($user)->postJson('/api/admin/offres', $validData);
+    $response->dump();
+    $response->assertStatus(201);
+    $response->assertJson([
+        'message' => 'Offer created successfully',
+        'offer' => [
             'titre' => 'Nouvelle Offre',
             'description' => 'Description de l\'offre.',
             'remise' => 10,
-            'date_debut_inscription' => '2024-01-01',
-            'date_fin_inscription' => '2024-01-31',
-            'administrateur_id' => $administrateur->id,
+            'date_debut' => '2024-01-01',
+            'date_fin' => '2024-01-31',
             'paiement_id' => $paiement->id,
-            'activites' => [
-                ['id' => $activite->id]
-            ]
-        ];
+            'administrateur_id' => $administrateur->id,
+            'activites' => [['id' => $activite->id]]
+        ]
+    ]);
 
-        $response = $this->postJson('/api/offres', $validData);
+    $this->assertDatabaseHas('offres', [
+        'titre' => 'Nouvelle Offre',
+        'description' => 'Description de l\'offre.'
+    ]);
+}
 
-        $response->assertStatus(201);
-        $response->assertJson([
-            'message' => 'Offer created successfully',
-            'offer' => [
-                'titre' => 'Nouvelle Offre',
-                'description' => 'Description de l\'offre.',
-                'remise' => 10,
-                'date_debut_inscription' => '2024-01-01',
-                'date_fin_inscription' => '2024-01-31',
-                'administrateur_id' => $administrateur->id,
-                'paiement_id' => $paiement->id,
-                'activites' => [['id' => $activite->id]]
-            ]
-        ]);
-
-        $this->assertDatabaseHas('offres', [
-            'titre' => 'Nouvelle Offre',
-            'description' => 'Description de l\'offre.'
-
-        ]);
-
-        $createdOffer = Offre::first();
-        $this->assertEquals(1, $createdOffer->getActivites()->count());
-        $this->assertTrue($createdOffer->getActivites()->first()->id === $activite->id);
-    }
     public function testUpdateOffreNotFound()
     {
-        $response = $this->putJson('/api/offres/999', []);
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->putJson('/api/admin/offres/999', []);
+        $response->dump();
         $response->assertStatus(404);
     }
 
-    public function testUpdateInvalideData()
+    public function testUpdateInvalidData()
     {
-        $offre = Offre::factory()->create();
-        $response = $this->putJson("/api/offres/{$offre->id}", [
-            'titre' => '',
-        ]);
-
-        $response->assertStatus(422);
-    }
-
-    public function testUpdateValideTada()
-    {
-        $offre = Offre::factory()->create();
-        $administrateur = Administrateur::factory()->create();
+        $user = User::factory()->create();
+        $administrateur = Administrateur::factory()->create(['user_id' => $user->id]);
         $paiement = Paiement::factory()->create();
-        $activite = Activite::factory()->create();
-
-        $validData = [
-            'titre' => 'NewTitle',
-            'description' => 'NewDiscription',
-            'remise' => 15,
-            'date_debut_inscription' => '2025-01-01',
-            'date_fin_inscription' => '2025-01-31',
+        $offre = Offre::factory()->create([
             'administrateur_id' => $administrateur->id,
             'paiement_id' => $paiement->id,
+        ]);
+
+        $response = $this->actingAs($user)->putJson("/api/admin/offres/{$offre->id}", [
+            'titre' => 123,
+            'description' => 456,
+            'date_debut' => 'invalid-date',
+            'date_fin' => 'invalid-date',
+            'paiement_id' => 'invalid-id',
+            'remise' => 'test',
             'activites' => [
-                ['id' => $activite->id]
-            ]
+            ['id' => 'invalid-id']
+        ]
+
+    ]);
+
+
+        $response->dump();
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors([
+            'titre',
+            'description',
+            'date_debut',
+            'date_fin',
+            'paiement_id',
+            'remise',
+            'activites.0.id'
+        ]);
+    }
+
+
+
+
+
+    public function testUpdateValidData()
+    {
+        $user = User::factory()->create();
+        $administrateur = Administrateur::factory()->create(['user_id' => $user->id]);
+        $paiement = Paiement::factory()->create();
+        $activite = Activite::factory()->create();
+        $offre = Offre::factory()->create([
+            'administrateur_id' => $administrateur->id,
+            'paiement_id' => $paiement->id,
+        ]);
+
+        $validData = [
+            'titre' => 'Updated Title',
+            'description' => 'Updated Description',
+            'remise' => 15,
+            'date_debut' => '2025-01-01',
+            'date_fin' => '2025-01-31',
+            'paiement_id' => $paiement->id,
+            'activites' => [['id' => $activite->id]]
         ];
 
-        $response = $this->putJson("/api/offres/{$offre->id}", $validData);
-
+        $response = $this->actingAs($user)->putJson("/api/admin/offres/{$offre->id}", $validData);
+        $response->dump();
         $response->assertStatus(200);
         $response->assertJson([
             'message' => 'Offer updated successfully',
             'offer' => [
-                'titre' => 'NewTitle',
-                'description' => 'NewDiscription',
+                'id' => $offre->id,
+                'titre' => 'Updated Title',
+                'description' => 'Updated Description',
                 'remise' => 15,
-                'date_debut_inscription' => '2025-01-01',
-                'date_fin_inscription' => '2025-01-31',
-                'administrateur_id' => $administrateur->id,
+                'date_debut' => '2025-01-01',
+                'date_fin' => '2025-01-31',
                 'paiement_id' => $paiement->id,
-                'activites' => [ ['id' => $activite->id]]
+                'administrateur_id' => $administrateur->id,
+                'created_at' => $offre->created_at->toISOString(),
+                'updated_at' => $offre->updated_at->toISOString(),
             ]
         ]);
 
         $offre->refresh();
-
-        $this->assertEquals('NewTitle', $offre->titre);
+        $this->assertEquals('Updated Title', $offre->titre);
+        $this->assertEquals('Updated Description', $offre->description);
         $this->assertEquals(15, $offre->remise);
+        $this->assertEquals($paiement->id, $offre->paiement_id);
         $this->assertEquals($administrateur->id, $offre->administrateur_id);
-        $this->assertCount(1, $offre->getActivites());
-        $this->assertTrue($offre->getActivites()->first()->id === $activite->id);
     }
 }
- */
-

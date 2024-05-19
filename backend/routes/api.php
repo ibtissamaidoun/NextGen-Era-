@@ -61,7 +61,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
 
     // Manipulation des enfants
     Route::apiResource('enfants', EnfantController::class);
-    // visuasilation des offres disponible 
+    // visuasilation des offres disponible
     Route::get('/offres', [ParentmodelController::class, 'getoffers']);
     Route::get('/offres/{id}', [ParentmodelController::class, 'showoffer']);
     Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']); // this one
@@ -78,7 +78,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
 
     //the father can check the commandes he submitted that are en cours
     Route::get('demandes', [DemandeController::class, 'demandes']);
-    //the parent get different notifications 
+    //the parent get different notifications
     Route::get('/notifications', [NotificationController::class,'indexparent']);
     // edt for a given student from Request
     Route::get('/EDT',[ParentmodelController::class,'EDT']);
@@ -188,7 +188,7 @@ Route::delete('activities/{activity}', [ActiviteController::class, 'destroy']);
     //Route::put('/offers/{offerId}/detach-activity', [OffreController::class, 'detachActivity']);
 
     //available-activities with available animators, remember that we need also to filter with domaine competence
-    //check for the activity with two horaires 
+    //check for the activity with two horaires
     Route::get('/available-activities', [ActiviteController::class, 'getAvailableActivities']);
     Route::get('/available-activities/{activity_id}/available-animators', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
     Route::post('/available-activities/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
@@ -219,7 +219,7 @@ Route::apiResource('devis', deviController::class);
 Route::apiResource('notifications', NotificationController::class);
 Route::apiResource('demandes', DemandeController::class);
 
-Route::get('getDevis',[deviController::class, 'getDevis']); // 
+Route::get('getDevis',[deviController::class, 'getDevis']); //
 Route::get('devis',[deviController::class, 'createDevis']); // marche
 Route::get('monPack',[PackController::class,'packPoussible']); // marche
 
