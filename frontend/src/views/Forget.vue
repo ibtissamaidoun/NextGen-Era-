@@ -26,11 +26,16 @@ onBeforeUnmount(() => {
   store.state.showSidenav = true;
   store.state.showFooter = true;
 });
-
+const token=ref('');
 const recoverPassword = async () => {
+  if (!token.value) {
+    alert("Token est requis pour la récupération de mot de passe.");
+    return;
+  }
   try {
-    const response = await axiosInstance.post('/forget', { email: email.value });
-    console.log(response.data.message); // Utiliser console.log ou une bibliothèque de notification
+    console.log("Envoi de la requête avec email:", email.value, "et token:", token.value);
+    const response = await axiosInstance.post('/forget', { email: email.value , token:token.value });
+    console.log(response.data.message); 
   } catch (error) {
     if (error.response && error.response.data) {
       alert(error.response.data.message);

@@ -86,23 +86,23 @@ const routes = [
     component: Profile,
   },
   {
-    path: "/signin",
-    name: "Signin",
+    path: "/login",
+    name: "login",
     component: Signin,
   },
   {
-    path: "/signup",
-    name: "Signup",
+    path: "/register",
+    name: "register",
     component: Signup,
   },
   {
-    path:"/Forget",
+    path:"/forget",
     name:"Forget",
     component: Forget,
   },
   {
-    path:"/Reset",
-    name:"Reset",
+    path:"/reset",
+    name:"reset",
     component: Reset,
   },
   

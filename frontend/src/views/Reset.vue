@@ -27,7 +27,11 @@ const confirmPassword = ref('');
 const token = ref('votre_token'); // Récupérez ce token plus sécuritairement, peut-être via des props ou un store Vuex
 
 
-const resetPassword = async () => {
+const resetPassword = async () => { 
+   if (!token.value) {
+    alert("Le token de réinitialisation est requis.");
+    return;
+  }
   try {
     const response = await axiosInstance.post('/reset', {
       mot_de_passe: password.value,
@@ -35,7 +39,7 @@ const resetPassword = async () => {
       token: token.value
     });
     alert(response.data.message);
-    router.push('/signin');
+    router.push('/login');
   } catch (error) {
     alert(error.response?.data?.message || "Erreur de réseau");
   }
@@ -55,7 +59,7 @@ const resetPassword = async () => {
 
 
    <h5>
-    <router-link class='lien' @click="resetPassword" style="text-align: center" to="/Signin" >Rénitialiser</router-link>
+    <router-link class='lien' @click="resetPassword" style="text-align: center" to="/login" >Rénitialiser</router-link>
   </h5>
     </div>
   </template>
