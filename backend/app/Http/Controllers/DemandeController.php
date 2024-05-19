@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use Carbon\Carbon;
 use App\Models\devi;
 use App\Models\pack;
 use App\Models\enfant;
 use App\Models\demande;
+use App\Models\facture;
 use App\Models\paiement;
 use App\Models\parentmodel;
 use App\Models\notification;
@@ -188,9 +190,12 @@ class DemandeController extends Controller
         // Retrieve all children associated with the demande, the power of relations
         $children = $demande->getEnfants()->distinct('id')->get();
 
+        /**
+         * COLLECTION DE LA DATA
+         */
+        $data = DeviController::createDevis($demande_id, 'devis', false);
         // --->>> FOR ACTIVITES
         if ($demande->pack()->first() && !$demande->offre()->first()) {
-            $data = DeviController::createDevis($demande_id);
             $activiteStudents = $data['enfantsActivites'];
             foreach ($activiteStudents as $actStud) {
                 $child = $actStud['enfantData'];
@@ -232,8 +237,10 @@ class DemandeController extends Controller
         $demande->administrateur_id = (Auth::user())->administrateur->id;
         $demande->save();
 
-        // TODO : create recu
-
+        /* 
+        * CREATION DE REÇU 
+        */
+        $recu = DemandeController::createRecu($demande_id);
 
 
         // notifier le parent 
@@ -357,5 +364,142 @@ class DemandeController extends Controller
                                   'devis'=>$devis]);
     }
     
+    /**
+     * CREATION DE REÇU POUR LE PAIEMENT
+     */
+    protected static function createRecu($facture_id, $first = false)
+    {
+        $facture = facture::findOrFail($facture_id);
+        
+        // COLLECTION DE DATA
+        $data = DeviController::createDevis($facture->devi->demande->id, 'facture', false);
+        
+        
+        /** DATA DE NV REÇU */
+        $items = array();
+        $qte = 0;
+        $old_item = $data['enfantsActivites'][0];
+        $count = count($data['enfantsActivites']);
+        $new_item = [];
+        foreach($data['enfantsActivites'] as $key => $item)
+        {
+            $new_item['qte'] = $qte;
+            $new_item['activite'] = $item['activite'];
+            $new_item['tarif'] = $item['tarif'];
+
+            if($item['activite'] == $old_item['activite'])
+            {
+                $new_item['qte'] = ++$qte;
+            }
+            else
+            {
+                $items[] = $new_item;
+                $qte = 1;
+            }
+            if($key == $count - 1)
+                $items[] = $new_item;
+
+            
+            $old_item = $item;
+        }
+
+        // LE PREMIÈR REÇU
+        if($first)
+        {
+            /** TRAITEMENT DU PROCHIANE DATE DE PAIMENT */
+            switch($data['optionPaiment'])
+            {
+                case 'mensuel':
+                    $date_prochaine_paiement = Carbon::parse($facture->devi->demande->date_traitement)->addMonth();
+                    break;
+                case 'trimestriel':
+                    $date_prochaine_paiement = Carbon::parse($facture->devi->demande->date_traitement)->addMonths(3);
+                    break;
+                case 'semestriel':
+                    $date_prochaine_paiement = Carbon::parse($facture->devi->demande->date_traitement)->addMonths(6);
+                    break;
+                case 'annuel':
+                    $date_prochaine_paiement = Carbon::parse($facture->devi->demande->date_traitement)->addYear();
+                    break;
+            }
+
+            $traite = 1;
+            $total_traite = $data['nbrTraite'];
+        }
+        else
+        {
+            $old_recu = $facture->recus()->orderBy('created_at')->latest();
+    
+            /** TRAITEMENT DU PROCHIANE DATE DE PAIMENT */
+            switch($data['optionPaiment'])
+            {
+                case 'mensuel':
+                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochaine_paiement)->addMonth();
+                    break;
+                case 'trimestriel':
+                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochaine_paiement)->addMonths(3);
+                    break;
+                case 'semestriel':
+                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochaine_paiement)->addMonths(6);
+                    break;
+                case 'annuel':
+                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochaine_paiement)->addYear();
+                    break;
+            }
+
+
+            $traite = $old_recu->traite + 1;
+            $total_traite = $old_recu->total_traite;
+        }
+
+
+        $mydata = [
+            'serie' => 'R' . Carbon::now()->format('yWw') . $data['parent']->id . $data['demande']->id.'-'.($traite),
+            'date_paiement' => Carbon::now(),
+            'date_prochaine_paiement' => $date_prochaine_paiement->format('Y-m-d'),
+            'traite' => $traite,
+            'total_traite' => $total_traite,
+            'tarif_traite' => $data['tarif_traite'],
+            'parent' => $data['parent'],
+            'optionPaiment' => $data['optionPaiment'],
+            'items' => $items,
+            'TTC' => $data['TTC'],
+            'image' => $data['image'],
+        ];
+
+        
+        /**
+         * REÇU PDF
+         */
+
+        $html = view('pdfs.recuTemplate', $mydata)->render();
+
+        $pdf = App::make('snappy.pdf.wrapper'); 
+        $pdf->loadHTML($html)->output();
+        
+        $pdfPath = 'storage/pdfs/recus/'.$mydata['serie'].'.pdf';  
+                
+        // enregister localement
+        $pdf->save($pdfPath, true);
+
+        /**
+         * CREATION D'INSTANCE REÇU
+         */
+        $recu = Recu::create([
+            'date_paiement' => $mydata['date_paiement'],
+            'date_prochaine_paiement' => $date_prochaine_paiement->format('Y-m-d'),
+            'traite' => $traite,
+            'total_traite' => $total_traite,
+            'tarif_traite' => $data['tarif_traite'],
+            'facture_id' => $facture_id,
+            'recu_pdf' => $pdfPath,
+        ]);
+
+        return response()->json([
+            'message' => 'votre traite est bien payée',
+            'recu' => $recu,
+        ]);
+
+    }
     
 }

@@ -271,6 +271,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
 
     /** --- FACTURE - PAYEMENT --- */
     Route::post('/demandes/{demande}/paye',[DemandeController::class, 'payeDemande']);
+    Route::post('/demandes/{demande}/paye',);
 
 
     /** ---- MON PROFILE ---- */
@@ -295,7 +296,9 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
 Route::apiResource('devis', deviController::class);
 Route::apiResource('demandes', DemandeController::class);
 
-// Route::get('getDevis',[deviController::class, 'getDevis']);    // marche
+Route::get('getRecu',function(){
+    return view('pdfs.recuTemplate');
+});    // marche
 // Route::get('devis',[deviController::class, 'createDevis']);    // marche
 // Route::get('monPack',[PackController::class,'packPoussible']); // marche
 

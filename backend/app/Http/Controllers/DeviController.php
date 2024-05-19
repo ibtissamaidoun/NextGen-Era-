@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App;
+use Illuminate\Support\Facades\App;
 use Carbon\Carbon;
 use App\Models\devi;
 use App\Models\User;
@@ -368,32 +368,33 @@ class DeviController extends Controller
         /**
          * PREPARATION DE L'AFFICHAGE DES PRIX PAR O.P.
          */
-        switch ($demande->paiement()->first()->option_paiement) {
+        switch ($demande->paiement()->first()->option_paiement)
+        {
             case 'mensuel':
                 $period = $start->diffInMonths($end);
-                $prixOP = $prix['TTC'] / $period;
-                $prixOP = $prixOP . ' DH / mois';
+                $traite = $prix['TTC'] / $period;
+                $prixOP = $traite . ' DH / mois';
                 $periodMsg = $period . ' mois';
                 break;
-                case 'trimestriel':
+            case 'trimestriel':
                 $period = $start->diffInMonths($end) / 3;
-                $prixOP = $prix['TTC'] / $period;
-                $prixOP = $prixOP . ' DH / trimestre';
+                $traite = $prix['TTC'] / $period;
+                $prixOP = $traite . ' DH / trimestre';
                 $periodMsg = $period . ' trimestres';
                 break;
-                case 'semestriel':
-                    $period = $start->diffInMonths($end) / 6;
-                    $prixOP = $prix['TTC'] / $period;
-                    $prixOP = $prixOP . ' DH / semestre';
-                    $periodMsg = $period . ' semestres';
-                    break;
-                    case 'annuel':
-                        $period = $start->diffInYears($end);
-                        $prixOP = $prix['TTC'] / $period;
-                        $prixOP = $prixOP . ' DH / annee';
-                        $periodMsg = $period . ' annees';
-                        break;
-                    }
+            case 'semestriel':
+                $period = $start->diffInMonths($end) / 6;
+                $traite = $prix['TTC'] / $period;
+                $prixOP = $traite . ' DH / semestre';
+                $periodMsg = $period . ' semestres';
+                break;
+            case 'annuel':
+                $period = $start->diffInYears($end);
+                $traite = $prix['TTC'] / $period;
+                $prixOP = $traite . ' DH / annee';
+                $periodMsg = $period . ' annees';
+                break;
+        }
                     
         
         /**
@@ -422,6 +423,8 @@ class DeviController extends Controller
             'type' => $type,
             'prixOP' => $prixOP,
             'period' => $periodMsg,
+            'nbrTraite' => $period,
+            'tarif_traite' => $traite,
         ];
         
         /**
@@ -443,9 +446,6 @@ class DeviController extends Controller
                 $data = DeviController::generateDevis($demande_id, $data, 'facture');
                 unset($data['devis_id']);
             }
-        } else  // pour les factures et le overview de devis
-        {
-            unset($data['image'], $data['TTC'], $data['TVA'], $data['prixRemise'], $data['prixHT'], $data['serie'], $data['parent']);
         }
 
         return $data;
@@ -472,8 +472,8 @@ class DeviController extends Controller
         }
 
         // creer pdf
-        $pdf = \App::make('snappy.pdf.wrapper'); // !!!!! DON'T CHANGE THIS LINE, IT WORKS PERFECTLY FINE !!!!! ///
-        $output = $pdf->loadHTML($html)->output();
+        $pdf = App::make('snappy.pdf.wrapper'); // !!!!! DON'T CHANGE THIS LINE, IT WORKS PERFECTLY FINE !!!!! ///
+        $pdf->loadHTML($html)->output();
 
         /**
          * PDF PATH FOR DEVIS OR FACTURE
@@ -516,6 +516,7 @@ class DeviController extends Controller
             case 'FACTURE': $facture = facture::createOrFirst([
                                 'devi_id' => $data['devis_id'],
                                 'facture_pdf' => $data['pdfPath'],
+                                'serie' => $data['serie'],
                             ]);
                             $data['facture'] = $facture->id;
                             break;
@@ -906,18 +907,20 @@ class DeviController extends Controller
         return response()->json(['message' => 'votre '.strtolower($type).' supprimmeé avec succes.']);
     }
 
-
     /**
-     * Genérer une Facture REÇU + PDF 
+     * TELECHARGER LE REÇU D'UNE DEMANDE DONNÉE ET D'UNE TRAITE DONNÉE
      */
-    public function createRecu($demande_id)
+    public function downloadRecu($demande_id, $traite)
     {
-        $data = DeviController::createDevis($demande_id, 'facture');
+        $user = Auth::User();
+        $parent = $user->parentmodel;
+        $demande = $parent->demandes()->find($demande_id);
 
-        $facture = facture::findOrFail($data['facture'])->makeHidden(['created_at','updated_at']);
-        
-         return response()->json(['message' => 'Facture generated successfully for selected children in all activities in the offer',
-                                  'facture'=>$facture]);
+        $facture = $demande->devi->facture;
+        $recu = $facture->recus()->where('tarite', $traite)->first();
+
+        $recuPath = $recu->recu_pdf;
+        return response()->download($recuPath);
     }
 
 }
