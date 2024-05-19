@@ -2,22 +2,31 @@
 
 namespace Database\Factories;
 
+use App\Models\Facture;
+use App\Models\Devi;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\facture>
- */
 class FactureFactory extends Factory
 {
     /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Facture::class;
+
+    /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array
      */
-    public function definition(): array
+    public function definition()
     {
+        $deviId = Devi::inRandomOrder()->first()->id;
+        
         return [
-            //
+            'facture_pdf' => $this->faker->word . '.pdf',
+            'devi_id' => $deviId,
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Administrateur;
+use App\Models\User; // Ajoutez cette ligne pour importer la classe User
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AdministrateurFactory extends Factory
@@ -23,10 +24,13 @@ class AdministrateurFactory extends Factory
     {
         return [
             'user_id' => function () {
-                // Générez un user_id valide
-                return \App\Models\User::factory()->create()->user_id;
+                // Créer un utilisateur avec le rôle 'administrateur'
+                $user = User::factory()->create();
+                $user->role = 'admin';
+                $user->save();
+
+                return $user->id;
             },
         ];
     }
 }
-

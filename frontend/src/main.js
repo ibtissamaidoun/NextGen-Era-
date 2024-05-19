@@ -6,6 +6,7 @@ import "./assets/css/nucleo-icons.css";
 import "./assets/css/nucleo-svg.css";
 import ArgonDashboard from "./argon-dashboard";
 import axios from 'axios'
+//import http from '@/services/http';
 
 // Configuration global d'Axios
 const axiosInstance = axios.create({
