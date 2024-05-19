@@ -22,20 +22,25 @@ class PackController extends Controller
     public function store(Request $request)
     {
         // validation input ....
+        $fields=$request->validate([
+            'type'=> 'required|string',
+            'description'=> 'required|string',
+            'remise'=> 'required|integer|min:0|max:100',
+        ]);
 
         // donnes valides
-        if( ! pack::firstWhere('type',$request['type']) ) 
+        if( ! pack::firstWhere('type',$fields['type']) ) 
         {
             // nv pack non existant
             pack::create([
-                'type'=> $request['type'],
-                'description'=>$request['description'],
-                'remise'=> $request['remise']
+                'type'=> $fields['type'],
+                'description'=>$fields['description'],
+                'remise'=> $fields['remise']
             ]);
 
             return response()->json([
                 'message'=> 'Creation avec succes.',
-                'pack'=> pack::firstWhere('type',$request['type'])
+                'pack'=> pack::firstWhere('type',$fields['type'])
             ]);
         }
         else{
@@ -52,19 +57,23 @@ class PackController extends Controller
     public function update($pack_id, Request $request)
     {
         // validate input ...
-
+        $fields= $request->validate([
+            'type' => 'sometimes|required|string',
+            'description' => 'sometimes|required|string',
+            'remise' => 'sometimes|required|integer|min:0|max:100',
+        ]);
         //valide data
         if($pack = pack::find($pack_id))
         {
             // pack existe
-            if( !pack::where('type',$request['type'])->where('id','!=',$pack_id)->first())
+            if( !pack::where('type',$fields['type'])->where('id','!=',$pack_id)->first())
             {
                 // la modification du pack ne creer pas de occurence
 
                 $pack->update([
-                    'type'=> $request['type'],
-                    'description'=>$request['description'],
-                    'remise'=> $request['remise']
+                    'type'=> $fields['type'],
+                    'description'=>$fields['description'],
+                    'remise'=> $fields['remise']
                 ]);
     
                 return response()->json([

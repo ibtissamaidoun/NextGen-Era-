@@ -41,15 +41,13 @@ class ForgetPasswordNotification extends Notification implements ShouldQueue
      * @return MailMessage
      */
     public function toMail($notifiable)
-    {
-        $url = env('FRONTEND_URL', 'https://your-frontend-url.com') . '/reset-password?token=' . $this->token;
+{
+    $url = env('FRONTEND_URL', 'https://your-frontend-url.com') . '/reset-password?token=' . $this->token;
 
-        return (new MailMessage)
-            ->subject('Reset Your Password')
-            ->line('You are receiving this email because we received a password reset request for your account.')
-            ->action('Reset Password', $url)
-            ->line('If you did not request a password reset, no further action is required.');
-    }
+    return (new MailMessage)
+        ->subject('Réinitialisation de votre mot de passe')
+        ->view('emails.reset', ['url' => $url, 'token' => $this->token]);
+}
 
     /**
      * Get the array representation of the notification.

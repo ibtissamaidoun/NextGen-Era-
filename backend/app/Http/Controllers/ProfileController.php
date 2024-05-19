@@ -14,9 +14,17 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
+
     public function updateanimateur(Request $request)
     {
         $user = Auth::user();
+
+
+    public function updateanimateur(Request $request, $id)
+    {
+       try{
+       $user = User::where('role', 'animateur')->findOrFail($id);
+
 
         $request->validate([
             'nom' => 'sometimes|required|string',
@@ -42,7 +50,7 @@ class ProfileController extends Controller
         ]);
 
         DB::beginTransaction();
-        try {
+
             // Update user information
             $userData = $request->only(['nom', 'prenom', 'email', 'telephone_portable', 'telephone_fixe']);
             $user->update($userData);
@@ -66,7 +74,11 @@ class ProfileController extends Controller
 
     public function updateParent(Request $request)
     {
+
         $user = auth::user();
+
+        try {
+        $user = User::where('role', 'parent')->findOrFail($id);
 
         $request->validate([
             'nom' => 'sometimes|required|string',
@@ -78,7 +90,7 @@ class ProfileController extends Controller
         ]);
 
         DB::beginTransaction();
-        try {
+
             $userData = $request->only(['nom', 'prenom', 'email', 'telephone_portable', 'telephone_fixe']);
             $user->update($userData);
 
@@ -97,7 +109,9 @@ class ProfileController extends Controller
 
     public function updateadmin(Request $request)
     {
+
         $user = Auth::user();
+
 
         $request->validate([
             'nom' => 'sometimes|required|string',
@@ -108,7 +122,7 @@ class ProfileController extends Controller
         ]);
 
         DB::beginTransaction();
-        try {
+
             $userData = $request->only(['nom', 'prenom', 'email', 'telephone_portable', 'telephone_fixe']);
             $user->update($userData);
 
@@ -122,6 +136,7 @@ class ProfileController extends Controller
 
     public function updatePhoto(Request $request)
 {
+    try {
     // Retrieve the authenticated user
     $user = $request->user();
 
@@ -131,7 +146,7 @@ class ProfileController extends Controller
     ]);
 
     DB::beginTransaction();
-    try {
+
         // Handle photo upload
         if ($request->hasFile('photo')) {
             if ($user->photo_path) {
@@ -165,14 +180,16 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request)
     {
+
         $user = Auth::User();
         
+
         $request->validate([
             'mot_de_passe' => 'required|string|min:8|confirmed',
         ]);
 
         DB::beginTransaction();
-        try {
+
             $user->update([
                 'mot_de_passe' => Hash::make($request->mot_de_passe),
             ]);
@@ -240,14 +257,17 @@ class ProfileController extends Controller
         return response()->json(['profile' => $profileData]);
     }
 
-    
+
     //delete for all types of users
     public function deleteprofile()
     {
         $user = auth()->user(); // Find the user by ID
 
+
+
+
         DB::beginTransaction();
-        try {
+
             // Delete the user from their associated role table based on their role
             switch ($user->role) {
                 case 'animateur':

@@ -1,27 +1,30 @@
 <template>
     <div class="card">
-      <div class="card-header pb-0">
-        <h6 class="text-center">Gestion des Animateurs</h6>
+      <div class="card-header pb-0 table-responsive p-6">
+        <h4 class="text-center mb-4">Tables des heures</h4>
       </div>
       <div class="card-body px-0 pt-0 pb-2">
-        <div class="table-responsive p-0">
-          <table class="table align-items-center mb-0">
+        <div class="table-responsive p-0" >
+          <table class="table align-items-center  mb-0">
             <thead>
               <tr>
+                <th  class="text-uppercase text-secondary opacity-7">jour </th>
                 <th
                   class="text-uppercase text-secondary opacity-7"
                 >
-                  Administrateurs
+                
+                  heures debut
+                </th>
+                <th
+                  class="text-uppercase text-secondary opacity-7"
+                >
+                
+                  Heures fin 
                 </th>
                 <th
                   class="text-center  text-secondary  opacity-7"
                 >
-                  Statuts
-                </th>
-                <th
-                  class="text-center  text-secondary  opacity-7"
-                >
-                  Employés
+                  Choisir
                 </th>
                 
                 <th class="text-secondary opacity-7"> Editer</th>
@@ -29,286 +32,44 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <div class="d-flex px-2 py-1 align-items-center">
-                    <div>
-                      <img
-                        src="../../assets/img/team-2.jpg"
-                        class="avatar avatar-sm me-3"
-                        alt="user1"
-                      />
-                    </div>
-                    <div class="d-flex flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">John Michael</h6>
-                      <p class="text-xs text-secondary mb-0">
-                        john@creative-tim.com
-                      </p>
-                    </div>
+              <tr v-for="(activity, index) in horaires" :key="index" class="bg-gray-100">
+                <td class="text-center">
+                  <div>
+                    <h6>{{ activity.jour_semaine }}</h6>
                   </div>
                 </td>
-                
-                <td class="align-middle text-center text-sm">
-                  <span class="badge badge-sm bg-gradient-success">En ligne</span>
-                </td>
-                <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold"
-                    >23/04/18</span
-                  >
-                </td>
-                <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Edit</a
-                  >
-                </td>
-                <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Delete</a
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex px-2 py-1">
-                    <div>
-                      <img
-                        src="../../assets/img/team-3.jpg"
-                        class="avatar avatar-sm me-3"
-                        alt="user2"
-                      />
-                    </div>
-                    <div class="d-flex flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">Alexa Liras</h6>
-                      <p class="text-xs text-secondary mb-0">
-                        alexa@creative-tim.com
-                      </p>
-                    </div>
+                <td class="text-center">
+                  <div>
+                    <h6>{{ activity.heure_debut }}</h6>
                   </div>
                 </td>
-                
-                <td class="align-middle text-center text-sm">
-                  <span class="badge badge-sm bg-gradient-secondary"
-                    >Hors ligne</span
-                  >
-                </td>
-                <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold"
-                    >11/01/19</span
-                  >
-                </td>
-                <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Edit</a
-                  >
-                </td>
-                <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Delete</a
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex px-2 py-1">
-                    <div>
-                      <img
-                        src="../../assets/img/team-4.jpg"
-                        class="avatar avatar-sm me-3"
-                        alt="user3"
-                      />
-                    </div>
-                    <div class="d-flex flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">Laurent Perrier</h6>
-                      <p class="text-xs text-secondary mb-0">
-                        laurent@creative-tim.com
-                      </p>
-                    </div>
+                <td class="text-center">
+                  <div>
+                    <h6>{{ activity.heure_fin }}</h6>
                   </div>
                 </td>
-                
-                <td class="align-middle text-center text-sm">
-                  <span class="badge badge-sm bg-gradient-success">En ligne</span>
-                </td>
                 <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold"
-                    >19/09/17</span
-                  >
+                  <i class="ni ni-check-bold" style="color:orange"></i>
                 </td>
-                <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Edit</a
-                  >
-                </td>
-                <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Delete</a
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex px-2 py-1">
-                    <div>
-                      <img
-                        src="../../assets/img/team-3.jpg"
-                        class="avatar avatar-sm me-3"
-                        alt="user4"
-                      />
-                    </div>
-                    <div class="d-flex flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">Michael Levi</h6>
-                      <p class="text-xs text-secondary mb-0">
-                        michael@creative-tim.com
-                      </p>
-                    </div>
-                  </div>
-                </td>
+               
                 
-                <td class="align-middle text-center text-sm">
-                  <span class="badge badge-sm bg-gradient-success">En ligne</span>
-                </td>
-                <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold"
-                    >24/12/08</span
-                  >
-                </td>
                 <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Edit</a
-                  >
-                </td>
+
+                <button
+                  class="btn btn-link text-danger text-gradient px-3 mb-0"
+                 
+                >
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </button>
+              
+              </td>
                 <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Delete</a
+                  <button
+                  class="btn btn-link text-danger text-gradient px-3 mb-0"
+                 @click="deleteAnimateur( activity.id,index)"
                   >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex px-2 py-1">
-                    <div>
-                      <img
-                        src="../../assets/img/team-2.jpg"
-                        class="avatar avatar-sm me-3"
-                        alt="user5"
-                      />
-                    </div>
-                    <div class="d-flex flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">Richard Gran</h6>
-                      <p class="text-xs text-secondary mb-0">
-                        richard@creative-tim.com
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                
-                <td class="align-middle text-center text-sm">
-                  <span class="badge badge-sm bg-gradient-secondary"
-                    >Hors ligne</span
-                  >
-                </td>
-                <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold"
-                    >04/10/21</span
-                  >
-                </td>
-                <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Edit</a
-                  >
-                </td>
-                <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Delete</a
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex px-2 py-1">
-                    <div>
-                      <img
-                        src="../../assets/img/team-4.jpg"
-                        class="avatar avatar-sm me-3"
-                        alt="user6"
-                      />
-                    </div>
-                    <div class="d-flex flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">Miriam Eric</h6>
-                      <p class="text-xs text-secondary mb-0">
-                        miriam@creative-tim.com
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                
-                <td class="align-middle text-center text-sm">
-                  <span class="badge badge-sm bg-gradient-secondary"
-                    >Hors ligne</span
-                  >
-                </td>
-                <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold"
-                    >14/09/20</span
-                  >
-                </td>
-                <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Edit</a
-                  >
-                </td>
-                <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                    >Delete</a
-                  >
+                  <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
+                </button>
                 </td>
               </tr>
             </tbody>
@@ -317,4 +78,49 @@
       </div>
     </div>
   </template>
+
+  <style scoped>
+  h4{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color:orange;
+  }
+  h6{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color:#000080;
+  }
+  </style>
+    <script>
+    import axiosInstance from '@/main';
+
+    export default {
+      data() {
+        return {
+          horaires: []
+        }},
+      
+        async created(){
+          try {
+          let response = await axiosInstance.get("animateur/horaires");
+          this.horaires = response.data;
+          console.log(response.data);
+        }
+        catch (error) {
+      console.error('Erreur lors de la récupération des horaires:', error);
+    }
+    },
+    
+        
+    methods: {
+    async deleteAnimateur(horaire_id, index) {
+
+      try {
+        this.horaires.splice(index, 1); // Supprime l'entrée du tableau local
+        await axiosInstance.delete("animateur/horaires/"+horaire_id); // Remplacez par l'URL correcte
+        
+      } catch (error) {
+        console.error('Erreur lors de la suppression de l\'animateur:', error);
+      }}}}
   
+   
+   
+    </script>

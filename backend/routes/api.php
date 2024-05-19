@@ -1,25 +1,26 @@
 <?php
 
 use App\Models\User;
+use App\Enums\TokenAbility;
 use Illuminate\Http\Request;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\deviController;
 use App\Http\Controllers\PackController;
 use App\Http\Controllers\offreController;
+use App\Http\Controllers\EnfantController;
+use App\Http\Controllers\ForgotController;
+use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\HoraireController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActiviteController;
 use App\Http\Controllers\paiementController;
 use App\Http\Controllers\AnimateurController;
 use App\Http\Controllers\AnimateursController;
 use App\Http\Controllers\ParentmodelController;
-use App\Http\Controllers\AdministrateurController;
-use App\Http\Controllers\DemandeController;
-use App\Http\Controllers\deviController;
-use App\Http\Controllers\EnfantController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ForgotController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdministrateurController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,10 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forget', [ForgotController::class, 'forget']);
 Route::post('/reset', [ForgotController::class, 'reset']);
+Route::post('/refresh-token', [AuthController::class, 'refreshToken'])->middleware([
+    'auth:sanctum',
+    'ability:' . TokenAbility::ISSUE_ACCESS_TOKEN->value,
+]);
 
 //route qui necessite l'authentification
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -53,6 +58,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 // Routes réservées aux parents
 Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->group(function () {
+
 
     /** ---- MANIPULATION DES ENFANTS ---- */
     Route::prefix('enfants')->group(function ()
@@ -129,6 +135,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
         /** --- SUUPRIMER LES PDFs ---- TYPE = 'DEVIS' OR 'FACTURE' ---- */  
         Route::delete('{demande}/{type}/delete',[DeviController::class, 'deletePDF']);
     });
+
 
 });
 
@@ -263,8 +270,23 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
     /** --- OFFRES --- */
     Route::apiResource('offres', offreController::class);
 
+
     /** --- CONSULTATION DES ENFANTS --- */
     Route::apiResource('enfants', EnfantController::class)->only(['index', 'show']);
+
+    //these two route are disabled , no use , no value ,no logic
+    // Define route for attaching activities to an offer
+    //Route::put('/offers/{offerId}/attach-activities', [OffreController::class, 'attachActivities']);
+
+    // Define route for detaching activity from offer
+    //Route::put('/offers/{offerId}/detach-activity', [OffreController::class, 'detachActivity']);
+
+    //available-activities with available animators, remember that we need also to filter with domaine competence
+    //check for the activity with two horaires
+    Route::get('/available-activities', [ActiviteController::class, 'getAvailableActivities']);
+    Route::get('/available-activities/{activity_id}/available-animators', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
+    Route::post('/available-activities/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
+
 
     //i need to adjust theese function to generate motife for refuse
     Route::get('/demandes', [AdministrateurController::class, 'getdemandes']);
@@ -296,11 +318,17 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
 Route::apiResource('devis', deviController::class);
 Route::apiResource('demandes', DemandeController::class);
 
+
 Route::get('getRecu',function(){
     return view('pdfs.recuTemplate');
 });    // marche
-// Route::get('devis',[deviController::class, 'createDevis']);    // marche
-// Route::get('monPack',[PackController::class,'packPoussible']); // marche
+
+Route::get('getDevis',[deviController::class, 'getDevis']); //
+Route::get('devis',[deviController::class, 'createDevis']); // marche
+Route::get('monPack',[PackController::class,'packPoussible']); // marche
+
+
+
 
 //------test----taha----ostora----//
 

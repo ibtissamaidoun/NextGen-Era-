@@ -11,10 +11,14 @@ use App\Models\offre;
 use App\Models\enfant;
 use App\Models\demande;
 use App\Models\facture;
+
 use App\Models\activite;
 use App\Models\parentmodel;
 use App\Models\notification;
 use Illuminate\Http\Request;
+
+use App\Models\administrateur;
+
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -33,8 +37,6 @@ class DeviController extends Controller
      * 
      * Pour le Parent & Admin
      */
-
-
     public function index()
     {
         $user = Auth::User();
@@ -134,7 +136,6 @@ class DeviController extends Controller
 
     // ------ Methodes appelable dans autre Controller ------ //
 
-
     /**
      * Affichage de detail d'un devis associer a une demande et un parent
      * for the admin and the parent it self
@@ -152,7 +153,6 @@ class DeviController extends Controller
 
         return $data->toArray();
     }
-
 
     /**
      * Calcule de prix d'un devis
@@ -274,7 +274,6 @@ class DeviController extends Controller
             $prixRemise = $prixHT * (1 - $offre->remise / 100);
         }
 
-
         $TTC = $prixRemise * (1 + $tva / 100);
 
         return [
@@ -351,25 +350,20 @@ class DeviController extends Controller
         $imgData = file_get_contents($path);
         $img = 'data:image/' . $typeImg . ';base64,' . base64_encode($imgData);
 
-
         /**
          * AFFICHAGE DE PRIX PAR RAPPORT À L'OPTION DE PAIEMENT
          */
         if ($offre) {
             $start = Carbon::parse($offre->date_debut);
             $end = Carbon::parse($offre->date_fin);
-           
-        }
-        elseif ($pack)
-        {
+        } elseif ($pack) {
             $start = Carbon::parse($activites[0]->date_debut_etud);
             $end = Carbon::parse($activites[0]->date_fin_etud);
         }
         /**
          * PREPARATION DE L'AFFICHAGE DES PRIX PAR O.P.
          */
-        switch ($demande->paiement()->first()->option_paiement)
-        {
+        switch ($demande->paiement()->first()->option_paiement) {
             case 'mensuel':
                 $period = $start->diffInMonths($end);
                 $traite = $prix['TTC'] / $period;
@@ -395,13 +389,12 @@ class DeviController extends Controller
                 $periodMsg = $period . ' annees';
                 break;
         }
-                    
-        
+
         /**
          * CALCULE DE DATE D'ÉXPIRATION DE DEVIS APRES 24 HEURES +1 FOR AJUSTMENT
          */
-        $expiration = Carbon::parse($demande->date_demande.' '.date('H:i'))->addHours(25)->format('Y-m-d H:i');
-        
+        $expiration = Carbon::parse($demande->date_demande . ' ' . date('H:i'))->addHours(25)->format('Y-m-d H:i');
+
         //dd($expiration);
         /**
          * LA DATA POUR GÉNÉRER LE PDF POUR LE DEVIS ET LA FACTURE
@@ -426,21 +419,17 @@ class DeviController extends Controller
             'nbrTraite' => $period,
             'tarif_traite' => $traite,
         ];
-        
+
         /**
          * CODE DE GENERATION DE PDF SI STATUT = TRUE, SINON JUST RETOURNE LA DATA
          */
-        if($status)
-        {
-            if(strtoupper($type) == 'DEVIS')
-            {
+        if ($status) {
+            if (strtoupper($type) == 'DEVIS') {
                 $data = DeviController::generateDevis($demande_id, $data);
-            }
-            elseif(strtoupper($type) == 'FACTURE')
-            {
+            } elseif (strtoupper($type) == 'FACTURE') {
                 $devis = $demande->devi;
                 $data['devis_id'] = $devis->id;
-                $data['serie'] = 'F'.Carbon::now()->format('yWw').$parent->id.$demande->id;
+                $data['serie'] = 'F' . Carbon::now()->format('yWw') . $parent->id . $demande->id;
                 /** EXPIRATION DE FACTURE APRES 15 JOURES */
                 $data['expiration'] = Carbon::parse($demande->updated_at)->addDays(15)->format('Y-m-d H:i');
                 $data = DeviController::generateDevis($demande_id, $data, 'facture');
@@ -478,15 +467,15 @@ class DeviController extends Controller
         /**
          * PDF PATH FOR DEVIS OR FACTURE
          */
-        switch(strtoupper($type))
-        {
-            case 'DEVIS': 
-                $pdfPath = 'storage/pdfs/devis/'.$data['serie'].'.pdf';  
+        switch (strtoupper($type)) {
+            case 'DEVIS':
+                $pdfPath = 'storage/pdfs/devis/' . $data['serie'] . '.pdf';
                 break;
             case 'FACTURE':
-                $pdfPath = 'storage/pdfs/factures/'.$data['serie'].'.pdf';  
+                $pdfPath = 'storage/pdfs/factures/' . $data['serie'] . '.pdf';
                 break;
         };
+
         // enregister localement
         $pdf->save($pdfPath, true);
 
@@ -499,34 +488,35 @@ class DeviController extends Controller
         /**
          * CREATION D'UNE INSTANCE DE DEVIS OU FACTURE
          */
-        switch(strtoupper($type))
-        {
-            case 'DEVIS': $devis = Devi::createOrFirst([
-                                'tarif_ht' => $data['prixHT'],
-                                'tarif_ttc' => $data['TTC'],
-                                'tva' => $data['TVA'],
-                                'devi_pdf' => $data['pdfPath'],
-                                'parentmodel_id' => $data['parent']->parentmodel->id,
-                                'demande_id' => $demande_id,
-                                //'date_expiration'=>$expiration,
-                            ]);
-                            $data['devis'] = $devis->id;
-                            break;
-            
-            case 'FACTURE': $facture = facture::createOrFirst([
-                                'devi_id' => $data['devis_id'],
-                                'facture_pdf' => $data['pdfPath'],
-                                'serie' => $data['serie'],
-                            ]);
-                            $data['facture'] = $facture->id;
-                            break;
+        switch (strtoupper($type)) {
+            case 'DEVIS':
+                $devis = Devi::createOrFirst([
+                    'tarif_ht' => $data['prixHT'],
+                    'tarif_ttc' => $data['TTC'],
+                    'tva' => $data['TVA'],
+                    'devi_pdf' => $data['pdfPath'],
+                    'parentmodel_id' => $data['parent']->parentmodel->id,
+                    'demande_id' => $demande_id,
+                    //'date_expiration'=>$expiration,
+                ]);
+                $data['devis'] = $devis->id;
+                break;
+
+            case 'FACTURE':
+                $facture = facture::createOrFirst([
+                    'devi_id' => $data['devis_id'],
+                    'facture_pdf' => $data['pdfPath'],
+                    'serie' => $data['serie'],
+                ]);
+                $data['facture'] = $facture->id;
+                break;
         }
 
         return $data;
     }
 
     /**
-     * 1. the parent  chooses childrens to enroll after he clicked on the offer
+     * 1. the parent  chooses childrens to enroll after he clicked on the offer 
      * 2. we retrieve the activities attached to the offer
      * 3.retrieve the paiement id
      * 4. retrieve the auth parent
@@ -584,7 +574,6 @@ class DeviController extends Controller
                 $data = $this->createDevis($demande->id);
                 $devis = Devi::findOrFail($data['devis'])->makeHidden(['created_at', 'updated_at']);
 
-
                 return response()->json([
                     'message' => 'Devis generated successfully for selected children in all activities in the offer',
                     'devis' => $devis
@@ -634,35 +623,33 @@ class DeviController extends Controller
         $demande->statut = 'en cours';
         $demande->save();
 
-        
         $data = DeviController::createDevis($demande->id, 'facture');
 
-        $facture = facture::findOrFail($data['facture'])->makeHidden(['created_at','updated_at']);
-    
+        $facture = facture::findOrFail($data['facture'])->makeHidden(['created_at', 'updated_at']);
+
         // Generate a notification for all admins
-        $notification = new  notification([
+        $notification = new notification([
             'type' => 'Devis Validated',
-            'contenu' => 'A new devis has been validated of the user Nº'.$demande->parentmodel->id,
+            'contenu' => 'A new devis has been validated of the user Nº' . $demande->parentmodel->id,
         ]);
         $notification->save();
         $admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin)
             $notification->users()->attach($admin->id, ['date_notification' => date('Y-m-d')]);
 
-
         return response()->json([
             'message' => 'devis validee avec succes. Facture generated successfully for selected children in all activities in the offer',
-            'facture'=>$facture
+            'facture' => $facture
         ]);
     }
     public function refuseDevis($demande_id)
     {
         $user = Auth::User();
         $parent = $user->parentmodel;
-        
+
         $demande = $parent->demandes()->findOrFail($demande_id);
         $demande->update(['statut' => 'refuse']);
-        
+
         $devis = $demande->devi;
         $devis->statut = 'refuse';
         $devis->save();
@@ -697,10 +684,12 @@ class DeviController extends Controller
     {
         $data = DeviController::createDevis($demande_id, 'facture');
 
-        $facture = facture::findOrFail($data['facture'])->makeHidden(['created_at','updated_at']);
-        
-         return response()->json(['message' => 'Facture generated successfully for selected children in all activities in the offer',
-                                  'facture'=>$facture]);
+        $facture = facture::findOrFail($data['facture'])->makeHidden(['created_at', 'updated_at']);
+
+        return response()->json([
+            'message' => 'Facture generated successfully for selected children in all activities in the offer',
+            'facture' => $facture
+        ]);
     }
 
     /**
@@ -730,11 +719,10 @@ class DeviController extends Controller
                 'required',
                 'exists:enfants,id',
                 Rule::exists('enfants', 'id')->where(function ($query) use ($parent_id) {
-                    $query->where('parentmodel_id', $parent_id);
+                    $query->where('parentmodel_id', $_parent_id);
                 }),
             ],
         ]);
-
 
         foreach ($validatedData['enfants'] as $enfant_id) {
             $enfant = enfant::findOrFail($enfant_id);
@@ -748,7 +736,6 @@ class DeviController extends Controller
         return response()->json([
             'message' => 'article ajouteé a votre panier avec succes',
             'Panier' => DeviController::getPanier($parent_id),
-
         ]);
     }
 
@@ -780,7 +767,6 @@ class DeviController extends Controller
             ]);
         }
 
-
         return response()->json([
             'message' => 'Panier Modifier avec succes',
             'Panier' => DeviController::getPanier($parent->id),
@@ -811,7 +797,6 @@ class DeviController extends Controller
      */
     protected static function getPanier($parent_id)
     {
-
         $panier = [];
         foreach (parentmodel::find($parent_id)->getActivites()->select(['id', 'titre'])->distinct('id')->get()->makeHidden('pivot') as $activite) {
             $enfants = array();
@@ -841,7 +826,6 @@ class DeviController extends Controller
      */
     public function SupprimerPanier()
     {
-
         $parent = Auth::user()->parentmodel;
 
         // ya rbi tkhdm :) // khedmat yalili :]
@@ -857,7 +841,7 @@ class DeviController extends Controller
      * 1- creation de demande
      * 2- remplire la table pivot 'enfant_demande_activite' ==> PGSQL
      */
-    public  function validerPanier()
+    public function validerPanier()
     {
         $parent = Auth::user()->parentmodel;
         $activites = $parent->getActivites()->distinct('id')->get();
@@ -884,13 +868,12 @@ class DeviController extends Controller
 
     /**
      * DELETE DEVIS/FACTURE WITH PDF
-    */
+     */
     public static function deletePDF($demande_id, $type = 'Devis')
     {
         $devis = Demande::findOrFail($demande_id)->devi;
 
-        switch(strtoupper($type))
-        {
+        switch (strtoupper($type)) {
             case 'DEVIS':
                 $pdfPath = $devis->devi_pdf;
                 Storage::disk('storage')->delete($pdfPath);
@@ -901,10 +884,10 @@ class DeviController extends Controller
                 $pdfPath = $facture->facture_pdf;
                 Storage::disk('storage')->delete($pdfPath);
                 $facture->delete();
-                break;      
+                break;
         }
 
-        return response()->json(['message' => 'votre '.strtolower($type).' supprimmeé avec succes.']);
+        return response()->json(['message' => 'votre ' . strtolower($type) . ' supprimmeé avec succes.']);
     }
 
     /**
@@ -922,5 +905,4 @@ class DeviController extends Controller
         $recuPath = $recu->recu_pdf;
         return response()->download($recuPath);
     }
-
 }

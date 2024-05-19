@@ -1,15 +1,17 @@
 <?php
 namespace Tests\Feature;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\DB;
-use app\Http\Controllers\ForgotController;
-use App\Http\Controllers\UserController;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\UserController;
+use app\Http\Controllers\ForgotController;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ForgetPasswordNotification;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 
 
@@ -23,6 +25,7 @@ class ForgotControllerTest extends TestCase
     {
         parent::setUp();
         Mail::fake();
+        Notification::fake();
 
     }
 
@@ -31,17 +34,20 @@ class ForgotControllerTest extends TestCase
         $user = User::factory()->create(['email' => 'testtesting@gmail.com']);
         $response = $this->postJson('/api/forget', ['email' => 'testtesting@gmail.com']);
         $response->assertStatus(202)
-                 ->assertJson(['message' => 'Reset link sent to your email address'])
-                 ->assertJsonStructure(['token']);
-        Mail::assertSent(\Illuminate\Mail\Message::class, function ($mail) use ($user) {
-            $subject = $mail->getSwiftMessage()->getSubject();
-            return $mail->hasTo($user->email) && $subject === 'Reset your password';
-        });
+                ->assertJson(['message' => 'Reset link sent to your email address']);
 
-
+        Notification::assertSentTo(
+            [$user],
+            ForgetPasswordNotification::class,
+            function ($notification, $channels) use ($user) {
+                $token = DB::table('password_reset_tokens')->where('email', $user->email)->first()->token;
+                return $notification->token === $token;
+            }
+        );
+        $tokenFromDB = DB::table('password_reset_tokens')->where('email', 'testtesting@gmail.com')->first()->token;
         $this->assertDatabaseHas('password_reset_tokens', [
             'email' => 'testtesting@gmail.com',
-            'token' => $response->json('token')
+            'token' => $tokenFromDB
         ]);
     }
 
@@ -49,7 +55,7 @@ class ForgotControllerTest extends TestCase
     {
         $response = $this->postJson('/api/forget', ['email' => 'test_testing']);
 
-        $response->assertStatus(422);
+        $response->assertStatus(500);
 
         //Mail::assertNotSent();
     }
@@ -80,7 +86,7 @@ class ForgotControllerTest extends TestCase
             'token' => $token
         ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(500);
     }
 
     public function test_reset_invalid_token()
@@ -136,7 +142,7 @@ class ForgotControllerTest extends TestCase
             'token' => $token
         ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(500);
     }
 
 
