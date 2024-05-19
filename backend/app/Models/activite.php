@@ -12,7 +12,7 @@ class activite extends Model
 {
     use HasFactory;
 
-    
+    protected $table = 'activites';
     protected $fillable = ['titre', 'description','objectifs','image_pub','lien_youtube','type_activite','domaine_activite','fiche_pdf','administrateur_id',
                             'age_max',
                             'age_min',

@@ -2,22 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\administrateur;
 use App\Models\User;
 use App\Models\animateur;
 use App\Models\parentmodel;
 use Illuminate\Http\Request;
+use App\Models\administrateur;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
 
+    public function updateanimateur(Request $request)
+    {
+        $user = Auth::user();
+
+
     public function updateanimateur(Request $request, $id)
     {
-        try{
-        $user = User::where('role', 'animateur')->findOrFail($id);
+       try{
+       $user = User::where('role', 'animateur')->findOrFail($id);
+
 
         $request->validate([
             'nom' => 'sometimes|required|string',
@@ -50,7 +57,7 @@ class ProfileController extends Controller
 
             // Update the domaine competence if provided
             if ($request->has('domaine_competence')) {
-                $animateur = animateur::where('user_id', $id)->firstOrFail();
+                $animateur = animateur::where('user_id', $user->id)->firstOrFail();
                 $animateur->update(['domaine_competence' => $request->domaine_competence]);
             }
 
@@ -65,8 +72,11 @@ class ProfileController extends Controller
         }
     }
 
-    public function updateParent(Request $request, $id)
+    public function updateParent(Request $request)
     {
+
+        $user = auth::user();
+
         try {
         $user = User::where('role', 'parent')->findOrFail($id);
 
@@ -84,23 +94,24 @@ class ProfileController extends Controller
             $userData = $request->only(['nom', 'prenom', 'email', 'telephone_portable', 'telephone_fixe']);
             $user->update($userData);
 
-            $parent = parentmodel::where('user_id', $id)->firstOrFail();
+            $parent = parentmodel::where('user_id', $user->id)->firstOrFail();
             if ($request->has('fonction')) {
                 $parent->update(['fonction' => $request->fonction]);
             }
 
             DB::commit();
-            return response()->json(['user' => $user, 'message' => 'Parent updated successfully']);
+            return response()->json(['user' => $user->with('parentmodel')->find($user->id), 'message' => 'Parent updated successfully']);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json(['message' => 'Failed to update parent: ' . $e->getMessage()], 409);
         }
     }
 
-    public function updateadmin(Request $request, $id)
+    public function updateadmin(Request $request)
     {
-        try {
-        $user = User::where('role', 'admin')->findOrFail($id);
+
+        $user = Auth::user();
+
 
         $request->validate([
             'nom' => 'sometimes|required|string',
@@ -127,7 +138,8 @@ class ProfileController extends Controller
 {
     try {
     // Retrieve the authenticated user
-    $user = User::find(auth()->id());
+    $user = $request->user();
+
     // Validate the photo input
     $request->validate([
         'photo' => 'required|image|max:2048', // Ensure the uploaded file is an image and within size limits
@@ -166,10 +178,11 @@ class ProfileController extends Controller
     }
 }
 
-    public function updatePassword(Request $request, $id)
+    public function updatePassword(Request $request)
     {
-        try {
-        $user = User::findOrFail($id);
+
+        $user = Auth::User();
+        
 
         $request->validate([
             'mot_de_passe' => 'required|string|min:8|confirmed',
@@ -245,11 +258,13 @@ class ProfileController extends Controller
     }
 
 
-//delete for all types of users
-    public function deleteprofile($id)
+    //delete for all types of users
+    public function deleteprofile()
     {
-        try {
-        $user = User::findOrFail($id); // Find the user by ID
+        $user = auth()->user(); // Find the user by ID
+
+
+
 
         DB::beginTransaction();
 

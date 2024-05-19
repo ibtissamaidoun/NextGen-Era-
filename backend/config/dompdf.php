@@ -279,8 +279,8 @@ return array(
          */
         "enable_html5_parser" => true,
 
-        'fontDir' => storage_path('fonts/Ford Antenna TTF'),  // This is where your fonts are stored.
-        'fontCache' => storage_path('fonts/Ford Antenna TTF'),  // This is where font metrics are cached.
+        'fontDir' => public_path('fonts/Ford Antenna TTF'),  // This is where your fonts are stored.
+        'fontCache' => public_path('fonts/Ford Antenna TTF'),  // This is where font metrics are cached.
 
         'font_families' => array(
             'Ford Antenna' => [

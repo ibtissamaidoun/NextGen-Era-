@@ -18,8 +18,13 @@ class OffreController extends Controller
      */
     public function index()
     {
+
+        $offres= offre::select('id','titre','remise','date_debut','date_fin')->get();
+        return response()->json(['offre'=>$offres]);
+
         $offres = Offre::select('id', 'titre', 'remise', 'date_debut', 'date_fin')->get();
         return response()->json(['offre' => $offres]);
+
     }
 
     public function show($id)

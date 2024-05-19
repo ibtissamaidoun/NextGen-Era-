@@ -207,13 +207,13 @@ public function update(Request $request, $id)
     /**
      * Display the edt for the choosen child
     */
-    public function EDT(Request $request)
+    public function EDT($enfant_id)
     {
         $user = Auth::user();
         $parent = $user->parentmodel;
-        // Retrieve the child_id from the request
-        $child_id = $request->child_id;
-        $child = $parent->enfants()->find($child_id);
+        
+        // Retrieve the enfant_id from the request
+        $child = $parent->enfants()->find($enfant_id);
         $activites = $child->activites()->select(['id','titre'])->get();
         $data = [];
         foreach($activites as $activite)

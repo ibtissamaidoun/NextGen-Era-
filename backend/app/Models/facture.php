@@ -10,7 +10,7 @@ class facture extends Model
 {
     use HasFactory;
 
-    protected $fillable = [ 'facture_pdf','devi_id'];
+    protected $fillable = [ 'facture_pdf','devi_id','serie'];
 
 
     public function devi(): belongsTo
