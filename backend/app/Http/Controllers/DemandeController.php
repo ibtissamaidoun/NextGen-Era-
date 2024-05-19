@@ -240,7 +240,7 @@ class DemandeController extends Controller
         /* 
         * CREATION DE REÇU 
         */
-        $recu = DemandeController::createRecu($demande_id);
+        $recu = DemandeController::createRecu($demande_id, true);
 
 
         // notifier le parent 

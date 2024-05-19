@@ -271,7 +271,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
 
     /** --- FACTURE - PAYEMENT --- */
     Route::post('/demandes/{demande}/paye',[DemandeController::class, 'payeDemande']);
-    Route::post('/demandes/{demande}/paye',);
+    Route::post('/factures/{facture}/paye/traite',[DemandeController::class, 'createRecu']);
 
 
     /** ---- MON PROFILE ---- */
