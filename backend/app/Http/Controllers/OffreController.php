@@ -4,13 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Offre;
 use App\Models\Activite;
-<<<<<<< HEAD
-=======
 use App\Models\Administrateur;
->>>>>>> 7394a7d9a0b35560dcce5aa48ea23508b6199f40
 use App\Models\Paiement;
 use Illuminate\Http\Request;
-use App\Models\Administrateur;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
@@ -42,16 +38,9 @@ class OffreController extends Controller
             return response()->json(['message' => 'Offre non trouvée'], 404);
         }
         $offre->delete();
-<<<<<<< HEAD
         return response()->json(['message' => 'Offre deleted successfully'], 204);
     }
 
-    public function store(Request $request)
-=======
-        return response()->json(['message' => 'Offre deleted successfully']);
-    }
-
-<<<<<<< HEAD
     public function attachactivity(Request $request, $offerId)
 {
     $offer = offre::find($offerId);
@@ -88,67 +77,6 @@ public function detachActivity(Request $request, $offerId)
         return response()->json(['message' => 'This activity is not associated with the specified offer'], 404);
     }
 }
-
-public function store(Request $request)
->>>>>>> 7394a7d9a0b35560dcce5aa48ea23508b6199f40
-{
-    try {
-        $validated = $request->validate([
-            'titre' => 'required|string|max:255',
-            'description' => 'required|string',
-            'remise' => 'nullable|integer|min:0',
-<<<<<<< HEAD
-            'date_debut' => 'required|date',
-            'date_fin' => 'required|date|after_or_equal:date_debut',
-            'paiement_id' => 'required|exists:paiements,id',
-            'activites' => 'required|array',
-            'activites.*.id' => 'exists:activites,id',
-        ]);
-
-        $user = $request->user();
-        $admin = Administrateur::where('user_id', $user->id)->firstOrFail();
-
-        $offer = new Offre([
-            'titre' => $validated['titre'],
-            'description' => $validated['description'],
-            'remise' => $validated['remise'],
-            'date_debut' => $validated['date_debut'],
-            'date_fin' => $validated['date_fin'],
-            'paiement_id' => $validated['paiement_id'],
-            'administrateur_id' => $admin->id,
-        ]);
-        $offer->save();
-
-        foreach ($validated['activites'] as $activity) {
-            $offer->activites()->attach($activity['id']);
-        }
-
-        $offer = $offer->load('activites'); // Load activites relation
-
-        return response()->json(['message' => 'Offer created successfully', 'offer' => $offer], 201);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['message' => 'Administrateur not found'], 404);
-    } catch (ValidationException $e) {
-        return response()->json(['errors' => $e->errors()], 422);
-    } catch (\Exception $e) {
-        Log::error('Error while creating offer: ' . $e->getMessage());
-        return response()->json(['message' => 'Failed to create offer', 'error' => $e->getMessage()], 500);
-    }
-}
-
-public function update(Request $request, $offerId)
-=======
-            'date_debut_inscription' => 'required|date',
-            'date_fin_inscription' => 'required|date|after_or_equal:date_debut_inscription',
-          //  'administrateur_id' => 'required|exists:administrateurs,id',
-            'paiement_id' => 'required|exists:paiements,id',
-            'activites' => 'required|array',
-            'activites.*.id' => 'exists:activites,id', // Ensure each activity ID exists
-        ]); 
-=======
-
-
->>>>>>> b0ff42eb0fd2d42c21dff1a6dd22cc85a9510d33
 
     public function store(Request $request)
     {
@@ -190,7 +118,6 @@ public function update(Request $request, $offerId)
     }
 
     public function update(Request $request, $offerId)
->>>>>>> 7394a7d9a0b35560dcce5aa48ea23508b6199f40
 {
     try {
         $offer = Offre::findOrFail($offerId);
@@ -201,45 +128,22 @@ public function update(Request $request, $offerId)
             'remise' => 'nullable|integer|min:0',
             'date_debut' => 'sometimes|date',
             'date_fin' => 'sometimes|date|after_or_equal:date_debut',
-<<<<<<< HEAD
-            'paiement_id' => 'sometimes|integer|exists:paiements,id',
-            'activites.*.id' => 'integer|exists:activites,id',
-            'activites' => 'sometimes|array'
-
-=======
             'paiement_id' => 'sometimes|exists:paiements,id',
             'activites' => 'sometimes|array',
             'activites.*.id' => 'exists:activites,id',
->>>>>>> 7394a7d9a0b35560dcce5aa48ea23508b6199f40
         ]);
 
         $offer->update($validated);
 
-<<<<<<< HEAD
-=======
         // Sync activities
->>>>>>> 7394a7d9a0b35560dcce5aa48ea23508b6199f40
         if (isset($validated['activites'])) {
             $activityIds = array_column($validated['activites'], 'id');
             $offer->activites()->sync($activityIds);
         } else {
-<<<<<<< HEAD
-            $offer->activites()->detach();
-        }
-
-        $offer = $offer->load('activites');
-
-        return response()->json(['message' => 'Offer updated successfully', 'offer' => $offer]);
-    } catch (ModelNotFoundException $e) {
-        return response()->json(['message' => 'Offer not found'], 404);
-    } catch (ValidationException $e) {
-        return response()->json(['errors' => $e->errors()], 422);
-=======
             $offer->activites()->detach(); // Detach all if no activities are provided
         }
 
         return response()->json(['message' => 'Offer updated successfully', 'offer' => $offer]);
->>>>>>> 7394a7d9a0b35560dcce5aa48ea23508b6199f40
     } catch (\Exception $e) {
         Log::error('Error while updating offer: ' . $e->getMessage());
         return response()->json(['message' => 'Failed to update offer', 'error' => $e->getMessage()], 500);
