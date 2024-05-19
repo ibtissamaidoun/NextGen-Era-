@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App;
+use Illuminate\Support\Facades\App;
 use Carbon\Carbon;
 use App\Models\devi;
 use App\Models\User;
@@ -417,7 +417,7 @@ class DeviController extends Controller
         }
 
         // creer pdf
-        $pdf = \App::make('snappy.pdf.wrapper'); // !!!!! DON'T CHANGE THIS LINE, IT WORKS PERFECTLY FINE !!!!! ///
+        $pdf = App::make('snappy.pdf.wrapper'); // !!!!! DON'T CHANGE THIS LINE, IT WORKS PERFECTLY FINE !!!!! ///
         $output = $pdf->loadHTML($html)->output();
         // Store the pdf in local
         $pdfPath = 'storage/pdfs/devis/'.$data['serie'].'.pdf';  // .date('_His')
@@ -614,6 +614,6 @@ class DeviController extends Controller
             'message' => 'votre motif a ete bien envoyer.',
             'devis' => $devis,
         ]);
-    }     
+    }    
 
 }

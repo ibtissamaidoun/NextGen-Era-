@@ -79,6 +79,7 @@ class AuthControllerTest extends TestCase
 
         $response->assertJsonStructure([
             'token',
+            'refresh_token',
         ]);
 
         $this->assertNotEmpty($response['token']);
@@ -106,6 +107,7 @@ class AuthControllerTest extends TestCase
         $response->assertJsonStructure([
             'role',
             'token',
+            'refresh_token'
         ]);
 
         $this->assertNotEmpty($response['token']);
@@ -147,15 +149,17 @@ class AuthControllerTest extends TestCase
             'email' => $email,
             'mot_de_passe' => $mot_de_passe,
         ]);
-        echo $response['token'];
 
         $response->assertStatus(202);
-        $token = $response['token'];
+        $responseData = $response->json();
+        $token = $responseData['token'];
+        $refresh_token = $responseData['refresh_token'];
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer ' . $token, 'Refresh-Token' => $refresh_token,
         ])->post('/api/logout');
         $response->assertStatus(200)
             ->assertExactJson(['message' => 'Logged out successfully']);
+            
     }
 
     public function tearDown(): void
