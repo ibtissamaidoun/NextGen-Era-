@@ -17,13 +17,12 @@ class ProfileController extends Controller
 
     public function updateanimateur(Request $request)
     {
-        $user = Auth::user();
+       try{ 
+           $user = Auth::user();
 
 
-    public function updateanimateur(Request $request, $id)
-    {
-       try{
-       $user = User::where('role', 'animateur')->findOrFail($id);
+    //public function updateanimateur(Request $request, $id){
+    //$user = User::where('role', 'animateur')->findOrFail($id);
 
 
         $request->validate([
@@ -74,10 +73,10 @@ class ProfileController extends Controller
 
     public function updateParent(Request $request)
     {
-
+    try {
         $user = auth::user();
 
-        try {
+        
         $user = User::where('role', 'parent')->findOrFail($id);
 
         $request->validate([
@@ -109,7 +108,7 @@ class ProfileController extends Controller
 
     public function updateadmin(Request $request)
     {
-
+        try {
         $user = Auth::user();
 
 
@@ -180,7 +179,7 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request)
     {
-
+        try{
         $user = Auth::User();
         
 
@@ -261,11 +260,8 @@ class ProfileController extends Controller
     //delete for all types of users
     public function deleteprofile()
     {
+        try{
         $user = auth()->user(); // Find the user by ID
-
-
-
-
         DB::beginTransaction();
 
             // Delete the user from their associated role table based on their role
