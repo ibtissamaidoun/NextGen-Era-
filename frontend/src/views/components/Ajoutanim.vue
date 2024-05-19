@@ -17,7 +17,7 @@ function toggleEmailInput() {
       <div class="col-12-end text-end">
         <argon-button color="dark" variant="gradient" @click="toggleEmailInput">
           <i class="fas fa-plus"></i>
-          Ajouter l'offre
+          Ajouter un animateur
         </argon-button>
       </div>
     </div>
@@ -25,12 +25,7 @@ function toggleEmailInput() {
     <div v-if="showEmailInput">
       <div class="row mt-3">
         <div class="col-12-end">
-          <input type="text" class="form-control" placeholder="Titre"><br/>
-          <input type="text" class="form-control" placeholder="Déscription"><br/>
-          <input type="text" class="form-control" placeholder="Date de début de l'inscription"><br/>
-          <input type="text" class="form-control" placeholder="Date de la fin de l'inscription"><br/>
-          <input type="text" class="form-control" placeholder="Option de paiment"><br/>
-          <input type="text" class="form-control" placeholder="activités"><br/>
+          <input type="email" class="form-control" placeholder="Email">
         </div>
         <div class="col-12-end text-end mt-2">
           <argon-button color="primary" variant="gradient">

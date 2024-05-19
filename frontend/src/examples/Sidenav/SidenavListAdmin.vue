@@ -44,7 +44,7 @@ const getRoute = () => {
           :navText="isRTL ? 'الواقع الافتراضي' : 'Administrateurs'"
         >
           <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
+            <i class="ni ni-bold-right text-warning text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
@@ -55,7 +55,7 @@ const getRoute = () => {
           :navText="isRTL ? 'الواقع الافتراضي' : 'animateurs'"
         >
           <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
+            <i class="ni ni-bold-right text-primary text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
@@ -66,11 +66,22 @@ const getRoute = () => {
           :navText="isRTL ? 'الواقع الافتراضي' : 'Parents'"
         >
           <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
+            <i class="ni ni-bold-right text-warning text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
 
+      <li class="nav-item">
+        <sidenav-item
+          to="/dashboard-admin/Horaires"
+          :class="getRoute() === 'HorairesAdmin' ? 'active' : ''"
+          :navText="isRTL ? 'الواقع الافتراضي' : 'HorairesAdmin'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-time-alarm text-primary text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
       <li class="nav-item">
         <sidenav-item
           to="/dashboard-admin/Offres"
@@ -79,8 +90,19 @@ const getRoute = () => {
         >
           <template v-slot:icon>
             <i
-              class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"
+              class="ni ni-planet text-warning text-sm opacity-10"
             ></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+          to="/dashboard-admin/AvailablesActivites"
+          :class="getRoute() === 'AvailablesActivites' ? 'active' : ''"
+          :navText="isRTL ? 'الواقع الافتراضي' : 'Activités disponibles'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-check-bold text-primary text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
@@ -93,13 +115,24 @@ const getRoute = () => {
         >
           <template v-slot:icon>
             <i
-              class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"
+              class="ni ni-spaceship text-warning text-sm opacity-10"
             ></i>
           </template>
         </sidenav-item>
       </li>
 
-      
+      <li class="nav-item">
+        <sidenav-item
+          to="/dashboard-admin/Enfants"
+          :class="getRoute() === 'Enfants' ? 'active' : ''"
+          :navText="isRTL ? 'الواقع الافتراضي' : 'Enfants'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-badge text-primary text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+
 
       <li class="nav-item">
         <sidenav-item
@@ -108,24 +141,16 @@ const getRoute = () => {
           :navText="isRTL ? 'الواقع الافتراضي' : 'Demandes'"
         >
           <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
+            <i class="ni ni-books text-warning text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
 
       
 
-      <li class="nav-item">
-        <sidenav-item
-          to="/dashboard-admin/rtl-page"
-          :class="getRoute() === 'rtl-page' ? 'active' : ''"
-          navText="RTL"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
+      
+
+      
 
       <li class="mt-3 nav-item">
         <h6
@@ -161,7 +186,7 @@ const getRoute = () => {
         <sidenav-item
           to="/signin"
           :class="getRoute() === 'signin' ? 'active' : ''"
-          :navText="isRTL ? 'تسجيل الدخول' : 'Sign In'"
+          :navText="isRTL ? 'تسجيل الدخول' : 'Déconnexion'"
         >
           <template v-slot:icon>
             <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>

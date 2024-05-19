@@ -1,10 +1,11 @@
 <template>
-  <div class="card">
-    <div class="card-header pb-0 px-3">
-      <h4 class="mb-2 text-center">La gestion des Parents</h4>
-    </div>
-    <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
-      <table class="table table-bordered align-items-center">
+    <div class="card pb-5 ">
+
+      <div class="card-header pb-5 px-3">
+        <h4 class="mt-5 text-center">Les détails des Parents</h4>
+      </div>
+      <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
+        <table class="table table-bordered align-items-center">
         <thead>
           <tr>
             <th class="text-uppercase text-primary opacity-7">
@@ -17,11 +18,18 @@
               Prénom
             </th>
             <th class="text-center text-primary opacity-7">
-              Supprimer
+              Email
             </th>
             <th class="text-center text-primary opacity-7">
-              Détails
+              Téléphone portable
             </th>
+            <th class="text-center text-primary opacity-7">
+              Téléphone fixe
+            </th>
+            <th class="text-center text-primary opacity-7">
+              Fonction
+            </th>  
+            
           </tr>
         </thead>
         <tbody>
@@ -34,34 +42,35 @@
             </td> 
             <td class="text-center">  
               <span class="text-s">{{ activity.prenom }}</span>
+            </td>
+            <td class="text-center">  
+              <span class="text-s">{{ activity.email }}</span>
+            </td>  
+            <td class="text-center">  
+              <span class="text-s">{{ activity.telPortable }}</span>
             </td> 
             <td class="text-center">  
-              <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
-                <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-              </a>
-            </td>
+              <span class="text-s">{{ activity.telFixe }}</span>
+            </td> 
             <td class="text-center">  
-              <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
-                <argon-button><router-link to="/dashboard-admin/Parents/Details">Détails</router-link></argon-button>
-            </a>
-            </td>
+              <span class="text-s">{{ activity.fonction }}</span>
+            </td> 
           </tr>
         </tbody>
       </table>
     </div>
-    
-  </div>
-</template>
+    </div>
+  </template>
+  
+  <script>
+  /* eslint-disable */
 
-<script>
-/* eslint-disable */
-
-export default {
-  data() {
-    return {
-      affectes: [
-        {
-          id: "1",
+  export default {
+    data() {
+      return {
+        affectes: [
+        {    
+        id: "1",
           nom: "Oulad Maalem", 
           prenom: "Ayoub",
           email: "ayoub@example.com",
@@ -114,24 +123,26 @@ export default {
           telFixe: "0987654321",
           fonction:"Najaar",
         },
-      ],
-    };
-  },
-}
-</script>
-
-<style scoped>
-h4 {
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  color: orange;
-}
-
-th {
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  color: #000080;
-}
-
-span {
-  font-family: Georgia, 'Times New Roman', Times, serif;
-}
-</style>
+        ],
+        
+      };
+    },
+  }
+  </script>
+  
+  <style scoped>
+  h4{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: orange;
+  }
+  
+  th {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #000080;
+  }
+  
+  span {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+  }
+  </style>
+  

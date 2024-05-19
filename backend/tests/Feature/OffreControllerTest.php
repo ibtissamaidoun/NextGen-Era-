@@ -10,7 +10,11 @@ use App\Models\Administrateur;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
+<<<<<<< HEAD
 class OffreControllerTest extends TestCase
+=======
+  class OffreControllerTest extends TestCase
+>>>>>>> 7394a7d9a0b35560dcce5aa48ea23508b6199f40
 {
     use RefreshDatabase, WithoutMiddleware;
 
@@ -193,3 +197,8 @@ class OffreControllerTest extends TestCase
         $this->assertEquals($administrateur->id, $offre->administrateur_id);
     }
 }
+<<<<<<< HEAD
+=======
+ 
+
+>>>>>>> 7394a7d9a0b35560dcce5aa48ea23508b6199f40
