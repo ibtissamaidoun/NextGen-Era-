@@ -10,11 +10,7 @@ use App\Models\Administrateur;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
-<<<<<<< HEAD
 class OffreControllerTest extends TestCase
-=======
-  class OffreControllerTest extends TestCase
->>>>>>> 7394a7d9a0b35560dcce5aa48ea23508b6199f40
 {
     use RefreshDatabase, WithoutMiddleware;
 
@@ -22,7 +18,6 @@ class OffreControllerTest extends TestCase
     {
         $nonExistentId = 999;
         $response = $this->deleteJson("/api/admin/offres/{$nonExistentId}");
-        $response->dump();
         $response->assertStatus(404);
         $response->assertJson(['message' => 'Offre non trouvée']);
     }
@@ -38,7 +33,6 @@ class OffreControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->deleteJson("/api/admin/offres/{$offre->id}");
-        $response->dump();
         $response->assertStatus(204);
         $this->assertDatabaseMissing('offres', ['id' => $offre->id]);
     }
@@ -54,8 +48,6 @@ class OffreControllerTest extends TestCase
             'paiement_id' => '',
             'activites' => []
         ]);
-
-        $response->dump();
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['titre', 'description', 'date_debut', 'date_fin', 'paiement_id', 'activites']);
     }
@@ -78,7 +70,6 @@ class OffreControllerTest extends TestCase
     ];
 
     $response = $this->actingAs($user)->postJson('/api/admin/offres', $validData);
-    $response->dump();
     $response->assertStatus(201);
     $response->assertJson([
         'message' => 'Offer created successfully',
@@ -104,7 +95,6 @@ class OffreControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $response = $this->actingAs($user)->putJson('/api/admin/offres/999', []);
-        $response->dump();
         $response->assertStatus(404);
     }
 
@@ -123,16 +113,17 @@ class OffreControllerTest extends TestCase
             'description' => 456,
             'date_debut' => 'invalid-date',
             'date_fin' => 'invalid-date',
-            'paiement_id' => 'invalid-id',
+            'paiement_id' => 99999,
             'remise' => 'test',
             'activites' => [
-            ['id' => 'invalid-id']
-        ]
+                ['id' => 'invalid-id']
+
+                ]
 
     ]);
 
 
-        $response->dump();
+
         $response->assertStatus(422);
         $response->assertJsonValidationErrors([
             'titre',
@@ -171,7 +162,6 @@ class OffreControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($user)->putJson("/api/admin/offres/{$offre->id}", $validData);
-        $response->dump();
         $response->assertStatus(200);
         $response->assertJson([
             'message' => 'Offer updated successfully',
@@ -197,8 +187,3 @@ class OffreControllerTest extends TestCase
         $this->assertEquals($administrateur->id, $offre->administrateur_id);
     }
 }
-<<<<<<< HEAD
-=======
- 
-
->>>>>>> 7394a7d9a0b35560dcce5aa48ea23508b6199f40

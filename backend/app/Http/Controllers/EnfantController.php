@@ -7,6 +7,7 @@ use App\Models\parentmodel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class EnfantController extends Controller
 {
@@ -32,6 +33,7 @@ class EnfantController extends Controller
      */
     public function store(Request $request)
         {
+            try{
             // validate the input ....
             $fields = $request->validate(
                 [
@@ -73,7 +75,10 @@ class EnfantController extends Controller
 
             return response()->json([
                 'message'=> 'Un enfant avec ces informations existe déjà'
-            ]);
+            ],422);
+        }catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
 
 }
 
@@ -116,6 +121,7 @@ class EnfantController extends Controller
      */
     public function update(Request $request, $enfant_id)
     {
+        try{
         // validate input ...
         $fields=$request->validate(
             [
@@ -161,7 +167,7 @@ class EnfantController extends Controller
             else{
                 return response()->json([
                     'message'=> 'la modification du enfant va creer de occurence'
-                ]);
+                ],422);
             }
         }
         else{
@@ -169,6 +175,9 @@ class EnfantController extends Controller
                 'message'=> 'enfant non existant.'
             ], 403);
         }
+    } catch (ValidationException $e) {
+        return response()->json(['errors' => $e->errors()], 422);
+    }
 
     }
 

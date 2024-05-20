@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('tarif_ht', 8, 2);
             $table->decimal('tarif_ttc', 8, 2);
             $table->decimal('tva', 8, 2);
-            $table->string('devi_pdf',255);
+            $table->string('devi_pdf',255)->unique();
             $table->unsignedInteger('demande_id');
             $table->foreign('demande_id')
                   ->references('id')

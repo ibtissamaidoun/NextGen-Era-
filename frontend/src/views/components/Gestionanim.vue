@@ -131,6 +131,12 @@
     
   </div>
 </template>
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 786ae3b3fef21d77a598f4a2589db831d5049e5d
 
 <script>
 /* eslint-disable */
@@ -223,19 +229,27 @@ span {
 }
 </style>
 
+<<<<<<< HEAD
 <script setup>
+=======
+//<script setup>
+>>>>>>> 786ae3b3fef21d77a598f4a2589db831d5049e5d
 //import { ref } from "vue";
-import axiosInstance from '@/main';
-import { onBeforeMount } from 'vue';
+//import axiosInstance from '@/main';
+//import { onBeforeMount } from 'vue';
 //const Animateurs= ref( [nom,prenom,email,telephone_fixe]); //ref pour creer var
 
-onBeforeMount(async() => {
-   let response= await axiosInstance.get('/admin/animateurs');
-   console.log(response);
+//onBeforeMount(async() => {
+  // let response= await axiosInstance.get('/admin/animateurs');
+   //console.log(response);
 
  // code to DB
 });
 
 
+<<<<<<< HEAD
 </script>
+=======
+//</script>
+>>>>>>> 786ae3b3fef21d77a598f4a2589db831d5049e5d
 
