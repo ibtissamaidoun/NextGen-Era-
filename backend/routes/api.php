@@ -90,12 +90,16 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     Route::get('offres/{id}', [ParentmodelController::class, 'showoffer']);
     Route::post('offres/{offreid}/demande',[DeviController::class,'chooseofferAndGenerateDevis']); // + Devis
     
+    /** --- ACTIVITÉES */
+    Route::get('activites/', [ActiviteController::class, 'index']);
+    Route::get('activites/{activity}', [ActiviteController::class, 'show']);
+
     /* ----- PANIER ----- */
-    Route::post('activite/{activity_id}/add', [deviController::class,'addToPanier']);
+    Route::post('activites/{activity_id}/add', [deviController::class,'addToPanier']);
     Route::prefix('panier')->group(function ()
     {
         Route::put('activite/{activity_id}/enfants/{enfant_id}', [deviController::class,'modifyPanier']);
-        Route::get('show', [DeviController::class, 'showPanier']);
+        Route::get('/', [DeviController::class, 'showPanier']);
         
         /* --- SUPPRIMER UNE ACTIVITÉE DE PANIER --- */
         Route::delete('activites/{activite}', [DeviController::class, 'deleteActiviteFromPanier']);
@@ -117,10 +121,9 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
         Route::post('{demande}/pack',[DemandeController::class, 'chosePack']);
         Route::post('{demande}/OP',[DemandeController::class, 'choseOP']);
         Route::post('{demande}/submit',[DemandeController::class, 'finishDemande']); // + Devis
-        
+        Route::get('{demande}/overview',[DeviController::class,'overview']);
         
         /* --- DEVIS (INCLU LES OFFRES) --- */
-        Route::get('{demande}/overview',[DeviController::class,'overview']);
         Route::get('{demande}/download-devis',[DeviController::class,'downloadDevis']);
         // Valider et refuser devis
         Route::post('{demande}/devis/validate',[DeviController::class, 'validateDevis']); // + Génération de facture
@@ -167,7 +170,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
     /** --- EDT --- */
     Route::get('edt', [AnimateurController::class, 'getEDT'])->name('animateur.edt');
 
-    /* --- ACTIVITÉS DE PANIER --- */
+    /* --- ACTIVITÉS  --- */
     Route::get('activites', [AnimateurController::class, 'indexActivite'])->name('animateur.activites');
     Route::get('activites/{activite}', [AnimateurController::class, 'showActivite'])->name('animateur.activites.show');
     Route::get('activites/{activite}/etudiants/{etudiant}', [AnimateurController::class, 'showEtudiant'])->name('animateur.activites.show');
@@ -288,12 +291,12 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
     Route::post('/available-activities/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
 
 
-    //i need to adjust theese function to generate motife for refuse
+    /** ---- DEMANDES ---- */
     Route::get('/demandes', [AdministrateurController::class, 'getdemandes']);
 
     /** --- FACTURE - PAYEMENT --- */
-    Route::post('/demandes/{demande}/paye',[DemandeController::class, 'payeDemande']);
-    Route::post('/factures/{facture}/paye/traite',[DemandeController::class, 'createRecu']);
+    Route::post('/demandes/{demande}/paye',[DemandeController::class, 'payeDemande']); // 1ÈRE TRAITE
+    Route::post('/demandes/{demande}/paye-traite',[DemandeController::class, 'payeTraite']); // LES AUTRE TRAITES
 
 
     /** ---- MON PROFILE ---- */

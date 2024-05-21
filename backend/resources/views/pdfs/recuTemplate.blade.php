@@ -86,7 +86,9 @@ use Carbon\Carbon;
 		</table>
             @if ($traite < $total_traite)
             <div style='padding-bottom: 25px; padding-top: 75px;'>
+                <p class='text'>
                 * : Votre Demande sera annulée si vous passer la date limite (48 heures) après la date de paiement déjà motionnée au début sans payé.</p>
+                </p>
             </div>
             @endif
         <div style='padding-bottom: 25px; padding-top: 30px'>

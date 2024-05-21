@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('traite');
             $table->integer('total_traite');
             $table->decimal('tarif_traite', 8, 2);
-            $table->date('date_prochain_paiement');
+            $table->date('date_prochain_paiement')->nullable();
             $table->string('recu_pdf');
             $table->unsignedBigInteger('facture_id');
             $table->foreign('facture_id')

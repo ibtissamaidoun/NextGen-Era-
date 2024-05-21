@@ -14,7 +14,7 @@ class Recu extends Model
         'date_paiement',
         'traite',
         'total_traite',
-        'tarif',
+        'tarif_traite',
         'date_prochain_paiement',
         'facture_id',
         'recu_pdf'

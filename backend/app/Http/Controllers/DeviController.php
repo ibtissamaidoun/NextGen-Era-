@@ -366,25 +366,25 @@ class DeviController extends Controller
         switch ($demande->paiement()->first()->option_paiement) {
             case 'mensuel':
                 $period = $start->diffInMonths($end);
-                $traite = $prix['TTC'] / $period;
+                $traite = number_format($prix['TTC'] / $period, 2);
                 $prixOP = $traite . ' DH / mois';
                 $periodMsg = $period . ' mois';
                 break;
             case 'trimestriel':
                 $period = $start->diffInMonths($end) / 3;
-                $traite = $prix['TTC'] / $period;
+                $traite = number_format($prix['TTC'] / $period, 2);
                 $prixOP = $traite . ' DH / trimestre';
                 $periodMsg = $period . ' trimestres';
                 break;
             case 'semestriel':
                 $period = $start->diffInMonths($end) / 6;
-                $traite = $prix['TTC'] / $period;
+                $traite = number_format($prix['TTC'] / $period, 2);
                 $prixOP = $traite . ' DH / semestre';
                 $periodMsg = $period . ' semestres';
                 break;
             case 'annuel':
                 $period = $start->diffInYears($end);
-                $traite = $prix['TTC'] / $period;
+                $traite = number_format($prix['TTC'] / $period, 2);
                 $prixOP = $traite . ' DH / annee';
                 $periodMsg = $period . ' annees';
                 break;
@@ -705,6 +705,7 @@ class DeviController extends Controller
         $facturePath = $facture->facture_pdf;
         return response()->download($facturePath);
     }
+
     /**
      * Ajouter au panier une activité avec ses enfants.
      */
@@ -719,7 +720,7 @@ class DeviController extends Controller
                 'required',
                 'exists:enfants,id',
                 Rule::exists('enfants', 'id')->where(function ($query) use ($parent_id) {
-                    $query->where('parentmodel_id', $_parent_id);
+                    $query->where('parentmodel_id', $parent_id);
                 }),
             ],
         ]);
