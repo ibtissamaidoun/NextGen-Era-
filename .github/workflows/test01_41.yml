@@ -182,7 +182,7 @@ jobs:
         with:
           context: frontend/
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera_frontend:version
+          tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version
           file: frontend/Dockerfile
 
       - name: Docker Build and Push Backend
@@ -190,7 +190,7 @@ jobs:
         with:
           context: backend/
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera_backend:version1
+          tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version1
           file: backend/Dockerfile
 
       - name: Set up Docker Compose
