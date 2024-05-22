@@ -11,18 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('factures', function (Blueprint $table) {
+        Schema::create('recus', function (Blueprint $table) {
             $table->id();
-            $table->string('serie')->unique();
-            $table->string('facture_pdf',255)->unique();
-            $table->unsignedBigInteger('devi_id');
-            $table->foreign('devi_id')
+            $table->date('date_paiement');
+            $table->integer('traite');
+            $table->integer('total_traite');
+            $table->decimal('tarif_traite', 8, 2);
+            $table->date('date_prochain_paiement');
+            $table->string('recu_pdf');
+            $table->unsignedBigInteger('facture_id');
+            $table->foreign('facture_id')
             ->references('id')
-            ->on('devis')
+            ->on('factures')
             ->onDelete('cascade')
             ->onUpdate('cascade');
             $table->timestamps();
-            
         });
     }
 
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('factures');
+        Schema::dropIfExists('recus');
     }
 };
