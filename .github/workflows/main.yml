@@ -193,5 +193,5 @@ jobs:
 
       - name: Build and push
         run: |
-          docker-compose -f docker-compose.yml build version2
-          docker-compose -f docker-compose.yml push version2
+          docker-compose -f docker-compose.yml build db
+          docker-compose -f docker-compose.yml push db
