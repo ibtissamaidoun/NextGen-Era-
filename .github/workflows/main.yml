@@ -188,10 +188,11 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version1
           file: backend/Dockerfile
 
-      - name: Set up Docker Compose
-        uses: docker/setup-buildx-action@v1
+     # - name: Set up Docker Compose
+     #   uses: docker/setup-buildx-action@v1
 
-      - name: Build and push
+      - name: Pull and push PostgreSQL image
         run: |
-          docker-compose -f docker-compose.yml build db
-          docker-compose -f docker-compose.yml push db
+          docker pull postgres:16
+          docker tag postgres:16 ${{ secrets.DOCKER_USERNAME }}/postgres:postgres
+          docker push ${{ secrets.DOCKER_USERNAME }}/postgres:postgres
