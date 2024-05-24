@@ -43,7 +43,7 @@ class AdministrateurController extends Controller
         DB::beginTransaction();
         try {
             // Generate a random password
-            $randomPassword = "123";//Str::random(10);
+            $randomPassword = Str::random(10);
 
             // Extract the first part of the email to use as the default name
             $emailParts = explode('@', $request->email);
