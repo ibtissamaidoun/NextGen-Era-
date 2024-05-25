@@ -1,0 +1,82 @@
+name: Deploy Backend Appliation
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  create-deployment-artifacts:
+    name: Create deployment artifacts
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Compile CSS and JavaScript
+        run: |
+          npm install
+          npm run prod
+
+        working-directory: backend
+
+      - name: Configure PHP 8.2
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 8.2
+          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
+
+      - name: Install Composer Dependencies
+        run: |
+          composer update
+          composer install --no-dev --no-interaction --prefer-dist
+        working-directory: backend
+
+#      - name: Create deployment artifact
+#        env:
+#          GITHUB_SHA: ${{ github.sha }}
+#        run: tar -czf "${GITHUB_SHA}".tar.gz --exclude=*.git --exclude=node_modules *
+#        working-directory: partie backend
+
+      - name: Create deployment artifact
+        run: |
+            cd "backend"
+            tar -czf myAPP.tar.gz --exclude=*.git --exclude=node_modules *
+
+      - name: Store artifact for distribution
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-build
+          path: backend/myAPP.tar.gz
+
+      - name: Export deployment matrix
+        id: export-deployment-matrix
+        run: |
+          JSON="$(cat ./deployment-config.json)"
+          JSON="${JSON//'%'/'%25'}"
+          JSON="${JSON//$'\n'/'%0A'}"
+          JSON="${JSON//$'\r'/'%0D'}"
+          echo "::set-output name=deployment-matrix::$JSON"
+        working-directory: backend
+
+  prepare-release-on-server:
+    runs-on: ubuntu-latest
+    needs: create-deployment-artifacts
+    strategy:
+      matrix:
+        server: ${{ fromJson(needs.create-deployment-artifacts.outputs.deployment-matrix) }}
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: app-build
+      - name: Upload
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          #password: ${{ matrix.server.password }}
+          port: ${{ matrix.server.port }}
+          source: myAPP.tar.gz
+          target: ${{ matrix.server.path }}/artifacts
