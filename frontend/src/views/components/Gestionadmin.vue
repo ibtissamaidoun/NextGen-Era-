@@ -3,6 +3,7 @@
     <div class="card-header pb-0 px-3">
       <h4 class="mb-2 text-center">La gestion des administrateurs</h4>
     </div>
+    
     <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
       <table class="table table-bordered align-items-center">
         <thead>

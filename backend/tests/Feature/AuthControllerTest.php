@@ -159,6 +159,7 @@ class AuthControllerTest extends TestCase
         ])->post('/api/logout');
         $response->assertStatus(200)
             ->assertExactJson(['message' => 'Logged out successfully']);
+            
     }
 
     public function tearDown(): void

@@ -121,7 +121,7 @@ class PackController extends Controller
     /**
      * identification des packs poussibles en se basent sur la demande
      */
-    public static function packPoussible($demande_id = 2)
+    public static function packPoussible($demande_id)
     {
         $demande = demande::find($demande_id);
         $countActivites = $demande->getActvites()->distinct('id')->count();
@@ -130,23 +130,23 @@ class PackController extends Controller
         if($countActivites == 1 && $countEnfants == 1)
         {
             // Pack Basique ( 1 enfant -> 1 activite )
-            return null;
+            return 1;
         }
         elseif($countActivites > 1 && $countEnfants == 1)
         {
             // Pack Multi-Activités ( 1 enfant -> +eurs activites )
-            return 1;
+            return [1, 2];
         }
         elseif($countEnfants > 1 && $countActivites == 1)
         {
             // Pack Familial ( +eurs enfants -> 1 activite )
-            return 2;
+            return [1, 3];
         }
         else
         {
             // 4- Pack Activites ( +eurs enfants -> +eurs activites)
             // 5- Pack nombre d’enfants ( +eurs enfants -> +eurs activites)
-            return [3, 4];
+            return [1, 4, 5];
         }
 
     }

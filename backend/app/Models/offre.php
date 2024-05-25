@@ -13,20 +13,19 @@ class offre extends Model
     use HasFactory;
 
 
-    protected $fillable = ['date_fin_inscription', 'titre','date_debut_inscription','description','remise','administrateur_id','paiement_id'];
+    protected $fillable = ['date_fin', 'titre', 'date_debut', 'description', 'remise', 'administrateur_id', 'paiement_id'];
 
 
-    public function administrateur():BelongsTo
+    public function administrateur(): BelongsTo
     {
         return $this->belongsTo(administrateur::class);
-
     }
     public function demandes(): HasMany
     {
-        return $this->hasMany(demande::class );
+        return $this->hasMany(demande::class);
     }
 
-    public function paiement():BelongsTo
+    public function paiement(): BelongsTo
     {
         return $this->belongsTo(paiement::class);
     }
@@ -34,7 +33,6 @@ class offre extends Model
 
     public function activites(): BelongsToMany
     {
-        return $this->belongsToMany(activite::class, 'offre_activite');   
-     }
-    
+        return $this->belongsToMany(activite::class, 'offre_activite');
+    }
 }

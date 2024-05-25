@@ -151,7 +151,7 @@ class AdministrateurController extends Controller
         DB::rollback();
         return response()->json(['message' => 'Failed to update admin: ' . $e->getMessage()], 409);
     }
-}
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -171,9 +171,9 @@ class AdministrateurController extends Controller
         $filteredDemandes = $demandes->map(function ($demande) {
             return [
                 'id' => $demande->id,
-                'paiement_option' => $demande->paiement->option_paiement ?? null,
-                'offer_titre' => $demande->offre->titre ?? null,
                 'parent_name' => $demande->parentmodel->user->nom.' '. $demande->parentmodel->user->prenom,
+                'offer_titre' => $demande->offre->titre ?? null,
+                'paiement_option' => $demande->paiement->option_paiement ?? null,
             ];
         });
         
@@ -182,5 +182,6 @@ class AdministrateurController extends Controller
         
     }
 
-   
+   //taha naya has deleted this useless code 
+
 }

@@ -13,7 +13,7 @@ use Carbon\Carbon;
         <table cellpadding="0" cellspacing="0">
             <tr class="top" >
                 <td class='titre' style="text-transform:uppercase;">
-                    {{ $type }}
+                    REÇU
                 </td>
                 <td rowspan="2" style="text-align: right;  vertical-align: top;">
                     <img src="{{ $image }}"  class='image'>
@@ -21,12 +21,10 @@ use Carbon\Carbon;
             </tr>
             <tr>
                 <td class='dates' style="text-transform:uppercase;">
-                    Nº {{$type}} : {{ $serie }}<br>
-                    DATE DEMANDE : {{ $demande->date_demande }}<br>
-                    @if( strtoupper($type) == 'DEVIS')
-                    DATE D'EXPIRATION : {{ $expiration }} (24 HEURES)*<br>
-                    @elseif(strtoupper($type) == 'FACTURE')
-                    DATE LIMITE POUR PAYER : {{ $expiration }} (15 JOURS)*<br>
+                    Nº REÇU : {{ $serie }}<br>
+                    DATE PAIEMENT : {{ $date_paiement }}<br><br>
+                    @if ($traite < $total_traite)
+                    DATE PROCHAINE DE PAIMENT : {{ $date_prochaine_paiement }} *<br>
                     @endif
                 </td>
             </tr>
@@ -40,7 +38,7 @@ use Carbon\Carbon;
                 </td>
                 
                 <td  class='info' style='text-align: left;'>
-                    Option de paiement : {{ $optionPaiment }}
+                    Option de paiement : {{ $optionPaiment }}<br>
                 </td>
             </tr>
             
@@ -53,55 +51,46 @@ use Carbon\Carbon;
             </colgroup>
 			<thead>
 				<tr>
-				    <th class='prix'>ENFANT</th>
+				    <th class='prix'>QTE</th>
 				    <th class='prix'>ACTIVITE</th>
-				    <th class='prix'>SEANCES / SEMAINE</th>
-				    <th class='prix'>EFFICTIF ACTUEL</th>
 				    <th class='prix'>TARIF UNITAIRE</th>
+				    <th class='prix'>TARIF</th>
 				</tr>
 			</thead>
 			
 			<tbody>
-                @foreach ($enfantsActivites as $item)
+                @foreach ($items as $item)
 				<tr>
-					<td class='td'>{{ $item['enfant'] }}</td>
+					<td class='td'>{{ $item['qte'] }}</td>
 					<td class='td'>{{ $item['activite'] }}</td>
-					<td class='td'>{{ $item['seances'] }}</td>
-					<td class='td'>{{ $item['effictif'] }}</td>
-					<td class='tdPrix' class='dataPrix'>{{ $item['tarif'] }} DH</td>
+					<td class='td'>{{ $item['tarif'] }}</td>
+					<td class='tdPrix' class='dataPrix'>{{ $item['tarif']*$item['qte'] }} DH</td>
 				</tr>
                 @endforeach
                 
 				<tr>
-					<td colspan="3" rowspan="4" class='hidden'></td>
-					<td class="prix">SOUS TOTAL</td>
-					<td class="tdPrix">{{ $prixHT }} DH</td>
+					<td colspan="2" rowspan="3" class='hidden'></td>
+					<td class="prix">TOTAL</td>
+					<td class="tdPrix">{{ $TTC }} DH</td>
 				</tr>
                 <tr>
-					<td class="prix">TVA</td>
-					<td class="tdPrix">{{ $TVA }} %</td>
+					<td class="prix">TRAITE</td>
+					<td class="tdPrix">{{ $traite }} / {{ $total_traite }}</td>
 				</tr>
                 <tr>
-					<td class="prix">TOTAL (TTC)</td>
-					<td class="prixBottomRight">{{ $TTC }} DH</td>
+					<td class="prix">COUT DE TRAITE</td>
+					<td class="prixBottomRight">{{ $tarif_traite }} DH</td>
 				</tr>
                 
 			</tbody>
 		</table>
-            @if (strtoupper($type) == 'FACTURE')
-            <div style='padding-bottom: 25px'>
-                <h3 class='description'>LE PAIEMENT</h3>
-                <p class='text'>{{ $prixOP }}<br>sur une period de {{ $period }}.<br><br>
-                * : Votre Demande sera annulée si vous passer la date limite (15 jours après acceptation de devis) déjà motionnée au début sans payé.</p>
+            @if ($traite < $total_traite)
+            <div style='padding-bottom: 25px; padding-top: 75px;'>
+                * : Votre Demande sera annulée si vous passer la date limite (48 heures) après la date de paiement déjà motionnée au début sans payé.</p>
             </div>
             @endif
-        <div style='padding-bottom: 25px; padding-top: 100px'>
-            @if(strtoupper($type) == 'DEVIS')
-            <p class='text' style="padding-bottom: 15px">Pour accepter ce devis, signez ici et renvoyez : ____________________________________________________<br>ou Acceper sur la plateform.<br></p><br>
-            <p class='text'>Devis établi le : {{ Carbon::now('Africa/Casablanca')->addHours(1)->toDateTimeString() }}</p>
-            @elseif (strtoupper($type) == 'FACTURE')
-            <p class='text'>Facture établi le : {{ Carbon::now('Africa/Casablanca')->addHours(1)->toDateTimeString() }}</p>
-            @endif
+        <div style='padding-bottom: 25px; padding-top: 30px'>
+            <p class='text'>Reçu établi le : {{ Carbon::now('Africa/Casablanca')->addHours(1)->toDateTimeString() }}</p>
             <p class='merci'>MERCI POUR VOTRE CONFIANCE !</p>
         </div>
         
