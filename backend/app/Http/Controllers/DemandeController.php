@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\App;
+use App\Models\activite;
 use Carbon\Carbon;
 use App\Models\devi;
 use App\Models\pack;
-use App\Models\enfant;
+use App\Models\recu;
 use App\Models\demande;
 use App\Models\facture;
 use App\Models\paiement;
-use App\Models\parentmodel;
 use App\Models\notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -173,7 +173,7 @@ class DemandeController extends Controller
      *     - affect children to there activities. -> EDT
      *     - demande statut = paye.
      *     - the user is notified.
-     * -->TODO: create recu.
+     *     - create le 1er recu.
      */
     public function payeDemande($demande_id)
     {
@@ -234,13 +234,14 @@ class DemandeController extends Controller
 
         // Update the status of the demande :) i am happy if it reaches this
         $demande->statut = 'paye';
+        $demande->date_traitement = now();
         $demande->administrateur_id = (Auth::user())->administrateur->id;
         $demande->save();
 
         /* 
         * CREATION DE REÇU 
         */
-        $recu = DemandeController::createRecu($demande_id, true);
+        $recu = DemandeController::createRecu($demande->devi->facture->id, true);
 
 
         // notifier le parent 
@@ -252,7 +253,8 @@ class DemandeController extends Controller
         $notification->users()->attach($parent->id, ['date_notification' => now()]);
 
 
-        return response()->json(['message' => 'Demande validated and children placed in activities successfully.']);
+        return response()->json(['message' => "Demande validée avec succes.\nFacture payée avec succes traite $recu->traite/$recu->total_traite",
+                                 'Reçu' => $recu]);
     }
 
     /**
@@ -335,15 +337,15 @@ class DemandeController extends Controller
     public function choseOP(Request $request, $demande_id)
     {
         $validated = $request->validate([
-            'optionPaiment' => 'exists:paiements,id'
+            'optionPaiement' => 'exists:paiements,id'
         ]);
 
         $parent = Auth::user()->parentmodel;
         $demande =  $parent->demandes()->findOrFail($demande_id);
 
-        $demande->update(['paiement_id'=> $validated['optionPaiment']]);
+        $demande->update(['paiement_id'=> $validated['optionPaiement']]);
 
-        $myOP = paiement::select(['id', 'option_paiement'])->find($validated['optionPaiment']);
+        $myOP = paiement::select(['id', 'option_paiement'])->find($validated['optionPaiement']);
 
         return response()->json([
             'message' => 'Votre Option de paiment : \''.$myOP->option_paiement.'\' est bien ajouteé à votre demande.',
@@ -376,33 +378,30 @@ class DemandeController extends Controller
         
         
         /** DATA DE NV REÇU */
-        $items = array();
-        $qte = 0;
-        $old_item = $data['enfantsActivites'][0];
-        $count = count($data['enfantsActivites']);
-        $new_item = [];
-        foreach($data['enfantsActivites'] as $key => $item)
+        $items = $dejaVu = array();
+        $mydata = $data['enfantsActivites'];
+        $count = count($mydata);
+
+        foreach($mydata as $i => $myAct)
         {
-            $new_item['qte'] = $qte;
-            $new_item['activite'] = $item['activite'];
-            $new_item['tarif'] = $item['tarif'];
+            $qte = 0;
+            if(in_array($myAct['activite'],$dejaVu))
+                continue;
 
-            if($item['activite'] == $old_item['activite'])
+            foreach($mydata as $j => $myAct2)
             {
-                $new_item['qte'] = ++$qte;
+                if($myAct['activite'] == $myAct2['activite'])
+                    $qte++;                
             }
-            else
-            {
-                $items[] = $new_item;
-                $qte = 1;
-            }
-            if($key == $count - 1)
-                $items[] = $new_item;
 
-            
-            $old_item = $item;
+            $dejaVu[] = $myAct['activite'];
+
+            $items[] = [
+                'qte' => $qte,
+                'activite' => $myAct['activite'],
+                'tarif' => $myAct['tarif'],
+            ];
         }
-
         // LE PREMIÈR REÇU
         if($first)
         {
@@ -428,22 +427,27 @@ class DemandeController extends Controller
         }
         else
         {
-            $old_recu = $facture->recus()->orderBy('created_at')->latest();
-    
+            $old_recu = $facture->recus()->orderBy('date_prochain_paiement', 'desc')->first();
+
+            
+            if($old_recu->traite >= $old_recu->total_traite)
+            {
+                return null;
+            }
             /** TRAITEMENT DU PROCHIANE DATE DE PAIMENT */
             switch($data['optionPaiment'])
             {
                 case 'mensuel':
-                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochaine_paiement)->addMonth();
+                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochain_paiement)->addMonth();
                     break;
                 case 'trimestriel':
-                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochaine_paiement)->addMonths(3);
+                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochain_paiement)->addMonths(3);
                     break;
                 case 'semestriel':
-                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochaine_paiement)->addMonths(6);
+                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochain_paiement)->addMonths(6);
                     break;
                 case 'annuel':
-                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochaine_paiement)->addYear();
+                    $date_prochaine_paiement = Carbon::parse($old_recu->date_prochain_paiement)->addYear();
                     break;
             }
 
@@ -487,7 +491,7 @@ class DemandeController extends Controller
          */
         $recu = Recu::create([
             'date_paiement' => $mydata['date_paiement'],
-            'date_prochaine_paiement' => $date_prochaine_paiement->format('Y-m-d'),
+            'date_prochain_paiement' => $date_prochaine_paiement->format('Y-m-d'),
             'traite' => $traite,
             'total_traite' => $total_traite,
             'tarif_traite' => $data['tarif_traite'],
@@ -495,11 +499,28 @@ class DemandeController extends Controller
             'recu_pdf' => $pdfPath,
         ]);
 
-        return response()->json([
-            'message' => 'votre traite est bien payée',
-            'recu' => $recu,
-        ]);
+        return $recu;
+    }
 
+    /**
+     * PAYEMENT DES TRAITE + REÇU ->SAUFE LA 1ÈRE TRAITE
+     */
+    public function payeTraite($demande_id)
+    {
+        $demande = demande::findOrFail($demande_id);
+        $facture = $demande->devi->facture;
+        $recu = DemandeController::createRecu($facture->id);
+
+        if(! $recu)
+            return response()->json(['message' => 'cette demande est déjà payée totalement.']);
+
+        
+        return response()->json(
+            [
+                'message' => "Votre traite $recu->traite/$recu->total_traite à été bien payée.",
+                'recu' => $recu, 
+            ]
+            );
     }
     
 }

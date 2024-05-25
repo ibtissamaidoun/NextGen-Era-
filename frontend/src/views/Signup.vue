@@ -1,4 +1,5 @@
 <script setup>
+/* eslint-disable */
 import { onBeforeUnmount, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import { ref } from "vue";
