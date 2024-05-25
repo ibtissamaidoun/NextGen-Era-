@@ -2,7 +2,6 @@
 
 use App\Models\User;
 use App\Enums\TokenAbility;
-use Illuminate\Http\Request;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -61,10 +60,9 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
 
 
     /** ---- MANIPULATION DES ENFANTS ---- */
+    Route::apiResource('enfants', EnfantController::class);
     Route::prefix('enfants')->group(function ()
     {
-        Route::apiResource('/', EnfantController::class);
-
         // EDT POUR UN ENFANT DONNÉE
         Route::get('{enfant_id}/edt',[ParentmodelController::class,'EDT']);
     });
@@ -72,7 +70,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     
     
     /** ---- NOTIFICATIONS ---- */
-    Route::apiResource('notifications', NotificationController::class);
+    Route::apiResource('notifications', NotificationController::class)->only(['index', 'show']);
     
     
     /** ---- PROFILE ---- */
@@ -98,7 +96,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     Route::post('activites/{activity_id}/add', [deviController::class,'addToPanier']);
     Route::prefix('panier')->group(function ()
     {
-        Route::put('activite/{activity_id}/enfants/{enfant_id}', [deviController::class,'modifyPanier']);
+        Route::put('activites/{activity_id}/enfants/{enfant_id}', [deviController::class,'modifyPanier']);
         Route::get('/', [DeviController::class, 'showPanier']);
         
         /* --- SUPPRIMER UNE ACTIVITÉE DE PANIER --- */

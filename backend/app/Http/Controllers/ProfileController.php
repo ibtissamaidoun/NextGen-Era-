@@ -76,9 +76,6 @@ class ProfileController extends Controller
     try {
         $user = auth::user();
 
-        
-        $user = User::where('role', 'parent')->findOrFail($id);
-
         $request->validate([
             'nom' => 'sometimes|required|string',
             'prenom' => 'sometimes|required|string',

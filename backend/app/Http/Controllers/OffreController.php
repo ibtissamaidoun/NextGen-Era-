@@ -98,7 +98,7 @@ public function store(Request $request)
             'date_fin' => 'required|date|after_or_equal:date_debut',
             'paiement_id' => 'required|exists:paiements,id',
             'activites' => 'required|array',
-            'activites.*.id' => 'exists:activites,id',
+            'activites.*.id' => 'exists:activite,id',
         ]);
 
         $user = $request->user();
@@ -114,7 +114,7 @@ public function store(Request $request)
             'administrateur_id' => $admin->id,
         ]);
         $offer->save();
-
+        
         foreach ($validated['activites'] as $activity) {
             $offer->activites()->attach($activity['id']);
         }

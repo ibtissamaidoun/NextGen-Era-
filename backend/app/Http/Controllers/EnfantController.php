@@ -152,12 +152,7 @@ class EnfantController extends Controller
             {
                 // la modification du enfant ne creer pas de occurence
 
-                $enfant->update([
-                    'nom' => $request->nom,
-                    'prenom' => $request->prenom,
-                    'date_de_naissance' => $request->date_de_naissance,
-                    'niveau_etude' => $request->niveau_etude
-                ]);
+                $enfant->update($fields);
 
                 return response()->json([
                     'message'=> 'modification avec succes.',

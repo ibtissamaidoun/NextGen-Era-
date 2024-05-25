@@ -33,6 +33,6 @@ class offre extends Model
 
     public function activites(): BelongsToMany
     {
-        return $this->belongsToMany(activite::class, 'offre_activite');
+        return $this->belongsToMany(activite::class, 'offre_activites');
     }
 }
