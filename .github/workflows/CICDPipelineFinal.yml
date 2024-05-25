@@ -164,7 +164,7 @@ jobs:
           cd "backend"
           composer audit
 
-  build-and-push:
+  build-and-push-Docker:
     runs-on: ubuntu-latest
     needs: [frontend-test, unit-tests, integration-tests, security-check]  # Ensure tests and security check pass before building images
     steps:
@@ -228,7 +228,7 @@ jobs:
           composer install --no-dev --no-interaction --prefer-dist
         working-directory: backend
 
-      - name: Create deployment artifact
+      - name: Create deployment artifact For Cloud Deployment
         run: |
           cd "backend"
           tar -czf myAPP.tar.gz --exclude=*.git --exclude=node_modules *
