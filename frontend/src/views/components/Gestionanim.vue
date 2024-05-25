@@ -52,10 +52,7 @@
     
   </div>
 </template>
-<<<<<<< HEAD
 
-=======
->>>>>>> b13862a683791f9ac34f75c3383c60654f1797c6
 
 <script>
 /* eslint-disable */
@@ -147,22 +144,7 @@ span {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 </style>
-<<<<<<< HEAD
-
-<script setup>
-//import { ref } from "vue";
-import axiosInstance from '@/main';
-import { onBeforeMount } from 'vue';
-//const Animateurs= ref( [nom,prenom,email,telephone_fixe]); //ref pour creer var
-
-onBeforeMount(async() => {
-   let response= await axiosInstance.get('/admin/animateurs');
-   console.log(response);
-
- // code to DB
-});
 
 
-</script>
-=======
->>>>>>> b13862a683791f9ac34f75c3383c60654f1797c6
+
+
