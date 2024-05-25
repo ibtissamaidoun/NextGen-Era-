@@ -199,3 +199,4 @@ jobs:
           docker pull postgres:16
           docker tag postgres:16 ${{ secrets.DOCKER_USERNAME }}/postgres:postgres
           docker push ${{ secrets.DOCKER_USERNAME }}/postgres:postgres
+          
