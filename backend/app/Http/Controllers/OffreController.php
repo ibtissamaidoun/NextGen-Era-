@@ -148,6 +148,7 @@ public function update(Request $request, $offerId)
         ]);
 
         $offer->update($validated);
+        // adiing
 
         if (isset($validated['activites'])) {
             $activityIds = array_column($validated['activites'], 'id');
