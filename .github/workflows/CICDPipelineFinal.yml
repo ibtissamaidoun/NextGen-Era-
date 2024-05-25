@@ -202,8 +202,9 @@ jobs:
           docker-compose -f docker-compose.yml push db
 
   create-deployment-artifacts:
-    name: Create deployment artifacts
+    name: Create deployment artifacts For Cloud Deployment
     runs-on: ubuntu-latest
+    needs: [frontend-test, unit-tests, integration-tests, security-check]
     outputs:
       deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
     steps:
