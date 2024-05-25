@@ -8934,11 +8934,7 @@
                     "type": "open_collective"
                 }
             ],
-<<<<<<< HEAD
             "time": "2024-04-23T20:25:34+00:00"
-=======
-            "time": "2024-05-22T21:24:41+00:00"
->>>>>>> ca11fc8ed6ad99c83be20d4021d509a0668eb0c8
         },
         {
             "name": "symfony/yaml",
