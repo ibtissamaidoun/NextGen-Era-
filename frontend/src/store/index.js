@@ -58,6 +58,9 @@ export default createStore({
     updateHideConfigButton(state, value) {
       state.hideConfigButton = value;
     },
+    setUser(state, user) {
+      state.user = user;
+    },
     setToken(state, token) {
       state.accessToken = token;
     },
@@ -83,15 +86,23 @@ export default createStore({
       }).then(res => {
         commit('setToken', res.data.token);
         commit('setRefreshToken', res.data.refresh_token);
+      }).catch(error => {
+        console.error('Login failed:', error);  
       });
+    }
     },
     logout({ commit }) {
       commit('setToken', null);
       commit('setRefreshToken', null);
       // Assurez-vous de gérer la déconnexion côté serveur si nécessaire
     },
-  },
   getters: {
     // Vous pouvez également ajouter des getters si nécessaire
+    isAuthenticated(state) {
+      return !!state.user;
+    },
+    userRole(state) {
+      return state.user ? state.user.role : null;
+    }
   }
 });

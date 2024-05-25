@@ -37,7 +37,7 @@ class parentmodel extends Model
     return $this->belongsToMany(enfant::class, 'paniers')
                 ->withPivot('activite_id','status');   
 }
-    public function getActvites(): BelongsToMany
+    public function getActivites(): BelongsToMany
 {
     return $this->belongsToMany(activite::class, 'paniers')
                 ->withPivot('enfant_id','status');   

@@ -27,7 +27,7 @@ class OffreFactory extends Factory
         $administrateurId = Administrateur::inRandomOrder()->first()->id;
 
         // Sélectionner un paiement existant aléatoirement
-        $paiementId = Paiement::inRandomOrder()->first()->id;
+        $paiementId = Paiement::inRandomOrder()->first()->id ;
 
         return [
             'titre' => $this->faker->sentence,
