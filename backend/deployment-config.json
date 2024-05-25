@@ -5,7 +5,7 @@
         "username":"deniz",
         "password": "",
         "port": "22",
-        "beforeHooks": "",
+        "beforeHooks": "echo $this",
         "afterHooks": "",
         "path": "/var/www/html"
     }
