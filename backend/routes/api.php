@@ -194,8 +194,6 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
 
-Route::post('/admin/admins', [AdministrateurController::class, 'store']);
-Route::post('animateurs', [AnimateursController::class, 'store']);
 
 
 
@@ -205,6 +203,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
 
     /** --- ADMINS --- */
     Route::get('admins', [AdministrateurController::class, 'index']);
+    Route::post('admins', [AdministrateurController::class, 'store']);
     Route::get('admins/{admin}', [AdministrateurController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
@@ -213,6 +212,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
 
     /** --- ANIMATEURS --- */
     Route::get('animateurs', [AnimateursController::class, 'index']);
+    Route::post('animateurs', [AnimateursController::class, 'store']);
     Route::get('animateurs/{animateur}', [AnimateursController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
