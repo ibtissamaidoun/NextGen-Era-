@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\deviController;
+use App\Http\Controllers\DeviController;
 use App\Http\Controllers\PackController;
 use App\Http\Controllers\offreController;
 use App\Http\Controllers\EnfantController;
