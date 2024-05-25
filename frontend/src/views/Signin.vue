@@ -1,10 +1,7 @@
 <script setup>
 import { ref, onBeforeMount, onBeforeUnmount } from 'vue';
-<<<<<<< HEAD
 // import { useRouter } from 'vue-router';
-=======
-//import { useRouter } from 'vue-router';
->>>>>>> b13862a683791f9ac34f75c3383c60654f1797c6
+
 import { useStore } from 'vuex';
 
 // Importing components
@@ -17,11 +14,8 @@ import axiosInstance from '@/main';
 
 // Getting references to document body, router, and store
 const body = document.getElementsByTagName("body")[0];
-<<<<<<< HEAD
 // const router = useRouter();
-=======
-//const router = useRouter();
->>>>>>> b13862a683791f9ac34f75c3383c60654f1797c6
+
 const store = useStore();
 
 // Setting up state variables
