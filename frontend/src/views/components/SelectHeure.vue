@@ -88,8 +88,10 @@
     font-family: Georgia, 'Times New Roman', Times, serif;
     color:#000080;
   }
+
   </style>
     <script>
+    /* eslint-disable */ 
     import axiosInstance from '@/main';
 
     export default {

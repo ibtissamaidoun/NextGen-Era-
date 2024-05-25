@@ -12,6 +12,7 @@ import DetailsAnim from "@/views/components/DetailsAnim.vue";
 import Parents from "../views/Parents.vue";
 import DetailsParents from "@/views/components/DetailsParents.vue"
 import HorairesAdmin from "../views/HorairesAdmin.vue";
+import EditerOffre from "@/views/components/Editoffre.vue";
 import Offres from "../views/offres.vue";
 import Activites from "../views/Activites.vue";
 import DetailsActivites from "@/views/components/DetailsActivites.vue";
@@ -98,6 +99,12 @@ const routes = [
     name: "Offres",
     component: Offres,
   },
+  {
+    path: "/dashboard-admin/Offres/Editer",
+    name: "EditerOffre",
+    component: EditerOffre,
+  },
+
   {
     path: "/dashboard-admin/Activites",
     name: "Activites",
