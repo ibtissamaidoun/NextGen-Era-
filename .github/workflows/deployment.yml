@@ -75,7 +75,7 @@ jobs:
         with:
           host: ${{ matrix.server.ip }}
           username: ${{ matrix.server.username }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_KEY }}
           #password: ${{ matrix.server.password }}
           port: ${{ matrix.server.port }}
           source: myAPP.tar.gz
