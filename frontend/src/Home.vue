@@ -49,9 +49,6 @@ export default {
                <li class="nav-item">
                    <a class="nav-link" href="#services">Activités</a>
                </li>
-            <!--<li class="nav-item">
-                   <a class="nav-link" href="#features">Features</a>
-               </li>-->
                <li class="nav-item">
                    <a class="nav-link" href="#contact">Contact Us</a>
                </li>
@@ -83,7 +80,7 @@ export default {
            </div> 
            <div class="col-lg-6 col-xl-7">
                <div class="image-container">
-                   <img class="img-fluid" src="assets/images/header-image_.png" alt="alternative" />
+                   <img class="img-fluid" src="assets/images/header-image__.png" alt="alternative" />
                </div> 
            </div> 
        </div> 
@@ -98,11 +95,6 @@ export default {
       </div>
       <div class="row">
           <div class="col-lg-12">
-              
-            <!--    L'entreprise propose une variété d'ateliers (programmation, intelligence artificielle, robotique, calcul
-                mental), des laboratoires de chimie et de biologie, ainsi que des jeux d'échecs pour les enfants âgés de 6 à
-17 ans.
--->
               <div class="card">
                   <div class="card-body">
                     <h4 class="card-title" style="color: #000080;" >Programmation</h4>
@@ -164,7 +156,7 @@ export default {
        <div class="row">
            <div class="col-lg-6 col-xl-7">
                <div class="image-container">
-                   <img class="img-fluid" src="assets/images/details-1.png" alt="alternative" />
+                   <img class="img-fluid" src="assets/images/details-1_.png" alt="alternative" />
                </div> 
            </div> 
            <div class="col-lg-6 col-xl-5">

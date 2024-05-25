@@ -14,11 +14,7 @@ import emploi from "./components/emploi.vue";
         <select-heure />
       </div>
     </div>
-    <div class="mt-4 row">
-      <div class="col-12">
-        <emploi />
-      </div>
-    </div>
+    
     
   
 

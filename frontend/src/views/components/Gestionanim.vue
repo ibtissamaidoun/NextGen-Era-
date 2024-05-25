@@ -52,10 +52,6 @@
     
   </div>
 </template>
-<<<<<<< HEAD
-
-=======
->>>>>>> b13862a683791f9ac34f75c3383c60654f1797c6
 
 <script>
 /* eslint-disable */
@@ -147,7 +143,6 @@ span {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 </style>
-<<<<<<< HEAD
 
 <script setup>
 //import { ref } from "vue";
@@ -164,5 +159,3 @@ onBeforeMount(async() => {
 
 
 </script>
-=======
->>>>>>> b13862a683791f9ac34f75c3383c60654f1797c6

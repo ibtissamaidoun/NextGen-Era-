@@ -8,19 +8,8 @@
           <table class="table align-items-center  mb-0">
             <thead>
               <tr>
-                <th  class="text-uppercase text-secondary opacity-7">jour </th>
-                <th
-                  class="text-uppercase text-secondary opacity-7"
-                >
+                <th  class="text-uppercase text-secondary opacity-7">Horaires disponibles </th>
                 
-                  heures debut
-                </th>
-                <th
-                  class="text-uppercase text-secondary opacity-7"
-                >
-                
-                  Heures fin 
-                </th>
                 <th
                   class="text-center  text-secondary  opacity-7"
                 >
@@ -35,19 +24,10 @@
               <tr v-for="(activity, index) in horaires" :key="index" class="bg-gray-100">
                 <td class="text-center">
                   <div>
-                    <h6>{{ activity.jour_semaine }}</h6>
+                    <h6>{{ activity.horairedispo }}</h6>
                   </div>
                 </td>
-                <td class="text-center">
-                  <div>
-                    <h6>{{ activity.heure_debut }}</h6>
-                  </div>
-                </td>
-                <td class="text-center">
-                  <div>
-                    <h6>{{ activity.heure_fin }}</h6>
-                  </div>
-                </td>
+                
                 <td class="align-middle text-center">
                   <i class="ni ni-check-bold" style="color:orange"></i>
                 </td>
@@ -97,7 +77,24 @@
     export default {
       data() {
         return {
-          horaires: []
+          horaires: [
+          { 
+          horairedispo:"9:00"
+          },
+          { 
+          horairedispo:"18:00"
+          },
+          { 
+          horairedispo:"19:30"
+          },
+          { 
+          horairedispo:"10:30",
+          },
+          { 
+          horairedispo:"12:00",
+          },
+
+          ]
         }},
       
         async created(){
