@@ -49,7 +49,12 @@
         </tbody>
       </table>
     </div>
+<<<<<<< HEAD
     </div>
+=======
+  </div>
+
+>>>>>>> 9b090d1841e26a278ea947699bde3bf40244a4a7
 </template>
 
 <script>
@@ -143,6 +148,7 @@ span {
 }
 </style>
 
+<<<<<<< HEAD
 <script setup>
 //import { ref } from "vue";
 import axiosInstance from '@/main';
@@ -157,3 +163,5 @@ onBeforeMount(async() => {
 });
 </script>
 
+=======
+>>>>>>> 9b090d1841e26a278ea947699bde3bf40244a4a7
