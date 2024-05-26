@@ -49,13 +49,8 @@
         </tbody>
       </table>
     </div>
-  </div>
-</div>
+    </div>
 </template>
-<<<<<<< HEAD
-=======
-
->>>>>>> 856c665504bf17a5a2c9eb4ea02af6d618b4d3b9
 
 <script>
 /* eslint-disable */
@@ -147,7 +142,6 @@ span {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 </style>
-<<<<<<< HEAD
 
 <script setup>
 //import { ref } from "vue";
@@ -159,14 +153,7 @@ onBeforeMount(async() => {
    let response= await axiosInstance.get('/admin/animateurs');
    console.log(response);
 
- // code to DB
-//});
 
-
+});
 </script>
-=======
 
-
-
-
->>>>>>> 856c665504bf17a5a2c9eb4ea02af6d618b4d3b9
