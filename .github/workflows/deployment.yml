@@ -99,8 +99,6 @@ jobs:
            
           
             
-              script: |
-                ${{ matrix.server.beforeHooks }}
-            
+           
             
       
