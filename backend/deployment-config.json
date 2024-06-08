@@ -6,6 +6,7 @@
         "password": "",
         "port": "22",
         "beforeHooks": " 
+                cd /var/www/html/releases/myApp/
                 composer update 
                 php artisan migrate
                 sudo chmod -R 777 /var/www/html/releases/myApp/storage
