@@ -9,8 +9,7 @@
                 cd /var/www/html/releases/myApp/
                 composer update 
                 php artisan migrate
-                sudo chmod -R 777 /var/www/html/releases/myApp/storage
-                sudo chmod -R 777 /var/www/html/releases/myApp/bootstrap/cache
+               
             ",
         "afterHooks": "",
         "path": "/var/www/html"
