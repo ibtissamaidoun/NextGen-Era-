@@ -5,7 +5,7 @@
         "username":"ibtissam",
         "password": "",
         "port": "22",
-        "beforeHooks": " |
+        "beforeHooks": " 
                 composer update 
                 php artisan migrate
                 sudo chmod -R 777 /var/www/html/releases/myApp/storage
