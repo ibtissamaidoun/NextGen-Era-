@@ -1,0 +1,85 @@
+name: CI-CD-Fina
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+deployment-artifacts-toCloud:
+    name: deployment-artifacts-toCloud
+    runs-on: ubuntu-latest
+    needs: [frontend-test, unit-tests, integration-tests, security-check]
+    outputs:
+      deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Compile CSS and JavaScript
+        run: |
+          npm install
+          npm run prod
+        working-directory: backend
+
+      - name: Configure PHP 8.2
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 8.2
+          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
+
+      - name: Install Composer Dependencies
+        run: |
+          composer update
+          composer install --no-dev --no-interaction --prefer-dist
+        working-directory: backend
+
+      - name: Create deployment artifact 
+        run: |
+          cd "backend"
+          tar -czf myAPP.tar.gz --exclude=*.git --exclude=node_modules *
+      - name: Store artifact for distribution
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-build
+          path: backend/myAPP.tar.gz
+
+      - name: Export deployment matrix
+        id: export-deployment-matrix
+        run: |
+          JSON="$(cat ./deployment-config.json)"
+          JSON="${JSON//'%'/'%25'}"
+          JSON="${JSON//$'\n'/'%0A'}"
+          JSON="${JSON//$'\r'/'%0D'}"
+          echo "::set-output name=deployment-matrix::$JSON"
+        working-directory: backend
+
+  prepare-release-on-server:
+    runs-on: ubuntu-latest
+    needs: deployment-artifacts-toCloud
+    strategy:
+      matrix:
+        server: ${{ fromJson(needs.deployment-artifacts-toCloud.outputs.deployment-matrix) }}
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: app-build
+      - name: Upload
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ matrix.server.port }}
+          source: myAPP.tar.gz
+          target: ${{ matrix.server.path }}/artifacts
+      - name: Extract archive and create directories
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ matrix.server.port }}
+          script: |
+            mkdir -p "${{ matrix.server.path }}/releases/myApp"
+            tar xzf ${{ matrix.server.path }}/artifacts/myAPP.tar.gz -C "${{ matrix.server.path }}/releases/myApp"
