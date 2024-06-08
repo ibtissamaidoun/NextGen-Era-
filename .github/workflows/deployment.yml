@@ -3,7 +3,7 @@ name: Deploy Backend Appliation
 on:
   push:
     branches:
-      # - develop
+        - develop
         - main
 jobs:
   create-deployment-artifacts:
