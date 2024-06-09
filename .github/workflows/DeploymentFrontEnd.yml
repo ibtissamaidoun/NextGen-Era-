@@ -31,7 +31,9 @@ jobs:
         run: ls -al frontend/dist
         
       - name: Create deployment artifact for frontend
-        run: tar -czf myVueApp.tar.gz .
+        run: |
+              sleep 5  # Wait for 5 seconds to ensure all file writes are completed
+              tar -czf myVueApp.tar.gz .
         working-directory: frontend/dist
 
       - name: Store frontend artifact
