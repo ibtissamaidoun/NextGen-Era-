@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\App;
 use Carbon\Carbon;
 use App\Models\devi;
 use App\Models\pack;
@@ -13,7 +12,11 @@ use App\Models\paiement;
 use App\Models\parentmodel;
 use App\Models\notification;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\DeviController;
+use App\Http\Controllers\PackController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DemandeController extends Controller
@@ -74,8 +77,8 @@ class DemandeController extends Controller
         //
     }
 
-    
-    //taha partie 
+
+    //taha partie
     public function demandes()
     {
         try {
@@ -85,7 +88,7 @@ class DemandeController extends Controller
 
             // Retrieve all demandes associated with the parent
             $demandes = $parent->demandes()->get(); // ->where('statut','en cours')
-    
+
             // Return the demandes along with their associated children IDs
             return response()->json(['demandes' => $demandes], 200);
         } catch (ModelNotFoundException $e) {
@@ -111,17 +114,17 @@ class DemandeController extends Controller
      * the user is notified in both cases
      * TRUE -> go pay
      * FALSE -> demande annuler
-     * 
+     *
      * @param bool $statut
      */
     public static function checkDemande( $demande_id )
     {
         $demande = demande::findOrFail($demande_id);
-        
+
         $activities = $demande->getActvites()->distinct('id')->get();
 
         $statut = true;
-        
+
         // Check if adding these children exceeds the maximum capacity for any activity, its smart from my part
         foreach ($activities as $activity)
         {
@@ -167,8 +170,8 @@ class DemandeController extends Controller
     }
     /**
      * admin valide la demande
-     * 
-     * 
+     *
+     *
      * if payed :
      *     - affect children to there activities. -> EDT
      *     - demande statut = paye.
@@ -177,7 +180,7 @@ class DemandeController extends Controller
      */
     public function payeDemande($demande_id)
     {
-        
+
         $statut = DemandeController::checkDemande($demande_id);
 
         if (!$statut)
@@ -237,13 +240,13 @@ class DemandeController extends Controller
         $demande->administrateur_id = (Auth::user())->administrateur->id;
         $demande->save();
 
-        /* 
-        * CREATION DE REÇU 
+        /*
+        * CREATION DE REÇU
         */
         $recu = DemandeController::createRecu($demande_id, true);
 
 
-        // notifier le parent 
+        // notifier le parent
         $notification = notification::create([
             'type' => 'Facture Payee',
             'contenu' => 'Votre Facture de ' . Carbon::now()->format('Y-m') . ' a ete bien payee',
@@ -262,7 +265,7 @@ class DemandeController extends Controller
     {
         $parent = Auth::user()->parentmodel;
         $demande =  $parent->demandes()->findOrFail($demande_id);
-        
+
         if ($demande->statut === 'en cours')
         {
             $demande->delete();
@@ -273,9 +276,9 @@ class DemandeController extends Controller
             return response()->json(['message' => 'Only demandes with status "en cours" can be deleted'], 400);
         }
     }
-     
+
     /**
-     * Proceder la creation de Demande -1- 
+     * Proceder la creation de Demande -1-
      * 1- check demande
      * 2- pack poussible
      * return les pack poussible (succes)
@@ -284,7 +287,7 @@ class DemandeController extends Controller
     {
         $parent = Auth::user()->parentmodel;
         $demande =  $parent->demandes()->findOrFail($demande_id);
-        
+
         // si la demande n'est pas valide
         if(! DemandeController::checkDemande($demande->id) )
         {
@@ -300,7 +303,7 @@ class DemandeController extends Controller
         {
             $myPacks[] =Pack::select(['id','type'])->find($id);
         }
-        
+
         return response()->json([
             'message' => 'Votre demande est valide',
             'packPoussible' => $myPacks,
@@ -315,7 +318,7 @@ class DemandeController extends Controller
         $validated = $request->validate([
             'pack' => 'exists:packs,id'
         ]);
-        
+
         $parent = Auth::user()->parentmodel;
         $demande =  $parent->demandes()->findOrFail($demande_id);
 
@@ -359,22 +362,22 @@ class DemandeController extends Controller
         // Generate a devis for the parent after filling the pivot table
         $data = DeviController::createDevis($demande_id);
         $devis = devi::findOrFail($data['devis'])->makeHidden(['created_at','updated_at']);
-        
+
          return response()->json(['message' => 'Devis generated successfully for selected children in all activities in the offer',
                                   'devis'=>$devis]);
     }
-    
+
     /**
      * CREATION DE REÇU POUR LE PAIEMENT
      */
     protected static function createRecu($facture_id, $first = false)
     {
         $facture = facture::findOrFail($facture_id);
-        
+
         // COLLECTION DE DATA
         $data = DeviController::createDevis($facture->devi->demande->id, 'facture', false);
-        
-        
+
+
         /** DATA DE NV REÇU */
         $items = array();
         $qte = 0;
@@ -399,7 +402,7 @@ class DemandeController extends Controller
             if($key == $count - 1)
                 $items[] = $new_item;
 
-            
+
             $old_item = $item;
         }
 
@@ -429,7 +432,7 @@ class DemandeController extends Controller
         else
         {
             $old_recu = $facture->recus()->orderBy('created_at')->latest();
-    
+
             /** TRAITEMENT DU PROCHIANE DATE DE PAIMENT */
             switch($data['optionPaiment'])
             {
@@ -467,18 +470,18 @@ class DemandeController extends Controller
             'image' => $data['image'],
         ];
 
-        
+
         /**
          * REÇU PDF
          */
 
         $html = view('pdfs.recuTemplate', $mydata)->render();
 
-        $pdf = App::make('snappy.pdf.wrapper'); 
+        $pdf = App::make('snappy.pdf.wrapper');
         $pdf->loadHTML($html)->output();
-        
-        $pdfPath = 'storage/pdfs/recus/'.$mydata['serie'].'.pdf';  
-                
+
+        $pdfPath = 'storage/pdfs/recus/'.$mydata['serie'].'.pdf';
+
         // enregister localement
         $pdf->save($pdfPath, true);
 
@@ -501,5 +504,5 @@ class DemandeController extends Controller
         ]);
 
     }
-    
+
 }

@@ -70,6 +70,7 @@ class OffreControllerTest extends TestCase
     ];
 
     $response = $this->actingAs($user)->postJson('/api/admin/offres', $validData);
+    dump($response);
     $response->assertStatus(201);
     $response->assertJson([
         'message' => 'Offer created successfully',
@@ -135,11 +136,6 @@ class OffreControllerTest extends TestCase
             'activites.0.id'
         ]);
     }
-
-
-
-
-
     public function testUpdateValidData()
     {
         $user = User::factory()->create();

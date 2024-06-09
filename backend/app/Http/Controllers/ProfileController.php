@@ -17,7 +17,7 @@ class ProfileController extends Controller
 
     public function updateanimateur(Request $request)
     {
-       try{ 
+       try{
            $user = Auth::user();
 
 
@@ -76,7 +76,7 @@ class ProfileController extends Controller
     try {
         $user = auth::user();
 
-        
+
         $user = User::where('role', 'parent')->findOrFail($id);
 
         $request->validate([
@@ -181,7 +181,7 @@ class ProfileController extends Controller
     {
         try{
         $user = Auth::User();
-        
+
 
         $request->validate([
             'mot_de_passe' => 'required|string|min:8|confirmed',
