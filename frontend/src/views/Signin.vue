@@ -1,14 +1,5 @@
 <script setup>
 import { ref, onBeforeMount, onBeforeUnmount } from 'vue';
-<<<<<<< HEAD
-//import { useRouter } from 'vue-router';
-
-// import { useRouter } from 'vue-router';
-
-//import { useRouter } from 'vue-router';
-
-=======
->>>>>>> 9b090d1841e26a278ea947699bde3bf40244a4a7
 import { useStore } from 'vuex';
 // Importing components
 import Navbar from "@/examples/PageLayout/Navbar.vue"; 
@@ -20,13 +11,7 @@ import axiosInstance from '@/main';
 
 // Getting references to document body, router, and store
 const body = document.getElementsByTagName("body")[0];
-<<<<<<< HEAD
-//const router = useRouter();
-// const router = useRouter();
-//const router = useRouter();
-=======
 
->>>>>>> 9b090d1841e26a278ea947699bde3bf40244a4a7
 const store = useStore();
 
 // Setting up state variables
