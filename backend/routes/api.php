@@ -6,16 +6,16 @@ use Illuminate\Http\Request;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\deviController;
+use App\Http\Controllers\DeviController;
 use App\Http\Controllers\PackController;
-use App\Http\Controllers\offreController;
+use App\Http\Controllers\OffreController;
 use App\Http\Controllers\EnfantController;
 use App\Http\Controllers\ForgotController;
 use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\HoraireController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActiviteController;
-use App\Http\Controllers\paiementController;
+use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\AnimateurController;
 use App\Http\Controllers\AnimateursController;
 use App\Http\Controllers\ParentmodelController;
@@ -194,8 +194,6 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
 
-Route::post('/admin/admins', [AdministrateurController::class, 'store']);
-Route::post('animateurs', [AnimateursController::class, 'store']);
 
 
 
@@ -205,6 +203,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
 
     /** --- ADMINS --- */
     Route::get('admins', [AdministrateurController::class, 'index']);
+    Route::post('admins', [AdministrateurController::class, 'store']);
     Route::get('admins/{admin}', [AdministrateurController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
@@ -213,6 +212,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
 
     /** --- ANIMATEURS --- */
     Route::get('animateurs', [AnimateursController::class, 'index']);
+    Route::post('animateurs', [AnimateursController::class, 'store']);
     Route::get('animateurs/{animateur}', [AnimateursController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users

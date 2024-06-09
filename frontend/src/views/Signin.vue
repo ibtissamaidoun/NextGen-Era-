@@ -1,8 +1,6 @@
 <script setup>
 import { ref, onBeforeMount, onBeforeUnmount } from 'vue';
-//import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-
 // Importing components
 import Navbar from "@/examples/PageLayout/Navbar.vue"; 
 import AppFooter from "@/examples/PageLayout/Footer.vue";
@@ -13,7 +11,7 @@ import axiosInstance from '@/main';
 
 // Getting references to document body, router, and store
 const body = document.getElementsByTagName("body")[0];
-//const router = useRouter();
+
 const store = useStore();
 
 // Setting up state variables
@@ -94,7 +92,7 @@ async function submitLogin() {
 import { ref, onBeforeMount, onBeforeUnmount, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore, mapGetters, mapActions } from 'vuex';
-import axios from 'axios';
+import http from '@/services/http';
 
 // Composants
 import Navbar from "@/examples/PageLayout/Navbar.vue"; 

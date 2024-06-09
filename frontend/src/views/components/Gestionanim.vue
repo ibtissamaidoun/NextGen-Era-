@@ -49,8 +49,9 @@
         </tbody>
       </table>
     </div>
-    
+
   </div>
+
 </template>
 
 <script>
@@ -143,3 +144,4 @@ span {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 </style>
+

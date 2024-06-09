@@ -80,18 +80,18 @@
             <h6 class="mb-2 text-center">{{activity.heurefin}}</h6>
           </td>
            <td class="text-center">  
-            <a
+            <button
               class="btn btn-link text-danger text-gradient px-3 mb-0"
               href="javascript:;"
             >
               <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-            </a>
+            </button>
             </td>
           
             <td class="align-middle">
             <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
-              <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
-              >
+              <argon-button><router-link to="/dashboard-admin/Offres/Editer"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
+              ></router-link></argon-button>
             </a>
             </td>
       </tr>

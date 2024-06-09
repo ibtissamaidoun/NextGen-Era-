@@ -11,7 +11,7 @@ import offredispo from "../views/components/Offredispo.vue";
   <div class="py-4 container-fluid">
     <div class="mt-4 row">
       <div class="col-12">
-        <Ajoutoffre />
+        <ajoutoffre/>
       </div>
     </div>
     <div class="mt-4 row">

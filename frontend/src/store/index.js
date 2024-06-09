@@ -1,6 +1,8 @@
 // src/store/index.js
 import { createStore } from "vuex";
 import router from '@/router'; // Importez le routeur
+//import http from '@/services/http';
+import axios from 'axios'
 
 export default createStore({
   state: {
@@ -19,6 +21,8 @@ export default createStore({
     showFooter: true,
     showMain: true,
     layout: "default",
+    accessToken: null,
+    refreshToken: null,
   },
   mutations: {
     toggleConfigurator(state) {
@@ -54,6 +58,15 @@ export default createStore({
     updateHideConfigButton(state, value) {
       state.hideConfigButton = value;
     },
+    setUser(state, user) {
+      state.user = user;
+    },
+    setToken(state, token) {
+      state.accessToken = token;
+    },
+    setRefreshToken(state, refreshToken) {
+      state.refreshToken = refreshToken;
+    },
   },
   actions: {
     toggleSidebarColor({ commit }, payload) {
@@ -66,6 +79,30 @@ export default createStore({
       commit('updateHideConfigButton', hideConfigButton);
       router.push(route);
     },
-  },
-  getters: {},
+    login({ commit }, authData) {
+      return axios.post('/login', {
+        email: authData.email,
+        password: authData.password
+      }).then(res => {
+        commit('setToken', res.data.token);
+        commit('setRefreshToken', res.data.refresh_token);
+      }).catch(error => {
+        console.error('Login failed:', error);  
+      });
+    }
+    },
+    logout({ commit }) {
+      commit('setToken', null);
+      commit('setRefreshToken', null);
+      // Assurez-vous de gérer la déconnexion côté serveur si nécessaire
+    },
+  getters: {
+    // Vous pouvez également ajouter des getters si nécessaire
+    isAuthenticated(state) {
+      return !!state.user;
+    },
+    userRole(state) {
+      return state.user ? state.user.role : null;
+    }
+  }
 });
