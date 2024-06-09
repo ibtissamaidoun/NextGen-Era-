@@ -36,7 +36,7 @@ jobs:
       - name: Pull and Tag PostgreSQL Image
         run: |
           docker pull postgres:15
-          docker tag postgres:15 ${{ secrets.DOCKER_USERNAME }}/nextgenera:postgres-version2
+          docker tag postgres:15 ${{ secrets.DOCKER_USERNAME }}/nextgenera:version2
 
       - name: Push PostgreSQL Image
         run: |
