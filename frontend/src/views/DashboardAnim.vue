@@ -1,10 +1,7 @@
 <script setup>
 
 import SelectHeure from "./components/SelectHeure.vue";
-<<<<<<< HEAD
-=======
 //import emploi from "./components/emploi.vue";
->>>>>>> 9b090d1841e26a278ea947699bde3bf40244a4a7
 
 
 </script>

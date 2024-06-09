@@ -1,14 +1,5 @@
 <script setup>
 import { ref, onBeforeMount, onBeforeUnmount } from 'vue';
-<<<<<<< HEAD
-//import { useRouter } from 'vue-router';
-
-// import { useRouter } from 'vue-router';
-
-//import { useRouter } from 'vue-router';
-
-=======
->>>>>>> 9b090d1841e26a278ea947699bde3bf40244a4a7
 import { useStore } from 'vuex';
 // Importing components
 import Navbar from "@/examples/PageLayout/Navbar.vue"; 
@@ -16,17 +7,9 @@ import AppFooter from "@/examples/PageLayout/Footer.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 // import ArgonButton from "@/components/ArgonButton.vue"; // Commented out if not used
-import axiosInstance from '@/main';
 
 // Getting references to document body, router, and store
 const body = document.getElementsByTagName("body")[0];
-<<<<<<< HEAD
-//const router = useRouter();
-// const router = useRouter();
-//const router = useRouter();
-=======
-
->>>>>>> 9b090d1841e26a278ea947699bde3bf40244a4a7
 const store = useStore();
 
 // Setting up state variables
@@ -58,11 +41,10 @@ onBeforeUnmount(() => {
 async function submitLogin() {
   loading.value = true;
   try {
-    let response = await axiosInstance.post("/login", user.value);
-    console.log(response);
-    if (response.status === 202) {
-      sessionStorage.setItem('token', response.data.token);
-      const role = response.data.role;
+    await store.dispatch('login', user.value);
+    setTimeout(() => {
+      const role = store.getters.userRole;
+      console.log('User Role:', role); 
       switch (role) {
         case "admin":
           store.dispatch('navigateTo', {
@@ -91,9 +73,9 @@ async function submitLogin() {
             hideConfigButton: false
           });
           break;
-      }
-    }
-  } catch (e) {
+        }
+      }, 100);
+    } catch (e) {
     error.value = e.message || 'An error occurred during login';
     console.error('Login failed:', e);
   } finally {
