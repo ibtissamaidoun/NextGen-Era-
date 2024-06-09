@@ -27,14 +27,21 @@ jobs:
         run: npm run build
         working-directory: frontend
       
-      - name: List output files
-        run: ls -al frontend/dist
-        
+      - name: Sync files to a temporary directory
+        run: |
+          mkdir -p temp
+          rsync -avh --delete frontend/dist/ temp/
+        working-directory: .
+      
       - name: Create deployment artifact for frontend
         run: |
-              sleep 5  # Wait for 5 seconds to ensure all file writes are completed
-              tar -czf myVueApp.tar.gz .
-        working-directory: frontend/dist
+          tar -czf myVueApp.tar.gz -C temp/ .
+        working-directory: .
+      
+      - name: Clean up temporary directory
+        run: rm -rf temp
+        working-directory: .
+
 
       - name: Store frontend artifact
         uses: actions/upload-artifact@v2
