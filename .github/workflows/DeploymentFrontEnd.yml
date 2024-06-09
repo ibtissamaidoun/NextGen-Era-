@@ -29,11 +29,10 @@ jobs:
       
       - name: List output files
         run: ls -al frontend/dist
+        
       - name: Create deployment artifact for frontend
-        run: |
-          cd frontend/dist
-          tar -czf myVueApp.tar.gz .
-        working-directory: ..
+        run: tar -czf myVueApp.tar.gz .
+        working-directory: frontend/dist
 
       - name: Store frontend artifact
         uses: actions/upload-artifact@v2
