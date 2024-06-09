@@ -39,5 +39,9 @@ jobs:
           docker tag postgres:15 ${{ secrets.DOCKER_USERNAME }}/nextgenera:version2
 
       - name: Push PostgreSQL Image
+#run: |
+        #  docker push ${{ secrets.DOCKER_USERNAME }}/nextgenera:postgres-version2
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/nextgenera:postgres-version2
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
+          docker-compose -f docker-compose.yml build db
+          docker-compose -f docker-compose.yml push db
