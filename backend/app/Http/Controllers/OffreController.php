@@ -21,10 +21,6 @@ class OffreController extends Controller
 
         $offres= offre::select('id','titre','remise','date_debut','date_fin')->get();
         return response()->json(['offre'=>$offres]);
-
-        $offres = Offre::select('id', 'titre', 'remise', 'date_debut', 'date_fin')->get();
-        return response()->json(['offre' => $offres]);
-
     }
 
     public function show($id)
@@ -98,7 +94,7 @@ public function store(Request $request)
             'date_fin' => 'required|date|after_or_equal:date_debut',
             'paiement_id' => 'required|exists:paiements,id',
             'activites' => 'required|array',
-            'activites.*.id' => 'exists:activites,id',
+            'activites.*.id' => 'exists:activite,id',
         ]);
 
         $user = $request->user();
