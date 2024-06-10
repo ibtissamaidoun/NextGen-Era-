@@ -45,7 +45,7 @@ onBeforeUnmount(() => {
 const router = useRouter();
 const HandleSubmit = async (e)=>{
   e.preventDefault()
-//  console.log(user.value)
+  console.log(user.value)
   const response = await axiosInstance.post("/register",user.value);
   if(response.status == 202){
     // Stocker le token dans le sessionStorage
