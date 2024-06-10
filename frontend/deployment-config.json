@@ -1,0 +1,14 @@
+[
+    {
+        "name": "server-1 ",
+        "ip":"40.127.11.222",
+        "username":"ibtissam",
+        "password": "",
+        "port": "22",
+        "beforeHooks": " 
+               npm install
+            ",
+        "afterHooks": "",
+        "path": "/var/www/html"
+    }
+]

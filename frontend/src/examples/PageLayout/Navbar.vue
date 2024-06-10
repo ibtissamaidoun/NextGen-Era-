@@ -64,7 +64,7 @@ defineProps({
             <router-link
               class="nav-link d-flex align-items-center me-2 active"
               aria-current="page"
-              to="/signup"
+              to="/register"
             >
               <i
                 class="fas fa-user-circle opacity-6 me-1"
@@ -75,7 +75,7 @@ defineProps({
             </router-link>
          </li>
          <li class="nav-item">
-            <router-link class="nav-link me-2" to="/signin">
+            <router-link class="nav-link me-2" to="/login">
               <i
                 class="fas fa-key opacity-6 me-1"
                 aria-hidden="true"

@@ -3,6 +3,7 @@
     <div class="card-header pb-0 px-3">
       <h4 class="mb-2 text-center">La gestion des administrateurs</h4>
     </div>
+    
     <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
       <table class="table table-bordered align-items-center">
         <thead>
@@ -18,6 +19,9 @@
             </th>
             <th class="text-center text-primary opacity-7">
               Supprimer
+            </th>
+            <th class="text-center text-primary opacity-7">
+             Editer 
             </th>
             <th class="text-center text-primary opacity-7">
               Détails
@@ -40,6 +44,16 @@
                 <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
               </a>
             </td>
+            <td    class="align-middle">
+
+<button
+  class="btn btn-link text-danger text-gradient px-3 mb-0"
+ 
+>
+<i class="fa fa-pencil" aria-hidden="true"></i>
+</button>
+
+</td>
             <td class="text-center">  
               <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
               <argon-button><router-link to="/dashboard-admin/Administrateurs/Details">Détails</router-link></argon-button>

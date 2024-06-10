@@ -35,8 +35,8 @@ class AdministrateurController extends Controller
             'email' => [
                 'required',
                 'email',
-                'unique:users,email',
-                'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i', // format validation
+               // 'unique:users,email',
+               // 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i', // format validation
             ],
         ]);
 

@@ -7,8 +7,8 @@
         <table class="table table-bordered align-items-center ">
             <thead >
               <tr>
-                <th
-                  class="text-uppercase text-secondary opacity-7"
+                 <th
+                 class="text-uppercase text-secondary opacity-7"
                 >
                   Heure début
                 </th>
@@ -16,7 +16,7 @@
                   class="text-uppercase text-secondary opacity-7"
                 >
                   Heure fin
-                </th>
+                </th> 
                 <th
                   class="text-uppercase text-secondary opacity-7"
                 >
@@ -61,11 +61,11 @@
               </td>
             
               <td class="align-middle">
-              <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
-                <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
-                >
-              </a>
-              </td>
+            <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
+              <argon-button><router-link to="/dashboard-admin/Horaires/Editer"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
+              ></router-link></argon-button>
+            </a>
+            </td>
         </tr>
           </tbody>
         </table>

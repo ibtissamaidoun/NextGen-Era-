@@ -5,22 +5,11 @@
       </div>
       <div class="card-body px-0 pt-0 pb-2">
         <div class="table-responsive p-0" >
-          <table class="table align-items-center  mb-0">
+          <table class="table table-bordered align-items-center  mb-0">
             <thead>
               <tr>
-                <th  class="text-uppercase text-secondary opacity-7">jour </th>
-                <th
-                  class="text-uppercase text-secondary opacity-7"
-                >
+                <th  class="text-uppercase text-secondary opacity-7">Horaires disponibles </th>
                 
-                  heures debut
-                </th>
-                <th
-                  class="text-uppercase text-secondary opacity-7"
-                >
-                
-                  Heures fin 
-                </th>
                 <th
                   class="text-center  text-secondary  opacity-7"
                 >
@@ -35,25 +24,17 @@
               <tr v-for="(activity, index) in horaires" :key="index" class="bg-gray-100">
                 <td class="text-center">
                   <div>
-                    <h6>{{ activity.jour_semaine }}</h6>
+                    <h6>{{ activity.horairedispo }}</h6>
                   </div>
                 </td>
-                <td class="text-center">
-                  <div>
-                    <h6>{{ activity.heure_debut }}</h6>
-                  </div>
-                </td>
-                <td class="text-center">
-                  <div>
-                    <h6>{{ activity.heure_fin }}</h6>
-                  </div>
-                </td>
+                
                 <td class="align-middle text-center">
                   <i class="ni ni-check-bold" style="color:orange"></i>
                 </td>
                
                 
-                <td class="align-middle">
+<<<<<<< HEAD
+             <td    class="align-middle">
 
                 <button
                   class="btn btn-link text-danger text-gradient px-3 mb-0"
@@ -63,6 +44,14 @@
               </button>
               
               </td>
+=======
+                <td class="align-middle">
+            <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
+              <argon-button><router-link to="/dashboard-animateurs/Horaires/Editer"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
+              ></router-link></argon-button>
+            </a>
+            </td>
+>>>>>>> f1b34e6138b84b56c5c59a389d83a05a365b1504
                 <td class="align-middle">
                   <button
                   class="btn btn-link text-danger text-gradient px-3 mb-0"
@@ -88,14 +77,33 @@
     font-family: Georgia, 'Times New Roman', Times, serif;
     color:#000080;
   }
+
   </style>
     <script>
+    /* eslint-disable */ 
     import axiosInstance from '@/main';
 
     export default {
       data() {
         return {
-          horaires: []
+          horaires: [
+          { 
+          horairedispo:"9:00"
+          },
+          { 
+          horairedispo:"18:00"
+          },
+          { 
+          horairedispo:"19:30"
+          },
+          { 
+          horairedispo:"10:30",
+          },
+          { 
+          horairedispo:"12:00",
+          },
+
+          ]
         }},
       
         async created(){

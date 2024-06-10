@@ -6,16 +6,16 @@ use Illuminate\Http\Request;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\deviController;
+use App\Http\Controllers\DeviController;
 use App\Http\Controllers\PackController;
-use App\Http\Controllers\offreController;
+use App\Http\Controllers\OffreController;
 use App\Http\Controllers\EnfantController;
 use App\Http\Controllers\ForgotController;
 use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\HoraireController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActiviteController;
-use App\Http\Controllers\paiementController;
+use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\AnimateurController;
 use App\Http\Controllers\AnimateursController;
 use App\Http\Controllers\ParentmodelController;
@@ -48,14 +48,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
-
-
-
-
-
-
-
-
 // Routes réservées aux parents
 Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->group(function () {
 
@@ -141,12 +133,6 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
 
 
 
-
-
-
-
-
-
 // Routes réservées à l'animateur
 Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('animateur')->group(function () 
 {
@@ -194,6 +180,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
 
+    Route::post('admins', [AdministrateurController::class, 'store']);
 
 
 

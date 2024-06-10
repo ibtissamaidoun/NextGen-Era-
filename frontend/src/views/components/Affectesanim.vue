@@ -4,7 +4,7 @@
         <h4 class="mb-2 text-center">Les activités affectés à l'animateur</h4>
       </div>
       <div class="card-body  pt-4 p-3 text-center justify-content-center align-items-center"> 
-        <table class="table align-items-center ">
+        <table class="table table-bordered align-items-center ">
             <thead >
               <tr>
                 <th
@@ -61,11 +61,11 @@
               </td>
             
               <td class="align-middle">
-              <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
-                <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
-                >
-              </a>
-              </td>
+            <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
+              <argon-button><router-link to="/dashboard-animateurs/Horaires/Editer"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
+              ></router-link></argon-button>
+            </a>
+            </td>
         </tr>
           </tbody>
         </table>
@@ -142,5 +142,37 @@ export default {
       ]
     };
   }
-};
-</script>
+}; 
+//  <script>
+//    import axiosInstance from '@/main';
+
+//     export default {
+//       data() {
+//         return {
+//           getActivites: []
+//         }},
+      
+//         async created(){
+//           try {
+//           let response = await axiosInstance.get("animateur/activites");
+//           this.getActivites= response.data;
+//           console.log(response.data);
+//         }
+//         catch (error) {
+//       console.error('Erreur lors de récupération des activites:', error);
+//     }
+//     },
+//     methods: {
+//     async deleteActivities(horaire_id, index) {
+
+//       try {
+//         this.horaires.splice(index, 1); // Supprime l'entrée du tableau local
+//         await axiosInstance.delete("animateur/horaires/"+horaire_id); // Remplacez par l'URL correcte
+        
+//       } catch (error) {
+//         console.error('Erreur lors de la suppression de l\'animateur:', error);
+//       }}}}
+  
+   
+   
+//     </script>-->

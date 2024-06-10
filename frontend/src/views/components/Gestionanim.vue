@@ -3,7 +3,6 @@
     <div class="card-header pb-0 px-3">
       <h4 class="mb-2 text-center">La gestion des animateurs</h4>
     </div>
-
     <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
       <table class="table table-bordered align-items-center">
         <thead>
@@ -126,15 +125,12 @@
           </tbody>
         </table>
       </div>
-
+    </div>
     </div>
     
   </div>
+
 </template>
-
-
-
-
 <script>
 /* eslint-disable */
 import ArgonButton from '@/components/ArgonButton.vue';
@@ -217,7 +213,7 @@ h4 {
 }
 
 th {
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', Verdana, sans-serif;
   color: #000080;
 }
 
@@ -226,19 +222,30 @@ span {
 }
 </style>
 
-//<script setup>
+<<<<<<< HEAD
+<!-- 
+=======
+>>>>>>> f1b34e6138b84b56c5c59a389d83a05a365b1504
+<script setup>
 //import { ref } from "vue";
-//import axiosInstance from '@/main';
-//import { onBeforeMount } from 'vue';
+import axiosInstance from '@/main';
+import { onBeforeMount } from 'vue';
 //const Animateurs= ref( [nom,prenom,email,telephone_fixe]); //ref pour creer var
 
-//onBeforeMount(async() => {
-  // let response= await axiosInstance.get('/admin/animateurs');
-   //console.log(response);
+onBeforeMount(async() => {
+   let response= await axiosInstance.get('/admin/animateurs');
+   console.log(response);
 
  // code to DB
+<<<<<<< HEAD
+}); -->
+
+<!-- 
+</script> -->
+=======
 });
 
 
-//</script>
+</script>
 
+>>>>>>> f1b34e6138b84b56c5c59a389d83a05a365b1504
