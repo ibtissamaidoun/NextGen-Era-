@@ -6,7 +6,7 @@ import { ref } from "vue";
 import { useRouter } from 'vue-router'; // Importer le routeur Vue Router
 
 //import axios from "axios";
-import axiosInstance from '@/main';
+import axiosInstance from '../axios-instance';
 
 
 import Navbar from "@/examples/PageLayout/Navbar.vue";
