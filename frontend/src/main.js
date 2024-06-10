@@ -35,10 +35,10 @@ app.mount("#app");
 //export default axiosInstance;
 
 
-const app = createApp(App);
-app.use(store);
-app.use(router);
-app.use(ArgonDashboard);
-app.config.globalProperties.$axios = axiosInstance;
-app.mount("#app");
+// const app = createApp(App);
+// app.use(store);
+// app.use(router);
+// app.use(ArgonDashboard);
+// app.config.globalProperties.$axios = axiosInstance;
+// app.mount("#app");
 
