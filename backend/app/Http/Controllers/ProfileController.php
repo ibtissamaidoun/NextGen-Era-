@@ -15,14 +15,15 @@ use Illuminate\Support\Facades\Storage;
 class ProfileController extends Controller
 {
 
-    public function updateanimateur(Request $request)
-    {
-       try{
-           $user = Auth::user();
+    //public function updateanimateur(Request $request)
+    //{
+
+          // $user = Auth::user();
 
 
-    //public function updateanimateur(Request $request, $id){
-    //$user = User::where('role', 'animateur')->findOrFail($id);
+    public function updateanimateur(Request $request, $id){
+        try{
+    $user = User::where('role', 'animateur')->findOrFail($id);
 
 
         $request->validate([

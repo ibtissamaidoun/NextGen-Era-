@@ -1,22 +1,21 @@
 <?php
 
 namespace Tests\Feature;
-use App\Http\Controllers\EnfantController;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Facades\Auth;
+
 use App\Models\User;
 use App\Models\Parentmodel;
 use App\Models\Enfant;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Validation\ValidationException;
 
 class EnfantControllerTest extends TestCase
 {
     use RefreshDatabase;
+
     public function testStoreDataInvalid()
     {
-        $user = User::factory()->create(['role'=>'parent']);
+        $user = User::factory()->create(['role' => 'parent']);
         $parent = Parentmodel::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)->postJson("/api/parent/enfants", [
@@ -26,14 +25,14 @@ class EnfantControllerTest extends TestCase
             'niveau_etude' => 'Universitaire',
             'parentmodel_id' => ''
         ]);
+
         $response->assertStatus(422);
         $response->assertJsonValidationErrors([
-        'nom',
-        'prenom',
-        'date_de_naissance',
-        'niveau_etude'
-
-    ]);
+            'nom',
+            'prenom',
+            'date_de_naissance',
+            'niveau_etude'
+        ]);
     }
 
     public function testStoreDataValideUserNonAuthentifier()
@@ -50,7 +49,7 @@ class EnfantControllerTest extends TestCase
 
     public function testStoreDataValideUserAuthentifierEnfantExiste()
     {
-        $user = User::factory()->create(['role'=>'parent']);
+        $user = User::factory()->create(['role' => 'parent']);
         $parent = Parentmodel::factory()->create(['user_id' => $user->id]);
         $child = Enfant::factory()->create([
             'nom' => 'test99',
@@ -71,8 +70,8 @@ class EnfantControllerTest extends TestCase
 
     public function testUpdateDataInvalid()
     {
-        $user = User::factory()->create(['role'=>'parent']);
-        $parent = Parentmodel::factory()->create();
+        $user = User::factory()->create(['role' => 'parent']);
+        $parent = Parentmodel::factory()->create(['user_id' => $user->id]);
         $enfant = Enfant::factory()->create(['parentmodel_id' => $parent->id]);
 
         $response = $this->actingAs($user)->putJson("/api/parent/enfants/{$enfant->id}", [
@@ -80,10 +79,13 @@ class EnfantControllerTest extends TestCase
             'prenom' => 123456,
             'date_de_naissance' => 'NotDate',
             'niveau_etude' => 'Universitaire'
-
         ]);
+
+        // Log the response content for debugging
+        error_log($response->getContent());
+
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['nom','prenom', 'date_de_naissance', 'niveau_etude']);
+        $response->assertJsonValidationErrors(['nom', 'prenom', 'date_de_naissance', 'niveau_etude']);
     }
 
     public function testUpdateValideDataUserAuthentifierEnfantNonExiste()
@@ -98,13 +100,16 @@ class EnfantControllerTest extends TestCase
             'niveau_etude' => 'College'
         ]);
 
+        // Log the response content for debugging
+        error_log($response->getContent());
+
         $response->assertStatus(403);
         $response->assertJson(['message' => 'enfant non existant.']);
     }
 
     public function testUpdateValideDataUserAuthentifierEnfantExisteSansConflit()
     {
-        $user = User::factory()->create(['role'=>'parent']);
+        $user = User::factory()->create(['role' => 'parent']);
         $parent = Parentmodel::factory()->create(['user_id' => $user->id]);
         $enfant = Enfant::factory()->create(['parentmodel_id' => $parent->id, 'nom' => 'testFirst']);
 
@@ -114,7 +119,10 @@ class EnfantControllerTest extends TestCase
             'date_de_naissance' => '2010-04-01',
             'niveau_etude' => 'Primaire'
         ]);
-        $response->dump();
+
+        // Log the response content for debugging
+        error_log($response->getContent());
+
         $response->assertSuccessful();
         $response->assertJson([
             'message' => 'modification avec succes.',
@@ -128,9 +136,10 @@ class EnfantControllerTest extends TestCase
             'nom' => 'testsecond'
         ]);
     }
+
     public function testUpdateValideDataUserAuthentifierEnfantExisteAvecConflit()
     {
-        $user = User::factory()->create(['role'=>'parent']);
+        $user = User::factory()->create(['role' => 'parent']);
         $parent = Parentmodel::factory()->create(['user_id' => $user->id]);
         $enfant1 = Enfant::factory()->create([
             'parentmodel_id' => $parent->id,
@@ -147,24 +156,20 @@ class EnfantControllerTest extends TestCase
             'date_de_naissance' => '2010-04-01',
             'niveau_etude' => 'Primaire'
         ]);
+
         $response = $this->actingAs($user)->putJson("/api/parent/enfants/{$enfant1->id}", [
             'nom' => 'testConflit',
             'prenom' => 'UniquePrenom2',
             'date_de_naissance' => '2010-04-01',
             'niveau_etude' => 'Primaire'
         ]);
+
+        // Log the response content for debugging
+        error_log($response->getContent());
+
         $response->assertStatus(422);
         $response->assertJson([
             'message' => 'la modification du enfant va creer de occurence'
         ]);
     }
-
-
-
-
-
-
-
-
-
 }
