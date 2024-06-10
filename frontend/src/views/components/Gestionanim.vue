@@ -49,8 +49,9 @@
         </tbody>
       </table>
     </div>
-    
+
   </div>
+
 </template>
 
 <script>
@@ -159,3 +160,4 @@ onBeforeMount(async() => {
 
 
 </script>
+

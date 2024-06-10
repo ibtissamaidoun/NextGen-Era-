@@ -30,7 +30,7 @@ import Signin from "../views/Signin.vue";
 import Home from "../Home.vue";
 import Forget from "../views/Forget.vue";
 import Reset from "../views/Reset.vue";
-
+import AccessDenied from "../views/AccessDenied.vue";
 import Horaires from "@/views/Horaires.vue";
 import EditerHorairesanim from "@/views/components/Edithoraireanim.vue";
 import Edt from "@/views/Edt.vue";
@@ -55,11 +55,30 @@ import LabChimie from "../views/Description/LabChimie.vue";
 import LabBiologie from "../views/Description/LabBiologie.vue";
 import Echecs from "../views/Description/Echecs.vue";
 
+import store from '@/store'
 
-
+function requireAuth(role) {
+  return function(to, from, next) {
+    console.log('Is Authenticated :' ,store.getters.isAuthenticated);
+    console.log('User Role :', store.getters.userRole)
+    if (!store.getters.isAuthenticated) {
+      return next({ name: 'Signin' });
+    }
+    if (store.getters.userRole !== role) {
+      return next({ name: 'AccessDenied' });
+    }
+    next();
+    
+  };
+}
 
 
 const routes = [
+  { 
+    path: "/access-denied", 
+    name: "AccessDenied", 
+    component: AccessDenied,
+   },
 
   {
     path: "/",
@@ -70,41 +89,50 @@ const routes = [
     path: "/dashboard-admin",
     name: "Dashboard",
     component: Dashboard,
+    beforeEnter: requireAuth('admin')
   },
+  
   {
     path: "/dashboard-admin/Administrateurs",
     name: "administrateurs",
     component: Administrateurs,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Administrateurs/Details",
     name: "DetailsAdmin",
     component: DetailsAdmin,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Animateurs",
     name: "animateurs",
     component: Animateurs,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Animateurs/Details",
     name: "DetailsAnim",
     component: DetailsAnim,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Parents",
     name: "parents",
     component: Parents,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Parents/Details",
     name: "DetailsParents",
     component: DetailsParents,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Horaires",
     name: "HorairesAdmin",
     component: HorairesAdmin,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Horaires/Editer",
@@ -115,47 +143,56 @@ const routes = [
     path: "/dashboard-admin/Offres",
     name: "Offres",
     component: Offres,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Offres/Editer",
     name: "EditerOffre",
     component: EditerOffre,
+    beforeEnter: requireAuth('admin')
   },
 
   {
     path: "/dashboard-admin/Activites",
     name: "Activites",
     component: Activites,
+    beforeEnter: requireAuth('admin')
   },
   {
   path: "/dashboard-admin/Activites/Details",
   name: "DetailsActivites",
   component: DetailsActivites,
+  beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Demandes",
     name: "Demandes",
     component: Demandes,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/AvailablesActivites",
     name: "AvailablesActivites",
     component: AvailablesActivites,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Enfants",
     name: "Enfants",
     component: Enfants,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Enfants/Details",
     name: "DetailsEnfants",
     component: DetailsEnfants,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Paiement",
     name: "Paiement",
     component: Paiement,
+    beforeEnter: requireAuth('admin')
   },
 
 
@@ -164,11 +201,13 @@ const routes = [
     path: "/dashboard-admin/rtl-page",
     name: "RTL",
     component: RTL,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/profile",
     name: "Profile",
     component: Profile,
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/signin",
@@ -231,11 +270,13 @@ const routes = [
     path:"/dashboard-animateurs",
     name:"Dashboardanim",
     component:Dashboardanim,
+    beforeEnter: requireAuth('animateur')
   },
   {
     path:"/dashboard-animateurs/Horaires",
     name:"Horaires",
     component:Horaires,
+    beforeEnter: requireAuth('animateur')
   },
   {
     path:"/dashboard-animateurs/Horaires/Editer",
@@ -246,11 +287,13 @@ const routes = [
     path:"/dashboard-animateurs/Edt",
     name:"Edt",
     component:Edt,
+    beforeEnter: requireAuth('animateur')
   },
   {
     path:"/dashboard-animateurs/Activites",
     name:"Activitesanim",
     component:Activitesanim,
+    beforeEnter: requireAuth('animateur')
   },
   {
     path:"/dashboard-animateurs/Activites/Editer",
@@ -264,6 +307,7 @@ const routes = [
     path:"/dashboard-parents",
     name:"Dashboardparents",
     component:Dashboardparents,
+    beforeEnter: requireAuth('parent')
   },
   {
     path:"/dashboard-parents/Enfants",

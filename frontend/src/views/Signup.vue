@@ -6,7 +6,7 @@ import { ref } from "vue";
 import { useRouter } from 'vue-router'; // Importer le routeur Vue Router
 
 //import axios from "axios";
-import axiosInstance from '@/main';
+import axiosInstance from '../axios-instance';
 
 
 import Navbar from "@/examples/PageLayout/Navbar.vue";
@@ -45,7 +45,7 @@ onBeforeUnmount(() => {
 const router = useRouter();
 const HandleSubmit = async (e)=>{
   e.preventDefault()
-//  console.log(user.value)
+  console.log(user.value)
   const response = await axiosInstance.post("/register",user.value);
   if(response.status == 202){
     // Stocker le token dans le sessionStorage
