@@ -6,16 +6,16 @@ use Illuminate\Http\Request;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\deviController;
+use App\Http\Controllers\DeviController;
 use App\Http\Controllers\PackController;
-use App\Http\Controllers\offreController;
+use App\Http\Controllers\OffreController;
 use App\Http\Controllers\EnfantController;
 use App\Http\Controllers\ForgotController;
 use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\HoraireController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActiviteController;
-use App\Http\Controllers\paiementController;
+use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\AnimateurController;
 use App\Http\Controllers\AnimateursController;
 use App\Http\Controllers\ParentmodelController;
@@ -51,126 +51,215 @@ Route::middleware(['auth:sanctum'])->group(function () {
 // Routes réservées aux parents
 Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->group(function () {
 
-    // Manipulation des enfants
-    Route::apiResource('enfants', EnfantController::class);
-    // visuasilation des offres disponible
-    Route::get('/offres', [ParentmodelController::class, 'getoffers']);
-    Route::get('/offres/{id}', [ParentmodelController::class, 'showoffer']);
-    Route::post('offres/{offreid}/demandes',[DeviController::class,'chooseofferAndGenerateDevis']); // this one
 
-    Route::get('/demandes/{demandeid}',[DeviController::class,'overview']);
+    /** ---- MANIPULATION DES ENFANTS ---- */
+    Route::prefix('enfants')->group(function ()
+    {
+        Route::apiResource('/', EnfantController::class);
 
-    Route::get('downloadDevis/{demande_id}',[DeviController::class,'downloadDevis']);
+        // EDT POUR UN ENFANT DONNÉE
+        Route::get('{enfant_id}/edt',[ParentmodelController::class,'EDT']);
+    });
 
-    // Valider et refuser devis
-    Route::post('devis/{devis}/validate',[DeviController::class, 'validateDevis']); // by Taha
-    Route::post('devis/{devis}/refuse', [deviController::class, 'refuseDevis']); // by Sakhri
-    // Motif au cas de refus
-    Route::post('devis/{devis}/refuse/motif',[DeviController::class, 'motifRefuse']);
+    
+    
+    /** ---- NOTIFICATIONS ---- */
+    Route::apiResource('notifications', NotificationController::class);
+    
+    
+    /** ---- PROFILE ---- */
+    Route::prefix('profile')->group(function ()
+    {
+        Route::get('/', [ProfileController::class, 'getprofileparent']); // working
+        Route::put('/', [ProfileController::class, 'updateparent']); // working
+        Route::put('update/password', [ProfileController::class, 'updatePassword']); // working
+        Route::post('update/photo', [ProfileController::class, 'updatePhoto']); 
+        Route::delete('/', [ProfileController::class, 'deleteprofile']);
+    });
+    
+    /** ---- PROCÉDURE DE CRÉATION D'UNE DEMANDE AVEC UNE OFFRE ---- */
+    Route::get('offres', [ParentmodelController::class, 'getoffers']);
+    Route::get('offres/{id}', [ParentmodelController::class, 'showoffer']);
+    Route::post('offres/{offreid}/demande',[DeviController::class,'chooseofferAndGenerateDevis']); // + Devis
+    
+    /* ----- PANIER ----- */
+    Route::post('activite/{activity_id}/add', [deviController::class,'addToPanier']);
+    Route::prefix('panier')->group(function ()
+    {
+        Route::put('activite/{activity_id}/enfants/{enfant_id}', [deviController::class,'modifyPanier']);
+        Route::get('show', [DeviController::class, 'showPanier']);
+        
+        /* --- SUPPRIMER UNE ACTIVITÉE DE PANIER --- */
+        Route::delete('activites/{activite}', [DeviController::class, 'deleteActiviteFromPanier']);
 
-    //the father can check the commandes he submitted that are en cours
-    Route::get('demandes', [DemandeController::class, 'demandes']);
-    //the parent get different notifications
-    Route::get('/notifications', [NotificationController::class,'indexparent']);
-    // edt for a given student from Request
-    Route::get('/EDT',[ParentmodelController::class,'EDT']);
+        Route::delete('delete', [DeviController::class, 'SupprimerPanier']);
+        Route::get('valide',[DeviController::class, 'validerPanier']);
+    });
+
+    /* ---- DEMANDE ---- */
+    Route::prefix('demandes')->group(function ()
+    {
+        //the father can check the commandes he submitted that are en cours
+        Route::get('/', [DemandeController::class, 'demandes']);
+
+        Route::delete('{demande}/delete', [DemandeController::class , 'deleteDemande']);
+        
+        /** --- PROCÉDURE DE CRÉATION D'UNE DEMANDE AVEC UN PACK ---- */
+        Route::get('{demande}/check', [DemandeController::class, 'checkDemandeAndGeneratePacks']);
+        Route::post('{demande}/pack',[DemandeController::class, 'chosePack']);
+        Route::post('{demande}/OP',[DemandeController::class, 'choseOP']);
+        Route::post('{demande}/submit',[DemandeController::class, 'finishDemande']); // + Devis
+        
+        
+        /* --- DEVIS (INCLU LES OFFRES) --- */
+        Route::get('{demande}/overview',[DeviController::class,'overview']);
+        Route::get('{demande}/download-devis',[DeviController::class,'downloadDevis']);
+        // Valider et refuser devis
+        Route::post('{demande}/devis/validate',[DeviController::class, 'validateDevis']); // + Génération de facture
+        Route::post('{demande}/devis/refuse', [deviController::class, 'refuseDevis']); // by Sakhri
+        // Motif au cas de refus
+        Route::post('{demande}/devis/refuse/motif',[DeviController::class, 'motifRefuse']);
+    
+        /* --- FACTURE  (INCLU LES OFFRES)--- */
+        //Route::get('{demande}/facture',[DeviController::class, 'createFacture']);
+        Route::get('{demande}/download-facture', [DeviController::class, 'downloadFacture']);
+
+        /** --- SUUPRIMER LES PDFs ---- TYPE = 'DEVIS' OR 'FACTURE' ---- */  
+        Route::delete('{demande}/{type}/delete',[DeviController::class, 'deletePDF']);
+    });
 
 
-    //profile(needs to be tested)
-    Route::get('profile', [ProfileController::class, 'getprofileparent']);
-    Route::put('profile/{id}', [ProfileController::class, 'updateparent']);
-    Route::put('profile/{id}/password', [ProfileController::class, 'updatePassword']);
-    Route::post('profile/{id}/photo', [ProfileController::class, 'updatePhoto']);
-    Route::delete('profile/{id}', [ProfileController::class, 'deleteprofile']);
 });
+
+
 
 
 // Routes réservées à l'animateur
-Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('animateur')->group(function () {
-    // Horaires CRUD
-    Route::get('horaires', [AnimateurController::class, 'indexHeures'])->name('animateur.horaires.index');
-    Route::post('horaires', [AnimateurController::class, 'storeHeure'])->name('animateur.horaires.store');
-    Route::get('getHoraires', [AnimateurController::class, 'getHeures'])->name('animateur.horaires.get');
+Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('animateur')->group(function () 
+{
+    /** --- HORAIRES CRUD --- */
+    Route::prefix('horaires')->group(function ()
+    {
+        Route::get('/', [AnimateurController::class, 'indexHeures'])->name('animateur.horaires.index');
+        Route::post('/', [AnimateurController::class, 'storeHeure'])->name('animateur.horaires.store');
+        Route::get('getHoraires', [AnimateurController::class, 'getHeures'])->name('animateur.horaires.get');
+    
+        Route::put('{horaire}', [AnimateurController::class, 'updateHeure'])->name('animateur.horaires.update');
+        Route::patch('{horaire}', [AnimateurController::class, 'updateHeure'])->name('animateur.horaires.update');
+    
+        Route::delete('{horaire}', [AnimateurController::class, 'destroyHeure'])->name('animateur.horaires.destroy');
+    });
 
-    Route::put('horaires/{horaire}', [AnimateurController::class, 'updateHeure'])->name('animateur.horaires.update');
-    Route::patch('horaires/{horaire}', [AnimateurController::class, 'updateHeure'])->name('animateur.horaires.update');
-
-    Route::delete('horaires/{horaire}', [AnimateurController::class, 'destroyHeure'])->name('animateur.horaires.destroy');
-    // EDT
+    /** --- EDT --- */
     Route::get('edt', [AnimateurController::class, 'getEDT'])->name('animateur.edt');
-    // Activites
+
+    /* --- ACTIVITÉS DE PANIER --- */
     Route::get('activites', [AnimateurController::class, 'indexActivite'])->name('animateur.activites');
     Route::get('activites/{activite}', [AnimateurController::class, 'showActivite'])->name('animateur.activites.show');
     Route::get('activites/{activite}/etudiants/{etudiant}', [AnimateurController::class, 'showEtudiant'])->name('animateur.activites.show');
-    //hardship always repay
-    Route::get('profile', [ProfileController::class, 'getprofileanimateurs'])->name('animateur.profile');
-    Route::put('profile/{id}', [ProfileController::class, 'updateanimateur'])->name('animateur.profile.update');
-    Route::put('profile/{id}/password', [ProfileController::class, 'updatePassword'])->name('animateur.profile.update-password');
-    Route::post('profile/{id}/photo', [ProfileController::class, 'updatePhoto'])->name('animateur.profile.update-photo');
-    Route::delete('profile/{id}', [ProfileController::class, 'deleteprofile'])->name('animateur.profile.delete-profile');
+
+    /** --- PROFILE --- */
+    Route::prefix('profile')->group(function ()
+    {
+        Route::get('/', [ProfileController::class, 'getprofileanimateurs'])->name('animateur.profile');
+        Route::put('/', [ProfileController::class, 'updateanimateur'])->name('animateur.profile.update');
+        Route::put('update/password', [ProfileController::class, 'updatePassword'])->name('animateur.profile.update-password');
+        Route::post('update/photo', [ProfileController::class, 'updatePhoto'])->name('animateur.profile.update-photo');
+        Route::delete('/', [ProfileController::class, 'deleteprofile'])->name('animateur.profile.delete-profile');
+        
+    });
 
 
-    //notification
-    Route::get('notifications', [NotificationController::class, 'indexanimateur']);
+    /** --- NOTIFICATIONS --- */
+    Route::apiResource('notifications', NotificationController::class);
 });
 
+
+
+
+
+
+
+
+    Route::post('admins', [AdministrateurController::class, 'store']);
 
 
 
 // Routes réservées à l'admin
 Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')->group(function () {
 
-    // Administrateur routes
+    /** --- ADMINS --- */
     Route::get('admins', [AdministrateurController::class, 'index']);
     Route::post('admins', [AdministrateurController::class, 'store']);
     Route::get('admins/{admin}', [AdministrateurController::class, 'show']);
+
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('admins/{admin}', [AdministrateurController::class, 'update']);
     Route::delete('admins/{admin}', [AdministrateurController::class, 'destroy']);
 
-    // Animateurs routes
+    /** --- ANIMATEURS --- */
     Route::get('animateurs', [AnimateursController::class, 'index']);
     Route::post('animateurs', [AnimateursController::class, 'store']);
     Route::get('animateurs/{animateur}', [AnimateursController::class, 'show']);
+
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('animateurs/{animateur}', [AnimateursController::class, 'update']);
     Route::delete('animateurs/{animateur}', [AnimateursController::class, 'destroy']);
 
-    // Parents routes
+    /** --- PARENTS --- */
     Route::get('parents', [ParentmodelController::class, 'index']);
     Route::post('parents', [ParentmodelController::class, 'store']);
     Route::get('parents/{parent}', [ParentmodelController::class, 'show']);
+
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('parents/{parent}', [ParentmodelController::class, 'update']);
     Route::delete('parents/{parent}', [ParentmodelController::class, 'destroy']);
 
+    /** --- PACKS --- */
+    Route::apiResource('packs', PackController::class)->only('index');
 
-    Route::apiResource('packs', PackController::class);
-    //Route::apiResource('paiements',paiementController::class);
+    /** --- O. DE PAIEMENTS --- */      // j'ai elimine la poussibilité de l'admin a manipuler les option de paiements directement
+    Route::apiResource('paiements',paiementController::class)->only('index');
 
 
-    //activite
-    Route::get('activities', [ActiviteController::class, 'index']);
+    /** ---- ACTIVITÉES ---- */
+    Route::prefix('activities')->group(function ()
+    {
+        Route::get('/', [ActiviteController::class, 'index']);
+    
+        Route::post('/', [ActiviteController::class, 'store']);
+        Route::get('{activity}', [ActiviteController::class, 'show']);
+        Route::put('{activity}', [ActiviteController::class, 'update']); // need to be revised
+        Route::delete('{activity}', [ActiviteController::class, 'destroy']);
+    
+        /** --- OPTIONS DE PAIMENTS ASSOCIER AVEC UNE ACTIVITÉE */
+        Route::post('{activity}/paiements', [ActiviteController::class, 'storeOP']);
+        Route::put('{activity}/paiements/{paiement}', [ActiviteController::class, 'updateOP']);
+        Route::delete('{activity}/paiements/{paiement}', [ActiviteController::class, 'destroyOP']);
+    
+        /** --- HORAIRES ASSOCIER AVEC UNE ACTIVITÉE */
+        Route::get('{activity}/horaires/{horaires}', [ActiviteController::class, 'showhoraire']);
+        Route::get('{activity}/horaires', [ActiviteController::class, 'indexhoraires']);
+        Route::delete('{activity}/horaires/{horaires}', [ActiviteController::class, 'detachhoraire']);
+        Route::post('{activity}/horaires', [ActiviteController::class, 'choosehoraire']);
+        
+        /** --- AVAILABLE ACTIVITIES --- */       // remember that we need also to filter with domaine competence
+        //check for the activity with two horaires 
+        Route::get('/available', [ActiviteController::class, 'getAvailableActivities']);
+        Route::get('/available/{activity_id}/available-animators', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
+        Route::post('/available/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
+    });
 
-Route::post('activities', [ActiviteController::class, 'store']);
-Route::get('activities/{activity}', [ActiviteController::class, 'show']);
-Route::put('activities/{activity}', [ActiviteController::class, 'update']); // need to be revised
-Route::delete('activities/{activity}', [ActiviteController::class, 'destroy']);
 
-    // option de paiement d activite (avec remise) --- new
-    Route::post('activities/{activity}/paiements', [ActiviteController::class, 'storeOP']);
-    Route::put('activities/{activity}/paiements/{paiement}', [ActiviteController::class, 'updateOP']);
-    Route::delete('activities/{activity}/paiements/{paiement}', [ActiviteController::class, 'destroyOP']);
-
-    //horaire d activite
-    Route::get('activities/{activity}/horaires/{horaires}', [ActiviteController::class, 'showhoraire']);
-    Route::get('activities/{activity}/horaires', [ActiviteController::class, 'indexhoraires']);
-    Route::delete('activities/{activity}/horaires/{horaires}', [ActiviteController::class, 'detachhoraire']);
-    Route::post('activities/{activity}/horaires', [ActiviteController::class, 'choosehoraire']);
-    //horaire
+    /** --- HORAIRES --- */
     Route::apiResource('horaires', HoraireController::class);
 
+    /** --- OFFRES --- */
     Route::apiResource('offres', offreController::class);
+
+
+    /** --- CONSULTATION DES ENFANTS --- */
+    Route::apiResource('enfants', EnfantController::class)->only(['index', 'show']);
 
     //these two route are disabled , no use , no value ,no logic
     // Define route for attaching activities to an offer
@@ -185,22 +274,28 @@ Route::delete('activities/{activity}', [ActiviteController::class, 'destroy']);
     Route::get('/available-activities/{activity_id}/available-animators', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
     Route::post('/available-activities/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
 
+
     //i need to adjust theese function to generate motife for refuse
     Route::get('/demandes', [AdministrateurController::class, 'getdemandes']);
 
-    // Consultation des enfants
-    Route::apiResource('enfants', EnfantController::class)->only(['index', 'show']);
+    /** --- FACTURE - PAYEMENT --- */
+    Route::post('/demandes/{demande}/paye',[DemandeController::class, 'payeDemande']);
+    Route::post('/factures/{facture}/paye/traite',[DemandeController::class, 'createRecu']);
 
-Route::post('/demandes/{demande}/validate',[DemandeController::class, 'payeDemande']);
-    //profile(needs to be tested)
-    Route::get('profile', [ProfileController::class, 'getprofileadmin']);
-    Route::put('profile/{id}', [ProfileController::class, 'updateadmin']);
-    Route::put('profile/{id}/password', [ProfileController::class, 'updatePassword']);
-    Route::post('profile/{id}/photo', [ProfileController::class, 'updatePhoto']);
-    Route::delete('profile/{id}', [ProfileController::class, 'deleteprofile']);
 
-    //notification
-    Route::get('notifications', [NotificationController::class, 'indexadmin']);
+    /** ---- MON PROFILE ---- */
+    Route::prefix('profile')->group(function ()
+    {
+        Route::get('/', [ProfileController::class, 'getprofileadmin']);
+        Route::put('/', [ProfileController::class, 'updateadmin']);
+        Route::put('/update/password', [ProfileController::class, 'updatePassword']);
+        Route::post('/update/photo', [ProfileController::class, 'updatePhoto']);
+        Route::delete('/', [ProfileController::class, 'deleteprofile']);
+    });
+
+    /** ---- NOTIFICATIONS ---- */
+    Route::apiResource('notifications', NotificationController::class);
+
 });
 
 
@@ -208,23 +303,19 @@ Route::post('/demandes/{demande}/validate',[DemandeController::class, 'payeDeman
 
 // ----- en test ----- //
 Route::apiResource('devis', deviController::class);
-Route::apiResource('notifications', NotificationController::class);
 Route::apiResource('demandes', DemandeController::class);
+
+
+Route::get('getRecu',function(){
+    return view('pdfs.recuTemplate');
+});    // marche
 
 Route::get('getDevis',[deviController::class, 'getDevis']); //
 Route::get('devis',[deviController::class, 'createDevis']); // marche
 Route::get('monPack',[PackController::class,'packPoussible']); // marche
 
-Route::get('getDevis', [deviController::class, 'getDevis']);
-Route::get('devis', [deviController::class, 'createDevis']);
-Route::get('monPack', [PackController::class, 'packPoussible']);
+
+
 
 //------test----taha----ostora----//
-// Validate demande route
-Route::post('/demandes/{demande}/validate', [AdministrateurController::class, 'validated']);
 
-// Refuse demande route
-Route::post('/demandes/{demande}/refuse',[AdministrateurController::class,'refuse']);
-
-
-Route::post('/demandes/{demande}/refuse', [AdministrateurController::class, 'refuse']);

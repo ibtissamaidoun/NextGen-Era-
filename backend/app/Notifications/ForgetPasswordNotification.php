@@ -48,7 +48,6 @@ class ForgetPasswordNotification extends Notification implements ShouldQueue
         ->subject('Réinitialisation de votre mot de passe')
         ->view('emails.reset', ['url' => $url, 'token' => $this->token]);
 }
-
     /**
      * Get the array representation of the notification.
      *

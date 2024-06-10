@@ -49,9 +49,6 @@ export default {
                <li class="nav-item">
                    <a class="nav-link" href="#services">Activités</a>
                </li>
-            <!--<li class="nav-item">
-                   <a class="nav-link" href="#features">Features</a>
-               </li>-->
                <li class="nav-item">
                    <a class="nav-link" href="#contact">Contact Us</a>
                </li>
@@ -66,7 +63,7 @@ export default {
                </li>
            </ul>
            <span class="nav-item">
-               <router-link to="Signin" class="btn-solid-sm" >Connexion</router-link>
+               <router-link to="login" class="btn-solid-sm" >Connexion</router-link>
            </span>
        </div> 
    </div> 
@@ -83,7 +80,7 @@ export default {
            </div> 
            <div class="col-lg-6 col-xl-7">
                <div class="image-container">
-                   <img class="img-fluid" src="assets/images/header-image_.png" alt="alternative" />
+                   <img class="img-fluid" src="assets/images/header-image__.png" alt="alternative" />
                </div> 
            </div> 
        </div> 
@@ -98,11 +95,6 @@ export default {
       </div>
       <div class="row">
           <div class="col-lg-12">
-              
-            <!--    L'entreprise propose une variété d'ateliers (programmation, intelligence artificielle, robotique, calcul
-                mental), des laboratoires de chimie et de biologie, ainsi que des jeux d'échecs pour les enfants âgés de 6 à
-17 ans.
--->
               <div class="card">
                   <div class="card-body">
                     <h4 class="card-title" style="color: #000080;" >Programmation</h4>
@@ -164,7 +156,7 @@ export default {
        <div class="row">
            <div class="col-lg-6 col-xl-7">
                <div class="image-container">
-                   <img class="img-fluid" src="assets/images/details-1.png" alt="alternative" />
+                   <img class="img-fluid" src="assets/images/details-1_.png" alt="alternative" />
                </div> 
            </div> 
            <div class="col-lg-6 col-xl-5">
@@ -187,7 +179,7 @@ export default {
                    <h2>Dix Ans d'Expérience Au Service de Votre Enfant</h2>
                    <p>Avec des années d'expérience dans le coaching et le développement personnel pour enfants, nous sommes passionnés par l'accompagnement des jeunes dans leur parcours vers la réussite. 
                     Faites confiance à notre expertise pour guider votre enfant vers un avenir brillant et épanouissant.</p>
-                   <router-link to="/signup" class="btn-outline-reg" >Inscription</router-link>
+                   <router-link to="/register" class="btn-outline-reg" >Inscription</router-link>
                </div> 
            </div> 
            <div class="col-lg-6 col-xl-7">

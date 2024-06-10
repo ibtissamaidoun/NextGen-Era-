@@ -29,7 +29,7 @@ onBeforeUnmount(() => {
 const token=ref('');
 const recoverPassword = async () => {
   
-  7
+  
 if (!token.value) {
     alert("Token est requis pour la récupération de mot de passe.");
     return;

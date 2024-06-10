@@ -152,8 +152,8 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/signin"
-          :class="getRoute() === 'signin' ? 'active' : ''"
+          to="/login"
+          :class="getRoute() === 'login' ? 'active' : ''"
           :navText="isRTL ? 'تسجيل الدخول' : 'Sign In'"
         >
           <template v-slot:icon>
@@ -164,8 +164,8 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/signup"
-          :class="getRoute() === 'signup' ? 'active' : ''"
+          to="/register"
+          :class="getRoute() === 'register' ? 'active' : ''"
           :navText="isRTL ? 'اشتراك' : 'Sign Up'"
         >
           <template v-slot:icon>

@@ -34,13 +34,11 @@ onBeforeUnmount(() => {
         <div class="navbar-collapse offcanvas-collapse justify-content-end">
             <!-- Liens d'inscription et de connexion -->
             <span class="nav-item">
-                <router-link to="/signup" class="btn-outline-sm orange">Inscription</router-link>
+                <router-link to="/register" class="btn-outline-sm orange">Inscription</router-link>
             </span>
             <span class="nav-item">
-                <router-link to="/signin" class="btn-solid-sm">Connexion</router-link>
+                <router-link to="/login" class="btn-solid-sm">Connexion</router-link>
             </span>
-    
-           
         </div>
     </div>
 </nav>
