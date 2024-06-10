@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\ParentModel;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ParentmodelFactory extends Factory
@@ -22,10 +23,14 @@ class ParentmodelFactory extends Factory
     public function definition()
     {
         return [
-            'fonction' => $this->faker->word,
-            'user_id' => function () {
-                // Générez un user_id valide
-                return \App\Models\User::factory()->create()->user_id;
+            'fonction' => $this->faker->jobTitle,   
+               'user_id' => function () {
+                // Créer un utilisateur avec le rôle 'parent'
+                $user = User::factory()->create();
+                $user->role = 'parent';
+                $user->save();
+
+                return $user->id;
             },
         ];
     }

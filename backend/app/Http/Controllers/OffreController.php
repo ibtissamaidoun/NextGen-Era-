@@ -8,7 +8,8 @@ use App\Models\Administrateur;
 use App\Models\Paiement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 
 class OffreController extends Controller
 {
@@ -37,11 +38,45 @@ class OffreController extends Controller
             return response()->json(['message' => 'Offre non trouvée'], 404);
         }
         $offre->delete();
-        return response()->json(['message' => 'Offre deleted successfully']);
+        return response()->json(['message' => 'Offre deleted successfully'], 204);
     }
 
+    public function attachactivity(Request $request, $offerId)
+{
+    $offer = offre::find($offerId);
+
+    $validatedata= $request->validate([
+        'activite_id'=>'required|exists:activites,id',
+    ]);
+
+    $activite = Activite::find($validatedata['activite_id']);
+
+    $offer->getActivites()->attach($activite->id);
+}
 
 
+public function detachActivity(Request $request, $offerId)
+{
+    // Find the offer by its ID
+    $offer = Offre::find($offerId);
+    
+    // Validate the incoming request data to ensure activite_id is provided and valid
+    $validatedData = $request->validate([
+        'activite_id' => 'required|exists:activites,id',
+    ]);
+    
+    // Find the activity by its ID
+    $activite = Activite::find($validatedData['activite_id']);
+    
+    // Check if the activity is currently associated with the offer
+    if ($offer->getActivites()->find($activite->id)) {
+        // Detach the activity from the offer
+        $offer->getActivites()->detach($activite->id);
+        return response()->json(['message' => 'Activity detached successfully from the offer']);
+    } else {
+        return response()->json(['message' => 'This activity is not associated with the specified offer'], 404);
+    }
+}
 
     public function store(Request $request)
     {

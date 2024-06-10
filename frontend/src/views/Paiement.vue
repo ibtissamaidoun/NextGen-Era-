@@ -1,23 +1,21 @@
 <script setup>
 
-import Ajoutactivite from "./components/Ajoutactivite.vue";
-import GestionActivites from "./components/GestionActivites.vue";
-
+import Gestionadmin from "./components/Gestionadmin.vue";
+import Gestionanim from "./components/Gestionanim.vue";
 
 </script>
 <template>
-
   <div class="py-4 container-fluid">
+  
     <div class="mt-4 row">
       <div class="col-12">
-        <Ajoutactivite />
+        <Gestionadmin />
       </div>
     </div>
     <div class="mt-4 row">
       <div class="col-12">
-        <GestionActivites />
+        <Gestionanim />
       </div>
     </div>
-    
   </div>
 </template>
