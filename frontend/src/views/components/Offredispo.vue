@@ -94,7 +94,7 @@
               ></router-link></argon-button>
             </a>
             </td>
-      </tr>
+          </tr>
         </tbody>
       </table>
     </div>

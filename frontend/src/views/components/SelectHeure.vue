@@ -5,7 +5,7 @@
       </div>
       <div class="card-body px-0 pt-0 pb-2">
         <div class="table-responsive p-0" >
-          <table class="table align-items-center  mb-0">
+          <table class="table table-bordered align-items-center  mb-0">
             <thead>
               <tr>
                 <th  class="text-uppercase text-secondary opacity-7">Horaires disponibles </th>
@@ -34,15 +34,11 @@
                
                 
                 <td class="align-middle">
-
-                <button
-                  class="btn btn-link text-danger text-gradient px-3 mb-0"
-                 
-                >
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-              </button>
-              
-              </td>
+            <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
+              <argon-button><router-link to="/dashboard-animateurs/Horaires/Editer"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
+              ></router-link></argon-button>
+            </a>
+            </td>
                 <td class="align-middle">
                   <button
                   class="btn btn-link text-danger text-gradient px-3 mb-0"
