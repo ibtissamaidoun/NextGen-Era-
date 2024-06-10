@@ -15,15 +15,16 @@ use Illuminate\Support\Facades\Storage;
 class ProfileController extends Controller
 {
 
-    //public function updateanimateur(Request $request)
-    //{
+    public function updateanimateur(Request $request)
+    {
+       try{
+        $user_id = auth::user()->id;
+        $user = User::find($user_id);
 
-          // $user = Auth::user();
 
-
-    public function updateanimateur(Request $request, $id){
-        try{
-    $user = User::where('role', 'animateur')->findOrFail($id);
+    // public function updateanimateur(Request $request, $id){
+    //     try{
+    // $user = User::where('role', 'animateur')->findOrFail($id);
 
 
         $request->validate([
@@ -75,10 +76,8 @@ class ProfileController extends Controller
     public function updateParent(Request $request)
     {
     try {
-        $user = auth::user();
-
-
-        $user = User::where('role', 'parent')->findOrFail($id);
+        $user_id = auth::user()->id;
+        $user = User::find($user_id);
 
         $request->validate([
             'nom' => 'sometimes|required|string',
@@ -110,7 +109,8 @@ class ProfileController extends Controller
     public function updateadmin(Request $request)
     {
         try {
-        $user = Auth::user();
+            $user_id = auth::user()->id;
+            $user = User::find($user_id);
 
 
         $request->validate([
@@ -181,7 +181,8 @@ class ProfileController extends Controller
     public function updatePassword(Request $request)
     {
         try{
-        $user = Auth::User();
+            $user_id = auth::user()->id;
+            $user = User::find($user_id);
 
 
         $request->validate([
@@ -262,8 +263,9 @@ class ProfileController extends Controller
     public function deleteprofile()
     {
         try{
-        $user = auth()->user(); // Find the user by ID
-        DB::beginTransaction();
+            $user_id = auth::user()->id;
+            $user = User::find($user_id); // Find the user by ID
+            DB::beginTransaction();
 
             // Delete the user from their associated role table based on their role
             switch ($user->role) {

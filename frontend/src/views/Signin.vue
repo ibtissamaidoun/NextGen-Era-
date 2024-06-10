@@ -7,13 +7,10 @@ import AppFooter from "@/examples/PageLayout/Footer.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 // import ArgonButton from "@/components/ArgonButton.vue"; // Commented out if not used
-import axiosInstance from '@/main';
 
 // Getting references to document body, router, and store
 const body = document.getElementsByTagName("body")[0];
-
 const store = useStore();
-
 // Setting up state variables
 const user = ref({
   email: '',
@@ -43,11 +40,10 @@ onBeforeUnmount(() => {
 async function submitLogin() {
   loading.value = true;
   try {
-    let response = await axiosInstance.post("/login", user.value);
-    console.log(response);
-    if (response.status === 202) {
-      sessionStorage.setItem('token', response.data.token);
-      const role = response.data.role;
+    await store.dispatch('login', user.value);
+    setTimeout(() => {
+      const role = store.getters.userRole;
+      console.log('User Role:', role); 
       switch (role) {
         case "admin":
           store.dispatch('navigateTo', {
@@ -76,9 +72,9 @@ async function submitLogin() {
             hideConfigButton: false
           });
           break;
-      }
-    }
-  } catch (e) {
+        }
+      }, 100);
+    } catch (e) {
     error.value = e.message || 'An error occurred during login';
     console.error('Login failed:', e);
   } finally {
@@ -208,7 +204,7 @@ const password = computed(() => {
                 <div class="px-1 pt-0 text-center card-footer px-lg-2">
                   <p class="mx-auto mb-4 text-sm">
                     Vous n'avez pas un compte?
-                    <router-link to="/signup" style="color:dark">S'inscrire</router-link>
+                    <router-link to="/register" style="color:dark">S'inscrire</router-link>
                     
                   </p>
                 </div>

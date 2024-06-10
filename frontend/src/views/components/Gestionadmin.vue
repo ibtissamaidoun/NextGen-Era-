@@ -21,6 +21,9 @@
               Supprimer
             </th>
             <th class="text-center text-primary opacity-7">
+             Editer 
+            </th>
+            <th class="text-center text-primary opacity-7">
               Détails
             </th>
           </tr>
@@ -41,6 +44,16 @@
                 <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
               </a>
             </td>
+            <td    class="align-middle">
+
+<button
+  class="btn btn-link text-danger text-gradient px-3 mb-0"
+ 
+>
+<i class="fa fa-pencil" aria-hidden="true"></i>
+</button>
+
+</td>
             <td class="text-center">  
               <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
               <argon-button><router-link to="/dashboard-admin/Administrateurs/Details">Détails</router-link></argon-button>

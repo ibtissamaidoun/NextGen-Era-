@@ -105,9 +105,6 @@ class AnimateurController extends Controller
             [
                 'horaires'=> horaire::all(),
             ]);
-
-
-
     }
 
     /**

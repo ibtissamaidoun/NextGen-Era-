@@ -28,10 +28,12 @@
     "dropzone": "6.0.0-beta.2",
     "quill": "^2.0.1",
     "vue": "3.4.19",
+    "vue-cli-service": "^5.0.8",
     "vue-count-to": "1.0.13",
     "vue-flatpickr-component": "11.0.4",
     "vue-router": "4.3.0",
-    "vuex": "4.1.0"
+    "vuex": "4.1.0",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.23.10",
