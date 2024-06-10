@@ -1,7 +1,7 @@
 <template>
     <div class="card ">
       <div class="card-header pb-0 px-3">
-        <h4 class="mb-2 text-center">Les activités affectés à l'animateur</h4>
+        <h4 class="mb-2 text-center">Les activités de mon enfant</h4>
       </div>
       <div class="card-body  pt-4 p-3 text-center justify-content-center align-items-center"> 
         <table class="table table-bordered align-items-center ">
@@ -22,13 +22,10 @@
                 >
                   Effectif actuel
                 </th>
-                <th
-                  class="text-center  text-secondary  opacity-7"
+                <th class="text-uppercase text-secondary opacity-7"
                 >
-                  Supprimer
+                  Ajouter
                 </th>
-                
-                <th class="text-secondary opacity-7"> Editer</th>
                 
               </tr>
             </thead>
@@ -51,21 +48,14 @@
                 {{activity.Effectif}}
               </span>
             </td> 
-             <td class="text-center">  
-              <a
-                class="btn btn-link text-danger text-gradient px-3 mb-0"
-                href="javascript:;"
-              >
-                <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-              </a>
-              </td>
-            
-              <td class="align-middle">
-            <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
-              <argon-button><router-link to="/dashboard-animateurs/Horaires/Editer"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
-              ></router-link></argon-button>
+            <td class="text-center">  
+              <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
+                <argon-button><router-link to="/dashboard-admin/Parents/Details">
+                    <i class="fas fa-plus"></i>
+                </router-link></argon-button>
             </a>
             </td>
+             
         </tr>
           </tbody>
         </table>
@@ -142,37 +132,5 @@ export default {
       ]
     };
   }
-}; 
-//  <script>
-//    import axiosInstance from '@/main';
-
-//     export default {
-//       data() {
-//         return {
-//           getActivites: []
-//         }},
-      
-//         async created(){
-//           try {
-//           let response = await axiosInstance.get("animateur/activites");
-//           this.getActivites= response.data;
-//           console.log(response.data);
-//         }
-//         catch (error) {
-//       console.error('Erreur lors de récupération des activites:', error);
-//     }
-//     },
-//     methods: {
-//     async deleteActivities(horaire_id, index) {
-
-//       try {
-//         this.horaires.splice(index, 1); // Supprime l'entrée du tableau local
-//         await axiosInstance.delete("animateur/horaires/"+horaire_id); // Remplacez par l'URL correcte
-        
-//       } catch (error) {
-//         console.error('Erreur lors de la suppression de l\'animateur:', error);
-//       }}}}
-  
-   
-   
-//     </script>-->
+};
+</script>

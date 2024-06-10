@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 
 import SidenavItem from "./SidenavItem.vue";
+//import SidenavCard from "./SidenavCard.vue";
 
 const store = useStore();
 const isRTL = computed(() => store.state.isRTL);
@@ -18,65 +19,19 @@ const getRoute = () => {
 <template>
     
         <div
-    class="collapse navbar-collapse w-auto h-auto h-100"
+    class="collapse navbar-collapse w-auto h-auto p-4"
     id="sidenav-collapse-main"
   >
     <ul class="navbar-nav">
-        <li class="nav-item">
-        <sidenav-item
-          to="/dashboard-parents"
-          :class="getRoute() === 'dashboard-parents' ? 'active' : ''"
-          :navText="isRTL ? 'لوحة القيادة' : 'Dashboard'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-      
       <li class="nav-item">
         <sidenav-item
-          to="/Administrateurs"
-          :class="getRoute() === 'Administrateurs' ? 'active' : ''"
-          :navText="isRTL ? 'الواقع الافتراضي' : 'Administrateurs'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-      <li class="nav-item">
-        <sidenav-item
-          to="/Animateurs"
-          :class="getRoute() === 'animateurs' ? 'active' : ''"
-          :navText="isRTL ? 'الواقع الافتراضي' : 'animateurs'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-      <li class="nav-item">
-        <sidenav-item
-          to="/Parents"
-          :class="getRoute() === 'Parents' ? 'active' : ''"
-          :navText="isRTL ? 'الواقع الافتراضي' : 'Parents'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/Offres"
-          :class="getRoute() === 'Offres' ? 'active' : ''"
-          :navText="isRTL ? 'الجداول' : 'Offres'"
+          to="/dashboard-parents/Enfants"
+          :class="getRoute() === 'Enfants' ? 'active' : ''"
+          :navText="isRTL ? 'الجداول' : 'Enfants'"
         >
           <template v-slot:icon>
             <i
-              class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"
+              class="ni ni-circle-08 text-primary text-sm opacity-10"
             ></i>
           </template>
         </sidenav-item>
@@ -84,42 +39,85 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/Activites"
-          :class="getRoute() === 'Activites' ? 'active' : ''"
-          :navText="isRTL ? 'الفواتیر' : 'Activites'"
+          to="/dashboard-parents/Activites"
+          :class="getRoute() === 'Activités' ? 'active' : ''"
+          :navText="isRTL ? 'الجداول' : 'Activités'"
         >
           <template v-slot:icon>
-            <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
+            <i
+              class="ni ni-controller text-warning text-sm opacity-10"
+            ></i>
           </template>
         </sidenav-item>
       </li>
 
       <li class="nav-item">
         <sidenav-item
-          to="/Demandes"
+          to="/dashboard-parents/DemandesParents"
           :class="getRoute() === 'Demandes' ? 'active' : ''"
-          :navText="isRTL ? 'الواقع الافتراضي' : 'Demandes'"
+          :navText="isRTL ? 'الجداول' : 'Demandes'"
         >
           <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
+            <i
+              class="ni ni-books text-primary text-sm opacity-10"
+            ></i>
           </template>
         </sidenav-item>
       </li>
 
+      <!-- <li class="nav-item">
+        <sidenav-item
+          to="/dashboard-parents/Devis"
+          :class="getRoute() === 'Devis' ? 'active' : ''"
+          :navText="isRTL ? 'الجداول' : 'Devis'"
+        >
+          <template v-slot:icon>
+            <i
+              class="ni ni-credit-card text-warning text-sm opacity-10"
+            ></i>
+          </template>
+        </sidenav-item>
+      </li>
       
-
       <li class="nav-item">
         <sidenav-item
-          to="/rtl-page"
-          :class="getRoute() === 'rtl-page' ? 'active' : ''"
-          navText="RTL"
+          to="/dashboard-parents/Factures"
+          :class="getRoute() === 'Factures' ? 'active' : ''"
+          :navText="isRTL ? 'الجداول' : 'Factures'"
         >
           <template v-slot:icon>
-            <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>
+            <i
+              class="ni ni-single-copy-04 text-primary text-sm opacity-10"
+            ></i>
+          </template>
+        </sidenav-item>
+      </li> -->
+      <li class="nav-item">
+        <sidenav-item
+          to="/dashboard-animateurs/Activites"
+          :class="getRoute() === 'Offres' ? 'active' : ''"
+          :navText="isRTL ? 'الجداول' : 'Offres'"
+        >
+          <template v-slot:icon>
+            <i
+              class="fa fa-birthday-cake text-info text-sm opacity-10"
+            ></i>
           </template>
         </sidenav-item>
       </li>
-
+      <li class="nav-item">
+        <sidenav-item
+          to="/dashboard-animateurs/Activites"
+          :class="getRoute() === 'Notifications' ? 'active' : ''"
+          :navText="isRTL ? 'الجداول' : 'Notifications'"
+        >
+          <template v-slot:icon>
+            <i
+              class="ni ni-controller text-info text-sm opacity-10"
+            ></i>
+          </template>
+        </sidenav-item>
+      </li>
       <li class="mt-3 nav-item">
         <h6
           v-if="isRTL"
@@ -129,7 +127,7 @@ const getRoute = () => {
           صفحات المرافق
         </h6>
 
-        <h6
+      <h6
           v-else
           class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6"
           :class="isRTL ? 'me-4' : 'ms-2'"
@@ -140,7 +138,7 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/profile"
+          to="/dashboard-admin/profile"
           :class="getRoute() === 'profile' ? 'active' : ''"
           :navText="isRTL ? 'حساب تعريفي' : 'Profile'"
         >
@@ -152,9 +150,15 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
+<<<<<<< HEAD
           to="/login"
           :class="getRoute() === 'login' ? 'active' : ''"
           :navText="isRTL ? 'تسجيل الدخول' : 'Sign In'"
+=======
+          to="/signin"
+          :class="getRoute() === 'signin' ? 'active' : ''"
+          :navText="isRTL ? 'تسجيل الدخول' : 'Déconnexion'"
+>>>>>>> f1b34e6138b84b56c5c59a389d83a05a365b1504
         >
           <template v-slot:icon>
             <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
@@ -162,6 +166,7 @@ const getRoute = () => {
         </sidenav-item>
       </li>
 
+<<<<<<< HEAD
       <li class="nav-item">
         <sidenav-item
           to="/register"
@@ -173,30 +178,13 @@ const getRoute = () => {
           </template>
         </sidenav-item>
       </li>
+=======
+      
+>>>>>>> f1b34e6138b84b56c5c59a389d83a05a365b1504
     </ul>
   </div>
-
-  <div class="pt-3 mx-3 mt-3 sidenav-footer">
-    <sidenav-card
-      :card="{
-        title: 'Need Help?',
-        description: 'Please check our docs',
-        links: [
-          {
-            label: 'Documentation',
-            route:
-              'https://www.creative-tim.com/learning-lab/vue/overview/argon-dashboard/',
-            color: 'dark',
-          },
-          {
-            label: 'Buy now',
-            route:
-              'https://www.creative-tim.com/product/vue-argon-dashboard-pro?ref=vadp',
-            color: 'success',
-          },
-        ],
-      }"
-    />
-  </div>
+      
+   
+  
     
   </template>
