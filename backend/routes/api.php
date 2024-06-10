@@ -195,6 +195,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
 
+    Route::post('admins', [AdministrateurController::class, 'store']);
 
 
 
