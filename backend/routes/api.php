@@ -61,10 +61,9 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
 
 
     /** ---- MANIPULATION DES ENFANTS ---- */
+    Route::apiResource('enfants', EnfantController::class);
     Route::prefix('enfants')->group(function ()
     {
-        Route::apiResource('/', EnfantController::class);
-
         // EDT POUR UN ENFANT DONNÉE
         Route::get('{enfant_id}/edt',[ParentmodelController::class,'EDT']);
     });
