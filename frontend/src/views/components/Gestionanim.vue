@@ -3,7 +3,6 @@
     <div class="card-header pb-0 px-3">
       <h4 class="mb-2 text-center">La gestion des animateurs</h4>
     </div>
-<<<<<<< HEAD
     <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
       <table class="table table-bordered align-items-center">
         <thead>
@@ -49,7 +48,7 @@
           </tr>
         </tbody>
       </table>
-=======
+
     <div class="card-body px-0 pt-0 pb-2">
       <div class="table-responsive p-0">
         <table class="table align-items-center mb-0">
@@ -126,12 +125,11 @@
           </tbody>
         </table>
       </div>
->>>>>>> b0ff42eb0fd2d42c21dff1a6dd22cc85a9510d33
     </div>
-    
+    </div>
   </div>
 </template>
-<<<<<<< HEAD
+
 
 <script>
 /* eslint-disable */
@@ -223,7 +221,7 @@ span {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 </style>
-=======
+<!-- 
 <script setup>
 //import { ref } from "vue";
 import axiosInstance from '@/main';
@@ -235,8 +233,7 @@ onBeforeMount(async() => {
    console.log(response);
 
  // code to DB
-});
+}); -->
 
-
-</script>
->>>>>>> b0ff42eb0fd2d42c21dff1a6dd22cc85a9510d33
+<!-- 
+</script> -->

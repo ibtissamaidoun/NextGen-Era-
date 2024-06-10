@@ -3,7 +3,6 @@ import Dashboard from "../views/Dashboard.vue";
 import Dashboardanim from "../views/DashboardAnim.vue";
 import Dashboardparents from "../views/DashboardParents.vue"
 import AvailablesActivites from "@/views/AvailableActivites.vue";
-
 //import utilisateurs from "../views/utilisateurs.vue";
 import Administrateurs from "../views/Administrateurs.vue";
 import DetailsAdmin from "@/views/components/DetailsAdmin.vue";
@@ -41,9 +40,6 @@ import CalculMental from "../views/Description/CalculMental.vue";
 import LabChimie from "../views/Description/LabChimie.vue";
 import LabBiologie from "../views/Description/LabBiologie.vue";
 import Echecs from "../views/Description/Echecs.vue";
-
-
-
 
 
 const routes = [

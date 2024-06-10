@@ -25,7 +25,6 @@ const user = ref ({
 })
 
 
-
 const store = useStore();
 onBeforeMount(() => {
   store.state.hideConfigButton = true;

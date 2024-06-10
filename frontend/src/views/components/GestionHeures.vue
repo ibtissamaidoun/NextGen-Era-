@@ -7,8 +7,8 @@
         <table class="table table-bordered align-items-center ">
             <thead >
               <tr>
-                <th
-                  class="text-uppercase text-secondary opacity-7"
+                 <th
+                 class="text-uppercase text-secondary opacity-7"
                 >
                   Heure début
                 </th>
@@ -16,7 +16,7 @@
                   class="text-uppercase text-secondary opacity-7"
                 >
                   Heure fin
-                </th>
+                </th> 
                 <th
                   class="text-uppercase text-secondary opacity-7"
                 >

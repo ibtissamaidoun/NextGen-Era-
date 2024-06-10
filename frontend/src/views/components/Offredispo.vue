@@ -83,6 +83,7 @@
             <a
               class="btn btn-link text-danger text-gradient px-3 mb-0"
               href="javascript:;"
+              @click="deleteOffre( activity.id,index)"
             >
               <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
             </a>
@@ -123,50 +124,81 @@ span{
 </style>
 
 <script>
+// export default {
+// data() {
+//   return {
+//     affectes: [
+//       {
+//         id:"5",
+//         titre: "Atelier",
+//         remise: "AID AL ADHA ", 
+//         datedebut: "10/06/2024",
+//         datefin:"10/07/2024",
+//         heuredebut:"10:30",
+//         heurefin:"22:30",
+//       },
+//       {
+//         id:"5",
+//         titre: "Atelier",
+//         remise: "AID AL ADHA ", 
+//         datedebut: "10/06/2024",
+//         datefin:"10/07/2024",
+//         heuredebut:"10:30",
+//         heurefin:"22:30",
+//       },
+//       {
+//         id:"5",
+//         titre: "Atelier",
+//         remise: "AID AL ADHA ", 
+//         datedebut: "10/06/2024",
+//         datefin:"10/07/2024",
+//         heuredebut:"10:30",
+//         heurefin:"22:30",
+//       },
+//       {
+//         id:"5",
+//         titre: "Atelier",
+//         remise: "AID AL ADHA ", 
+//         datedebut: "10/06/2024",
+//         datefin:"10/07/2024",
+//         heuredebut:"10:30",
+//         heurefin:"22:30",
+//       },
+
+
+//     ]
+//   };
+// }
+// };
+import axiosInstance from '@/main';
+
 export default {
-data() {
-  return {
-    affectes: [
-      {
-        id:"5",
-        titre: "Atelier",
-        remise: "AID AL ADHA ", 
-        datedebut: "10/06/2024",
-        datefin:"10/07/2024",
-        heuredebut:"10:30",
-        heurefin:"22:30",
-      },
-      {
-        id:"5",
-        titre: "Atelier",
-        remise: "AID AL ADHA ", 
-        datedebut: "10/06/2024",
-        datefin:"10/07/2024",
-        heuredebut:"10:30",
-        heurefin:"22:30",
-      },
-      {
-        id:"5",
-        titre: "Atelier",
-        remise: "AID AL ADHA ", 
-        datedebut: "10/06/2024",
-        datefin:"10/07/2024",
-        heuredebut:"10:30",
-        heurefin:"22:30",
-      },
-      {
-        id:"5",
-        titre: "Atelier",
-        remise: "AID AL ADHA ", 
-        datedebut: "10/06/2024",
-        datefin:"10/07/2024",
-        heuredebut:"10:30",
-        heurefin:"22:30",
-      },
-
-
-    ]
-  };
+  data() {
+    return {
+      offres: []
+    }},
+  
+    async created(){
+      try {
+      let response = await axiosInstance.get("admin/offres");
+      this.offres = response.data;
+      console.log(response.data);
+    }
+    catch (error) {
+  console.error('Erreur lors de la récupération des offres:', error);
 }
-};
+},
+
+    
+methods: {
+async deleteOffre(activite_id, index) {
+
+  try {
+    this.horaires.splice(index, 1); // Supprime l'entrée du tableau local
+    await axiosInstance.delete("admin/offres/"+activite_id); // Remplacez par l'URL correcte
+    
+  } catch (error) {
+    console.error('Erreur lors de la suppression de l\'offre:', error);
+  }}}}
+
 </script>
