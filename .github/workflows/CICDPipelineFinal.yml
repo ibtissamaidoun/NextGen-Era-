@@ -37,8 +37,8 @@ jobs:
       - name: Install PHP dependencies
         run: |
           cd "backend"
-         # composer update
-          composer install --prefer-dist --no-progress --no-suggest
+          composer update
+          #composer install --prefer-dist --no-progress --no-suggest
           
       - name: Copy .env file
         run: |
