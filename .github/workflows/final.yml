@@ -33,10 +33,19 @@ jobs:
           php-version: '8.2'
           extensions: mbstring, pdo_pgsql
           tools: composer:v2, phpunit
-          
+
       - name: Install unzip
         run: sudo apt-get install unzip
-        
+
+      - name: Clear Composer cache
+        run: composer clear-cache
+
+      - name: Remove vendor directory
+        run: rm -rf backend/vendor
+
+      - name: Remove composer.lock
+        run: rm -f backend/composer.lock
+
       - name: Cache Composer dependencies
         uses: actions/cache@v2
         with:
@@ -44,14 +53,11 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/backend/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Clear Composer cache
-        run: composer clear-cache
-      
       - name: Install PHP dependencies
         run: |
           cd "backend"
           composer install --prefer-dist --no-progress --no-suggest
-          
+
       - name: Copy .env file
         run: |
           cd "backend"
@@ -61,12 +67,12 @@ jobs:
           echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          
+
       - name: Generate key
         run: |
           cd "backend"
           php artisan key:generate
-          
+
       - name: Run migration
         run: |
           cd "backend"
