@@ -1,6 +1,7 @@
 <?php
 
 use Spatie\Csp\Keyword;
+use spatie\Csp\Nonce\RandomString;
 
 return [
 
@@ -8,7 +9,7 @@ return [
      * A policy will determine which CSP headers will be set. A valid CSP policy is
      * any class that extends `Spatie\Csp\Policies\Policy`
      */
-    'policy' => Spatie\Csp\Policies\basic::class,
+    'policy' => App\Policies\CustomCspPolicy::class,
 
     /*
      * This policy which will be put in report only mode. This is great for testing out
@@ -33,6 +34,6 @@ return [
     /*
      * The class responsible for generating the nonces used in inline tags and headers.
      */
-    'nonce_generator' => Spatie\Csp\Nonce\RandomString::class,
+    'nonce_generator' => RandomString::class,
     
 ];

@@ -28,7 +28,8 @@ class ForgotController extends Controller
         ]);
         $user->notify(new ForgetPasswordNotification($token));
 
-        return response()->json(['message' => 'Reset link sent to your email address'], 202);
+        return response()->json(['message' => 'Reset link sent to your email address',
+    'token'=>$token], 202);
     }
     catch (\Throwable $th) {
         return response()->json([
@@ -58,7 +59,8 @@ class ForgotController extends Controller
          $user->save();
         DB::table('password_reset_tokens')->where('token', $token)->delete();
         });
-        return response()->json(['message'=> 'Your password is reset successfully'],202);
+        return response()->json(['message'=> 'Your password is reset successfully',
+    ],202);
         }
         catch (\Throwable $th) {
             return response()->json([
