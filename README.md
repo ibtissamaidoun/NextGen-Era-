@@ -1,3 +1,4 @@
 ## GETNEXT-ERA
-![image](https://github.com/ibtissamaidoun/NextGen-Era-/assets/159814656/ea487c7c-4a84-40f1-9202-08a3d68de7f3)
+![image](https://github.com/ibtissamaidoun/NextGen-Era-/assets/159814656/5ea40744-0b66-4fc9-bbd9-d4b9ea278619)
+
 
