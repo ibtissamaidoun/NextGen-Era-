@@ -34,6 +34,9 @@ jobs:
           extensions: mbstring, pdo_pgsql
           tools: composer:v2, phpunit
           
+      - name: Install unzip
+        run: sudo apt-get install unzip
+        
       - name: Cache Composer dependencies
         uses: actions/cache@v2
         with:
