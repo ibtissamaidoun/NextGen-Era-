@@ -222,10 +222,7 @@ span {
 }
 </style>
 
-<<<<<<< HEAD
 <!-- 
-=======
->>>>>>> f1b34e6138b84b56c5c59a389d83a05a365b1504
 <script setup>
 //import { ref } from "vue";
 import axiosInstance from '@/main';
@@ -237,15 +234,13 @@ onBeforeMount(async() => {
    console.log(response);
 
  // code to DB
-<<<<<<< HEAD
 }); -->
 
 <!-- 
-</script> -->
-=======
+</script> 
 });
 
 
 </script>
+-->
 
->>>>>>> f1b34e6138b84b56c5c59a389d83a05a365b1504

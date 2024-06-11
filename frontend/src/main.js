@@ -32,15 +32,6 @@ app.mount("#app");
 //     return config;
 // });
 // Exporter l'instance Axios configurée
-//export default axiosInstance;
+export default axiosInstance;
 
-<<<<<<< HEAD
 
-=======
-const app = createApp(App);
-app.use(store);
-app.use(router);
-app.use(ArgonDashboard);
-app.config.globalProperties.$axios = axiosInstance;
-app.mount("#app");
->>>>>>> f1b34e6138b84b56c5c59a389d83a05a365b1504
