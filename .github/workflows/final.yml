@@ -33,7 +33,17 @@ jobs:
           php-version: '8.2'
           extensions: mbstring, pdo_pgsql
           tools: composer:v2, phpunit
+          
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: backend/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/backend/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
 
+      - name: Clear Composer cache
+        run: composer clear-cache
+      
       - name: Install PHP dependencies
         run: |
           cd "backend"
