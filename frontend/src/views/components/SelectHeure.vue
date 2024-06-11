@@ -34,16 +34,16 @@
                
                 
 
-           //  <td    class="align-middle">
+           <!-- <td    class="align-middle">
 
-               // <button
-                //  class="btn btn-link text-danger text-gradient px-3 mb-0"
+               <button
+                class="btn btn-link text-danger text-gradient px-3 mb-0"
                  
-              //  >
-              //  <i class="fa fa-pencil" aria-hidden="true"></i>
-             // </button>
+                >
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </button>
               
-             // </td>
+              </td> -->
 
                 <td class="align-middle">
             <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
