@@ -37,8 +37,9 @@ jobs:
       - name: Install PHP dependencies
         run: |
           cd "backend"
-          composer install --prefer-dist --no-progress --no-suggest
-          
+          composer update
+          #composer install --prefer-dist --no-progress --no-suggest
+
       - name: Copy .env file
         run: |
           cd "backend"
@@ -48,12 +49,12 @@ jobs:
           echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          
+
       - name: Generate key
         run: |
           cd "backend"
           php artisan key:generate
-          
+
       - name: Run migration
         run: |
           cd "backend"
@@ -76,7 +77,8 @@ jobs:
       - name: Install PHP dependencies
         run: |
           cd "backend"
-          composer install --prefer-dist --no-progress --no-suggest
+          composer update
+          # composer install --prefer-dist --no-progress --no-suggest
       - name: Run unit tests
         run: |
           cd "backend"
@@ -99,7 +101,7 @@ jobs:
       - name: Install PHP dependencies
         run: |
           cd "backend"
-          composer install --prefer-dist --no-progress --no-suggest
+          composer update
           
       - name: Copy .env example
         run: |
@@ -302,11 +304,11 @@ jobs:
             mv ./database/seeders/animateursTableSeeder.php ./database/seeders/AnimateursTableSeeder.php
             mv ./app/Models/recu.php ./app/Models/Recu.php
             cp .env.example .env
-            echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-            echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-            echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
-            echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+            # echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+            # echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+            # echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+            # echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+            # echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
             php artisan key:generate
             sudo chmod -R 777 ${RELEASE_PATH}storage
             sudo chmod -R 777 ${RELEASE_PATH}bootstrap/cache
