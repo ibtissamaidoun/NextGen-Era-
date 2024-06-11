@@ -37,8 +37,8 @@ jobs:
       - name: Install PHP dependencies
         run: |
           cd "backend"
-          composer update
-          #composer install --prefer-dist --no-progress --no-suggest
+         # composer update
+          composer install --prefer-dist --no-progress --no-suggest
           
       - name: Copy .env file
         run: |
@@ -77,8 +77,8 @@ jobs:
       - name: Install PHP dependencies
         run: |
           cd "backend"
-          composer update
-          #composer install --prefer-dist --no-progress --no-suggest
+        #  composer update
+          composer install --prefer-dist --no-progress --no-suggest
       - name: Run unit tests
         run: |
           cd "backend"
@@ -101,8 +101,8 @@ jobs:
       - name: Install PHP dependencies
         run: |
           cd "backend"
-          composer update
-          #composer install --prefer-dist --no-progress --no-suggest
+          #composer update
+          composer install --prefer-dist --no-progress --no-suggest
           
       - name: Copy .env example
         run: |
@@ -160,8 +160,10 @@ jobs:
       - name: Install PHP dependencies
         run: |
           cd "backend"
-          composer update
-          #composer install --prefer-dist --no-progress --no-suggest
+         
+          
+           #composer update
+          composer install --prefer-dist --no-progress --no-suggest
       
       - name: Run security check
         run: |
@@ -236,8 +238,8 @@ jobs:
 
       - name: Install Composer Dependencies
         run: |
-          composer update
-          #composer install --no-dev --no-interaction --prefer-dist
+          #composer update
+          composer install --no-dev --no-interaction --prefer-dist
         working-directory: backend
 
       - name: Create deployment artifact 
