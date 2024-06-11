@@ -189,7 +189,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')->group(function () {
 
     /** --- ADMINS --- */
-    Route::get('admins', [AdministrateurController::class, 'index']);
+    
     Route::post('admins', [AdministrateurController::class, 'store']);
     Route::get('admins/{admin}', [AdministrateurController::class, 'show']);
 
@@ -315,7 +315,9 @@ Route::get('devis',[deviController::class, 'createDevis']); // marche
 Route::get('monPack',[PackController::class,'packPoussible']); // marche
 
 
-
+Route::prefix('dashboard-admin')->group(function () {
+    Route::get('admins', [AdministrateurController::class, 'index']);
+});
 
 //------test----taha----ostora----//
 

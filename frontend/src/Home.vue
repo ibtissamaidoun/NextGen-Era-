@@ -47,11 +47,10 @@ export default {
                    <a class="nav-link active" aria-current="page" href="#header">Accueil</a>
                </li>
                <li class="nav-item">
-<<<<<<< HEAD
+
                    <a class="nav-link" href="#services">Activités</a>
-=======
-                   <a class="nav-link" href="#services">activités</a>
->>>>>>> f1b34e6138b84b56c5c59a389d83a05a365b1504
+
+
                </li>
                <li class="nav-item">
                    <a class="nav-link" href="#contact">Contact Us</a>

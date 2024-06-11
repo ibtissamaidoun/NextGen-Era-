@@ -8,11 +8,11 @@
 import { ref, onBeforeUnmount, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import ArgonInput from "@/components/ArgonInput.vue";
-import axiosInstance from "@/main"; 
+import axiosInstance from "@/axios-instance"; 
 
 const store = useStore();
 const email = ref('');
-
+//const refresh_token=ref('');
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
   store.state.showNavbar = false;
@@ -26,18 +26,20 @@ onBeforeUnmount(() => {
   store.state.showSidenav = true;
   store.state.showFooter = true;
 });
-const token=ref('');
+// const token=ref('');
 const recoverPassword = async () => {
   
   
-if (!token.value) {
-    alert("Token est requis pour la récupération de mot de passe.");
-    return;
-  }
+// if (!refresh_token.value) {
+//     alert("Token est requis pour la récupération de mot de passe."); console.log('safaa', refresh_token.value);
+//     return;
+//   }
   try {
-    console.log("Envoi de la requête avec email:", email.value, "et token:", token.value);
-    const response = await axiosInstance.post('/forget', { email: email.value , token:token.value });
+    
+    console.log("Envoi de la requête avec email:", email.value);
+    const response = await axiosInstance.post('/forget', { email: email.value });
     console.log(response.data.message); 
+    
   } catch (error) {
     if (error.response && error.response.data) {
       alert(error.response.data.message);

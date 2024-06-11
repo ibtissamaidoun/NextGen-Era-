@@ -39,7 +39,7 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/dashboard-admin/Administrateurs"
+          to="/dashboard-admin/Admins"
           :class="getRoute() === 'Administrateurs' ? 'active' : ''"
           :navText="isRTL ? 'الواقع الافتراضي' : 'Administrateurs'"
         >

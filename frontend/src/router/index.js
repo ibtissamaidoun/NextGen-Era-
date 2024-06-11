@@ -92,11 +92,13 @@ const routes = [
   },
   
   {
-    path: "/dashboard-admin/Administrateurs",
-    name: "administrateurs",
-    component: Administrateurs,
-  // beforeEnter: requireAuth('admin')
+      path: "/dashboard-admin/admins",
+      name: "administrateurs",
+      component: Administrateurs,
+    //  beforeEnter: requireAuth('admin')
+    
   },
+
   {
     path: "/dashboard-admin/Administrateurs/Details",
     name: "DetailsAdmin",

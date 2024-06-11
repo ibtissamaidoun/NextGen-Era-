@@ -33,7 +33,6 @@
                 </td>
                
                 
-<<<<<<< HEAD
              <td    class="align-middle">
 
                 <button
@@ -44,14 +43,12 @@
               </button>
               
               </td>
-=======
                 <td class="align-middle">
             <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
               <argon-button><router-link to="/dashboard-animateurs/Horaires/Editer"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
               ></router-link></argon-button>
             </a>
             </td>
->>>>>>> f1b34e6138b84b56c5c59a389d83a05a365b1504
                 <td class="align-middle">
                   <button
                   class="btn btn-link text-danger text-gradient px-3 mb-0"

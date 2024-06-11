@@ -28,7 +28,8 @@ class ForgotController extends Controller
         ]);
         $user->notify(new ForgetPasswordNotification($token));
 
-        return response()->json(['message' => 'Reset link sent to your email address'], 202);
+        return response()->json(['message' => 'Reset link sent to your email address','token' => $token
+    ], 202);
     }
     catch (\Throwable $th) {
         return response()->json([
