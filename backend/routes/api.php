@@ -53,10 +53,9 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
 
 
     /** ---- MANIPULATION DES ENFANTS ---- */
+    Route::apiResource('enfants', EnfantController::class);
     Route::prefix('enfants')->group(function ()
     {
-        Route::apiResource('/', EnfantController::class);
-
         // EDT POUR UN ENFANT DONNÉE
         Route::get('{enfant_id}/edt',[ParentmodelController::class,'EDT']);
     });
@@ -142,7 +141,6 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
     {
         Route::get('/', [AnimateurController::class, 'indexHeures'])->name('animateur.horaires.index');
         Route::post('/', [AnimateurController::class, 'storeHeure'])->name('animateur.horaires.store');
-        Route::get('getHoraires', [AnimateurController::class, 'getHeures'])->name('animateur.horaires.get');
     
         Route::put('{horaire}', [AnimateurController::class, 'updateHeure'])->name('animateur.horaires.update');
         Route::patch('{horaire}', [AnimateurController::class, 'updateHeure'])->name('animateur.horaires.update');

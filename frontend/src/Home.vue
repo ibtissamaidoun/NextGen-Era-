@@ -51,6 +51,7 @@ export default {
                    <a class="nav-link" href="#services">Activités</a>
 
 
+
                </li>
                <li class="nav-item">
                    <a class="nav-link" href="#contact">Contact Us</a>
