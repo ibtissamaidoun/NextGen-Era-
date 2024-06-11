@@ -6,6 +6,12 @@ import axiosInstance from './axios-instance';
 import "./assets/css/nucleo-icons.css";
 import "./assets/css/nucleo-svg.css";
 import ArgonDashboard from "./argon-dashboard";
+const app = createApp(App);
+app.use(store);
+app.use(router);
+app.use(ArgonDashboard);
+app.config.globalProperties.$axios = axiosInstance;
+app.mount("#app");
 
 //import http from '@/services/http';
 
@@ -28,9 +34,11 @@ import ArgonDashboard from "./argon-dashboard";
 // Exporter l'instance Axios configurée
 //export default axiosInstance;
 
-const app = createApp(App);
-app.use(store);
-app.use(router);
-app.use(ArgonDashboard);
-app.config.globalProperties.$axios = axiosInstance;
-app.mount("#app");
+
+// const app = createApp(App);
+// app.use(store);
+// app.use(router);
+// app.use(ArgonDashboard);
+// app.config.globalProperties.$axios = axiosInstance;
+// app.mount("#app");
+

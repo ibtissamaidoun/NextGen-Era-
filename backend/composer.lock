@@ -16,7 +16,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-dompdf/zipball/c96f90c97666cebec154ca1ffb67afed372114d8",
+                "url": "https://github.com/barryvdh/laravel-dompdf.git",
                 "reference": "c96f90c97666cebec154ca1ffb67afed372114d8",
                 "shasum": ""
             },

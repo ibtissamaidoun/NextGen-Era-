@@ -11,7 +11,6 @@ import ArgonSwitch from "@/components/ArgonSwitch.vue";
 // Getting references to document body, router, and store
 const body = document.getElementsByTagName("body")[0];
 const store = useStore();
-
 // Setting up state variables
 const user = ref({
   email: '',
@@ -205,7 +204,7 @@ const password = computed(() => {
                 <div class="px-1 pt-0 text-center card-footer px-lg-2">
                   <p class="mx-auto mb-4 text-sm">
                     Vous n'avez pas un compte?
-                    <router-link to="/signup" style="color:dark">S'inscrire</router-link>
+                    <router-link to="/register" style="color:dark">S'inscrire</router-link>
                     
                   </p>
                 </div>

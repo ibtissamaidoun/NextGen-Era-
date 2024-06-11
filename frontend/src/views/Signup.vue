@@ -6,7 +6,7 @@ import { ref } from "vue";
 import { useRouter } from 'vue-router'; // Importer le routeur Vue Router
 
 //import axios from "axios";
-import axiosInstance from '@/main';
+import axiosInstance from '../axios-instance';
 
 
 import Navbar from "@/examples/PageLayout/Navbar.vue";
@@ -24,7 +24,6 @@ const user = ref ({
   mot_de_passe : "",
   mot_de_passe_confirmation : ""
 })
-
 
 
 const store = useStore();
@@ -45,19 +44,17 @@ onBeforeUnmount(() => {
 const router = useRouter();
 const HandleSubmit = async (e)=>{
   e.preventDefault()
-//  console.log(user.value)
+  console.log(user.value)
   const response = await axiosInstance.post("/register",user.value);
   if(response.status == 202){
     // Stocker le token dans le sessionStorage
     sessionStorage.setItem('token', response.data.token);
     
-    router.push('/signin'); // Rediriger vers la route '/signup'
+    router.push('/login'); // Rediriger vers la route '/signup'
   }
   
   console.log(response)
 }
-
-
 
 </script>
 <template>
@@ -270,7 +267,7 @@ const HandleSubmit = async (e)=>{
                 </div>
                 <p class="text-sm mt-3 mb-0">
                   Avez-vous déjà un compte?
-                  <router-link to="/signin" class="text-dark font-weight-bolder"
+                  <router-link to="/login" class="text-dark font-weight-bolder"
                     >se connecter</router-link>
                   
                 </p>

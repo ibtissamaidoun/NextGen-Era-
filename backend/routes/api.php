@@ -48,23 +48,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
-
-
-
-
-
-
-
-
 // Routes réservées aux parents
 Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->group(function () {
 
 
     /** ---- MANIPULATION DES ENFANTS ---- */
+    Route::apiResource('enfants', EnfantController::class);
     Route::prefix('enfants')->group(function ()
     {
-        Route::apiResource('/', EnfantController::class);
-
         // EDT POUR UN ENFANT DONNÉE
         Route::get('{enfant_id}/edt',[ParentmodelController::class,'EDT']);
     });
@@ -142,12 +133,6 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
 
 
 
-
-
-
-
-
-
 // Routes réservées à l'animateur
 Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('animateur')->group(function () 
 {
@@ -156,7 +141,6 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
     {
         Route::get('/', [AnimateurController::class, 'indexHeures'])->name('animateur.horaires.index');
         Route::post('/', [AnimateurController::class, 'storeHeure'])->name('animateur.horaires.store');
-        Route::get('getHoraires', [AnimateurController::class, 'getHeures'])->name('animateur.horaires.get');
     
         Route::put('{horaire}', [AnimateurController::class, 'updateHeure'])->name('animateur.horaires.update');
         Route::patch('{horaire}', [AnimateurController::class, 'updateHeure'])->name('animateur.horaires.update');
@@ -195,6 +179,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
 
+    Route::post('admins', [AdministrateurController::class, 'store']);
 
 
 

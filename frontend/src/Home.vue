@@ -47,7 +47,11 @@ export default {
                    <a class="nav-link active" aria-current="page" href="#header">Accueil</a>
                </li>
                <li class="nav-item">
-                   <a class="nav-link" href="#services"></a>
+
+                   <a class="nav-link" href="#services">Activités</a>
+
+                   <a class="nav-link" href="#services">activités</a>
+
                </li>
                <li class="nav-item">
                    <a class="nav-link" href="#contact">Contact Us</a>
@@ -63,7 +67,7 @@ export default {
                </li>
            </ul>
            <span class="nav-item">
-               <router-link to="Signin" class="btn-solid-sm" >Connexion</router-link>
+               <router-link to="login" class="btn-solid-sm" >Connexion</router-link>
            </span>
        </div> 
    </div> 
@@ -94,8 +98,8 @@ export default {
           </div> 
       </div>
       <div class="row">
-          <div class="col-lg-12">
-              <div class="card">
+          <div class="col-lg-12 ">
+              <div class="card flex-fill">
                   <div class="card-body">
                     <h4 class="card-title" style="color: #000080;" >Programmation</h4>
                         <p style="padding:10%"> Apprenez les bases de la programmation et développez des compétences en codage à travers des projets passionnants.</p>
@@ -103,7 +107,7 @@ export default {
                   </div>
               </div>
           
-              <div class="card">
+              <div class="card flex-fill">
                   <div class="card-body">
                     <h4 class="card-title" style="color: #000080;" >Intelligence Artificielle</h4>
                         <p style="padding:10%"> Explorez le monde fascinant de l'intelligence artificielle et apprenez à développer des applications intelligentes.</p>
@@ -111,35 +115,35 @@ export default {
                       </div>
               </div>
             
-              <div class="card">
+              <div class="card flex-fill">
                   <div class="card-body"><h4 class="card-title" style="color: #000080;" >Robotique</h4>
                         <p style="padding:10%"> Plongez dans le domaine de la robotique en apprenant à concevoir, construire et programmer des robots.</p>
                         <router-link to="/Robotique" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
 
-              <div class="card">
+              <div class="card flex-fill">
                   <div class="card-body"><h4 class="card-title" style="color: #000080;" >Calcul Mental</h4>
                         <p style="padding:10%">  Améliorez vos compétences en calcul mental à travers des exercices ludiques et stimulants.</p>
                         <router-link to="/CalculMental" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
 
-              <div class="card">
+              <div class="card flex-fill">
                   <div class="card-body"><h4 class="card-title" style="color: #000080;" >Laboratoires de Chimie</h4>
                         <p style="padding:10%"> Explorez les principes fondamentaux de la chimie à travers des expériences pratiques et des démonstrations.</p>
                         <router-link to="/LabChimie" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
 
-              <div class="card">
+              <div class="card flex-fill">
                   <div class="card-body"><h4 class="card-title" style="color: #000080;" >Laboratoires de Biologie</h4>
                         <p style="padding:10%"> Découvrez le monde fascinant de la biologie à travers des expériences de laboratoire et des observations.</p>
                         <router-link to="/LabBiologie" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
 
-              <div class="card">
+              <div class="card flex-fill">
                   <div class="card-body"><h4 class="card-title" style="color: #000080;" >Jeux d'échecs</h4>
                         <p style="padding:10%"> Apprenez les règles du jeu d'échecs et développez des compétences stratégiques et tactiques.</p>
                         <router-link to="/Echecs" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
@@ -179,7 +183,7 @@ export default {
                    <h2>Dix Ans d'Expérience Au Service de Votre Enfant</h2>
                    <p>Avec des années d'expérience dans le coaching et le développement personnel pour enfants, nous sommes passionnés par l'accompagnement des jeunes dans leur parcours vers la réussite. 
                     Faites confiance à notre expertise pour guider votre enfant vers un avenir brillant et épanouissant.</p>
-                   <router-link to="/signup" class="btn-outline-reg" >Inscription</router-link>
+                   <router-link to="/register" class="btn-outline-reg" >Inscription</router-link>
                </div> 
            </div> 
            <div class="col-lg-6 col-xl-7">
@@ -525,5 +529,12 @@ export default {
 .text-container{
     text-align: center;
 
+}
+.d-flex {
+    display: flex;
+  }
+  
+.flex-fill {
+flex: 1;
 }
  </style>
