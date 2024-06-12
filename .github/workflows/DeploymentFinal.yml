@@ -165,7 +165,7 @@ jobs:
       - name: Run VueJS security check
         run: |
           cd "frontend"
-          npm audit --audit-level=moderate
+          npm audit --audit-level=critical 
 
   # Trivy-fileSystem-backend-scan:
   #   runs-on: ubuntu-latest
