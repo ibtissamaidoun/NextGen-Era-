@@ -63,20 +63,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # - name: Set up PHP with extensions
-      #   uses: shivammathur/setup-php@v2
-      #   with:
-      #     php-version: '8.2'
-      #     extensions: mbstring, pdo_pgsql
-      #     tools: composer:v2, phpunit
-      # - name: Install PHP dependencies
-      #   run: |
-      #     cd "backend"
-      #     composer update
-      # - name: Run unit tests
-      #   run: |
-      #     cd "backend"
-      #     php artisan test --testsuite=Unit
+      - name: Set up PHP with extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_pgsql
+          tools: composer:v2, phpunit
+      - name: Install PHP dependencies
+        run: |
+          cd "backend"
+          composer update
+      - name: Run unit tests
+        run: |
+          cd "backend"
+          php artisan test --testsuite=Unit
 
   integration-tests:
     runs-on: ubuntu-latest
@@ -85,28 +85,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # - name: Set up PHP with extensions
-      #   uses: shivammathur/setup-php@v2
-      #   with:
-      #     php-version: '8.2'
-      #     extensions: mbstring, pdo_pgsql
-      #     tools: composer:v2, phpunit
-      # - name: Install PHP dependencies
-      #   run: |
-      #     cd "backend"
-      #     composer update
-      # - name: Copy .env example
-      #   run: |
-      #     cd "backend"
-      #     cp .env.example .env
-      # - name: Generate key
-      #   run: |
-      #     cd "backend"
-      #     php artisan key:generate
-      # - name: Run integration tests
-      #   run: |
-      #     cd "backend"
-      #     #php artisan test --testsuite=Feature
+      - name: Set up PHP with extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_pgsql
+          tools: composer:v2, phpunit
+      - name: Install PHP dependencies
+        run: |
+          cd "backend"
+          composer update
+      - name: Copy .env example
+        run: |
+          cd "backend"
+          cp .env.example .env
+      - name: Generate key
+        run: |
+          cd "backend"
+          php artisan key:generate
+      - name: Run integration tests
+        run: |
+          cd "backend"
+          #php artisan test --testsuite=Feature
 
   frontend-setup:
     runs-on: ubuntu-latest
@@ -114,23 +114,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # - name: Set up Node.js
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: '16'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
-      # - name: Install dependencies
-      #   run: |
-      #     cd frontend
-      #     npm install
-      # - name: Lint code
-      #   run: |
-      #     cd frontend
-      #     npm run lint
-      # - name: Build project
-      #   run: |
-      #     cd frontend
-      #     npm run build
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+      - name: Lint code
+        run: |
+          cd frontend
+          npm run lint
+      - name: Build project
+        run: |
+          cd frontend
+          npm run build
 
   security-check:
     runs-on: ubuntu-latest
@@ -139,18 +139,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # - name: Set up PHP with extensions
-      #   uses: shivammathur/setup-php@v2
-      #   with:
-      #     php-version: '8.2'
-      # - name: Install PHP dependencies
-      #   run: |
-      #     cd "backend"
-      #     composer update
-      # - name: Run security check
-      #   run: |
-      #     cd "backend"
-      #     composer audit
+      - name: Set up PHP with extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - name: Install PHP dependencies
+        run: |
+          cd "backend"
+          composer update
+      - name: Run security check
+        run: |
+          cd "backend"
+          composer audit
 
   Trivy-fileSystem-backend-scan:
     runs-on: ubuntu-latest
