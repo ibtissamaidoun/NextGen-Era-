@@ -188,7 +188,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version2
   
-  fs-scan:
+  Trivy-fileSystem-backend-scan:
     runs-on: ubuntu-latest
     needs: build-and-push-Docker
     steps:
@@ -199,12 +199,12 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs' 
-          scan-ref: '.' 
+          scan-ref: 'backend' 
           trivy-config: trivy.yaml
 
-  container-scan:
+  container-scan-Backend:
     runs-on: ubuntu-latest
-    needs: fs-scan
+    needs: Trivy-fileSystem-backend-scan
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -227,6 +227,45 @@ jobs:
            ignore-unfixed: true
            vuln-type: 'os,library'
            severity: 'CRITICAL,HIGH'
+  Trivy-fileSystem-frontend-scan:
+    runs-on: ubuntu-latest
+    needs: build-and-push-Docker
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Run Trivy vulnerability scanner in fs mode 
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs' 
+          scan-ref: 'frontend' 
+          trivy-config: trivy.yaml
+          
+  container-scan-Frontend:
+    runs-on: ubuntu-latest
+    needs: Trivy-fileSystem-frontend-scan
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+        
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+          
+        - name: Login to Docker Hub
+          uses: docker/login-action@v2
+          with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
+        
+        - name: Run Trivy vulnerability scanner
+          uses: aquasecurity/trivy-action@master
+          with:
+             image-ref: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version
+             format: 'table'
+             exit-code: '0'
+             ignore-unfixed: true
+             vuln-type: 'os,library'
+             severity: 'CRITICAL,HIGH'
 
   build-and-package-backend:
     name:   build-and-package-backend
