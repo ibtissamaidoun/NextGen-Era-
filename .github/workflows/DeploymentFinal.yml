@@ -240,7 +240,7 @@ jobs:
     needs:  build-and-package-backend
     strategy:
       matrix:
-        server: ${{ fromJson(needs.deployment-artifacts-toCloud.outputs.deployment-matrix) }}
+        server: ${{ fromJson(needs.build-and-package-backend.outputs.deployment-matrix) }}
     steps:
       - uses: actions/download-artifact@v2
         with:
@@ -274,7 +274,7 @@ jobs:
         needs : [ build-and-package-backend,  deploy-backend]
         strategy:
           matrix:
-            server: ${{ fromJson(needs.create-deployment-artifacts.outputs.deployment-matrix) }}
+            server: ${{ fromJson(needs.build-and-package-backend.outputs.deployment-matrix) }}
         steps:
           - name: Run before hooks
             uses: appleboy/ssh-action@master
