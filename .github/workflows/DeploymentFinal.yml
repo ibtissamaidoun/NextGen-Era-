@@ -267,7 +267,7 @@ jobs:
           #envs: GITHUB_SHA
           script: |
             mkdir -p "${{ matrix.server.path }}/releases/myApp"
-            tar xzf ${{ matrix.server.path }}/artifacts/myAPP.tar.gz -C "${{ matrix.server.path }}/releases/myApp
+            tar xzf ${{ matrix.server.path }}/artifacts/myAPP.tar.gz -C "${{ matrix.server.path }}/releases/myApp"
       - name: Run before hooks and Run before hooks and setup application on VM
         uses: appleboy/ssh-action@master
         env:
