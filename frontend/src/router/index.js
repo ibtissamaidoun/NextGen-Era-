@@ -88,7 +88,7 @@ const routes = [
     path: "/dashboard-admin",
     name: "Dashboard",
     component: Dashboard,
-  //  beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   
   {
@@ -142,7 +142,7 @@ const routes = [
     path: "/dashboard-admin/Offres",
     name: "Offres",
     component: Offres,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Offres/Editer",

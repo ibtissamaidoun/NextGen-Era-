@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Enums\TokenAbility;
 use Illuminate\Http\Request;
 use App\Http\Middleware\CheckRole;
+use Spatie\Csp\Nonce\NonceGenerator;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DeviController;
@@ -42,6 +43,13 @@ Route::post('/refresh-token', [AuthController::class, 'refreshToken'])->middlewa
     'auth:sanctum',
     'ability:' . TokenAbility::ISSUE_ACCESS_TOKEN->value,
 ]);
+Route::get('/get-nonce', function () {
+    $nonce = app(NonceGenerator::class)->generate();
+
+    return response()->json([
+        'nonce' => $nonce,
+    ]);
+});
 
 //route qui necessite l'authentification
 Route::middleware(['auth:sanctum'])->group(function () {
