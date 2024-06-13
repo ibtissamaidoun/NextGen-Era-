@@ -10,10 +10,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install Trivy
+        run: |
+          sudo apt-get update && sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.34.0/trivy_0.34.0_Linux-64bit.deb
+          sudo dpkg -i trivy_0.34.0_Linux-64bit.deb
+
       - name: Run Trivy vulnerability scanner in fs mode
         run: |
           cd frontend
           trivy fs --config trivy.yaml .
+        shell: /usr/bin/bash -e {0}
 
   container-scan:
     runs-on: ubuntu-latest
@@ -33,15 +40,15 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: frontend/
+          context: backend/
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version
+          tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version1
           file: backend/Dockerfile
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version
+          image-ref: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version1
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
