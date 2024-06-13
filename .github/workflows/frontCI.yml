@@ -7,7 +7,7 @@ on:
       - develop
 
 jobs:     
-  frontend-test:
+  frontend-setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
