@@ -53,4 +53,4 @@ jobs:
           exit-code: '0'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'MODERATE,CRITICAL,HIGH'
+          severity: 'MEDIUM,CRITICAL,HIGH'
