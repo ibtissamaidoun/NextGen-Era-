@@ -1,5 +1,5 @@
 <script setup>
-import getactivities from "./components/getactivities.vue";
+import getactivities from "../components/getactivities.vue";
 
 </script>
 <template>

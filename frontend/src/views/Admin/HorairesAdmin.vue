@@ -1,6 +1,6 @@
 <script setup>
-import GestionHeures from "./components/GestionHeures.vue";
-import AjoutHeure from "./components/AjoutHeure.vue"
+import GestionHeures from "../components/GestionHeures.vue";
+import AjoutHeure from "../components/AjoutHeure.vue"
 </script>
 
 <template>

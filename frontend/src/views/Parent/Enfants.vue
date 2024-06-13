@@ -1,7 +1,7 @@
 <script setup>
 
 
-import choisiroffre from "./components/choisiroffre.vue";
+import GestionEnfants from "../components/GestionEnfants.vue";
 
 </script>
 <template>
@@ -9,7 +9,7 @@ import choisiroffre from "./components/choisiroffre.vue";
   
     <div class="mt-4 row">
       <div class="col-12">
-        <choisiroffre />
+        <gestion-enfants />
       </div>
     </div>
     

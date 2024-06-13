@@ -1,52 +1,50 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Dashboard from "../views/Dashboard.vue";
-import Dashboardanim from "../views/DashboardAnim.vue";
-import Dashboardparents from "../views/DashboardParents.vue"
-import AvailablesActivites from "@/views/AvailableActivites.vue";
+import Dashboard from "../views/Admin/Dashboard.vue";
+import Dashboardanim from "../views/Animateur/DashboardAnim.vue";
+import Dashboardparents from "../views/Parent/DashboardParents.vue"
+import AvailablesActivites from "@/views/Admin/AvailableActivites.vue";
 //import utilisateurs from "../views/utilisateurs.vue";
-import Administrateurs from "../views/Administrateurs.vue";
+import Administrateurs from "../views/Admin/Administrateurs.vue";
 import DetailsAdmin from "@/views/components/DetailsAdmin.vue";
-import Animateurs from "../views/Animateurs.vue";
+import Animateurs from "../views/Admin/Animateurs.vue";
 import DetailsAnim from "@/views/components/DetailsAnim.vue";
-import Parents from "../views/Parents.vue";
+import Parents from "../views/Admin/Parents.vue";
 import DetailsParents from "@/views/components/DetailsParents.vue";
 import EditerHoraires from "@/views/components/Edithoraire.vue";
-import HorairesAdmin from "../views/HorairesAdmin.vue";
+import HorairesAdmin from "../views/Admin/HorairesAdmin.vue";
 import EditerOffre from "@/views/components/Editoffre.vue";
-import Offres from "../views/offres.vue";
-import Activites from "../views/Activites.vue";
+import Offres from "../views/Admin/offres.vue";
+import Activites from "../views/Admin/Activites.vue";
 import DetailsActivites from "@/views/components/DetailsActivites.vue";
-import Demandes from "../views/Demandes.vue";
-import RTL from "../views/Rtl.vue";
+import Demandes from "../views/Admin/Demandes.vue";
 import Profile from "../views/Profile.vue";
-import Paiement from "../views/Paiement.vue";
-import Enfants from "@/views/Enfants.vue";
+import Enfants from "@/views/Parent/Enfants.vue";
 import DetailsEnfants from "@/views/components/DetailsEnfants.vue"
 
 
-import Signup from "../views/Signup.vue";
-import Signin from "../views/Signin.vue";
+import Signup from "../views/Authentification/Signup.vue";
+import Signin from "../views/Authentification/Signin.vue";
 import Home from "../Home.vue";
-import Forget from "../views/Forget.vue";
-import Reset from "../views/Reset.vue";
+import Forget from "../views/Authentification/Forget.vue";
+import Reset from "../views/Authentification/Reset.vue";
 
-import Horaires from "@/views/Horaires.vue";
+import Horaires from "@/views/Animateur/Horaires.vue";
 import EditerHorairesanim from "@/views/components/Edithoraireanim.vue";
-import Edt from "@/views/Edt.vue";
-import Activitesanim from "@/views/Activitesanim.vue";
+import Edt from "@/views/Animateur/Edt.vue";
+import Activitesanim from "@/views/Animateur/Activitesanim.vue";
 import Editaffectsanim from "@/views/components/Editaffectsanim.vue";
 
-import EnfantsParents from "@/views/EnfantsParents.vue";
+import EnfantsParents from "@/views/Parent/EnfantsParents.vue";
 import edtenfants from "@/views/components/edtenfants.vue";
 import Editenfant from "@/views/components/Editenfant.vue";
-import ActivitesParents from "@/views/ActivitesParents.vue";
-import DemandesP from "@/views/DemandesParents.vue";
-import Cart from "@/views/Cart.vue";
-import pack from "@/views/PackParents.vue";
-import devis from "@/views/Devis.vue";
-import facture from "@/views/Factures.vue";
-import overview from "@/views/overview.vue";
-import Offresparents from "@/views/offresParents.vue";
+import ActivitesParents from "@/views/Parent/ActivitesParents.vue";
+import DemandesP from "@/views/Parent/DemandesParents.vue";
+import Cart from "@/views/Parent/Cart.vue";
+import pack from "@/views/Parent/PackParents.vue";
+import devis from "@/views/Parent/Devis.vue";
+import facture from "@/views/Parent/Factures.vue";
+import overview from "@/views/Parent/overview.vue";
+import Offresparents from "@/views/Parent/offresParents.vue";
 
 
 import Programmation from "../views/Description/Programmation.vue";
@@ -172,21 +170,10 @@ const routes = [
     component: DetailsEnfants,
    // beforeEnter: requireAuth('admin')
   },
-  {
-    path: "/dashboard-admin/Paiement",
-    name: "Paiement",
-    component: Paiement,
-    //beforeEnter: requireAuth('admin')
-  },
+  
 
 
 
-  {
-    path: "/dashboard-admin/rtl-page",
-    name: "RTL",
-    component: RTL,
-   // beforeEnter: requireAuth('admin')
-  },
   {
     path: "/dashboard-admin/profile",
     name: "Profile",

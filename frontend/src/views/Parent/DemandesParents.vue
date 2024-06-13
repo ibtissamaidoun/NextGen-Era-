@@ -1,6 +1,6 @@
 <script setup>
 
-import tableaudemandep from "./components/TableaudemandeP.vue";
+import tableaudemandep from "../components/TableaudemandeP.vue";
 
 
 </script>

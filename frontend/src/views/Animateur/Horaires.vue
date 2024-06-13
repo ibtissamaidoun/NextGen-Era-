@@ -1,16 +1,18 @@
 <script setup>
-
-
-import Gestiondemande from "./components/Gestiondemande.vue";
+import SelectHeure from "../components/SelectHeure.vue"
 
 </script>
+
 <template>
   <div class="py-4 container-fluid">
-  
+    
     <div class="mt-4 row">
       <div class="col-12">
-        <Gestiondemande />
+        <select-heure />
       </div>
-  </div>
+    </div>
+    
+  
+
   </div>
 </template>

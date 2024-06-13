@@ -24,9 +24,9 @@ const getRoute = () => {
     <ul class="navbar-nav">
         <li class="nav-item">
         <sidenav-item
-          to="/dashboard-parents"
-          :class="getRoute() === 'dashboard-parents' ? 'active' : ''"
-          :navText="isRTL ? 'لوحة القيادة' : 'Dashboard'"
+          to="/dashboard-parents/Enfants"
+          :class="getRoute() === 'Enfants' ? 'active' : ''"
+          :navText="isRTL ? 'لوحة القيادة' : 'Enfants'"
         >
           <template v-slot:icon>
             <i
@@ -113,8 +113,8 @@ const getRoute = () => {
       <li class="nav-item">
         <sidenav-item
           to="/login"
-          :class="getRoute() === 'logines' ? 'active' : ''"
-          :navText="isRTL ? 'تسجيل الدخول' : 'Sign In'"
+          :class="getRoute() === 'Déconnexion' ? 'active' : ''"
+          :navText="isRTL ? 'تسجيل الدخول' : 'Déconnexion'"
         >
           <template v-slot:icon>
             <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
@@ -122,17 +122,7 @@ const getRoute = () => {
         </sidenav-item>
       </li>
 
-      <li class="nav-item">
-        <sidenav-item
-          to="/register"
-          :class="getRoute() === 'register' ? 'active' : ''"
-          :navText="isRTL ? 'اشتراك' : 'Sign Up'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-collection text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
+      
     </ul>
   </div>
 

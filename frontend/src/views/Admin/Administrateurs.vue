@@ -1,23 +1,24 @@
 <script setup>
 
-import AjoutEnfants from "./components/AjoutEnfants.vue";
-import getenfants from "./components/getenfants.vue";
+
+import Ajoutadmin from "../components/Ajoutadmin.vue";
+import Gestionadmin from "../components/Gestionadmin.vue";
 
 
 </script>
 <template>
-
   <div class="py-4 container-fluid">
     <div class="mt-4 row">
       <div class="col-12">
-        <AjoutEnfants />
+        <Ajoutadmin />
       </div>
     </div>
     <div class="mt-4 row">
       <div class="col-12">
-        <getenfants />
+        <Gestionadmin />
       </div>
     </div>
+    
     
   </div>
 </template>

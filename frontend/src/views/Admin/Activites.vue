@@ -1,7 +1,7 @@
 <script setup>
 
-import Ajoutactivite from "./components/Ajoutactivite.vue";
-import GestionActivites from "./components/GestionActivites.vue";
+import Ajoutactivite from "../components/Ajoutactivite.vue";
+import GestionActivites from "../components/GestionActivites.vue";
 
 
 </script>

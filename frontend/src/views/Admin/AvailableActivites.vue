@@ -1,6 +1,6 @@
 <script setup>
-import Tabajoutanim from "./components/Tabajoutanim.vue";
-import Tabanim from "./components/Tabanim.vue";
+import Tabajoutanim from "../components/Tabajoutanim.vue";
+import Tabanim from "../components/Tabanim.vue";
 
 </script>
 

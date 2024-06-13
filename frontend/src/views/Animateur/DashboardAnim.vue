@@ -1,17 +1,22 @@
 <script setup>
-import GestionParent from "./components/GestionParent.vue";
+
+import SelectHeure from "../components/SelectHeure.vue";
+
+
 
 </script>
 
 <template>
   <div class="py-4 container-fluid">
     
-    
     <div class="mt-4 row">
       <div class="col-12">
-       <GestionParent /> 
+        <select-heure />
       </div>
-    </div>  
+    </div>
     
+    
+  
+
   </div>
 </template>

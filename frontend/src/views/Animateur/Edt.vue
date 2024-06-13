@@ -1,17 +1,18 @@
 <script setup>
-
-
-import GestionEnfants from "./components/GestionEnfants.vue";
+import emploi from "../components/emploi.vue";
 
 </script>
+
 <template>
   <div class="py-4 container-fluid">
-  
+    
     <div class="mt-4 row">
       <div class="col-12">
-        <gestion-enfants />
+        <emploi />
       </div>
     </div>
+    
+  
     
   </div>
 </template>

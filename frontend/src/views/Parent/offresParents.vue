@@ -1,18 +1,17 @@
 <script setup>
-import emploi from "./components/emploi.vue";
+
+
+import choisiroffre from "../components/choisiroffre.vue";
 
 </script>
-
 <template>
   <div class="py-4 container-fluid">
-    
+  
     <div class="mt-4 row">
       <div class="col-12">
-        <emploi />
+        <choisiroffre />
       </div>
     </div>
-    
-  
     
   </div>
 </template>

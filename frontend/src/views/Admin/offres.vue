@@ -1,7 +1,7 @@
 <script setup>
 
-import Ajoutoffre from "../views/components/Ajoutoffre.vue";
-import offredispo from "../views/components/Offredispo.vue";
+import Ajoutoffre from "../components/Ajoutoffre.vue";
+import offredispo from "../components/Offredispo.vue";
 </script>
 
 <template>
