@@ -52,7 +52,7 @@ const closeMenu = () => {
           class="pe-md-12 d-flex align-middle text-center"
           :class="isRTL ? 'me-md-auto' : 'ms-md-auto'"
         >
-          <div class="input-group">
+          <!-- <div class="input-group">
             <span class="input-group-text text-body">
               <i class="fas fa-search" aria-hidden="true"></i>
             </span>
@@ -61,7 +61,7 @@ const closeMenu = () => {
               class="form-control"
               :placeholder="isRTL ? 'أكتب هنا...' : 'Type here...'"
             />
-          </div>
+          </div> -->
         </div>
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item d-flex align-items-center">

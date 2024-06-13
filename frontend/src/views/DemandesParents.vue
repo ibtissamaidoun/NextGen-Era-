@@ -1,25 +1,14 @@
 <script setup>
 
-import Pack from "./components/PackParents.vue";
-import Factures from "./components/Factures.vue";
-import Devis from "./components/Devis.vue"
+import tableaudemandep from "./components/TableaudemandeP.vue";
+
 
 </script>
 <template>
-  <div class="py-4 container-fluid">
+  <div>
     <div class="mt-4 row">
       <div class="col-12">
-        <pack />
-      </div>
-  </div>
-    <div class="mt-4 row">
-      <div class="col-12">
-        <factures />
-      </div>
-  </div>
-  <div class="mt-4 row">
-      <div class="col-12">
-        <devis />
+        <tableaudemandep />
       </div>
   </div>
 

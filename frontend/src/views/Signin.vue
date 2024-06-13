@@ -185,7 +185,7 @@ const password = computed(() => {
                     </div> -->
                     </div>
                     <router-link to="/forget" class="forget-pass">Mot de passe oublié</router-link> 
-                    <argon-switch id="rememberMe" name="remember-me">Remember me</argon-switch>
+                    <argon-switch id="rememberMe" name="remember-me">Souviens de moi</argon-switch>
 
                     <div class="text-center">
                        <!-- <router-link to="/">  -->

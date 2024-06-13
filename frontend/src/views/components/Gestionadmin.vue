@@ -37,9 +37,9 @@
               <span class="text-s">{{ activity.prenom }}</span>
             </td> 
             <td class="text-center">  
-              <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
+              <button class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
                 <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-              </a>
+              </button>
             </td>
             <td class="text-center">  
               <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
@@ -56,7 +56,7 @@
 <script>
 /* eslint-disable */
 import ArgonButton from '@/components/ArgonButton.vue';
-
+import axiosInstance from '@/main';
 export default {
   data() {
     return {

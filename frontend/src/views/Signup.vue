@@ -83,17 +83,6 @@ const HandleSubmit = async (e)=>{
       "
     >
      <span class="mask bg-gradient-dark opacity-6"></span>
-    <!--  <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-5 text-center mx-auto">
-            <h1 class="text-dark mb-2 mt-5">Welcome!</h1>
-            <p class="text-lead text-white">
-              Use these awesome forms to login or create new account in your
-              project for free.
-            </p>
-          </div>
-        </div>
-      </div>-->
     </div>
     <div class="container">
       <div class="row mt-lg-n10 mt-md-n11 mt-n10 justify-content-center">
@@ -136,7 +125,7 @@ const HandleSubmit = async (e)=>{
                   </svg>
                 </a>
               </div>
-              <div class="col-3 px-1">
+              <!-- <div class="col-3 px-1">
                 <a class="btn btn-outline-light w-100" href="javascript:;">
                   <svg
                     width="24px"
@@ -162,7 +151,7 @@ const HandleSubmit = async (e)=>{
                     </g>
                   </svg>
                 </a>
-              </div>
+              </div> -->
               <div class="col-3 me-auto px-1">
                 <a class="btn btn-outline-light w-100" href="javascript:;">
                   <svg
@@ -256,7 +245,7 @@ const HandleSubmit = async (e)=>{
                   </label>
                 </argon-checkbox>
                 <div class="text-center">
-                 <!-- <router-link to="/signin">-->
+                 <!-- <router-link to="/dashboard-parents"> -->
                     <button class="text-white font-weight-bolder" style="
                           background-color: #000080;
                           color: #fff;
@@ -266,7 +255,7 @@ const HandleSubmit = async (e)=>{
                           padding: 8px;
                           width:100%;
                       " >S'inscrire</button>
-                <!--  </router-link> -->
+                 <!-- </router-link> -->
                 </div>
                 <p class="text-sm mt-3 mb-0">
                   Avez-vous déjà un compte?

@@ -53,7 +53,7 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/dashboard-parents/DemandesParents"
+          to="/dashboard-parents/Demandes"
           :class="getRoute() === 'Demandes' ? 'active' : ''"
           :navText="isRTL ? 'الجداول' : 'Demandes'"
         >
@@ -64,60 +64,23 @@ const getRoute = () => {
           </template>
         </sidenav-item>
       </li>
-
-      <!-- <li class="nav-item">
-        <sidenav-item
-          to="/dashboard-parents/Devis"
-          :class="getRoute() === 'Devis' ? 'active' : ''"
-          :navText="isRTL ? 'الجداول' : 'Devis'"
-        >
-          <template v-slot:icon>
-            <i
-              class="ni ni-credit-card text-warning text-sm opacity-10"
-            ></i>
-          </template>
-        </sidenav-item>
-      </li>
       
+
+     
       <li class="nav-item">
         <sidenav-item
-          to="/dashboard-parents/Factures"
-          :class="getRoute() === 'Factures' ? 'active' : ''"
-          :navText="isRTL ? 'الجداول' : 'Factures'"
-        >
-          <template v-slot:icon>
-            <i
-              class="ni ni-single-copy-04 text-primary text-sm opacity-10"
-            ></i>
-          </template>
-        </sidenav-item>
-      </li> -->
-      <li class="nav-item">
-        <sidenav-item
-          to="/dashboard-animateurs/Activites"
+          to="/dashboard-parents/Offres"
           :class="getRoute() === 'Offres' ? 'active' : ''"
           :navText="isRTL ? 'الجداول' : 'Offres'"
         >
           <template v-slot:icon>
             <i
-              class="fa fa-birthday-cake text-info text-sm opacity-10"
+              class="fa fa-star text-warning text-sm opacity-10"
             ></i>
           </template>
         </sidenav-item>
       </li>
-      <li class="nav-item">
-        <sidenav-item
-          to="/dashboard-animateurs/Activites"
-          :class="getRoute() === 'Notifications' ? 'active' : ''"
-          :navText="isRTL ? 'الجداول' : 'Notifications'"
-        >
-          <template v-slot:icon>
-            <i
-              class="ni ni-controller text-info text-sm opacity-10"
-            ></i>
-          </template>
-        </sidenav-item>
-      </li>
+      
       <li class="mt-3 nav-item">
         <h6
           v-if="isRTL"

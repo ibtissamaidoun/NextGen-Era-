@@ -1,4 +1,4 @@
-<template>
+  <template>
     <div class="card pb-8">
       <div class="card-header pb-3 px-3">
         <h3 class="mb-2 text-center">Gestion du Devis</h3>
@@ -20,22 +20,22 @@
                 <td class="text-center">{{ devis.date }}</td>
                 <td class="text-center">{{ devis.status }}</td>
                 <td class="text-center">
-                    <div class="facture-actions">
-                     <div class="actions-buttons">
-                  <button class="download-button" @click="downloadDevis(devis.id)">
-                    <i class="fa fa-download"></i> Pdf
-                  </button>
-                  <button class="accept-button" @click="validateDevis(devis.id)">
-                    <i class="fa fa-check"></i> Valider
-                  </button>
-                  <button class="refuse-button" @click="showRefusalForm = devis.id">
-                    <i class="fa fa-times"></i> Refuser
-                  </button>
-                  <button class="delete-button" @click="deleteDevis(devis.id)">
-                    <i class="fa fa-trash"></i> Supprimer
-                  </button>
+                  <div class="facture-actions">
+                    <div class="actions-buttons">
+                      <button class="download-button" @click="downloadDevis(devis.id)">
+                        <i class="fa fa-download"></i> Pdf
+                      </button>
+                      <button class="accept-button" @click="validateAndRedirect(devis.id)">
+                        <i class="fa fa-check"></i> Valider
+                      </button>
+                      <button class="refuse-button" @click="showRefusalForm = devis.id">
+                        <i class="fa fa-times"></i> Refuser
+                      </button>
+                      <button class="delete-button" @click="deleteDevis(devis.id)">
+                        <i class="fa fa-trash"></i> Supprimer
+                      </button>
                     </div>
-                </div>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -52,6 +52,9 @@
   
   <script setup>
   import { ref } from "vue";
+  import { useRouter } from 'vue-router'; // Importer useRouter depuis vue-router
+  
+  const router = useRouter(); // Initialiser le router
   
   const showRefusalForm = ref(null);
   const refusalReason = ref("");
@@ -60,17 +63,17 @@
     { id: 1, date:"17/09/2023", status: "En attente" },
     { id: 2, date:"12/12/2024",status: "Validé" },
     { id: 3, date:"12/12/2024",status: "Refusé" },
-    // Ajoutez d'autres devis ici
   ]);
   
   const downloadDevis = (id) => {
     console.log(`Téléchargement du devis ${id}`);
   };
   
-  const validateDevis = (id) => {
+  const validateAndRedirect = (id) => {
     console.log(`Devis ${id} validé`);
     const devis = devisList.value.find((devis) => devis.id === id);
     devis.status = "Validé";
+    router.push({ name: 'facture' }); 
   };
   
   const deleteDevis = (id) => {

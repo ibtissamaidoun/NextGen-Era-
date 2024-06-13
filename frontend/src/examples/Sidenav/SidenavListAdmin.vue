@@ -23,7 +23,7 @@ const getRoute = () => {
     id="sidenav-collapse-main"
   >
     <ul class="navbar-nav">
-        <li class="nav-item">
+        <!-- <li class="nav-item">
         <sidenav-item
           to="/dashboard-admin"
           :class="getRoute() === 'dashboard-admin' ? 'active' : ''"
@@ -33,7 +33,7 @@ const getRoute = () => {
             <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> -->
 
 
 

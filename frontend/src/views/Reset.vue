@@ -22,7 +22,7 @@ onBeforeUnmount(() => {
 </script>
 <template >
     <div class="box">
-    <h3>Rénitialiser votre mot de passe</h3>
+    <h3>Réinitialiser votre mot de passe</h3>
   
     <div class="mb-3" >
       <argon-input id="password" type="password" placeholder="Mot de passe" name="password" size="lg" />
@@ -34,7 +34,7 @@ onBeforeUnmount(() => {
 
 
    <h5>
-    <router-link class='lien' style="text-align: center" to="/Signin" >Rénitialiser</router-link>
+    <router-link class='lien' style="text-align: center" to="/Signin" >Réinitialiser</router-link>
   </h5>
     </div>
   </template>
