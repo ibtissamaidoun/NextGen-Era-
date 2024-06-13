@@ -1,6 +1,10 @@
 name: Frontend CI Pipeline
 
-on: [push, pull_request]
+on: 
+  push: 
+     branches:
+      - test02
+      
 
 jobs:
   frontend-setup:
