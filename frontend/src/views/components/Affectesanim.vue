@@ -142,5 +142,37 @@ export default {
       ]
     };
   }
-};
-</script>
+}; 
+//  <script>
+//    import axiosInstance from '@/main';
+
+//     export default {
+//       data() {
+//         return {
+//           getActivites: []
+//         }},
+      
+//         async created(){
+//           try {
+//           let response = await axiosInstance.get("animateur/activites");
+//           this.getActivites= response.data;
+//           console.log(response.data);
+//         }
+//         catch (error) {
+//       console.error('Erreur lors de récupération des activites:', error);
+//     }
+//     },
+//     methods: {
+//     async deleteActivities(horaire_id, index) {
+
+//       try {
+//         this.horaires.splice(index, 1); // Supprime l'entrée du tableau local
+//         await axiosInstance.delete("animateur/horaires/"+horaire_id); // Remplacez par l'URL correcte
+        
+//       } catch (error) {
+//         console.error('Erreur lors de la suppression de l\'animateur:', error);
+//       }}}}
+  
+   
+   
+//     </script>-->

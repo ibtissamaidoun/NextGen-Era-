@@ -1,10 +1,14 @@
 <script setup>
-import { onBeforeUnmount, onBeforeMount } from "vue";
+import { ref, onBeforeUnmount, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import ArgonInput from "@/components/ArgonInput.vue";
-
-
+import { useRouter } from 'vue-router';
+import axiosInstance from "@/main"; // Assurez-vous que le chemin est correct
+const router = useRouter();
 const store = useStore();
+const password = ref('');
+const confirmPassword = ref('');
+const token = ref('');
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
   store.state.showNavbar = false;
@@ -19,14 +23,42 @@ onBeforeUnmount(() => {
   store.state.showFooter = true;
 
 });
+ // Récupérez ce token plus sécuritairement, peut-être via des props ou un store Vuex
+
+
+const resetPassword = async () => { 
+  //  if (!token.value) {
+  //   alert("Le token de réinitialisation est requis.");
+  //   return;
+  // }
+  ////
+  try {
+    console.log('safaa');
+    const response = await axiosInstance.post('/reset', {
+      mot_de_passe: password.value,
+      mot_de_passe_confirmation: confirmPassword.value,
+      token: token.value
+      
+    });
+    
+    console.log('safaa',response);
+    alert(response.data.message);
+    console.log('safaa',response);
+    router.push('/login');
+  } catch (error) { 
+    //alert(error.response?.data?.message || "Erreur de réseau");
+    
+  }
+};
 </script>
+
 <template >
     <div class="box">
     <h3>Réinitialiser votre mot de passe</h3>
   
     <div class="mb-3" >
-      <argon-input id="password" type="password" placeholder="Mot de passe" name="password" size="lg" />
-      <argon-input
+      <argon-input v-model="password" id="password" type="password" placeholder="Mot de passe" name="password" size="lg" />
+      <argon-input v-model="confirmPassword"
                   id="password_confirmation" name="mot_de_passe_confirmation" type="password"
                   placeholder="Confirmez le mot de passe" aria-label="Confirmez le mot de passe"
                 />
@@ -34,7 +66,7 @@ onBeforeUnmount(() => {
 
 
    <h5>
-    <router-link class='lien' style="text-align: center" to="/Signin" >Réinitialiser</router-link>
+    <router-link class='lien' @click="resetPassword" style="text-align: center" to="/login" >Rénitialiser</router-link>
   </h5>
     </div>
   </template>

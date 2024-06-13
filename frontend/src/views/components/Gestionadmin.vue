@@ -26,15 +26,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(activity, index) in affectes" :key="index" class="p-4 mb-2 bg-gray-100 border-radius-lg">
+          <tr v-for="(administrateur, index) in this.administrateurs" :key="index" class="p-4 mb-2 bg-gray-100 border-radius-lg">
             <td>
-              <h6 class="mb-2 text-center">{{ activity.id }}</h6>
+              <h6 class="mb-2 text-center">{{ administrateur.id }}</h6>
             </td> 
             <td class="text-center">  
-              <span class="text-s">{{ activity.nom }}</span>
+              <span class="text-s">{{ administrateur.nom }}</span>
             </td> 
             <td class="text-center">  
-              <span class="text-s">{{ activity.prenom }}</span>
+              <span class="text-s">{{ administrateur.prenom }}</span>
             </td> 
             <td class="text-center">  
               <button class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
@@ -54,54 +54,34 @@
 </template>
 
 <script>
-/* eslint-disable */
-import ArgonButton from '@/components/ArgonButton.vue';
-import axiosInstance from '@/main';
+import axiosInstance from '@/axios-instance'; // Assurez-vous que le chemin d'importation est correct
+
 export default {
+  name: 'administrateurs',
   data() {
     return {
-      affectes: [
-        {
-          id: "1",
-          nom: "Oulad Maalem", 
-          prenom: "Ayoub",
-        },
-        {
-          id: "4",
-          nom: "DOCTEUUUUR", 
-          prenom: "Taha",
-        },
-        {
-          id: "1",
-          nom: "Oulad Maalem", 
-          prenom: "Ayoub",
-        },
-        {
-          id: "4",
-          nom: "DOCTEUUUUR", 
-          prenom: "Taha",
-        },
-        {
-          id: "1",
-          nom: "Oulad Maalem", 
-          prenom: "Ayoub",
-        },
-        {
-          id: "4",
-          nom: "DOCTEUUUUR", 
-          prenom: "Taha",
-        },
-      ],
-      selectedActivity: null,
+      administrateurs: []
     };
   },
-  // methods: {
-  //   showDetails(activity) {
-  //     this.selectedActivity = activity;
-  //   },
+  mounted() {
+    this.getadministrateurs();
+  },
+  methods: {
+    getadministrateurs() {
+      axiosInstance.get('/dashboard-admin/admins')
+        .then(response => {
+          this.administrateurs = response.data;
+          console.log('Administrateurs chargés:', this.administrateurs);
+        })
+        .catch(error => {
+          console.error('Erreur lors de la récupération des administrateurs:', error);
+          alert('Erreur lors de la récupération des données: ' + (error.response ? error.response.data.message : error.message));
+        });
+    }
   }
-// }
+}
 </script>
+
 
 <style scoped>
 h4 {

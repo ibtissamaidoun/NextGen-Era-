@@ -56,7 +56,6 @@
 
 
 </template>
-
 <script>
 /* eslint-disable */
 import ArgonButton from '@/components/ArgonButton.vue';
@@ -139,7 +138,7 @@ h4 {
 }
 
 th {
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', Verdana, sans-serif;
   color: #000080;
 }
 

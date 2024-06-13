@@ -26,7 +26,6 @@ const user = ref ({
 })
 
 
-
 const store = useStore();
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
@@ -51,13 +50,11 @@ const HandleSubmit = async (e)=>{
     // Stocker le token dans le sessionStorage
     sessionStorage.setItem('token', response.data.token);
     
-    router.push('/signin'); // Rediriger vers la route '/signup'
+    router.push('/login'); // Rediriger vers la route '/signup'
   }
   
   console.log(response)
 }
-
-
 
 </script>
 <template>
@@ -259,7 +256,7 @@ const HandleSubmit = async (e)=>{
                 </div>
                 <p class="text-sm mt-3 mb-0">
                   Avez-vous déjà un compte?
-                  <router-link to="/signin" class="text-dark font-weight-bolder"
+                  <router-link to="/login" class="text-dark font-weight-bolder"
                     >se connecter</router-link>
                   
                 </p>

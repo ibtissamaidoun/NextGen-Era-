@@ -3,7 +3,6 @@ import Dashboard from "../views/Dashboard.vue";
 import Dashboardanim from "../views/DashboardAnim.vue";
 import Dashboardparents from "../views/DashboardParents.vue"
 import AvailablesActivites from "@/views/AvailableActivites.vue";
-
 //import utilisateurs from "../views/utilisateurs.vue";
 import Administrateurs from "../views/Administrateurs.vue";
 import DetailsAdmin from "@/views/components/DetailsAdmin.vue";
@@ -73,41 +72,51 @@ const routes = [
     path: "/dashboard-admin",
     name: "Dashboard",
     component: Dashboard,
+  //  beforeEnter: requireAuth('admin')
   },
   {
-    path: "/dashboard-admin/Administrateurs",
-    name: "administrateurs",
-    component: Administrateurs,
+      path: "/dashboard-admin/admins",
+      name: "administrateurs",
+      component: Administrateurs,
+    //  beforeEnter: requireAuth('admin')
+    
   },
+
   {
     path: "/dashboard-admin/Administrateurs/Details",
     name: "DetailsAdmin",
     component: DetailsAdmin,
+   // beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Animateurs",
     name: "animateurs",
     component: Animateurs,
+   // beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Animateurs/Details",
     name: "DetailsAnim",
     component: DetailsAnim,
+    //beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Parents",
     name: "parents",
     component: Parents,
+    //beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Parents/Details",
     name: "DetailsParents",
     component: DetailsParents,
+   // beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Horaires",
     name: "HorairesAdmin",
     component: HorairesAdmin,
+   // beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Horaires/Editer",
@@ -118,47 +127,56 @@ const routes = [
     path: "/dashboard-admin/Offres",
     name: "Offres",
     component: Offres,
+   // beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Offres/Editer",
     name: "EditerOffre",
     component: EditerOffre,
+   // beforeEnter: requireAuth('admin')
   },
 
   {
     path: "/dashboard-admin/Activites",
     name: "Activites",
     component: Activites,
+   // beforeEnter: requireAuth('admin')
   },
   {
   path: "/dashboard-admin/Activites/Details",
   name: "DetailsActivites",
   component: DetailsActivites,
+ // beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Demandes",
     name: "Demandes",
     component: Demandes,
+   // beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/AvailablesActivites",
     name: "AvailablesActivites",
     component: AvailablesActivites,
+  //  beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Enfants",
     name: "Enfants",
     component: Enfants,
+   // beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Enfants/Details",
     name: "DetailsEnfants",
     component: DetailsEnfants,
+   // beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Paiement",
     name: "Paiement",
     component: Paiement,
+    //beforeEnter: requireAuth('admin')
   },
 
 
@@ -167,30 +185,32 @@ const routes = [
     path: "/dashboard-admin/rtl-page",
     name: "RTL",
     component: RTL,
+   // beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/profile",
     name: "Profile",
     component: Profile,
+   // beforeEnter: requireAuth('admin')
   },
   {
-    path: "/signin",
-    name: "Signin",
+    path: "/login",
+    name: "login",
     component: Signin,
   },
   {
-    path: "/signup",
-    name: "Signup",
+    path: "/register",
+    name: "register",
     component: Signup,
   },
   {
-    path:"/Forget",
+    path:"/forget",
     name:"Forget",
     component: Forget,
   },
   {
-    path:"/Reset",
-    name:"Reset",
+    path:"/reset",
+    name:"reset",
     component: Reset,
   },
   
@@ -234,6 +254,7 @@ const routes = [
     path:"/dashboard-animateurs",
     name:"Dashboardanim",
     component:Dashboardanim,
+   // beforeEnter: requireAuth('animateur')
   },
   {
     path:"/dashboard-animateurs/Horaires",

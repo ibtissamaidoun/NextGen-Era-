@@ -39,7 +39,7 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/dashboard-admin/Administrateurs"
+          to="/dashboard-admin/Admins"
           :class="getRoute() === 'Administrateurs' ? 'active' : ''"
           :navText="isRTL ? 'الواقع الافتراضي' : 'Administrateurs'"
         >
@@ -184,8 +184,8 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/signin"
-          :class="getRoute() === 'signin' ? 'active' : ''"
+          to="/login"
+          :class="getRoute() === 'login' ? 'active' : ''"
           :navText="isRTL ? 'تسجيل الدخول' : 'Déconnexion'"
         >
           <template v-slot:icon>

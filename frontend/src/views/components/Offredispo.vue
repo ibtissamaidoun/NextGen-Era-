@@ -5,28 +5,88 @@
     </div>
     <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
       <table class="table table-bordered align-middle">
-        <thead>
-          <tr>
-            <th class="text-uppercase text-primary opacity-7">id</th>
-            <th class="text-uppercase text-primary opacity-7">Titre</th>
-            <th class="text-uppercase text-primary opacity-7">Remise</th>
-            <th class="text-uppercase text-primary opacity-7">Date de début d'inscription</th>
-            <th class="text-uppercase text-primary opacity-7">Date de la fin d'inscription</th>
-            <th class="text-center text-primary opacity-7">Supprimer</th>
-            <th class="text-center text-primary opacity-7">Editer</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(offre, index) in offres" :key="index" class="p-4 mb-2 bg-gray-100 border-radius-lg">
-            <td><h6 class="text-center">{{ offre.id}}</h6></td>
-            <td><h6 class="mb-2 text-center">{{ offre.titre}}</h6></td>
-            <td><h6 class="mb-2 text-center">{{ offre.remise}}</h6></td>
-            <td><h6 class="mb-2 text-center">{{ offre.date_debut}}</h6></td>
-            <td><h6 class="mb-2 text-center">{{ offre.date_fin}}</h6></td>
-            <td class="text-center">
-              <button class="btn btn-link text-danger text-gradient px-3 mb-0" @click="deleteOffre(offre.id, index)">
-                <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-              </button>
+          <thead >
+            <tr>
+              <th
+                class="text-uppercase text-primary opacity-7"
+              >
+                id
+              </th>
+              <th
+                class="text-uppercase text-primary opacity-7"
+              >
+                Titre
+              </th>
+              <th
+                class="text-uppercase text-primary opacity-7"
+              >
+                Remise
+              </th>
+              <th
+                class="text-uppercase text-primary opacity-7"
+              >
+                Date de début d'inscription
+              </th>
+              <th
+                class="text-uppercase text-primary opacity-7"
+              >
+                Date de la fin d'inscription
+              </th>
+              <th
+                class="text-uppercase text-primary opacity-7"
+              >
+                Heure début
+              </th>
+              <th
+                class="text-uppercase text-primary opacity-7"
+              >
+                Heure fin
+              </th>
+              <th
+                class="text-center  text-primary  opacity-7"
+              >
+                Supprimer
+              </th>
+              
+              <th class="text-center text-primary opacity-7"> Editer</th>
+              
+            </tr>
+          </thead>
+          
+          
+          <tbody>
+              
+      <tr v-for="(activity, index) in affectes" :key="index"  class="  p-4 mb-2 bg-gray-100  border-radius-lg ">
+          <td >
+            <h6 class=" text-center">{{activity.id}}</h6>
+            
+          </td> 
+          <td >
+            <h6 class="mb-2 text-center">{{activity.titre}}</h6>
+          </td>
+          <td >
+            <h6 class="mb-2 text-center">{{activity.remise}}</h6>
+          </td>
+          <td >
+            <h6 class="mb-2 text-center">{{activity.datedebut}}</h6>
+          </td>
+          <td >
+            <h6 class="mb-2 text-center">{{activity.datefin}}</h6> 
+          </td>
+          <td >
+            <h6 class="mb-2 text-center">{{activity.heuredebut}}</h6>
+          </td>
+          <td >
+            <h6 class="mb-2 text-center">{{activity.heurefin}}</h6>
+          </td>
+           <td class="text-center">  
+            <button
+              class="btn btn-link text-danger text-gradient px-3 mb-0"
+              href="javascript:;"
+              @click="deleteOffre( activity.id,index)"
+            >
+              <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
+            </button>
             </td>
             <td class="align-middle">
               <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
@@ -63,35 +123,106 @@ span {
 </style>
 
 <script>
-import axiosInstance from '@/axios-instance';
+// export default {
+// data() {
+//   return {
+//     affectes: [
+//       {
+//         id:"5",
+//         titre: "Atelier",
+//         remise: "AID AL ADHA ", 
+//         datedebut: "10/06/2024",
+//         datefin:"10/07/2024",
+//         heuredebut:"10:30",
+//         heurefin:"22:30",
+//       },
+//       {
+//         id:"5",
+//         titre: "Atelier",
+//         remise: "AID AL ADHA ", 
+//         datedebut: "10/06/2024",
+//         datefin:"10/07/2024",
+//         heuredebut:"10:30",
+//         heurefin:"22:30",
+//       },
+//       {
+//         id:"5",
+//         titre: "Atelier",
+//         remise: "AID AL ADHA ", 
+//         datedebut: "10/06/2024",
+//         datefin:"10/07/2024",
+//         heuredebut:"10:30",
+//         heurefin:"22:30",
+//       },
+//       {
+//         id:"5",
+//         titre: "Atelier",
+//         remise: "AID AL ADHA ", 
+//         datedebut: "10/06/2024",
+//         datefin:"10/07/2024",
+//         heuredebut:"10:30",
+//         heurefin:"22:30",
+//       },
+
+
+//     ]
+//   };
+// }
+// };
+import axiosInstance from '@/main';
 
 export default {
   data() {
     return {
       offres: []
-    };
-  },
-  mounted() {
-    this.fetchOffres();
-  },
-  methods: {
-    async fetchOffres() {
+//     };
+//   },
+//   mounted() {
+//     this.fetchOffres();
+//   },
+//   methods: {
+//     async fetchOffres() {
+//       try {
+//         const response = await axiosInstance.get('/dashboard-admin/offres');
+//         this.offres = response.data.offre;
+//         console.log(response.data);
+//       } catch (error) {
+//         console.error('Erreur lors de la récupération des offres:', error);
+//       }
+//     },
+//     async deleteOffre(offre_id, index) {
+//       try {
+//         await axiosInstance.delete(`/dashboard-admin/offres/${offre_id}`);
+//         this.offres.splice(index, 1);
+//       } catch (error) {
+//         console.error('Erreur lors de la suppression de l\'offre:', error);
+//       }
+//     }
+//   }
+// };
+    }},
+  
+    async created(){
       try {
-        const response = await axiosInstance.get('/dashboard-admin/offres');
-        this.offres = response.data.offre;
-        console.log(response.data);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des offres:', error);
-      }
-    },
-    async deleteOffre(offre_id, index) {
-      try {
-        await axiosInstance.delete(`/dashboard-admin/offres/${offre_id}`);
-        this.offres.splice(index, 1);
-      } catch (error) {
-        console.error('Erreur lors de la suppression de l\'offre:', error);
-      }
+      let response = await axiosInstance.get("admin/offres");
+      this.offres = response.data;
+      console.log(response.data);
     }
-  }
-};
+    catch (error) {
+  console.error('Erreur lors de la récupération des offres:', error);
+}
+},
+
+    
+methods: {
+async deleteOffre(activite_id, index) {
+
+  try {
+    this.horaires.splice(index, 1); // Supprime l'entrée du tableau local
+    await axiosInstance.delete("admin/offres/"+activite_id); // Remplacez par l'URL correcte
+    
+  } catch (error) {
+    console.error('Erreur lors de la suppression de l\'offre:', error);
+  }}}}
+
 </script>
