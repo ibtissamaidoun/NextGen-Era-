@@ -31,8 +31,6 @@
                 <td class="align-middle text-center">
                   <i class="ni ni-check-bold" style="color:orange"></i>
                 </td>
-               
-                
 
            <!-- <td    class="align-middle">
 
@@ -40,7 +38,8 @@
                 class="btn btn-link text-danger text-gradient px-3 mb-0"
                  
                 >
-                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <i class="fa fa-pencil" aria-hidden="true"></i>:env
+                
               </button>
               
               </td> -->

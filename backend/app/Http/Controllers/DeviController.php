@@ -719,7 +719,7 @@ class DeviController extends Controller
                 'required',
                 'exists:enfants,id',
                 Rule::exists('enfants', 'id')->where(function ($query) use ($parent_id) {
-                    $query->where('parentmodel_id', $_parent_id);
+                    $query->where('parentmodel_id', $parent_id);
                 }),
             ],
         ]);

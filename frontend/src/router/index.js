@@ -54,8 +54,6 @@ import CalculMental from "../views/Description/CalculMental.vue";
 import LabChimie from "../views/Description/LabChimie.vue";
 import LabBiologie from "../views/Description/LabBiologie.vue";
 import Echecs from "../views/Description/Echecs.vue";
-
-/* eslint-disable */
 import store from '@/store'
 
 function requireAuth(role) {
@@ -74,6 +72,7 @@ function requireAuth(role) {
 }
 
 
+
 const routes = [
 
   {
@@ -85,7 +84,7 @@ const routes = [
     path: "/dashboard-admin",
     name: "Dashboard",
     component: Dashboard,
-  //  beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
       path: "/dashboard-admin/admins",
@@ -140,7 +139,7 @@ const routes = [
     path: "/dashboard-admin/Offres",
     name: "Offres",
     component: Offres,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Offres/Editer",

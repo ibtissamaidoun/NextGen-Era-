@@ -7,10 +7,7 @@ use App\Models\User;
 use App\Enums\TokenAbility;
 use App\Models\parentmodel;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\Sanctum;
-use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -37,6 +34,7 @@ $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_
             'token' => $token->plainTextToken,
             'refresh_token' => $refreshToken->plainTextToken,
             'role' => $user->role, // Ajoutez cette ligne
+            'utilisateur' => $user
         ],202);//renvoyer les données au client
     }
     public function register(Request $request){
@@ -44,12 +42,12 @@ $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_
         try {
             $fields = $request->validate([
                 'nom'=>'required|string',
-                'prenom'=>'required|string',
-                'telephone_portable' => 'required|regex:/^0[67]\d{8}$/',
+                'prenom'=>'required|string',               
                 'telephone_fixe' => 'required|regex:/^0[5]\d{8}$/',
                 'email' => 'required|email',
                 'mot_de_passe' => 'required|string|confirmed',
-                'fonction' => 'nullable|string'
+                'fonction' => 'nullable|string',
+                'telephone_portable' => 'required|regex:/^0[67]\d{8}$/'
             ]);
 
             $user = User::create([
@@ -58,7 +56,7 @@ $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_
                 'telephone_portable' =>$fields['telephone_portable'],
                 'telephone_fixe' =>$fields['telephone_fixe'],
                 'email' =>$fields['email'],
-                'mot_de_passe' => Hash::make($fields['mot_de_passe']),
+                'mot_de_passe' => Hash::make($fields['mot_de_passe'])
             ]);
             $parent= new parentmodel([
                 'fonction'=>$request->fonction,
@@ -82,6 +80,8 @@ $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_
             ], 500);
         }
     }
+
+   
     public function logout(Request $request)
     {
         $user = auth()->user();
@@ -96,21 +96,19 @@ $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_
     }
 
     public function refreshToken(Request $request)
-{
-    $user = $request->user();
-    $accessTokenExpiration = config('sanctum.expiration');
+    {
+        $user = $request->user();
+        $accessTokenExpiration = config('sanctum.expiration');
 
-    if (!$accessTokenExpiration) {
-        return response()->json(['message' => 'Token expiration time not configured'], 500);
+        if (!$accessTokenExpiration) {
+           return response()->json(['message' => 'Token expiration time not configured'], 500);
+        }
+        $accessTokenExpiresAt = Carbon::now()->addMinutes($accessTokenExpiration);
+
+        $accessToken = $user->createToken('access_token', [TokenAbility::ACCESS_API->value], $accessTokenExpiresAt);
+
+        return response()->json(['token' => $accessToken->plainTextToken]);
     }
-
-    // Utilisez Carbon pour définir l'expiration du token
-    $accessTokenExpiresAt = Carbon::now()->addMinutes($accessTokenExpiration);
-
-    $accessToken = $user->createToken('access_token', [TokenAbility::ACCESS_API->value], $accessTokenExpiresAt);
-
-    return response()->json(['token' => $accessToken->plainTextToken]);
-}
 
     public function userProfile(){
         return response()->json(auth()->user());

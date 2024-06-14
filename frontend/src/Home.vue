@@ -66,7 +66,7 @@ export default {
                </li>
            </ul>
            <span class="nav-item">
-               <router-link to="login" class="btn-solid-sm" >Connexion</router-link>
+               <router-link to="/login" class="btn-solid-sm" >Connexion</router-link>
            </span>
        </div> 
    </div> 
@@ -182,7 +182,7 @@ export default {
                    <h2>Dix ans d'expérience au service de votre enfant</h2>
                    <p>Avec des années d'expérience dans le coaching et le développement personnel pour enfants, nous sommes passionnés par l'accompagnement des jeunes dans leur parcours vers la réussite. 
                     Faites confiance à notre expertise pour guider votre enfant vers un avenir brillant et épanouissant.</p>
-                   <router-link to="/register" class="btn-outline-reg" >Inscription</router-link>
+                   <router-link to="/signup" class="btn-outline-reg" >Inscription</router-link>
                </div> 
            </div> 
            <div class="col-lg-6 col-xl-7">

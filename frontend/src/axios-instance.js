@@ -1,20 +1,26 @@
 // src/axios-instance.js
 import axios from 'axios';
+import store from "@/store/index.js";
 
 const axiosInstance = axios.create({
   baseURL: 'http://127.0.0.1:8000/api', // URL de notre API backend
   withCredentials: true 
 });
 //baseURL: 'http://127.0.0.1:8000/api', // URL de votre API backend
-axiosInstance.interceptors.request.use(
-    config => {
-      console.log('Request made with ', config);
-      return config;
-    },
-    error => {
-      return Promise.reject(error);
-    }
-  );
+
+// Ajouter un intercepteur de requête pour inclure le token d'authentification dans toutes les requêtes sortantes
+axiosInstance.interceptors.request.use(config => {
+  // Récupérer le token d'authentification de votre source appropriée (local storage, Vuex, etc.)
+  const token = store.state.refreshToken; // Remplacez par la méthode appropriée pour récupérer le token
+
+  // Vérifier si le token est disponible et ajouter l'en-tête d'authentification
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
 // Intercepteur pour les erreurs 401
 axiosInstance.interceptors.response.use(
   response => response,
@@ -23,8 +29,12 @@ axiosInstance.interceptors.response.use(
     if (error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        await axiosInstance.post('/refresh-token');
-        return axiosInstance(originalRequest);
+        const refresh_token = store.state.refreshToken;
+        const user = store.state.user;
+        await axiosInstance.post('/refresh-token',{user: user},{headers: {
+          'Authorization': `Bearer ${refresh_token}`}
+        });
+        return axiosInstance.request(originalRequest);
       } catch (err) {
         console.error('Refresh token failed', err);
         // Gérer la déconnexion si nécessaire
@@ -33,5 +43,3 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-export default axiosInstance;

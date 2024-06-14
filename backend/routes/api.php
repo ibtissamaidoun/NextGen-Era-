@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Enums\TokenAbility;
 use Illuminate\Http\Request;
 use App\Http\Middleware\CheckRole;
+use Spatie\Csp\Nonce\NonceGenerator;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DeviController;
@@ -42,15 +43,22 @@ Route::post('/refresh-token', [AuthController::class, 'refreshToken'])->middlewa
     'auth:sanctum',
     'ability:' . TokenAbility::ISSUE_ACCESS_TOKEN->value,
 ]);
+Route::get('/get-nonce', function () {
+    $nonce = app(NonceGenerator::class)->generate();
+
+    return response()->json([
+        'nonce' => $nonce,
+    ]);
+});
 
 //route qui necessite l'authentification
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
+
 // Routes réservées aux parents
 Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->group(function () {
-
 
     /** ---- MANIPULATION DES ENFANTS ---- */
     Route::apiResource('enfants', EnfantController::class);
@@ -59,13 +67,10 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
         // EDT POUR UN ENFANT DONNÉE
         Route::get('{enfant_id}/edt',[ParentmodelController::class,'EDT']);
     });
-
-    
-    
+ 
     /** ---- NOTIFICATIONS ---- */
     Route::apiResource('notifications', NotificationController::class);
-    
-    
+     
     /** ---- PROFILE ---- */
     Route::prefix('profile')->group(function ()
     {
@@ -184,10 +189,10 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
 // Routes réservées à l'admin
-Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')->group(function () {
+Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboard-admin')->group(function () {
 
     /** --- ADMINS --- */
-    
+    Route::get('admins', [AdministrateurController::class, 'index']);
     Route::post('admins', [AdministrateurController::class, 'store']);
     Route::get('admins/{admin}', [AdministrateurController::class, 'show']);
 
@@ -313,9 +318,9 @@ Route::get('devis',[deviController::class, 'createDevis']); // marche
 Route::get('monPack',[PackController::class,'packPoussible']); // marche
 
 
-Route::prefix('dashboard-admin')->group(function () {
-    Route::get('admins', [AdministrateurController::class, 'index']);
-});
+// Route::prefix('dashboard-admin')->group(function () {
+//     Route::get('admins', [AdministrateurController::class, 'index']);
+// });
 
 //------test----taha----ostora----//
 
