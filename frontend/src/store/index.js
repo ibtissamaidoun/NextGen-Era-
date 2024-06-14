@@ -71,7 +71,7 @@ export default createStore({
     setUser(state, user) {
       console.log("Setting user in mutation:", user);
       state.user = user;
-      state.isAuthenticated = !!user;
+      state.isAuthenticated =! user;
     },
     setAuthentication(state, isAuthenticated) {
       console.log("Setting isAuthenticated in mutation:", isAuthenticated);
@@ -105,7 +105,7 @@ export default createStore({
       console.log('API Response:', response.data);
       if (response.data.token) {
         console.log('Login successful: User and token are present');
-        commit('setUser', response.data.user ||{});
+        commit('setUser', response.data.utilisateur ||{});
         commit('setAuthentication', true);
         commit('setUserRole', response.data.role);
         commit('setToken', response.data.token);

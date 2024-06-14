@@ -37,6 +37,7 @@ $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_
             'token' => $token->plainTextToken,
             'refresh_token' => $refreshToken->plainTextToken,
             'role' => $user->role, // Ajoutez cette ligne
+            'utilisateur' => $user
         ],202);//renvoyer les données au client
     }
     public function register(Request $request){
