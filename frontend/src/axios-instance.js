@@ -2,8 +2,8 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api', // URL de votre API backend
-  withCredentials: true // Assurez-vous que les cookies sont envoyés avec les requêtes
+  baseURL: 'http://127.0.0.1:8000/api', // URL de notre API backend
+  withCredentials: true 
 });
 //baseURL: 'http://127.0.0.1:8000/api', // URL de votre API backend
 axiosInstance.interceptors.request.use(

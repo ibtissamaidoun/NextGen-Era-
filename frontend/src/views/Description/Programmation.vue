@@ -30,6 +30,7 @@ onBeforeUnmount(() => {
         <button class="navbar-toggler p-0 border-0 ms-auto" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        
         <!-- Contenu du menu aligné à droite -->
         <div class="navbar-collapse offcanvas-collapse justify-content-end">
             <!-- Liens d'inscription et de connexion -->
@@ -44,6 +45,7 @@ onBeforeUnmount(() => {
         </div>
     </div>
 </nav>
+
 
   <div id="features" class="accordion-1">
    <div class="container">
@@ -112,11 +114,12 @@ onBeforeUnmount(() => {
 
                    <div class="accordion-item">
                        <div class="accordion-icon blue">
-                           <span class="fas fa-tools"></span>
+                           <span class="fas fa-info"></span>
                        </div> 
                        <div class="accordion-header" id="headingTwo" style="color:white">
                         <!-- <h5> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> -->
-                              Age maximum: 17 <hr>
+                            <h5 >  
+                            Age maximum: 17 <hr>
                               Age minimum: 14 <hr>
                               Nombre de séance par semaine:2 <hr>
                               Effectif maximum : 15 <hr>
@@ -124,8 +127,9 @@ onBeforeUnmount(() => {
                                 Effectif actuel :12 <hr>
                                 Tarif : 600 MAD <hr>
                                 Statut : Actif <hr>
-                                <!-- </button>
-                           </h5> -->
+                               
+                           </h5>
+                            <!-- </button>-->
                        </div>
                    </div>
 

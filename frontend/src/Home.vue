@@ -21,7 +21,6 @@ export default {
     });
 
     return {
-      // any variables or functions you want to expose to the template
     };
   },
 };
@@ -359,9 +358,13 @@ export default {
  }
  .card-body{
     text-align: center;
+    flex:1;
  }
 .col-lg-12{
     text-align: center;
+    /* display: flex;
+    flex-wrap: wrap;
+    justify-content: center; */
 }
 
 .text-container{
@@ -376,9 +379,10 @@ export default {
 flex: 1;
 }
 .cards-1 .card .card-body {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex: 1 1 calc(33.333% - 20px); /* Ajustez cette valeur en fonction du nombre de colonnes que vous voulez */
+    margin: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
  </style>

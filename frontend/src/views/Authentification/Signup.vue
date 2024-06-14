@@ -3,9 +3,9 @@
 import { onBeforeUnmount, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import { ref } from "vue";
-import { useRouter } from 'vue-router'; // Importer le routeur Vue Router
+import { useRouter } from 'vue-router'; 
 
-//import axios from "axios";
+
 import axiosInstance from '../../axios-instance';
 
 
@@ -192,7 +192,7 @@ const HandleSubmit = async (e)=>{
                 <p
                   class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3"
                 >
-                  or
+                  ou
                 </p>
               </div>
             </div>

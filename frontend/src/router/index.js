@@ -17,7 +17,7 @@ import Offres from "../views/Admin/offres.vue";
 import Activites from "../views/Admin/Activites.vue";
 import DetailsActivites from "@/views/components/DetailsActivites.vue";
 import Demandes from "../views/Admin/Demandes.vue";
-import Profile from "../views/Profile.vue";
+import Profile from "../views/Admin/Profile.vue";
 import Enfants from "@/views/Parent/Enfants.vue";
 import DetailsEnfants from "@/views/components/DetailsEnfants.vue"
 
@@ -55,8 +55,23 @@ import LabChimie from "../views/Description/LabChimie.vue";
 import LabBiologie from "../views/Description/LabBiologie.vue";
 import Echecs from "../views/Description/Echecs.vue";
 
+/* eslint-disable */
+import store from '@/store'
 
-
+function requireAuth(role) {
+  return function(to, from, next) {
+    console.log('Is Authenticated :' ,store.getters.isAuthenticated);
+    console.log('User Role :', store.getters.userRole)
+    if (!store.getters.isAuthenticated) {
+      return next({ name: 'Signin' });
+    }
+    if (store.getters.userRole !== role) {
+      return next({ name: 'AccessDenied' });
+    }
+    next();
+    
+  };
+}
 
 
 const routes = [

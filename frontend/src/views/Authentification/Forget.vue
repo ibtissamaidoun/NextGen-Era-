@@ -54,16 +54,16 @@ const recoverPassword = async () => {
     <h3>Récupération de votre mot de passe</h3>
   
     <div class="mb-3">
-      <!--<argon-input v-model="email" id="email" type="email" placeholder="Email" name="email" size="lg"/>-->
       <argon-input v-model="email" type="email" id="email"  placeholder="Email" name="email" size="lg"/>
 
     </div>
-
-   <h5>
+   <div class="d-grid gap-2">
+   
     <button class='lien' @click="recoverPassword" style="text-align: center"  data-bs-target="#collapseFour"  type="button" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="collapseFour">Récupérer</button>
-  </h5>
+  
+  </div>
   <!--<div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">-->
-     <div class="accordion-body">Veuillez vérifier votre boîte e-mail pour les instructions de récupération de mot de passe</div>
+     <!-- <div class="accordion-body">Veuillez vérifier votre boîte e-mail pour les instructions de récupération de mot de passe</div> -->
   </div>
   <!--</div>-->  
   </template>

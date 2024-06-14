@@ -107,8 +107,8 @@ async function submitLogin() {
                     <div class="mb-3">
                       <argon-input v-model="user.email" :type="email" id="email"  placeholder="Email" name="email" size="lg"/>
                     </div>   
-                    <div class="mb-3" >
-                      <argon-input v-model="user.mot_de_passe"  :type="showPassword ? 'text' : 'password'" id="password"  placeholder="Mot de passe" name="password" size="lg" />
+                    <div class="mb-3 position-relative">
+                    <argon-input v-model="user.mot_de_passe" :type="showPassword ? 'text' : 'password'" id="password" placeholder="Mot de passe" name="password" size="lg" />
                     <i :class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'" class="fa position-absolute end-0 top-50 translate-middle-y pe-3" @click="togglePasswordVisibility" style="cursor: pointer;"></i>
                     </div>
                     <router-link to="/forget" class="forget-pass">Mot de passe oublié</router-link> 
@@ -172,6 +172,17 @@ async function submitLogin() {
 }
 .mb-0{
   margin-top:15%;
+}
+.fa-eye, .fa-eye-slash {
+    position: absolute;
+    right: 10px; /* Ajustez cette valeur selon vos besoins */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1; /* Assure que l'icône reste au-dessus du champ de saisie */
+}
+.position-relative {
+    position: relative;
 }
 </style>
 
