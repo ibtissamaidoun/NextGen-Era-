@@ -50,7 +50,7 @@ onBeforeUnmount(() => {
        <div class="row">
            <div class="col-xl-12">
                <h2 class="h2-heading">Laboratoires de Chimie</h2>
-               <p class="p-heading">Explorez les principes fondamentaux de la chimie à travers des expériences pratiques et des démonstrations.</p>
+               <p class="p-heading"> Cet atelier offre aux enfants âgés de 9 à 12 ans une expérience immersive dans le monde de la chimie. À travers une série d'expériences pratiques et amusantes, les participants découvrent les réactions chimiques, les propriétés des éléments et les applications de la chimie dans la vie quotidienne, tout en développant leur esprit critique et leur sens de l'observation.</p>
            </div> 
        </div>   
        <div class="row">
@@ -92,8 +92,7 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingThree">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                          Permettre aux participants de comprendre les principes fondamentaux de la chimie à travers des expériences pratiques et des observations.
-                           </button></h5>
+                            Initier les enfants à la magie des éléments chimiques et des réactions, à travers des expériences ludiques et interactives.                           </button></h5>
                        </div>
                        
                    </div>
@@ -106,27 +105,36 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingFour">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                          Développer les compétences des participants en matière de manipulation d'équipements de laboratoire et de respect des protocoles de sécurité en milieu chimique.
-                           </button></h5>
+                            Enseigner aux enfants les bases de la chimie, comme la structure de la matière...                            </button></h5>
                        </div>
                        
                    </div>
                    <div class="accordion-item">
+                       <div class="accordion-icon orange">
+                           <span class="fas fa-flag"></span>
+                       </div> 
+                       <div class="accordion-header" id="headingFour">
+                        <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Sensibiliser les enfants aux bonnes pratiques de sécurité en laboratoire et à l'importance de préserver notre environnement en évitant les substances nocives.     </button></h5>                 
+                       </div>
+                   </div>
+                   <div class="accordion-item">
                        <div class="accordion-icon blue">
-                           <span class="fas fa-tools"></span>
+                           <span class="fas fa-info"></span>
                        </div> 
                        <div class="accordion-header" id="headingTwo" style="color:white">
-                        <!-- <h5> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> -->
-                              Age maximum: 17 <hr>
-                              Age minimum: 14 <hr>
-                              Nombre de séance par semaine:2 <hr>
-                              Effectif maximum : 15 <hr>
-                                Effectif minimum : 10 <hr>
-                                Effectif actuel :12 <hr>
-                                Tarif : 600 MAD <hr>
+                             <h5>
+                              Age maximum: 12 <hr>
+                              Age minimum: 9 <hr>
+                              Nombre de séance par semaine:1 <hr>
+                              Effectif maximum : 8 <hr>
+                                Effectif minimum : 5 <hr>
+                                Effectif actuel :6 <hr>
+                                Tarif : 500 MAD <hr>
                                 Statut : Actif <hr>
-                                <!-- </button>
-                           </h5> -->
+                            </h5>
+                            <iframe width="560" height="315" src="https://youtu.be/BldE3YslCgo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
                        </div>
                    </div>
                   

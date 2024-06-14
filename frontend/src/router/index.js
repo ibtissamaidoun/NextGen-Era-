@@ -50,10 +50,15 @@ import Offresparents from "@/views/Parent/offresParents.vue";
 import Programmation from "../views/Description/Programmation.vue";
 import IA from "../views/Description/IA.vue";
 import Robotique from "../views/Description/Robotique.vue";
+import RobotiqueAvance from "@/views/Description/RobotiqueAvance.vue";
 import CalculMental from "../views/Description/CalculMental.vue";
+import CalculMentalAvance from "@/views/Description/CalculMentalAvance.vue";
 import LabChimie from "../views/Description/LabChimie.vue";
 import LabBiologie from "../views/Description/LabBiologie.vue";
 import Echecs from "../views/Description/Echecs.vue";
+import EchecsAvance from "../views/Description/EchecsAvance.vue";
+
+
 import store from '@/store'
 
 function requireAuth(role) {
@@ -231,9 +236,19 @@ const routes = [
     component:Robotique,
   },
   {
+    path:"/RobotiqueAvance",
+    name:"RobotiqueAvance",
+    component:RobotiqueAvance,
+  },
+  {
     path:"/CalculMental",
     name:"CalculMental",
     component:CalculMental,
+  },
+  {
+    path:"/CalculMentalAvance",
+    name:"CalculMentalAvance",
+    component:CalculMentalAvance,
   },
   {
     path:"/LabChimie",
@@ -249,6 +264,11 @@ const routes = [
     path:"/Echecs",
     name:"Echecs",
     component:Echecs,
+  },
+  {
+    path:"/EchecsAvance",
+    name:"EchecsAvance",
+    component:EchecsAvance,
   },
   //dashboard-animateurs:
   {

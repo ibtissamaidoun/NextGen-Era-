@@ -50,7 +50,7 @@ onBeforeUnmount(() => {
        <div class="row">
            <div class="col-xl-12">
                <h2 class="h2-heading">Laboratoires de biologie</h2>
-               <p class="p-heading"> Découvrez le monde fascinant de la biologie à travers des expériences de laboratoire et des observations.</p>
+               <p class="p-heading">Notre atelier de biologie offre aux enfants l'opportunité d'explorer le monde vivant à travers des expériences pratiques, des observations au microscope et des jeux interactifs. Guidés par des animateurs passionnés, les enfants découvriront les secrets de la vie, de la cellule aux écosystèmes, tout en développant leur amour pour la science.</p>
            </div> 
        </div>   
        <div class="row">
@@ -92,8 +92,7 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingThree">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                          Initier les participants aux concepts clés de la biologie, y compris la structure cellulaire, le métabolisme et l'hérédité.
-                           </button></h5>
+                            Permettre aux enfants de découvrir et d'apprécier la diversité fascinante de la vie sur Terre à travers des expériences interactives.                           </button></h5>
                        </div>
                        
                    </div>
@@ -106,27 +105,39 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingFour">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                          Encourager les participants à développer des compétences d'observation et d'analyse en étudiant des spécimens biologiques et en réalisant des expériences de laboratoire.
-                           </button></h5>
+                            Introduire aux enfants les bases essentielles de la biologie pour nourrir leur curiosité et stimuler leur compréhension du vivant.                           </button></h5>
                        </div>
                        
                    </div>
                    <div class="accordion-item">
+                       <div class="accordion-icon orange">
+                           <span class="fas fa-flag"></span>
+                       </div> 
+                       <div class="accordion-header" id="headingFour">
+                        <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Éveiller la conscience environnementale des enfants en leur montrant l'importance cruciale de préserver la diversité des espèces et des écosystèmes pour l'avenir de notre planète.                      
+                        </button></h5>
+                        </div>
+                   </div>
+
+
+                   <div class="accordion-item">
                        <div class="accordion-icon blue">
-                           <span class="fas fa-tools"></span>
+                           <span class="fas fa-info"></span>
                        </div> 
                        <div class="accordion-header" id="headingTwo" style="color:white">
-                        <!-- <h5> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> -->
-                              Age maximum: 17 <hr>
-                              Age minimum: 14 <hr>
-                              Nombre de séance par semaine:2 <hr>
-                              Effectif maximum : 15 <hr>
-                                Effectif minimum : 10 <hr>
-                                Effectif actuel :12 <hr>
-                                Tarif : 600 MAD <hr>
-                                Statut : Actif <hr>
-                                <!-- </button>
-                           </h5> -->
+                             <h5>
+                              Age maximum: 12 <hr>
+                              Age minimum: 9 <hr>
+                              Nombre de séance par semaine:1 <hr>
+                              Effectif maximum : 8 <hr>
+                                Effectif minimum : 5 <hr>
+                                Effectif actuel :3 <hr>
+                                Tarif : 500 MAD <hr>
+                                Statut : Inctif <hr>
+                            </h5>
+                            <iframe width="560" height="315" src="https://youtu.be/3LaBbpLr4mg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
                        </div>
                    </div>
                   
