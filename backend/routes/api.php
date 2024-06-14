@@ -56,9 +56,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
+
 // Routes réservées aux parents
 Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->group(function () {
-
 
     /** ---- MANIPULATION DES ENFANTS ---- */
     Route::apiResource('enfants', EnfantController::class);
@@ -67,13 +67,10 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
         // EDT POUR UN ENFANT DONNÉE
         Route::get('{enfant_id}/edt',[ParentmodelController::class,'EDT']);
     });
-
-    
-    
+ 
     /** ---- NOTIFICATIONS ---- */
     Route::apiResource('notifications', NotificationController::class);
-    
-    
+     
     /** ---- PROFILE ---- */
     Route::prefix('profile')->group(function ()
     {
@@ -195,7 +192,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')->group(function () {
 
     /** --- ADMINS --- */
-    Route::get('admins', [AdministrateurController::class, 'index']);
+    
     Route::post('admins', [AdministrateurController::class, 'store']);
     Route::get('admins/{admin}', [AdministrateurController::class, 'show']);
 
@@ -321,7 +318,9 @@ Route::get('devis',[deviController::class, 'createDevis']); // marche
 Route::get('monPack',[PackController::class,'packPoussible']); // marche
 
 
-
+Route::prefix('dashboard-admin')->group(function () {
+    Route::get('admins', [AdministrateurController::class, 'index']);
+});
 
 //------test----taha----ostora----//
 

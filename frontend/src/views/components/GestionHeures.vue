@@ -90,43 +90,38 @@
     font-family:Georgia, 'Times New Roman', Times, serif;
     
 
-  }
-  </style>
+}
+</style>
 
 <script>
-export default {
-  data() {
-    return {
-      affectes: [
-        {
-          heuredebut: "21:00",
-          heurefin: "22:30 ", 
-          joursemaine: "Lundi",
-        },
-        {
-          heuredebut: "16:30",
-          heurefin: "18:00 ", 
-          joursemaine: "Vendredi",
-        },
-        {
-          heuredebut: "21:00",
-          heurefin: "22:30 ", 
-          joursemaine: "Mardi",
-        },
-        {
-          heuredebut: "9:00",
-          heurefin: "10:30 ", 
-          joursemaine: "Mardi",
-        },
-        {
-          heuredebut: "10:30",
-          heurefin: "12:00 ", 
-          joursemaine: "Samedi",
-        },
-      
+import axiosInstance from '@/axios-instance';
 
-      ]
-    };
-  }
+export default {
+data() {
+  return {
+    affectes: [],
+  };
+},
+mounted() {
+  this.fetchHoraires();
+},
+methods: {
+  async fetchHoraires() {
+    try {
+      const response = await axiosInstance.get('/dashboard-admin/Horaires');
+      this.affectes = response.data;
+    } catch (error) {
+      console.error('Error fetching horaires:', error);
+    }
+  },
+  async deleteHoraire(id) {
+    try {
+      await axiosInstance.delete(`/dashboard-admin/Horaires/${id}`);
+      this.affectes = this.affectes.filter(horaire => horaire.id !== id);
+    } catch (error) {
+      console.error('Error deleting horaire:', error);
+    }
+  },
+},
 };
 </script>

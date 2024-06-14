@@ -159,7 +159,8 @@ jobs:
       - name: Install PHP dependencies
         run: |
           cd "backend"
-          composer install --prefer-dist --no-progress --no-suggest
+          composer update
+          #composer install --prefer-dist --no-progress --no-suggest
       
       - name: Run security check
         run: |

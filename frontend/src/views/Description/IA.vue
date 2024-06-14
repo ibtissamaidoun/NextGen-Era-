@@ -111,6 +111,25 @@ onBeforeUnmount(() => {
                        </div>
                        
                    </div>
+
+                   <div class="accordion-item">
+                       <div class="accordion-icon blue">
+                           <span class="fas fa-tools"></span>
+                       </div> 
+                       <div class="accordion-header" id="headingTwo" style="color:white">
+                        <!-- <h5> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> -->
+                              Age maximum: 17 <hr>
+                              Age minimum: 14 <hr>
+                              Nombre de séance par semaine:2 <hr>
+                              Effectif maximum : 15 <hr>
+                                Effectif minimum : 10 <hr>
+                                Effectif actuel :12 <hr>
+                                Tarif : 600 MAD <hr>
+                                Statut : Actif <hr>
+                                <!-- </button>
+                           </h5> -->
+                       </div>
+                   </div>
                   
                </div> 
            </div> 

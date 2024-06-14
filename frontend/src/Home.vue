@@ -47,7 +47,11 @@ export default {
                    <a class="nav-link active" aria-current="page" href="#header">Accueil</a>
                </li>
                <li class="nav-item">
-                   <a class="nav-link" href="#services">activités</a>
+
+                   <a class="nav-link" href="#services">Activités</a>
+
+
+
                </li>
                <li class="nav-item">
                    <a class="nav-link" href="#contact">Contact Us</a>
@@ -176,7 +180,7 @@ export default {
            <div class="col-lg-6 col-xl-5">
                <div class="text-container">
                    <div class="section-title">SUR NOUS</div>
-                   <h2>Dix Ans d'Expérience Au Service de Votre Enfant</h2>
+                   <h2>Dix ans d'expérience au service de votre enfant</h2>
                    <p>Avec des années d'expérience dans le coaching et le développement personnel pour enfants, nous sommes passionnés par l'accompagnement des jeunes dans leur parcours vers la réussite. 
                     Faites confiance à notre expertise pour guider votre enfant vers un avenir brillant et épanouissant.</p>
                    <router-link to="/signup" class="btn-outline-reg" >Inscription</router-link>

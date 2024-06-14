@@ -62,7 +62,7 @@
             <h1>Réinitialisation de votre mot de passe</h1>
             <p>Bonjour,</p>
             <p>Vous recevez cet email parce que nous avons reçu une demande de réinitialisation du mot de passe pour votre compte.</p>
-            <a href="{{ $url }}" class="button">Réinitialiser le mot de passe</a>
+            <a href="http://localhost:8083/reset" class="button">Réinitialiser le mot de passe</a>
             <p>Si vous n'avez pas demandé de réinitialisation de mot de passe, aucune action supplémentaire n'est requise.</p>
         </div>
         <div class="email-footer">

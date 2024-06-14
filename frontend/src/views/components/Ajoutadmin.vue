@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import axiosInstance from "@/axios-instance"; // Make sure this is correctly imported
+import axiosInstance from "@/axios-instance"; 
 import ArgonButton from "@/components/ArgonButton.vue";
 
 const email = ref('');
@@ -17,7 +17,7 @@ async function addAdministrator() {
     return;
   }
 
-  console.log("Attempting to add email:", trimmedEmail); // Debug: Log the email being sent
+  console.log("Attempting to add email:", trimmedEmail); 
 
   try {
     const response = await axiosInstance.post('admins', { email: trimmedEmail });
@@ -29,6 +29,26 @@ async function addAdministrator() {
     alert('Failed to add administrator: ' + (error.response ? error.response.data.message : error.message));
   }
 }
+
+// async function addAdministrator() {
+//   let trimmedEmail = email.value.trim();
+//   if (!trimmedEmail) {
+//     alert('Please enter a valid email address.');
+//     return;
+//   }
+
+//   console.log("Attempting to add email:", trimmedEmail); // Debug: Log the email being sent
+
+//   try {
+//     const response = await axiosInstance.post('admins', { email: trimmedEmail });
+//     console.log("Response:", response); // Debug: Log the response
+//     alert('Administrator added successfully: ' + response.data.message);
+//     email.value = '';
+//   } catch (error) {
+//     console.error('Error adding administrator:', error.response ? error.response.data.message : error.message);
+//     alert('Failed to add administrator: ' + (error.response ? error.response.data.message : error.message));
+//   }
+// }
 </script>
 
 <template>
