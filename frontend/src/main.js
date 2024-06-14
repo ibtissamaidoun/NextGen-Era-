@@ -49,7 +49,7 @@ app.mount("#app");
 // const axiosInstance = axios.create({
 //     baseURL: 'http://40.127.11.222:8000/api', /// Remplacez par l'URL de votre API
 //     headers: {
-//         'Authorization': `Bearer ${sessionStorage.getItem('token')}` // Inclure le token dans l'en-tête Authorization
+//         'Authorization': Bearer ${sessionStorage.getItem('token')} // Inclure le token dans l'en-tête Authorization
 //     }
 // });
 // const axiosInstance = axios.create({
@@ -58,7 +58,7 @@ app.mount("#app");
 // });
 // axiosInstance.interceptors.request.use(function (config) {
 //     const token = Cookies.get('token');;
-//     config.headers.Authorization = token ? `Bearer ${token}` : '';
+//     config.headers.Authorization = token ? Bearer ${token} : '';
 //     return config;
 // });
 // Exporter l'instance Axios configurée
@@ -71,4 +71,3 @@ app.mount("#app");
 // app.use(ArgonDashboard);
 // app.config.globalProperties.$axios = axiosInstance;
 // app.mount("#app");
-

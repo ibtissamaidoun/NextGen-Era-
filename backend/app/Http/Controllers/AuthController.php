@@ -12,6 +12,31 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function login(Request $request)
+    {
+        // verification que email et password sont entré et validé
+        $fields = $request->validate([
+            'email' => 'required|email',
+            'mot_de_passe' => 'required|string'
+        ]);
+
+        //recherge de user qui correspond au email entré
+        $user = User::where('email',$fields['email'] )->first();
+        //si email invalide ou mot de passe haché ne correspond pas au mot de passe entré
+        //! Auth::attempt($fields)
+        if ( !$user || !Hash::check($fields['mot_de_passe'], $user->mot_de_passe))
+        {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+        $token = $user->createToken('access_token', [TokenAbility::ACCESS_API->value], Carbon::now()->addMinutes(config('sanctum.expiration')));
+$refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], Carbon::now()->addMinutes(config('sanctum.rt_expiration')));
+        return response()->json([
+            'token' => $token->plainTextToken,
+            'refresh_token' => $refreshToken->plainTextToken,
+            'role' => $user->role, // Ajoutez cette ligne
+            'utilisateur' => $user
+        ],202);//renvoyer les données au client
+    }
     public function register(Request $request){
         DB::beginTransaction();
         try {
@@ -56,31 +81,7 @@ class AuthController extends Controller
         }
     }
 
-    public function login(Request $request)
-    {
-        // verification que email et password sont entré et validé
-        $fields = $request->validate([
-            'email' => 'required|email',
-            'mot_de_passe' => 'required|string'
-        ]);
-
-        //recherge de user qui correspond au email entré
-        $user = User::where('email',$fields['email'] )->first();
-        //si email invalide ou mot de passe haché ne correspond pas au mot de passe entré
-        //! Auth::attempt($fields)
-        if ( !$user || !Hash::check($fields['mot_de_passe'], $user->mot_de_passe))
-        {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
-        $token = $user->createToken('access_token', [TokenAbility::ACCESS_API->value], Carbon::now()->addMinutes(config('sanctum.expiration')));
-        $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], Carbon::now()->addMinutes(config('sanctum.rt_expiration')));
-        return response()->json([
-            'token' => $token->plainTextToken,
-            'refresh_token' => $refreshToken->plainTextToken,
-            'role' => $user->role, // Ajoutez cette ligne
-        ],202);//renvoyer les données au client
-    }
-
+   
     public function logout(Request $request)
     {
         $user = auth()->user();

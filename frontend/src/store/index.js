@@ -116,7 +116,7 @@ export default createStore({
     setUser(state, user) {
       console.log("Setting user in mutation:", user);
       state.user = user;
-      state.isAuthenticated = !!user;
+      state.isAuthenticated =! user;
     },
     setAuthentication(state, isAuthenticated) {
       console.log("Setting isAuthenticated in mutation:", isAuthenticated);
@@ -148,22 +148,22 @@ export default createStore({
       router.push(route);
     },
     async login({ commit }, authData) {
-      try {
-        const response = await axios.post('/api/login', authData);
-        console.log('API Response:', response.data);
-        if (response.data.token) {
-          console.log('Login successful: User and token are present');
-          commit('setUser', response.data.user || {});
-          commit('setAuthentication', true);
-          commit('setUserRole', response.data.role);
-          commit('setToken', response.data.token);
-          commit('setRefreshToken', response.data.refresh_token);
-        } else {
-          throw new Error('Login failed: User or token are missing from the response');
-        }
-      } catch (error) {
-        console.error('Login failed:', error);
-        throw error;
+      try{
+      const response = await axios.post('/api/login', authData);
+      console.log('API Response:', response.data);
+      if (response.data.token) {
+        console.log('Login successful: User and token are present');
+        commit('setUser', response.data.utilisateur ||{});
+        commit('setAuthentication', true);
+        commit('setUserRole', response.data.role);
+        commit('setToken', response.data.token);
+        commit('setRefreshToken', response.data.refresh_token);
+      }else {
+        throw new Error('Login failed: User or token are missing from the response');
+      }
+    } catch(error) {
+        console.error('Login failed:', error); 
+        throw error; 
       }
     },
     async logout({ commit }) {
@@ -178,17 +178,17 @@ export default createStore({
         console.error('Logout failed:', error);
       }
     }
-  },
-  getters: {
-    // Getters from the second store
-    isAuthenticated(state) {
-      console.log("Getter isAuthenticated value:", state.isAuthenticated);
-      return state.isAuthenticated;
+      // Assurez-vous de gérer la déconnexion côté serveur si nécessaire
     },
-    userRole(state) {
-      console.log("Getter userRole value:", state.userRole);
-      return state.userRole;
-    },
+    getters: {
+      isAuthenticated(state) {
+        console.log("Getter isAuthenticated value:", state.isAuthenticated);
+        return state.isAuthenticated;
+      },
+      userRole(state) {
+        console.log("Getter userRole value:", state.userRole);
+        return state.userRole;
+      },
   },
-  plugins: [createPersistedState()],
+  plugins: [createPersistedState()]
 });

@@ -4,10 +4,10 @@ import { onBeforeUnmount, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import { ref } from "vue";
 import { useRouter } from 'vue-router'; // Importer le routeur Vue Router
-
+import { toRaw } from 'vue';
 //import axios from "axios";
-import axiosInstance from '../../axios-instance';
-
+import axiosInstance from '@/axios-instance';
+console.log("Initial Axios instance state:", axiosInstance);
 
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";
@@ -42,20 +42,21 @@ onBeforeUnmount(() => {
   body.classList.add("bg-gray-100");
 });
 const router = useRouter();
-const HandleSubmit = async (e)=>{
-  e.preventDefault()
-  console.log(user.value)
-  const response = await axiosInstance.post("/register",user.value);
-  if(response.status == 202){
-    // Stocker le token dans le sessionStorage
-    sessionStorage.setItem('token', response.data.token);
-    
-    router.push('/login'); // Rediriger vers la route '/signup'
+const HandleSubmit = async (e) => {
+  e.preventDefault();
+  const rawUser = toRaw(user.value);
+  console.log("Raw user data:", rawUser);
+  try {
+    const response = await axiosInstance.post("/register", user.value);
+    console.log("Response received:", response);
+    if (response.status === 202) {
+      sessionStorage.setItem('token', response.data.token);
+      router.push('/login'); // Redirect to the login page
+    }
+  } catch (error) {
+    console.error("Error submitting user data:", error);
   }
-  
-  console.log(response)
 }
-
 </script>
 <template>
  <div class="container top-0 position-sticky z-index-sticky">
