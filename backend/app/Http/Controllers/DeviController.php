@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  *  !!!!! BE CAREFUL WITH THIS CODE IT'S THE MAIN BRAIN OF ALL THE PROJECT LOGIC, IF IT GOES WE GOES !!!!!
- * 
+ *
  * AT FIRST ONLY WE AND GOD KNOWS HOW IT WORKS , NOW ONLY GOD KNOWS.
  */
 
@@ -34,7 +34,7 @@ class DeviController extends Controller
 {
     /**
      * Afficher tout les devis.
-     * 
+     *
      * Pour le Parent & Admin
      */
     public function index()
@@ -139,7 +139,7 @@ class DeviController extends Controller
     /**
      * Affichage de detail d'un devis associer a une demande et un parent
      * for the admin and the parent it self
-     * 
+     *
      * @param int $parentmodel_id
      * @param int $demande_id
      * @return array
@@ -156,7 +156,7 @@ class DeviController extends Controller
 
     /**
      * Calcule de prix d'un devis
-     * 
+     *
      * @param int $demande_id
      * @param array $enfantActivites
      * @param int $tva
@@ -287,12 +287,12 @@ class DeviController extends Controller
      * Collection de DATA pour le Devis
      * Creation d'une instance de (Devis, Facture) pour les Offre et les Activites si statue=true,
      * sinon il calcule la data des devis et des factures sans creer une instance.
-     * 
+     *
      * @param int $demande_id
      * @param string $type
      * @param bool $status
      * @param int $tva
-     * @return 
+     * @return
      */
     public static function createDevis($demande_id, $type = 'Devis', $status = true, $tva = 20) // on work
     {
@@ -516,7 +516,7 @@ class DeviController extends Controller
     }
 
     /**
-     * 1. the parent  chooses childrens to enroll after he clicked on the offer 
+     * 1. the parent  chooses childrens to enroll after he clicked on the offer
      * 2. we retrieve the activities attached to the offer
      * 3.retrieve the paiement id
      * 4. retrieve the auth parent
@@ -719,7 +719,7 @@ class DeviController extends Controller
                 'required',
                 'exists:enfants,id',
                 Rule::exists('enfants', 'id')->where(function ($query) use ($parent_id) {
-                    $query->where('parentmodel_id', $_parent_id);
+                    $query->where('parentmodel_id', $parent_id);
                 }),
             ],
         ]);
@@ -791,7 +791,7 @@ class DeviController extends Controller
     /**
      * retourner le panier courant d'un etulisateur donneé
      * type de retour  Panier[ Activité{id, titre}, Enfants[{id, nom, prenom}] ]
-     * 
+     *
      * @param int $parent_id
      * @return array
      */
@@ -837,7 +837,7 @@ class DeviController extends Controller
     }
 
     /**
-     * Valider le panier afin de proceder la demande 
+     * Valider le panier afin de proceder la demande
      * 1- creation de demande
      * 2- remplire la table pivot 'enfant_demande_activite' ==> PGSQL
      */

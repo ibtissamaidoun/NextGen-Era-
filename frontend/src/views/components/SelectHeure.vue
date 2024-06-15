@@ -38,19 +38,23 @@
 =======
 >>>>>>> 31e02bd86949edfbb381667db826cbcf38761d10
 
-           //  <td    class="align-middle">
+           <!-- <td    class="align-middle">
 
-               // <button
-                //  class="btn btn-link text-danger text-gradient px-3 mb-0"
+               <button
+                class="btn btn-link text-danger text-gradient px-3 mb-0"
                  
-              //  >
-              //  <i class="fa fa-pencil" aria-hidden="true"></i>
-             // </button>
+                >
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </button>
               
+<<<<<<< HEAD
 <<<<<<< HEAD
               </td>
 =======
              // </td>
+=======
+              </td> -->
+>>>>>>> c539887d89751138eb81d6f3ffd120a690275f13
 
 >>>>>>> 31e02bd86949edfbb381667db826cbcf38761d10
                 <td class="align-middle">
