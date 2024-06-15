@@ -1,160 +1,78 @@
 <template>
-    <div class="card pb-5 ">
-
-      <div class="card-header pb-5 px-3">
-        <h4 class="mt-5 text-center">Les détails des animateurs</h4>
-      </div>
-      <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
-        <table class="table table-bordered align-items-center">
+  <div class="card pb-0">
+    <div class="card-header pb-5 px-3">
+      <h4 class="mt-5 text-center">Détails de l'animateur</h4>
+    </div>
+    <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
+      <table class="table table-bordered align-items-center" v-if="animateurDetails">
         <thead>
           <tr>
-            <th class="text-uppercase text-primary opacity-7">
-              Id
-            </th>
-            <th class="text-uppercase text-primary opacity-7">
-              Nom
-            </th>
-            <th class="text-uppercase text-primary opacity-7">
-              Prénom
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Email
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Téléphone portable
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Téléphone fixe
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Domaine de competence
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Horaires
-            </th>   
-            
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Téléphone portable</th>
+            <th>Téléphone fixe</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(activity, index) in affectes" :key="index" class="p-4 mb-2 bg-gray-100 border-radius-lg">
-            <td>
-              <h6 class="mb-2 text-center">{{ activity.id }}</h6>
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.nom }}</span>
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.prenom }}</span>
-            </td>
-            <td class="text-center">  
-              <span class="text-s">{{ activity.email }}</span>
-            </td>  
-            <td class="text-center">  
-              <span class="text-s">{{ activity.telPortable }}</span>
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.telFixe }}</span>
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.domaineCompetence }}</span>
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.horaire }}</span>
-            </td> 
+          <tr>
+            <td>{{ animateurDetails.id }}</td>
+            <td>{{ animateurDetails.nom }}</td>
+            <td>{{ animateurDetails.prenom }}</td>
+            <td>{{ animateurDetails.email }}</td>
+            <td>{{ animateurDetails.telephone_portable }}</td>
+            <td>{{ animateurDetails.telephone_fixe }}</td>
           </tr>
         </tbody>
       </table>
+      <div v-else class="text-muted">
+        Chargement des détails de l'animateur en cours...
+      </div>
     </div>
-    </div>
-  </template>
-  
-  <script>
-  /* eslint-disable */
+  </div>
+</template>
 
-  export default {
-    data() {
-      return {
-        affectes: [
-        {
-          id: "1",
-          nom: "Oulad Maalem", 
-          prenom: "Ayoub",
-          email: "ayoub@example.com",
-          telPortable: "0612345678",
-          telFixe: "0123456789",
-          domaineCompetence: "Informatique",
-          horaire: "9h - 17h",
-        },
-        {
-          id: "4",
-          nom: "Naya", 
-          prenom: "Taha",
-          email: "taha@example.com",
-          telPortable: "0698765432",
-          telFixe: "0987654321",
-          domaineCompetence: "Finance",
-          horaire: "8h - 16h",
-        },
-        {
-          id: "1",
-          nom: "Oulad Maalem", 
-          prenom: "Ayoub",
-          email: "ayoub@example.com",
-          telPortable: "0612345678",
-          telFixe: "0123456789",
-          domaineCompetence: "Informatique",
-          horaire: "9h - 17h",
-        },
-        {
-          id: "4",
-          nom: "Naya", 
-          prenom: "Taha",
-          email: "taha@example.com",
-          telPortable: "0698765432",
-          telFixe: "0987654321",
-          domaineCompetence: "Finance",
-          horaire: "8h - 16h",
-        },
-        {
-          id: "1",
-          nom: "Oulad Maalem", 
-          prenom: "Ayoub",
-          email: "ayoub@example.com",
-          telPortable: "0612345678",
-          telFixe: "0123456789",
-          domaineCompetence: "Informatique",
-          horaire: "9h - 17h",
-        },
-        {
-          id: "4",
-          nom: "Naya", 
-          prenom: "Taha",
-          email: "taha@example.com",
-          telPortable: "0698765432",
-          telFixe: "0987654321",
-          domaineCompetence: "Finance",
-          horaire: "8h - 16h",
-        },
-        ],
-        
-      };
-    },
+<script>
+import axiosInstance from '@/axios-instance';
+
+export default {
+  data() {
+    return {
+      animateurDetails: null,
+    };
+  },
+  mounted() {
+    console.log("ID de l'animateur récupéré:", this.$route.params.animateurId);
+    this.fetchAnimateurDetails();
+  },
+  methods: {
+    async fetchAnimateurDetails() {
+      try {
+        const animateurId = this.$route.params.animateurId;
+        const response = await axiosInstance.get(`/dashboard-admin/animateurs/details/${animateurId}`);
+        if (response.data) {
+          this.animateurDetails = response.data;
+          console.log("Réponse de l'API:", response.data);
+        } else {
+          throw new Error("Aucune donnée reçue de l'API");
+        }
+      } catch (error) {
+        console.error('Erreur lors de la récupération des détails de l\'animateur:', error);
+        this.animateurDetails = null;
+      }
+    }
   }
-  </script>
-  
-  <style scoped>
-  h4{
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    color: orange;
-  }
-  
-  th {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    color: #000080;
-  }
-  
-  span {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-  }
-  </style>
-  
+}
+</script>
+
+<style scoped>
+h4 {
+  color: orange;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+table th {
+  color: #000080;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+</style>

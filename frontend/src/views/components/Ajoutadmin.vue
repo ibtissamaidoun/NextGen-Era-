@@ -3,52 +3,27 @@ import { ref } from 'vue';
 import axiosInstance from "@/axios-instance"; 
 import ArgonButton from "@/components/ArgonButton.vue";
 
-const email = ref('');
-const showEmailInput = ref(false);
+let showEmailInput = ref(false);
+let email = ref('');
+let adminCreated = ref(false);
 
 function toggleEmailInput() {
   showEmailInput.value = !showEmailInput.value;
 }
 
 async function addAdministrator() {
-  let trimmedEmail = email.value.trim();
-  if (!trimmedEmail) {
-    alert('Please enter a valid email address.');
-    return;
-  }
-
-  console.log("Attempting to add email:", trimmedEmail); 
-
   try {
-    const response = await axiosInstance.post('admins', { email: trimmedEmail });
-    console.log("Response:", response); // Debug: Log the response
-    alert('Administrator added successfully: ' + response.data.message);
-    email.value = '';
+    const response = await axiosInstance.post('dashboard-admin/admins', { email: email.value });
+    if (response.status === 200) {
+      console.log('Admin created successfully');
+      adminCreated.value = true;
+    } else if (response.status === 409) {
+      console.log('Admin already exists in the database');
+    }
   } catch (error) {
-    console.error('Error adding administrator:', error.response ? error.response.data.message : error.message);
-    alert('Failed to add administrator: ' + (error.response ? error.response.data.message : error.message));
+    console.error('An error occurred:', error);
   }
 }
-
-// async function addAdministrator() {
-//   let trimmedEmail = email.value.trim();
-//   if (!trimmedEmail) {
-//     alert('Please enter a valid email address.');
-//     return;
-//   }
-
-//   console.log("Attempting to add email:", trimmedEmail); // Debug: Log the email being sent
-
-//   try {
-//     const response = await axiosInstance.post('admins', { email: trimmedEmail });
-//     console.log("Response:", response); // Debug: Log the response
-//     alert('Administrator added successfully: ' + response.data.message);
-//     email.value = '';
-//   } catch (error) {
-//     console.error('Error adding administrator:', error.response ? error.response.data.message : error.message);
-//     alert('Failed to add administrator: ' + (error.response ? error.response.data.message : error.message));
-//   }
-// }
 </script>
 
 <template>
@@ -65,7 +40,7 @@ async function addAdministrator() {
     <div v-if="showEmailInput">
       <div class="row mt-3">
         <div class="col-12-end">
-          <input type="email" class="form-control" placeholder="Email">
+          <input type="email" class="form-control" placeholder="Email" v-model="email">
         </div>
         <div class="col-12-end text-end mt-2">
           <argon-button color="primary" variant="gradient" @click="addAdministrator">
@@ -74,5 +49,20 @@ async function addAdministrator() {
         </div>
       </div>
     </div>
+
+    <div v-if="adminCreated" class="notification success">
+      Admin created successfully!
+    </div>
   </div>
-</template>`  `
+</template>
+
+<style>
+.notification.success {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
+}
+</style>

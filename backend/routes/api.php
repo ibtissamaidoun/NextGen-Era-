@@ -189,12 +189,13 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
 // Routes réservées à l'admin
-Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboard-admin')->group(function () {
+// Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboard-admin')->group(function () {
+    Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboard-admin')->group(function () {
 
     /** --- ADMINS --- */
     Route::get('admins', [AdministrateurController::class, 'index']);
     Route::post('admins', [AdministrateurController::class, 'store']);
-    Route::get('admins/{admin}', [AdministrateurController::class, 'show']);
+    Route::get('admins/details/{admin}', [AdministrateurController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('admins/{admin}', [AdministrateurController::class, 'update']);
@@ -203,7 +204,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboar
     /** --- ANIMATEURS --- */
     Route::get('animateurs', [AnimateursController::class, 'index']);
     Route::post('animateurs', [AnimateursController::class, 'store']);
-    Route::get('animateurs/{animateur}', [AnimateursController::class, 'show']);
+    Route::get('animateurs/details/{animateur}', [AnimateursController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('animateurs/{animateur}', [AnimateursController::class, 'update']);

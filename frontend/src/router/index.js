@@ -100,7 +100,7 @@ const routes = [
   },
 
   {
-    path: "/dashboard-admin/Administrateurs/Details",
+    path: '/dashboard-admin/admins/details/:adminId',
     name: "DetailsAdmin",
     component: DetailsAdmin,
    // beforeEnter: requireAuth('admin')
@@ -112,7 +112,7 @@ const routes = [
    // beforeEnter: requireAuth('admin')
   },
   {
-    path: "/dashboard-admin/Animateurs/Details",
+    path: "/dashboard-admin/animateurs/details/:animateurId",
     name: "DetailsAnim",
     component: DetailsAnim,
     //beforeEnter: requireAuth('admin')

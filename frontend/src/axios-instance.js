@@ -3,8 +3,8 @@ import axios from 'axios';
 import store from "@/store/index.js";
 
 const axiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api', // URL de notre API backend
-  withCredentials: true 
+  baseURL: 'http://127.0.0.1:8000/api', // URL de votre API backend
+  withCredentials: true // Assurez-vous que les cookies sont envoyés avec les requêtes
 });
 //baseURL: 'http://127.0.0.1:8000/api', // URL de votre API backend
 
@@ -34,7 +34,7 @@ axiosInstance.interceptors.response.use(
         await axiosInstance.post('/refresh-token',{user: user},{headers: {
           'Authorization': `Bearer ${refresh_token}`}
         });
-        return axiosInstance.request(originalRequest);
+        return axiosInstance(originalRequest);
       } catch (err) {
         console.error('Refresh token failed', err);
         // Gérer la déconnexion si nécessaire
@@ -43,3 +43,5 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export default axiosInstance;
