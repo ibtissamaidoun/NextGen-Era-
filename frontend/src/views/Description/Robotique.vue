@@ -49,8 +49,8 @@ onBeforeUnmount(() => {
    <div class="container">
        <div class="row">
            <div class="col-xl-12">
-               <h2 class="h2-heading">Atelier de Robotique</h2>
-               <p class="p-heading"> Plongez dans le domaine de la robotique en apprenant à concevoir, construire et programmer des robots.</p>
+               <h2 class="h2-heading">Atelier de Robotique pour les débutants</h2>
+               <p class="p-heading"> Les participants apprendront à assembler et programmer des robots en utilisant des kits adaptés. Ils découvriront les principes de base de la mécanique, de l'électronique et du codage. L'atelier se conclura par la présentation des projets de robots réalisés par les groupes.</p>
            </div> 
        </div>   
        <div class="row">
@@ -92,8 +92,7 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingThree">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                          Enseigner aux participants les principes fondamentaux de la robotique, y compris la conception, la construction et la programmation de robots.
-                           </button></h5>
+                            Permettre aux enfants de découvrir les bases de la robotique et de la programmation à travers des projets ludiques et interactifs.                           </button></h5>
                        </div>
                        
                    </div>
@@ -106,10 +105,40 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingFour">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                          Stimuler la créativité des participants en les encourageant à concevoir et à développer leurs propres projets de robotique.                         
-                        </button></h5>
+                            Encourager les enfants à acquérir des compétences en ingénierie                        </button></h5>
                        </div>
                        
+                   </div>
+
+                   <div class="accordion-item">
+                       <div class="accordion-icon orange">
+                           <span class="fas fa-flag"></span>
+                       </div> 
+                       <div class="accordion-header" id="headingFour">
+                        <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Stimuler l'imagination des enfants en les incitant à concevoir des robots uniques et à développer des solutions novatrices pour résoudre des défis et des problèmes réels.            
+                        </button></h5>
+                        </div>
+                   </div>
+
+                   <div class="accordion-item">
+                       <div class="accordion-icon blue">
+                           <span class="fas fa-info"></span>
+                       </div> 
+                       <div class="accordion-header" id="headingTwo" style="color:white">
+                             <h5>
+                              Age maximum: 13 <hr>
+                              Age minimum: 10 <hr>
+                              Nombre de séance par semaine:2 <hr>
+                              Effectif maximum : 15 <hr>
+                                Effectif minimum : 12 <hr>
+                                Effectif actuel :10 <hr>
+                                Tarif : 600 MAD <hr>
+                                Statut : Inactif <hr>
+                            </h5>
+                            <iframe width="560" height="315" src="https://youtu.be/eOzPGmCR7gs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+                       </div>
                    </div>
                   
                </div> 

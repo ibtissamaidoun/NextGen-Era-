@@ -31,12 +31,15 @@
                 <td class="align-middle text-center">
                   <i class="ni ni-check-bold" style="color:orange"></i>
                 </td>
+<<<<<<< HEAD
                
                 
 <<<<<<< HEAD
              <td    class="align-middle">
 =======
 >>>>>>> 31e02bd86949edfbb381667db826cbcf38761d10
+=======
+>>>>>>> e071be7b93f037fe7ad10a6f0b070e0e9aa8b7b1
 
            <!-- <td    class="align-middle">
 
@@ -44,7 +47,8 @@
                 class="btn btn-link text-danger text-gradient px-3 mb-0"
                  
                 >
-                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <i class="fa fa-pencil" aria-hidden="true"></i>:env
+                
               </button>
               
 <<<<<<< HEAD

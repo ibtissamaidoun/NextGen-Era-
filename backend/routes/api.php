@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Enums\TokenAbility;
 use Illuminate\Http\Request;
 use App\Http\Middleware\CheckRole;
+use Spatie\Csp\Nonce\NonceGenerator;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DeviController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\AnimateursController;
 use App\Http\Controllers\ParentmodelController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdministrateurController;
+use App\Http\Controllers\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,15 +44,22 @@ Route::post('/refresh-token', [AuthController::class, 'refreshToken'])->middlewa
     'auth:sanctum',
     'ability:' . TokenAbility::ISSUE_ACCESS_TOKEN->value,
 ]);
+Route::get('/get-nonce', function () {
+    $nonce = app(NonceGenerator::class)->generate();
+
+    return response()->json([
+        'nonce' => $nonce,
+    ]);
+});
 
 //route qui necessite l'authentification
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
+
 // Routes réservées aux parents
 Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->group(function () {
-
 
     /** ---- MANIPULATION DES ENFANTS ---- */
     Route::apiResource('enfants', EnfantController::class);
@@ -60,10 +69,8 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
         Route::get('{enfant_id}/edt',[ParentmodelController::class,'EDT']);
     });
 
-
     /** ---- NOTIFICATIONS ---- */
     Route::apiResource('notifications', NotificationController::class);
-
 
     /** ---- PROFILE ---- */
     Route::prefix('profile')->group(function ()
@@ -183,12 +190,13 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
 // Routes réservées à l'admin
-Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')->group(function () {
+// Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboard-admin')->group(function () {
+    Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboard-admin')->group(function () {
 
     /** --- ADMINS --- */
     Route::get('admins', [AdministrateurController::class, 'index']);
     Route::post('admins', [AdministrateurController::class, 'store']);
-    Route::get('admins/{admin}', [AdministrateurController::class, 'show']);
+    Route::get('admins/details/{admin}', [AdministrateurController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('admins/{admin}', [AdministrateurController::class, 'update']);
@@ -197,7 +205,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
     /** --- ANIMATEURS --- */
     Route::get('animateurs', [AnimateursController::class, 'index']);
     Route::post('animateurs', [AnimateursController::class, 'store']);
-    Route::get('animateurs/{animateur}', [AnimateursController::class, 'show']);
+    Route::get('animateurs/details/{animateur}', [AnimateursController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('animateurs/{animateur}', [AnimateursController::class, 'update']);
@@ -206,7 +214,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
     /** --- PARENTS --- */
     Route::get('parents', [ParentmodelController::class, 'index']);
     Route::post('parents', [ParentmodelController::class, 'store']);
-    Route::get('parents/{parent}', [ParentmodelController::class, 'show']);
+    Route::get('parents/details/{parent}', [ParentmodelController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('parents/{parent}', [ParentmodelController::class, 'update']);
@@ -249,15 +257,21 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('admin')-
 
 
     /** --- HORAIRES --- */
-    Route::apiResource('horaires', HoraireController::class);
+    // Route::apiResource('horaires', HoraireController::class);
+    Route::get('horaires', [HoraireController::class, 'index']);
+    Route::post('horaires', [HoraireController::class, 'store']);
+    Route::get('horaires/{horaire}', [HoraireController::class, 'show']);
+    Route::put('horaires/Editer/{heureId}', [HoraireController::class, 'update']);
+    Route::delete('horaires/{horaire}', [HoraireController::class, 'destroy']);
 
     /** --- OFFRES --- */
     Route::apiResource('offres', offreController::class);
 
 
     /** --- CONSULTATION DES ENFANTS --- */
-    Route::apiResource('enfants', EnfantController::class)->only(['index', 'show']);
-
+    // Route::apiResource('enfants', EnfantController::class)->only(['index', 'show']);
+    Route::get('enfants/details/{enfant}', [EnfantController::class, 'show']);
+    Route::get('enfants', [EnfantController::class, 'index']);
     //these two route are disabled , no use , no value ,no logic
     // Define route for attaching activities to an offer
     //Route::put('/offers/{offerId}/attach-activities', [OffreController::class, 'attachActivities']);
@@ -312,7 +326,9 @@ Route::get('devis',[deviController::class, 'createDevis']); // marche
 Route::get('monPack',[PackController::class,'packPoussible']); // marche
 
 
-
+// Route::prefix('dashboard-admin')->group(function () {
+//     Route::get('admins', [AdministrateurController::class, 'index']);
+// });
 
 //------test----taha----ostora----//
 

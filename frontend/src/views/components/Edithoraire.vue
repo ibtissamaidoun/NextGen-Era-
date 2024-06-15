@@ -1,74 +1,81 @@
-<script setup>
-/* eslint-disable */
+<script>
+import axiosInstance from '@/axios-instance';
 
-import { ref } from 'vue';
-import ArgonButton from "@/components/ArgonButton.vue";
-
-const form = ref({
-  heure_debut: '',
-  heure_fin: '',
-  jour_semaine: '',
+export default {
+  data() {
+    return {
+      form: {
+        heure_debut: '',
+        heure_fin: '',
+        jour_semaine: ''
+      },
+      heureId: null
+    };
+  },
+  mounted() {
+    this.heureId = this.$route.params.heureId; // Assurez-vous que le nom du paramètre est correct
+    console.log("Heure ID récupéré:", this.heureId); // Pour le débogage
+  },
+  methods: {
+    submitForm() {
+      console.log("Données envoyées pour la mise à jour:", this.form);
+      if (!this.form.heure_debut || !this.form.heure_fin || !this.form.jour_semaine) {
+        alert('Veuillez remplir tous les champs correctement.');
+        return;
+      }
+      axiosInstance.put(`/dashboard-admin/horaires/Editer/${this.heureId}`, this.form)
+        .then(response => {
+          alert('Horaire mis à jour avec succès');
+          console.log('Réponse de mise à jour:', response.data);
+        })
+        .catch(error => {
+  console.error('Erreur lors de la mise à jour de l\'horaire:', error);
+  let errorMessage = "Une erreur inconnue est survenue";
+  if (error.response) {
+    console.log("Détails de l'erreur:", error.response);
+    errorMessage = error.response.data && error.response.data.message
+                   ? error.response.data.message
+                   : error.response.statusText;
+  } else if (error.message) {
+    errorMessage = error.message;
+  }
+  alert(`Erreur lors de la mise à jour: ${errorMessage}`);
 });
 
-const paymentOptions = ref(['Mensuel', 'Annuel']);
-
-const submitForm = () => {
-  console.log('Form data:', form.value);
-};
+    }
+  }
+}
 </script>
 
 <template>
   <div class="card mt-6">
-    <div class="card-header pb-0 px-3"></div>
-    
-      <div class="col-12-end">
-        <input v-model="form.title" type="text" class="form-control" placeholder="HEURE DÉBUT"><br/>
-        <input v-model="form.description" type="text" class="form-control" placeholder="HEURE FIN"><br/>
-        <input v-model="form.discount" type="text" class="form-control" placeholder="JOUR DE SEMAINE"><br/>
-      </div>
-      <div class="col-12-end text-end mt-2">
-        <argon-button color="primary" variant="gradient" @click="submitForm">
-          Editer
-        </argon-button>
-      </div>
+    <div class="col-12">
+      <input v-model="form.heure_debut" type="time" class="form-control" placeholder="Heure début">
+      <input v-model="form.heure_fin" type="time" class="form-control" placeholder="Heure fin">
+      <select v-model="form.jour_semaine" class="form-control">
+        <option disabled value="">Choisissez un jour</option>
+        <option>Lundi</option>
+        <option>Mardi</option>
+        <option>Mercredi</option>
+        <option>Jeudi</option>
+        <option>Vendredi</option>
+        <option>Samedi</option>
+        <option>Dimanche</option>
+      </select>
+      <button @click="submitForm" class="btn btn-primary mt-2">Editer</button>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .card {
   margin-top: 20px;
+  padding: 20px;
 }
-
-.card-header {
-  padding-bottom: 0;
-  padding-left: 15px;
-  padding-right: 15px;
+.btn-primary {
+  width: 100%;
 }
-
-.card-body {
-  padding-top: 20px;
-  padding-left: 15px;
-  padding-right: 15px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .form-control {
   margin-bottom: 10px;
-}
-
-.text-end {
-  text-align: end;
-}
-
-.mt-4 {
-  margin-top: 1.5rem;
-}
-
-.mt-2 {
-  margin-top: 0.5rem;
 }
 </style>

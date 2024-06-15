@@ -1,16 +1,3 @@
-<script setup>
-/* eslint-disable */
-
-import { ref } from 'vue';
-import ArgonButton from "@/components/ArgonButton.vue";
-
-const showEmailInput = ref(false);
-
-function toggleEmailInput() {
-  showEmailInput.value = !showEmailInput.value;
-}
-</script>
-
 <template>
   <div>
     <div class="row">
@@ -25,12 +12,21 @@ function toggleEmailInput() {
     <div v-if="showEmailInput">
       <div class="row mt-3">
         <div class="col-12-end">
-          <input type="text" class="form-control" placeholder="Heure début"><br/>
-          <input type="text" class="form-control" placeholder="Heure fin"><br/>
-          <input type="text" class="form-control" placeholder="jour de semaine">
+          <input v-model="heureDebut" type="text" class="form-control" placeholder="Heure début">
+          <input v-model="heureFin" type="text" class="form-control" placeholder="Heure fin">
+          <select v-model="jourSemaine" class="form-control">
+            <option disabled value="">Sélectionnez le jour</option>
+            <option>Lundi</option>
+            <option>Mardi</option>
+            <option>Mercredi</option>
+            <option>Jeudi</option>
+            <option>Vendredi</option>
+            <option>Samedi</option>
+            <option>Dimanche</option>
+          </select>
         </div>
         <div class="col-12-end text-end mt-2">
-          <argon-button color="primary" variant="gradient">
+          <argon-button @click="submitHoraire" color="primary" variant="gradient">
             Ajouter
           </argon-button>
         </div>
@@ -38,3 +34,48 @@ function toggleEmailInput() {
     </div>
   </div>
 </template>
+
+<script>
+import axiosInstance from '@/axios-instance';
+import ArgonButton from "@/components/ArgonButton.vue";
+
+export default {
+  components: {
+    ArgonButton
+  },
+  data() {
+    return {
+      showEmailInput: false,
+      heureDebut: '',
+      heureFin: '',
+      jourSemaine: ''
+    };
+  },
+  methods: {
+    toggleEmailInput() {
+      this.showEmailInput = !this.showEmailInput;
+    },
+    async submitHoraire() {
+      try {
+        const payload = {
+          heure_debut: this.heureDebut,
+          heure_fin: this.heureFin,
+          jour_semaine: this.jourSemaine
+        };
+        const response = await axiosInstance.post('/dashboard-admin/horaires', payload);
+        console.log('Horaire ajouté avec succès:', response.data);
+       
+        this.resetForm();
+      } catch (error) {
+        console.error('Erreur complète:', error);
+      }
+    },
+    resetForm() {
+      this.heureDebut = '';
+      this.heureFin = '';
+      this.jourSemaine = '';
+      this.showEmailInput = false;
+    }
+  }
+}
+</script>

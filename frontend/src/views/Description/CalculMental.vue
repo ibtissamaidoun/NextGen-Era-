@@ -49,8 +49,8 @@ onBeforeUnmount(() => {
    <div class="container">
        <div class="row">
            <div class="col-xl-12">
-               <h2 class="h2-heading">Atelier de Calcul Mental</h2>
-               <p class="p-heading"> Améliorez vos compétences en calcul mental à travers des exercices ludiques et stimulants.</p>
+               <h2 class="h2-heading">Atelier de Calcul Mental pour les débutants</h2>
+               <p class="p-heading">Cet atelier propose une série d'exercices et de jeux interactifs adaptés à différents niveaux de compétence, encourageant les enfants à résoudre des problèmes mathématiques de manière rapide et précise, tout en favorisant un environnement positif et encourageant.</p>
            </div> 
        </div>   
        <div class="row">
@@ -92,8 +92,7 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingThree">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                          Améliorer la rapidité et la précision des participants dans les opérations mathématiques de base, telles que l'addition, la soustraction, la multiplication et la division.
-                           </button></h5>
+                            Renforcer les capacités des enfants à effectuer des calculs mentaux rapides et précis, adaptés à leur niveau d'âge.                           </button></h5>
                        </div>
                        
                    </div>
@@ -106,12 +105,39 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingFour">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                          Renforcer la confiance en soi des participants en leur fournissant des stratégies efficaces pour effectuer des calculs mentaux rapidement et avec précision.
-                           </button></h5>
+                            Encourager les enfants à maintenir leur concentration tout en développant leur capacité à résoudre des problèmes mathématiques rapidement et efficacement.                           </button></h5>
                        </div>
                        
                    </div>
-                  
+                   <div class="accordion-item">
+                       <div class="accordion-icon orange">
+                           <span class="fas fa-flag"></span>
+                       </div> 
+                       <div class="accordion-header" id="headingFour">
+                        <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            	Favoriser un environnement positif où les enfants se sentent encouragés à relever des défis mathématiques. </button></h5>                       </div>
+                       
+                   </div>
+                   
+                   <div class="accordion-item">
+                       <div class="accordion-icon blue">
+                           <span class="fas fa-info"></span>
+                       </div> 
+                       <div class="accordion-header" id="headingTwo" style="color:white">
+                             <h5>
+                              Age maximum: 9 <hr>
+                              Age minimum: 6 <hr>
+                              Nombre de séance par semaine:1 <hr>
+                              Effectif maximum : 10 <hr>
+                                Effectif minimum : 8 <hr>
+                                Effectif actuel :10 <hr>
+                                Tarif : 500 MAD <hr>
+                                Statut : Actif <hr>
+                            </h5>
+                            <iframe width="560" height="315" src="https://youtu.be/FGdiuHTYHQg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+                       </div>
+                   </div>
                </div> 
            </div> 
            <div class="col-xl-7">

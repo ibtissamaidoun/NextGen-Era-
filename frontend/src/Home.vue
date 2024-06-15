@@ -21,7 +21,6 @@ export default {
     });
 
     return {
-      // any variables or functions you want to expose to the template
     };
   },
 };
@@ -52,7 +51,7 @@ export default {
 <<<<<<< HEAD
 =======
 
-                   <a class="nav-link" href="#services">activités</a>
+
 
 >>>>>>> c539887d89751138eb81d6f3ffd120a690275f13
                </li>
@@ -70,7 +69,7 @@ export default {
                </li>
            </ul>
            <span class="nav-item">
-               <router-link to="login" class="btn-solid-sm" >Connexion</router-link>
+               <router-link to="/login" class="btn-solid-sm" >Connexion</router-link>
            </span>
        </div> 
    </div> 
@@ -102,7 +101,7 @@ export default {
       </div>
       <div class="row">
           <div class="col-lg-12 ">
-              <div class="card flex-fill">
+              <div class="card ">
                   <div class="card-body">
                     <h4 class="card-title" style="color: #000080;" >Programmation</h4>
                         <p style="padding:10%"> Apprenez les bases de la programmation et développez des compétences en codage à travers des projets passionnants.</p>
@@ -110,7 +109,7 @@ export default {
                   </div>
               </div>
           
-              <div class="card flex-fill">
+              <div class="card ">
                   <div class="card-body">
                     <h4 class="card-title" style="color: #000080;" >Intelligence Artificielle</h4>
                         <p style="padding:10%"> Explorez le monde fascinant de l'intelligence artificielle et apprenez à développer des applications intelligentes.</p>
@@ -118,38 +117,57 @@ export default {
                       </div>
               </div>
             
-              <div class="card flex-fill">
-                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Robotique</h4>
+              <div class="card ">
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Robotique pour les débutants</h4>
                         <p style="padding:10%"> Plongez dans le domaine de la robotique en apprenant à concevoir, construire et programmer des robots.</p>
                         <router-link to="/Robotique" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
+              <div class="card ">
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Robotique avancé</h4>
+                        <p style="padding:10%"> Plongez dans le domaine de la robotique en apprenant à concevoir, construire et programmer des robots.</p>
+                        <router-link to="/RobotiqueAvance" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
+                  </div>
+              </div>
 
-              <div class="card flex-fill">
-                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Calcul Mental</h4>
+              <div class="card">
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Calcul mental pour les débutants</h4>
                         <p style="padding:10%">  Améliorez vos compétences en calcul mental à travers des exercices ludiques et stimulants.</p>
                         <router-link to="/CalculMental" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
+              <div class="card">
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Calcul mental avancé</h4>
+                        <p style="padding:10%">  Améliorez vos compétences en calcul mental à travers des exercices ludiques et stimulants.</p>
+                        <router-link to="/CalculMentalAvance" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
+                  </div>
+              </div>
 
-              <div class="card flex-fill">
+              <div class="card">
                   <div class="card-body"><h4 class="card-title" style="color: #000080;" >Laboratoires de Chimie</h4>
                         <p style="padding:10%"> Explorez les principes fondamentaux de la chimie à travers des expériences pratiques et des démonstrations.</p>
                         <router-link to="/LabChimie" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
 
-              <div class="card flex-fill">
+              <div class="card ">
                   <div class="card-body"><h4 class="card-title" style="color: #000080;" >Laboratoires de Biologie</h4>
                         <p style="padding:10%"> Découvrez le monde fascinant de la biologie à travers des expériences de laboratoire et des observations.</p>
                         <router-link to="/LabBiologie" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
 
-              <div class="card flex-fill">
-                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Jeux d'échecs</h4>
+              <div class="card">
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Jeux d'échecs pour débutants</h4>
                         <p style="padding:10%"> Apprenez les règles du jeu d'échecs et développez des compétences stratégiques et tactiques.</p>
                         <router-link to="/Echecs" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
+                  </div>
+              </div>
+
+              <div class="card">
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Jeux d'échecs avancé</h4>
+                        <p style="padding:10%"> Apprenez les règles du jeu d'échecs et développez des compétences stratégiques et tactiques.</p>
+                        <router-link to="/EchecsAvance" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
               
@@ -183,10 +201,10 @@ export default {
            <div class="col-lg-6 col-xl-5">
                <div class="text-container">
                    <div class="section-title">SUR NOUS</div>
-                   <h2>Dix Ans d'Expérience Au Service de Votre Enfant</h2>
+                   <h2>Dix ans d'expérience au service de votre enfant</h2>
                    <p>Avec des années d'expérience dans le coaching et le développement personnel pour enfants, nous sommes passionnés par l'accompagnement des jeunes dans leur parcours vers la réussite. 
                     Faites confiance à notre expertise pour guider votre enfant vers un avenir brillant et épanouissant.</p>
-                   <router-link to="/register" class="btn-outline-reg" >Inscription</router-link>
+                   <router-link to="/signup" class="btn-outline-reg" >Inscription</router-link>
                </div> 
            </div> 
            <div class="col-lg-6 col-xl-7">
@@ -197,169 +215,7 @@ export default {
        </div>
    </div> 
  </div> 
-<!-- <div id="features" class="accordion-1">
-   <div class="container">
-       <div class="row">
-           <div class="col-xl-12">
-               <h2 class="h2-heading">Online service features</h2>
-               <p class="p-heading">Suspendisse vitae enim arcu. Aliquam convallis risus a felis blandit, at mollis nisi bibendum. Aliquam nec purus at ex blandit posuere nec a odio. Proin lacinia dolor justo</p>
-           </div> 
-       </div>   
-       <div class="row">
-           <div class="col-xl-5">
-               <div class="accordion" id="accordionExample">
-                   
-                  
-                   <div class="accordion-item">
-                       <div class="accordion-icon">
-                           <span class="fas fa-tv"></span>
-                       </div> 
-                       <div class="accordion-header" id="headingOne">
-                           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                               Analyse the product and design plan
-                           </button>
-                       </div>
-                       <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                           <div class="accordion-body">Mauris ornare libero et pharetra hendrerit. Cura elementum lectus quis tellus pretium, vitae lobortis dui sagittis aliquam et enim vel semon anticus</div>
-                       </div>
-                   </div>
-                  
-                  
-                   <div class="accordion-item">
-                       <div class="accordion-icon blue">
-                           <span class="fas fa-microphone"></span>
-                       </div> 
-                       <div class="accordion-header" id="headingTwo">
-                           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                               Find the market opportunities
-                           </button>
-                       </div>
-                       <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                           <div class="accordion-body">Mauris ornare libero et pharetra hendrerit. Cura elementum lectus quis tellus pretium, vitae lobortis dui sagittis aliquam et enim vel semon anticus</div>
-                       </div>
-                   </div>
-                  
-                  
-                   <div class="accordion-item">
-                       <div class="accordion-icon purple">
-                           <span class="fas fa-video"></span>
-                       </div> 
-                       <div class="accordion-header" id="headingThree">
-                           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                               Prepare the product launch campaign
-                           </button>
-                       </div>
-                       <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                           <div class="accordion-body">Mauris ornare libero et pharetra hendrerit. Cura elementum lectus quis tellus pretium, vitae lobortis dui sagittis aliquam et enim vel semon anticus</div>
-                       </div>
-                   </div>
-                  
-                   
-                  
-                   <div class="accordion-item">
-                       <div class="accordion-icon orange">
-                           <span class="fas fa-tools"></span>
-                       </div> 
-                       <div class="accordion-header" id="headingFour">
-                           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                               Evaluate the campaign and adjust
-                           </button>
-                       </div>
-                       <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
-                           <div class="accordion-body">Mauris ornare libero et pharetra hendrerit. Cura elementum lectus quis tellus pretium, vitae lobortis dui sagittis aliquam et enim vel semon anticus</div>
-                       </div>
-                   </div>
-                  
-               </div> 
-           </div> 
-           <div class="col-xl-7">
-               <div class="image-container">
-                   <img class="img-fluid" src="assets/images/features-dashboard.png" alt="alternative"/>
-               </div> 
-           </div> 
-       </div>
-   </div> 
- </div> 
- <div class="cards-2 bg-gray">
-   <div class="container">
-       <div class="row">
-           <div class="col-lg-12">
-               <h2 class="h2-heading">Customer testimonials</h2>
-           </div> 
-       </div>
-       <div class="row">
-           <div class="col-lg-12">
-               
-               <div class="card">
-                   <img class="quotes" src="assets/images/quotes.svg" alt="alternative" />
-                   <div class="card-body">
-                       <p class="testimonial-text">Suspendisse vitae enim arcu. Aliqu convallis risus a felis blandit, at mollis nisi bibendum aliquam noto ricos</p>
-                       <div class="testimonial-author">Roe Smith</div>
-                       <div class="occupation">General Manager, Presentop</div>
-                   </div>
-                   <div class="gradient-floor red-to-blue"></div>
-               </div>
-             
-               
-               <div class="card">
-                   <img class="quotes" src="assets/images/quotes.svg" alt="alternative" />
-                   <div class="card-body">
-                       <p class="testimonial-text">Suspendisse vitae enim arcu. Aliqu convallis risus a felis blandit, at mollis nisi bibendum aliquam noto ricos</p>
-                       <div class="testimonial-author">Sam Bloom</div>
-                       <div class="occupation">General Manager, Presentop</div>
-                   </div>
-                   <div class="gradient-floor blue-to-purple"></div>
-               </div>
-             
-               
-               <div class="card">
-                   <img class="quotes" src="assets/images/quotes.svg" alt="alternative" />
-                   <div class="card-body">
-                       <p class="testimonial-text">Suspendisse vitae enim arcu. Aliqu convallis risus a felis blandit, at mollis nisi bibendum aliquam noto ricos</p>
-                       <div class="testimonial-author">Bill McKenzie</div>
-                       <div class="occupation">General Manager, Presentop</div>
-                   </div>
-                   <div class="gradient-floor purple-to-green"></div>
-               </div>
-             
-               
-               
-               <div class="card">
-                   <img class="quotes" src="assets/images/quotes.svg" alt="alternative" />
-                   <div class="card-body">
-                       <p class="testimonial-text">Suspendisse vitae enim arcu. Aliqu convallis risus a felis blandit, at mollis nisi bibendum aliquam noto ricos</p>
-                       <div class="testimonial-author">Vanya Dropper</div>
-                       <div class="occupation">General Manager, Presentop</div>
-                   </div>
-                   <div class="gradient-floor red-to-blue"></div>
-               </div>
-             
-               
-               <div class="card">
-                   <img class="quotes" src="assets/images/quotes.svg" alt="alternative" />
-                   <div class="card-body">
-                       <p class="testimonial-text">Suspendisse vitae enim arcu. Aliqu convallis risus a felis blandit, at mollis nisi bibendum aliquam noto ricos</p>
-                       <div class="testimonial-author">Lefty Brown</div>
-                       <div class="occupation">General Manager, Presentop</div>
-                   </div>
-                   <div class="gradient-floor blue-to-purple"></div>
-               </div>
-             
-               
-               <div class="card">
-                   <img class="quotes" src="assets/images/quotes.svg" alt="alternative" />
-                   <div class="card-body">
-                       <p class="testimonial-text">Suspendisse vitae enim arcu. Aliqu convallis risus a felis blandit, at mollis nisi bibendum aliquam noto ricos</p>
-                       <div class="testimonial-author">Susane Blake</div>
-                       <div class="occupation">General Manager, Presentop</div>
-                   </div>
-                   <div class="gradient-floor purple-to-green"></div>
-               </div>
-             
-           </div> 
-       </div>
-   </div> 
- </div> -->
+
  <div class="slider-1">
    <div class="container">
        <div class="row">
@@ -524,9 +380,13 @@ export default {
  }
  .card-body{
     text-align: center;
+    flex:1;
  }
 .col-lg-12{
     text-align: center;
+    /* display: flex;
+    flex-wrap: wrap;
+    justify-content: center; */
 }
 
 .text-container{
@@ -539,5 +399,12 @@ export default {
   
 .flex-fill {
 flex: 1;
+}
+.cards-1 .card .card-body {
+  flex: 1 1 calc(33.333% - 20px); /* Ajustez cette valeur en fonction du nombre de colonnes que vous voulez */
+    margin: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
  </style>
