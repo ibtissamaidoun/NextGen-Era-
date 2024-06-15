@@ -17,6 +17,7 @@ import Offres from "../views/Admin/offres.vue";
 import Activites from "../views/Admin/Activites.vue";
 import DetailsActivites from "@/views/components/DetailsActivites.vue";
 import Demandes from "../views/Admin/Demandes.vue";
+import DemandePayment from "../views/components/DemandePayement.vue"
 import Profile from "../views/Admin/Profile.vue";
 import Enfants from "@/views/Parent/Enfants.vue";
 import DetailsEnfants from "@/views/components/DetailsEnfants.vue"
@@ -124,7 +125,7 @@ const routes = [
     //beforeEnter: requireAuth('admin')
   },
   {
-    path: "/dashboard-admin/Parents/Details",
+    path: "/dashboard-admin/parents/details/:parentId",
     name: "DetailsParents",
     component: DetailsParents,
    // beforeEnter: requireAuth('admin')
@@ -136,7 +137,7 @@ const routes = [
    // beforeEnter: requireAuth('admin')
   },
   {
-    path: "/dashboard-admin/Horaires/Editer",
+    path: "/dashboard-admin/Horaires/Editer/:heureId",
     name: "EditerHoraires",
     component: EditerHoraires,
   },
@@ -171,6 +172,11 @@ const routes = [
     component: Demandes,
    // beforeEnter: requireAuth('admin')
   },
+  { path: "/dashboard-admin/Demandes/:demandeId/paye",
+    name: "DemandePayment",
+    component: DemandePayment,
+   // beforeEnter: requireAuth('admin')
+  },
   {
     path: "/dashboard-admin/AvailablesActivites",
     name: "AvailablesActivites",
@@ -184,7 +190,7 @@ const routes = [
    // beforeEnter: requireAuth('admin')
   },
   {
-    path: "/dashboard-admin/Enfants/Details",
+    path: "/dashboard-admin/enfants/details/:enfantId",
     name: "DetailsEnfants",
     component: DetailsEnfants,
    // beforeEnter: requireAuth('admin')

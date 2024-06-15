@@ -63,7 +63,8 @@
             <td class="align-middle">
           <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
             <argon-button>                  
-                <router-link :to="`/dashboard-admin/horaires/Editer/${horaire.id}`">editer</router-link>
+                <router-link :to="`/dashboard-admin/horaires/Editer/${horaire.id}`"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
+                  ></router-link>
             </argon-button>
           </a>
           </td>

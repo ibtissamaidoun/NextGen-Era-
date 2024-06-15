@@ -213,7 +213,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
     /** --- PARENTS --- */
     Route::get('parents', [ParentmodelController::class, 'index']);
     Route::post('parents', [ParentmodelController::class, 'store']);
-    Route::get('parents/{parent}', [ParentmodelController::class, 'show']);
+    Route::get('parents/details/{parent}', [ParentmodelController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('parents/{parent}', [ParentmodelController::class, 'update']);
@@ -256,15 +256,21 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
     /** --- HORAIRES --- */
-    Route::apiResource('horaires', HoraireController::class);
-
+    // Route::apiResource('horaires', HoraireController::class);
+    Route::get('horaires', [HoraireController::class, 'index']);
+    Route::post('horaires', [HoraireController::class, 'store']);
+    Route::get('horaires/{horaire}', [HoraireController::class, 'show']);
+    Route::put('horaires/Editer/{heureId}', [HoraireController::class, 'update']);
+    Route::delete('horaires/{horaire}', [HoraireController::class, 'destroy']);
+    
     /** --- OFFRES --- */
     Route::apiResource('offres', offreController::class);
 
 
     /** --- CONSULTATION DES ENFANTS --- */
-    Route::apiResource('enfants', EnfantController::class)->only(['index', 'show']);
-
+    // Route::apiResource('enfants', EnfantController::class)->only(['index', 'show']);
+    Route::get('enfants/details/{enfant}', [EnfantController::class, 'show']);
+    Route::get('enfants', [EnfantController::class, 'index']);
     //these two route are disabled , no use , no value ,no logic
     // Define route for attaching activities to an offer
     //Route::put('/offers/{offerId}/attach-activities', [OffreController::class, 'attachActivities']);
