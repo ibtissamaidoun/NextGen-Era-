@@ -115,16 +115,18 @@ async function submitLogin() {
                     <router-link to="/forget" class="forget-pass">Mot de passe oublié</router-link> 
                     <argon-switch id="rememberMe" name="remember-me">Remember me</argon-switch>
 
-                    <div class="text-center">
-                      <button @click="submitLogin" class="text-white font-weight-bolder" style="
+                    <div class="text-center align-items-center">
+                      <!-- <button @click="submitLogin" class="text-white btn btn-primary font-weight-bolder " style="
                         background-color: #000080;
                         color: #fff;
                         border: none;
                         border-radius: 5px;
                         margin-top: 5%;
                         padding: 8px;
-                        display: block;
-                      ">Se connecter</button>
+                        display: flex;
+                        text-align: center;
+                      ">Se connecter</button> -->
+                      <button type="button" @click="submitLogin"   class="btn btn-dark mt-4" style="background-color: #000080; color">Se connceter</button>
                       <p v-if="error">{{ error }}</p>
                     </div>
                   </form>
@@ -132,7 +134,7 @@ async function submitLogin() {
                 <div class="px-1 pt-0 text-center card-footer px-lg-2">
                   <p class="mx-auto mb-4 text-sm">
                     Vous n'avez pas un compte?
-                    <router-link to="/register" style="color:dark">S'inscrire</router-link>
+                    <router-link to="/register">S'inscrire</router-link>
                     
                   </p>
                 </div>
@@ -142,7 +144,7 @@ async function submitLogin() {
               class="top-0 my-auto text-center col-6 d-lg-flex d-none h-100 pe-0 position-absolute end-0 justify-content-center flex-column"
        
                 style="
-                  background-image: url(https://pairroxz.com/blog/wp-content/uploads/2023/06/What-is-edtech-games-1-1536x681.png);
+                  background-image: url('https://pairroxz.com/blog/wp-content/uploads/2023/06/What-is-edtech-games-1-1536x681.png');
                   background-size: border-box;
                   background-position: center;
                 "
