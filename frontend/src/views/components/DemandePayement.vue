@@ -8,21 +8,11 @@
         <table class="table table-bordered align-items-center">
           <thead>
             <tr>
-              <th class="text-uppercase text-primary opacity-7">
-                Traite
-              </th>
-              <th class="text-uppercase text-primary opacity-7">
-                Date de sortie
-              </th>
-              <th class="text-uppercase text-primary opacity-7">
-                Date de paiement
-              </th>
-              <th class="text-uppercase text-primary opacity-7">
-                Delai
-              </th>
-              <th class="text-uppercase text-primary opacity-7">
-                Payé
-              </th>
+              <th class="text-uppercase text-primary opacity-7">Traite</th>
+              <th class="text-uppercase text-primary opacity-7">Date de sortie</th>
+              <th class="text-uppercase text-primary opacity-7">Date de paiement</th>
+              <th class="text-uppercase text-primary opacity-7">Delai</th>
+              <th class="text-uppercase text-primary opacity-7">Payé</th>
             </tr>
           </thead>
           <tbody>
@@ -31,7 +21,7 @@
                 <h6 class="mb-2 text-center">{{ demande.traite }}</h6>
               </td>
               <td class="text-center">
-                <span class="text-s">{{demande.datesortie}}</span>
+                <span class="text-s">{{ demande.datesortie }}</span>
               </td>
               <td class="text-center">
                 <span class="text-s">{{ demande.datepaiement }}</span>
@@ -40,10 +30,10 @@
                 <span class="text-s">{{ demande.delai }}</span>
               </td>
               <td class="text-center">
-              <button class="btn btn-link text-danger text-gradient px-3 mb-0" >
-                <i class="fa-sharp fa-thin fa-badge-check"></i>
-              </button>
-            </td>
+                <button @click="generateReceipt(demande.id)" class="btn btn-link text-danger text-gradient px-3 mb-0">
+                  <i class="fa-sharp fa-thin fa-badge-check"></i>
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -58,7 +48,7 @@
     name: 'demandes',
     data() {
       return {
-        demandes: [1,'salim','19/02/2023','en cours'],
+        demandes: [],
         parents: []
       };
     },
@@ -89,6 +79,21 @@
             alert('Erreur lors de la récupération des données: ' + (error.response ? error.response.data.message : error.message));
           });
       },
+      generateReceipt(demandeId) {
+        axiosInstance.post(`/demandes/${demandeId}/paye`)
+          .then(response => {
+            const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `recu_${demandeId}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+          })
+          .catch(error => {
+            console.error('Erreur lors de la génération du reçu:', error);
+            alert('Erreur lors de la génération du reçu: ' + (error.response ? error.response.data.message : error.message));
+          });
+      }
     }
   }
   </script>
