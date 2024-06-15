@@ -1,188 +1,91 @@
 <template>
-    <!-- <div class="card pb-5 "> -->
-
-      <div >
-        <h4 class=" mt-5 text-center" >Les détails des activtés</h4>
+  <div>
+    <h4 class="mt-5 text-center">Course Details</h4>
+    <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center">
+      <div class="course-image" v-if="activite">
+        <img :src="activite.image_pub" alt="Image description">
       </div>
-      <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
-        <table class="table table-bordered  align-items-center">
-        <thead>
-          <tr>
-            <th class="text-center text-primary opacity-7">
-              Id
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Titre
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Type d'activté
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Domaine d'activité
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Heure de début
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Heure de la fin
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Jour de la semaine 
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Remise
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Choisir
-            </th>  
-            <th class="text-center text-primary opacity-7">
-              Supprimer
-            </th>     
-            <th class="text-center text-primary opacity-7">
-              Option de paiement 
-            </th>
-            
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(activity, index) in affectes" :key="index" class="p-4 mb-2 bg-gray-100 border-radius-lg">
-            <td>
-              <h6 class="mb-2 text-center">{{ activity.id }}</h6>
-            </td> 
-            <td class="text-center">  
-                <span class="text-s">{{ activity.titre }}</span>
-              </td> 
-              <td class="text-center">  
-                <span class="text-s">{{ activity.typeactivite }}</span>
-              </td> 
-              <td class="text-center">  
-                <span class="text-s">{{ activity.domaineactivite }}</span>            
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.heuredebut }}</span>
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.heurefin }}</span>
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.joursemaine }}</span>
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.remise }}</span>
-            </td>
-            <td class="align-middle text-center">
-                  <i class="ni ni-check-bold" style="color:orange"></i>
-                </td>
-                <td class="align-middle">
-                  <a
-                    class="btn btn-link text-warning text-gradient px-3 mb-0"
-                    href="javascript:;"
-                  >
-                  <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-                  </a>
-                </td>
-            <td class="text-center">
-              <select v-model="activity.optionpaiement" class="form-control">
-                <option value="Option 1">Betcoin</option>
-                <option value="Option 2">Master card</option>
-                <option value="Option 3">Visa card</option>
-              </select>
-            </td>
-
-          </tr>
-        </tbody>
-      </table>
+      <div class="course-details">
+        <div v-if="activite">
+          <h2>{{ activite.titre }}</h2>
+          <p>{{ activite.description }}</p>
+          <ul>
+            <li><strong>Objectives:</strong> {{ activite.objectifs }}</li>
+            <li><strong>Number of Sessions per Week:</strong> {{ activite.nbr_seances_semaine }}</li>
+            <li><strong>Price:</strong> {{ activite.tarif }}</li>
+            <li><strong>Minimum Participants:</strong> {{ activite.effectif_min }}</li>
+            <li><strong>Maximum Participants:</strong> {{ activite.effectif_max }}</li>
+            <li><strong>Current Participants:</strong> {{ activite.effectif_actuel }}</li>
+            <li><strong>Minimum Age:</strong> {{ activite.age_min }}</li>
+            <li><strong>Maximum Age:</strong> {{ activite.age_max }}</li>
+            <li><strong>Status:</strong> {{ activite.status }}</li>
+            <li><strong>Start Date:</strong> {{ activite.date_debut_etud }}</li>
+            <li><strong>End Date:</strong> {{ activite.date_fin_etud }}</li>
+            <li><strong>Activity Type:</strong> {{ activite.type_activite }}</li>
+            <li><strong>Activity Domain:</strong> {{ activite.domaine_activite }}</li>
+          </ul>
+        </div>
+        <div v-else>
+          <p>No data available</p>
+        </div>
+      </div>
     </div>
-    <!-- </div> -->
-  </template>
-  
-  <script>
-  /* eslint-disable */
+  </div>
+</template>
 
-  export default {
-    data() {
-      return {
-        affectes: [
-        {
-          id: "1",
-          titre: "Oulad Maalem", 
-          typeactivite: "Ayoub",
-          domaineactivite: "ayoub@example.com",
-          heuredebut: "0612345678",
-          heurefin: "0123456789",
-          joursemaine: "Informatique",
-          optionpaiement: "9h - 17h",
-          remise: "9h - 17h",
+<script>
+/* eslint-disable */
+import axiosInstance from '@/axios-instance';
 
-        },
-        {
-          id: "1",
-          titre: "Oulad Maalem", 
-          typeactivite: "Ayoub",
-          domaineactivite: "ayoub@example.com",
-          heuredebut: "0612345678",
-          heurefin: "0123456789",
-          joursemaine: "Informatique",
-          optionpaiement: "9h - 17h",
-          remise: "9h - 17h",
-
-        },
-        {
-          id: "1",
-          titre: "Oulad Maalem", 
-          typeactivite: "Ayoub",
-          domaineactivite: "ayoub@example.com",
-          heuredebut: "0612345678",
-          heurefin: "0123456789",
-          joursemaine: "Informatique",
-          optionpaiement: "9h - 17h",
-          remise: "9h - 17h",
-
-        },
-        {
-          id: "1",
-          titre: "Oulad Maalem", 
-          typeactivite: "Ayoub",
-          domaineactivite: "ayoub@example.com",
-          heuredebut: "0612345678",
-          heurefin: "0123456789",
-          joursemaine: "Informatique",
-          optionpaiement: "9h - 17h",
-          remise: "9h - 17h",
-
-        },
-        {
-          id: "1",
-          titre: "Oulad Maalem", 
-          typeactivite: "Ayoub",
-          domaineactivite: "ayoub@example.com",
-          heuredebut: "0612345678",
-          heurefin: "0123456789",
-          joursemaine: "Informatique",
-          optionpaiement: "9h - 17h",
-          remise: "9h - 17h",
-
-        },
-        ],
-        
-      };
+export default {
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
+  data() {
+    return {
+      activite: null,
+      horaires: [],
+      mode_paiements: []
+    };
+  },
+  mounted() {
+    this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const response = await axiosInstance.get(`/dashboard-admin/Activites/Details/${this.id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` // Assurez-vous que le token est stocké dans localStorage
+          }
+        });
+        this.activite = response.data.activite; // Ajustez pour correspondre à la structure de réponse
+        this.horaires = response.data.horaires;
+        this.mode_paiements = response.data.mode_paiements;
+        console.log('Activite details:', this.activite);
+      } catch (error) {
+        console.error('Error fetching activite details:', error);
+      }
     },
-  }
-  </script>
-  
-  <style scoped>
-  h4 {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    color: orange;
-  }
-  
-  th {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    color: #000080;
-  }
-  
-  span {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-  }
-  </style>
-  
+  },
+}
+</script>
+
+<style scoped>
+h4 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: orange;
+}
+
+th {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: #000080;
+}
+
+span {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+</style>
