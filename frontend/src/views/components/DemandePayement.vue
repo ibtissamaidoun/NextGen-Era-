@@ -1,7 +1,7 @@
 <template>
     <div class="card">
       <div class="card-header pb-0 px-3">
-        <h4 class="mb-2 text-center">La gestion des demandes</h4>
+        <h4 class="mb-2 text-center">Serie de demande</h4>
       </div>
   
       <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center">
@@ -58,7 +58,7 @@
     },
     methods: {
       getdemandes() {
-        axiosInstance.get('/dashboard-admin/demandes')
+        axiosInstance.post('/dashboard-admin/demandes')
           .then(response => {
             this.demandes = response.data.demandes;
             console.log('Demandes chargées:', this.demandes);
@@ -69,7 +69,7 @@
           });
       },
       getParents() {
-        axiosInstance.get('/dashboard-admin/parents')
+        axiosInstance.post('/dashboard-admin/parents')
           .then(response => {
             this.parents = response.data.parents;
             console.log('Parents chargés:', this.parents);

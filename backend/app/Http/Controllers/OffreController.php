@@ -25,7 +25,7 @@ class OffreController extends Controller
 
     public function show($id)
     {
-        $offre = Offre::with('activites.horaires')->find($id);
+        $offre = Offre::with('activites.horaires', 'paiement')->find($id);
         return response()->json([$offre]);
     }
 

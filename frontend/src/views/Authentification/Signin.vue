@@ -18,6 +18,7 @@ const user = ref({
 });
 const error = ref('');
 const loading = ref(false);
+const showPassword = ref(false);
 
 // Setup for mounting and unmounting the component
 onBeforeMount(() => {
@@ -107,25 +108,24 @@ async function submitLogin() {
                     <div class="mb-3">
                       <argon-input v-model="user.email" :type="email" id="email"  placeholder="Email" name="email" size="lg"/>
                     </div>   
-                    <div class="mb-3 position-relative">
-                    <argon-input v-model="user.mot_de_passe" :type="showPassword ? 'text' : 'password'" id="password" placeholder="Mot de passe" name="password" size="lg" />
-                    <i :class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'" class="fa position-absolute end-0 top-50 translate-middle-y pe-3" @click="togglePasswordVisibility" style="cursor: pointer;"></i>
+                    <div class="mb-3" style="position: relative;">
+                      <argon-input v-model="user.mot_de_passe" :type="showPassword ? 'text' : 'password'" id="password" placeholder="Mot de passe" name="password" size="lg" />
+                      <i :class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'" class="fa position-absolute end-0 top-50 translate-middle-y pe-3" @click="showPassword = !showPassword" style="cursor: pointer;"></i>
                     </div>
                     <router-link to="/forget" class="forget-pass">Mot de passe oublié</router-link> 
                     <argon-switch id="rememberMe" name="remember-me">Remember me</argon-switch>
 
                     <div class="text-center">
-                       <!-- <router-link to="/">  -->
-                      <button @click="submitLogin"  class="text-white font-weight-bolder" style="
-                          background-color: #000080;
-                          color: #fff;
-                          border: none;
-                          border-radius: 5px;
-                          margin-top:5%;
-                          padding: 8px;
-                      " >Se connecter</button>
-                     <!-- </router-link>  -->
-                     <p v-if="error">{{ error }}</p>
+                      <button @click="submitLogin" class="text-white font-weight-bolder" style="
+                        background-color: #000080;
+                        color: #fff;
+                        border: none;
+                        border-radius: 5px;
+                        margin-top: 5%;
+                        padding: 8px;
+                        display: block;
+                      ">Se connecter</button>
+                      <p v-if="error">{{ error }}</p>
                     </div>
                   </form>
                 </div>
@@ -173,80 +173,4 @@ async function submitLogin() {
 .mb-0{
   margin-top:15%;
 }
-.fa-eye, .fa-eye-slash {
-    position: absolute;
-    right: 10px; /* Ajustez cette valeur selon vos besoins */
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    z-index: 1; /* Assure que l'icône reste au-dessus du champ de saisie */
-}
-.position-relative {
-    position: relative;
-}
 </style>
-
-
-<!-- <script setup>
-import { ref, onBeforeMount, onBeforeUnmount, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore, mapGetters, mapActions } from 'vuex';
-import http from '@/services/http';
-
-// Composants
-import Navbar from "@/examples/PageLayout/Navbar.vue"; 
-import AppFooter from "@/examples/PageLayout/Footer.vue";
-import ArgonInput from "@/components/ArgonInput.vue";
-import ArgonSwitch from "@/components/ArgonSwitch.vue";
-
-const body = document.getElementsByTagName("body")[0];
-const router = useRouter();
-const store = useStore();
-
-const user = ref({
-  email: '',
-  password: '',
-});
-const error = ref('');
-const showPassword = ref(false);
-const loading = ref(false);
-
-
-
-const password = computed(() => {
-  return showPassword.value ? 'text' : 'password';
-});
-
-// function togglePasswordVisibility() {
-//   showPassword.value = !showPassword.value;
-// }
-      async function submitLogin() {
-  try {
-    const response = await submitLogin(user.value);
-    if (response.isAuthenticated) {
-      const userType = store.getters['auth/user'].type;
-      switch (userType) {
-        case 'parent':
-          router.push('/dashboard-parents');
-          break;
-        case 'admin':
-          router.push('/dashboard-admin');
-          break;
-        case 'animateur':
-          router.push('/dashboard-animateurs');
-          break;
-        default:
-          router.push('/');
-      }
-      // store.commit('auth/login', response.data.user);
-      // router.push('/dashboard'); // Redirect to dashboard or another page
-    } else {
-      error.value = 'Invalid username or password'; // Set error message
-    }
-  } catch (e) {
-    console.error('Login failed', e);
-    error.value = 'error'; // Set error message if there was a problem with the request
-  }
-  loading.value = false;
-}
-</script> -->

@@ -4,10 +4,10 @@ import { onBeforeUnmount, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import { ref } from "vue";
 import { useRouter } from 'vue-router'; // Importer le routeur Vue Router
-import { toRaw } from 'vue';
+
 //import axios from "axios";
 import axiosInstance from '@/axios-instance';
-console.log("Initial Axios instance state:", axiosInstance);
+
 
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";
@@ -26,6 +26,7 @@ const user = ref ({
 })
 
 
+
 const store = useStore();
 onBeforeMount(() => {
   store.state.hideConfigButton = true;
@@ -42,21 +43,22 @@ onBeforeUnmount(() => {
   body.classList.add("bg-gray-100");
 });
 const router = useRouter();
-const HandleSubmit = async (e) => {
-  e.preventDefault();
-  const rawUser = toRaw(user.value);
-  console.log("Raw user data:", rawUser);
-  try {
-    const response = await axiosInstance.post("/register", user.value);
-    console.log("Response received:", response);
-    if (response.status === 202) {
-      sessionStorage.setItem('token', response.data.token);
-      router.push('/login'); // Redirect to the login page
-    }
-  } catch (error) {
-    console.error("Error submitting user data:", error);
+const HandleSubmit = async (e)=>{
+  e.preventDefault()
+  console.log(user.value)
+  const response = await axiosInstance.post("/register",user.value);
+  if(response.status == 202){
+    // Stocker le token dans le sessionStorage
+    sessionStorage.setItem('token', response.data.token);
+    
+    router.push('/login'); // Rediriger vers la route '/signup'
   }
+  
+  console.log(response)
 }
+
+
+
 </script>
 <template>
  <div class="container top-0 position-sticky z-index-sticky">
@@ -81,6 +83,17 @@ const HandleSubmit = async (e) => {
       "
     >
      <span class="mask bg-gradient-dark opacity-6"></span>
+    <!--  <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-5 text-center mx-auto">
+            <h1 class="text-dark mb-2 mt-5">Welcome!</h1>
+            <p class="text-lead text-white">
+              Use these awesome forms to login or create new account in your
+              project for free.
+            </p>
+          </div>
+        </div>
+      </div>-->
     </div>
     <div class="container">
       <div class="row mt-lg-n10 mt-md-n11 mt-n10 justify-content-center">
@@ -123,7 +136,7 @@ const HandleSubmit = async (e) => {
                   </svg>
                 </a>
               </div>
-              <!-- <div class="col-3 px-1">
+              <div class="col-3 px-1">
                 <a class="btn btn-outline-light w-100" href="javascript:;">
                   <svg
                     width="24px"
@@ -149,7 +162,7 @@ const HandleSubmit = async (e) => {
                     </g>
                   </svg>
                 </a>
-              </div> -->
+              </div>
               <div class="col-3 me-auto px-1">
                 <a class="btn btn-outline-light w-100" href="javascript:;">
                   <svg
@@ -193,7 +206,7 @@ const HandleSubmit = async (e) => {
                 <p
                   class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3"
                 >
-                  ou
+                  or
                 </p>
               </div>
             </div>
@@ -243,7 +256,7 @@ const HandleSubmit = async (e) => {
                   </label>
                 </argon-checkbox>
                 <div class="text-center">
-                 <!-- <router-link to="/dashboard-parents"> -->
+                 <!-- <router-link to="/signin">-->
                     <button class="text-white font-weight-bolder" style="
                           background-color: #000080;
                           color: #fff;
@@ -253,11 +266,11 @@ const HandleSubmit = async (e) => {
                           padding: 8px;
                           width:100%;
                       " >S'inscrire</button>
-                 <!-- </router-link> -->
+                <!--  </router-link> -->
                 </div>
                 <p class="text-sm mt-3 mb-0">
                   Avez-vous déjà un compte?
-                  <router-link to="/login" class="text-dark font-weight-bolder"
+                  <router-link to="/signin" class="text-dark font-weight-bolder"
                     >se connecter</router-link>
                   
                 </p>

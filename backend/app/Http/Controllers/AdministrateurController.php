@@ -163,25 +163,27 @@ class AdministrateurController extends Controller
     }
 
     public function getdemandes()
-    {
-        $status = 'en cours';
-        $demandes = demande::where('statut', $status)->get();
-        
-        // Loop through each demande to fetch additional related data
-        $filteredDemandes = $demandes->map(function ($demande) {
-            return [
-                'id' => $demande->id,
-                'parent_name' => $demande->parentmodel->user->nom.' '. $demande->parentmodel->user->prenom,
-                'offer_titre' => $demande->offre->titre ?? null,
-                'paiement_option' => $demande->paiement->option_paiement ?? null,
-            ];
-        });
-        
-        // Return the modified demandes with additional data
-        return response()->json(['demandes' => $filteredDemandes]);
-        
-    }
-
+{
+    $status = 'en cours';
+    $demandes = Demande::where('statut', $status)
+                        ->with('parentmodel.user', 'offre', 'paiement')
+                        ->get();
+    
+    $filteredDemandes = $demandes->map(function ($demande) {
+        return [
+            'id' => $demande->id,
+            'parent_name' => $demande->parentmodel->user->nom . ' ' . $demande->parentmodel->user->prenom,
+            'date_demande' => $demande->created_at->format('d/m/Y'),
+            'statut' => $demande->statut,
+            'offre_titre' => $demande->offre ? $demande->offre->titre : null,
+            'paiement_option' => $demande->paiement ? $demande->paiement->option_paiement : null,
+        ];
+    });
+    
+    dd($filteredDemandes); // Vérifiez la structure de $filteredDemandes ici
+    
+    return response()->json(['demandes' => $filteredDemandes]);
+}
    //taha naya has deleted this useless code 
 
 }

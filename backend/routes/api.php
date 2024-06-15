@@ -228,12 +228,11 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
     /** ---- ACTIVITÉES ---- */
-    Route::prefix('activities')->group(function ()
-    {
+    Route::prefix('Activites')->group(function () {
         Route::get('/', [ActiviteController::class, 'index']);
 
         Route::post('/', [ActiviteController::class, 'store']);
-        Route::get('{activity}', [ActiviteController::class, 'show']);
+        Route::get('Details/{activity}', [ActiviteController::class, 'show']);
         Route::put('{activity}', [ActiviteController::class, 'update']); // need to be revised
         Route::delete('{activity}', [ActiviteController::class, 'destroy']);
 

@@ -15,6 +15,7 @@ import HorairesAdmin from "../views/Admin/HorairesAdmin.vue";
 import EditerOffre from "@/views/components/Editoffre.vue";
 import Offres from "../views/Admin/offres.vue";
 import Activites from "../views/Admin/Activites.vue";
+import Editeractivite from "../views/components/Editactivites.vue";
 import DetailsActivites from "@/views/components/DetailsActivites.vue";
 import Demandes from "../views/Admin/Demandes.vue";
 import DemandePayment from "../views/components/DemandePayement.vue"
@@ -161,9 +162,16 @@ const routes = [
    // beforeEnter: requireAuth('admin')
   },
   {
-  path: "/dashboard-admin/Activites/Details",
-  name: "DetailsActivites",
-  component: DetailsActivites,
+    path: "/dashboard-admin/Activites/Editer",
+    name: "Editeractivite",
+    component: Editeractivite,
+   // beforeEnter: requireAuth('admin')
+  },
+  {
+    path: "/dashboard-admin/Activites/Details/:id",
+    name: "DetailsActivites",
+    component: DetailsActivites,
+    props: true  // Assurez-vous que props est true pour passer l'ID comme prop
  // beforeEnter: requireAuth('admin')
   },
   {
@@ -175,6 +183,7 @@ const routes = [
   { path: "/dashboard-admin/Demandes/:demandeId/paye",
     name: "DemandePayment",
     component: DemandePayment,
+    props: true
    // beforeEnter: requireAuth('admin')
   },
   {
