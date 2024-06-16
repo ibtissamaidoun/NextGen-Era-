@@ -20,10 +20,10 @@ class EnfantController extends Controller
         if($user && $user->role == 'parent')
         {
             $parent = $user->parentmodel;
-            $enfants= $parent->enfants()->select(['id','nom','prenom'])->get();
+            $enfants= $parent->enfants()->get();
         }
         else //si user est un admin il peut voir tout les enfants
-            $enfants = Enfant::select(['id','nom','prenom'])->get();
+            $enfants = Enfant::all();
 
         return response()->json(['enfants'=>$enfants]);
     }
