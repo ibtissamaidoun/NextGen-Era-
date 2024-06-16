@@ -115,16 +115,28 @@ export default {
               </div>
             
               <div class="card ">
-                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Robotique</h4>
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Robotique pour les débutants</h4>
                         <p style="padding:10%"> Plongez dans le domaine de la robotique en apprenant à concevoir, construire et programmer des robots.</p>
                         <router-link to="/Robotique" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
+              <div class="card ">
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Robotique avancé</h4>
+                        <p style="padding:10%"> Plongez dans le domaine de la robotique en apprenant à concevoir, construire et programmer des robots.</p>
+                        <router-link to="/RobotiqueAvance" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
+                  </div>
+              </div>
 
               <div class="card">
-                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Calcul Mental</h4>
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Calcul mental pour les débutants</h4>
                         <p style="padding:10%">  Améliorez vos compétences en calcul mental à travers des exercices ludiques et stimulants.</p>
                         <router-link to="/CalculMental" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
+                  </div>
+              </div>
+              <div class="card">
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Calcul mental avancé</h4>
+                        <p style="padding:10%">  Améliorez vos compétences en calcul mental à travers des exercices ludiques et stimulants.</p>
+                        <router-link to="/CalculMentalAvance" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
 
@@ -143,9 +155,16 @@ export default {
               </div>
 
               <div class="card">
-                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Jeux d'échecs</h4>
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Jeux d'échecs pour débutants</h4>
                         <p style="padding:10%"> Apprenez les règles du jeu d'échecs et développez des compétences stratégiques et tactiques.</p>
                         <router-link to="/Echecs" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
+                  </div>
+              </div>
+
+              <div class="card">
+                  <div class="card-body"><h4 class="card-title" style="color: #000080;" >Jeux d'échecs avancé</h4>
+                        <p style="padding:10%"> Apprenez les règles du jeu d'échecs et développez des compétences stratégiques et tactiques.</p>
+                        <router-link to="/EchecsAvance" class="read-more no-line" >Lire Plus<span class="fas fa-long-arrow-alt-right"></span></router-link>
                   </div>
               </div>
               

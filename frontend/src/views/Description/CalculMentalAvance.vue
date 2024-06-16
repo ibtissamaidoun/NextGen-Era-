@@ -49,8 +49,8 @@ onBeforeUnmount(() => {
    <div class="container">
        <div class="row">
            <div class="col-xl-12">
-               <h2 class="h2-heading">Atelier de Calcul Mental pour les débutants</h2>
-               <p class="p-heading">Cet atelier propose une série d'exercices et de jeux interactifs adaptés à différents niveaux de compétence, encourageant les enfants à résoudre des problèmes mathématiques de manière rapide et précise, tout en favorisant un environnement positif et encourageant.</p>
+               <h2 class="h2-heading">Atelier de Calcul Mental Avancé</h2>
+               <p class="p-heading"> Cet atelier avancé propose une série d'exercices et de jeux interactifs adaptés aux enfants de 9 à 11 ans ayant déjà des bases en calcul mental. Les activités sont conçues pour encourager les enfants à résoudre des problèmes mathématiques de manière rapide et précise, tout en favorisant un environnement positif et motivant.</p>
            </div> 
        </div>   
        <div class="row">
@@ -92,7 +92,7 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingThree">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            Renforcer les capacités des enfants à effectuer des calculs mentaux rapides et précis, adaptés à leur niveau d'âge.                           </button></h5>
+                            Permettre aux enfants de 9 à 11 ans de perfectionner leurs compétences en calcul mental, en les rendant plus rapides et précis.                           </button></h5>
                        </div>
                        
                    </div>
@@ -105,17 +105,8 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingFour">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                            Encourager les enfants à maintenir leur concentration tout en développant leur capacité à résoudre des problèmes mathématiques rapidement et efficacement.                           </button></h5>
+                            Encourager les enfants à rester concentrés tout en améliorant leur capacité à résoudre des problèmes mathématiques rapidement et efficacement.                           </button></h5>
                        </div>
-                       
-                   </div>
-                   <div class="accordion-item">
-                       <div class="accordion-icon orange">
-                           <span class="fas fa-flag"></span>
-                       </div> 
-                       <div class="accordion-header" id="headingFour">
-                        <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                            	Favoriser un environnement positif où les enfants se sentent encouragés à relever des défis mathématiques. </button></h5>                       </div>
                        
                    </div>
                    
@@ -125,8 +116,8 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingTwo" style="color:white">
                              <h5>
-                              Age maximum: 9 <hr>
-                              Age minimum: 6 <hr>
+                              Age maximum: 11 <hr>
+                              Age minimum: 9 <hr>
                               Nombre de séance par semaine:1 <hr>
                               Effectif maximum : 10 <hr>
                                 Effectif minimum : 8 <hr>
@@ -134,7 +125,7 @@ onBeforeUnmount(() => {
                                 Tarif : 500 MAD <hr>
                                 Statut : Actif <hr>
                             </h5>
-                            <iframe width="560" height="315" src="https://youtu.be/FGdiuHTYHQg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe width="560" height="315" src="https://youtu.be/ZBXnCerchlc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
                        </div>
                    </div>

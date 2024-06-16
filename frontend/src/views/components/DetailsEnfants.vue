@@ -1,132 +1,79 @@
 <template>
-    <div class="card pb-5 ">
-
-      <div class="card-header pb-5 px-3">
-        <h4 class="mt-5 text-center">Les détails des Parents</h4>
-      </div>
-      <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
-        <table class="table table-bordered align-items-center">
+  <div class="card pb-0">
+    <div class="card-header pb-5 px-3">
+      <h4 class="mt-5 text-center">Détails de l'enfant</h4>
+    </div>
+    <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center"> 
+      <table class="table table-bordered align-items-center" v-if="enfantDetails">
         <thead>
           <tr>
-            <th class="text-uppercase text-primary opacity-7">
-              Id
-            </th>
-            <th class="text-uppercase text-primary opacity-7">
-              Nom
-            </th>
-            <th class="text-uppercase text-primary opacity-7">
-              Prénom
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Date de naissance 
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Niveau d'étude
-            </th>
-            <th class="text-center text-primary opacity-7">
-              Parents
-            </th>            
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Date de naissance</th>
+            <th>Niveau étude</th>
+            <th>Nom du parent</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(activity, index) in affectes" :key="index" class="p-4 mb-2 bg-gray-100 border-radius-lg">
-            <td>
-              <h6 class="mb-2 text-center">{{ activity.id }}</h6>
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.nom }}</span>
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.prenom }}</span>
-            </td>
-            <td class="text-center">  
-              <span class="text-s">{{ activity.datenaissance }}</span>
-            </td>  
-            <td class="text-center">  
-              <span class="text-s">{{ activity.nivetude }}</span>
-            </td> 
-            <td class="text-center">  
-              <span class="text-s">{{ activity.parentmodel }}</span>
-            </td> 
+          <tr>
+            <td>{{ enfantDetails.id }}</td>
+            <td>{{ enfantDetails.nom }}</td>
+            <td>{{ enfantDetails.prenom }}</td>
+            <td>{{ enfantDetails.date_de_naissance }}</td>
+            <td>{{ enfantDetails.niveau_etude }}</td>
+            <td>{{ enfantDetails.parent.nom }}</td>
           </tr>
         </tbody>
       </table>
+      <div v-else>
+        Chargement des détails ou aucun enfant trouvé.
+      </div>
     </div>
-    </div>
-  </template>
-  
-  <script>
-  /* eslint-disable */
+  </div>
+</template>
 
-  export default {
-    data() {
-      return {
-        affectes: [
-        {
-            id: "1",
-            nom: "ausdu", 
-            prenom: "lswefwo",
-            datenaissance: "01/01/2012",
-            telPortable: "0612345678",
-            nivetude: "primaire",
-            parentmodel:"owfjfio et ascojwm",
-          },
-          {
-            id: "2",
-            nom: "aaaaaaa", 
-            prenom: "knsfskl",
-            datenaissance: "04/11/2010",
-            telPortable: "0612345678",
-            nivetude: "college",
-            parentmodel:"owfjfio et ascojwm",
-          },
-          {
-            id: "3",
-            nom: "fnklwkefn", 
-            prenom: "ldddddwo",
-            datenaissance: "03/03/2015",
-            telPortable: "0612345678",
-            nivetude: "college",
-            parentmodel:"owfjfio et ascojwm",
-          },
-          {
-            id: "4",
-            nom: "ausdu", 
-            prenom: "lswefwo",
-            datenaissance: "03/09/2013",
-            telPortable: "0612345678",
-            nivetude: "college",
-            parentmodel:"owfjfio et ascojwm",
-          },
-          {
-            id: "5",
-            nom: "ausdu", 
-            prenom: "lswefwo",
-            datenaissance: "03/09/2013",
-            telPortable: "0612345678",
-            nivetude: "lycee",
-            parentmodel:"owfjfio et ascojwm",
-          },
-        ],
-        
-      };
-    },
+<script>
+import axiosInstance from '@/axios-instance';
+
+export default {
+  data() {
+    return {
+      enfantDetails: null,
+    };
+  },
+  mounted() {
+    console.log("enfant ID récupéré:", this.$route.params.enfantId);
+    this.fetchenfantDetails();
+  },
+  methods: {
+    async fetchenfantDetails() {
+      try {
+        const enfantId = this.$route.params.enfantId;
+        const response = await axiosInstance.get(`/dashboard-admin/enfants/details/${enfantId}`);
+        if (response.data && response.data.enfant) {
+          this.enfantDetails = response.data.enfant; // Assurez-vous que la réponse correspond à ce format
+          this.enfantDetails.parent = response.data.parent; // Ajouter les détails du parent à l'objet enfantDetails
+          console.log("Réponse de l'API:", response.data);
+        } else {
+          throw new Error("Aucune donnée reçue de l'API ou format incorrect");
+        }
+      } catch (error) {
+        console.error('Erreur lors de la récupération des détails de l\'enfant:', error);
+        this.enfantDetails = null;
+      }
+    }
   }
-  </script>
-  
-  <style scoped>
-  h4 {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    color: orange;
-  }
-  
-  th {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    color: #000080;
-  }
-  
-  span {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-  }
-  </style>
-  
+}
+</script>
+
+<style scoped>
+h4 {
+  color: orange;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+table th {
+  color: #000080;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+</style>

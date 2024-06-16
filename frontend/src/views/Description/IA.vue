@@ -50,7 +50,7 @@ onBeforeUnmount(() => {
        <div class="row">
            <div class="col-xl-12">
                <h2 class="h2-heading">Atelier d'Intelligence Artificielle</h2>
-               <p class="p-heading"> Explorez le monde fascinant de l'intelligence artificielle et apprenez à développer des applications intelligentes.</p>
+               <p class="p-heading">Un atelier interactif en intelligence artificielle pour adolescents de 14 à 17 ans, visant à les initier aux principes de base de l'IA et de l'apprentissage automatique. Les participants exploreront les concepts fondamentaux de l'IA, concevront leurs premiers modèles simples, et développeront leurs compétences analytiques et critiques. Cet atelier offre une introduction pratique et ludique aux technologies avancées, préparant les jeunes à intégrer l'intelligence artificielle dans des projets concrets et innovants.</p>
            </div> 
        </div>   
        <div class="row">
@@ -92,8 +92,7 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingThree">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                          Introduire les participants aux concepts clés de l'intelligence artificielle, y compris le machine learning et le deep learning.
-                           </button></h5>
+                            Introduire les concepts fondamentaux de l'intelligence artificielle de manière accessible et ludique pour les adolescents.                           </button></h5>
                        </div>
                        
                    </div>
@@ -106,28 +105,39 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingFour">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                          Guider les participants dans la création d'applications intelligentes simples en utilisant des outils et des bibliothèques d'intelligence artificielle.
-                           </button></h5>
+                            Renforcer les compétences pour les jeunes entre 14 et 17 ans en permettant de créer et de comprendre des algorithmes d'intelligence artificielle.                           </button></h5>
                        </div>
                        
                    </div>
 
                    <div class="accordion-item">
+                       <div class="accordion-icon orange">
+                           <span class="fas fa-flag"></span>
+                       </div> 
+                       <div class="accordion-header" id="headingFour">
+                        <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        Sensibiliser les adolescents aux enjeux éthiques et sociaux de l'IA, les encourageant à réfléchir de manière critique sur son impact sur la société et le monde.</button></h5>
+                       
+                    </div>
+                   </div>
+
+                   <div class="accordion-item">
                        <div class="accordion-icon blue">
-                           <span class="fas fa-tools"></span>
+                           <span class="fas fa-info"></span>
                        </div> 
                        <div class="accordion-header" id="headingTwo" style="color:white">
-                        <!-- <h5> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> -->
+                             <h5>
                               Age maximum: 17 <hr>
                               Age minimum: 14 <hr>
-                              Nombre de séance par semaine:2 <hr>
-                              Effectif maximum : 15 <hr>
-                                Effectif minimum : 10 <hr>
-                                Effectif actuel :12 <hr>
-                                Tarif : 600 MAD <hr>
-                                Statut : Actif <hr>
-                                <!-- </button>
-                           </h5> -->
+                              Nombre de séance par semaine:1 <hr>
+                              Effectif maximum : 13 <hr>
+                                Effectif minimum : 9 <hr>
+                                Effectif actuel :8 <hr>
+                                Tarif : 700 MAD <hr>
+                                Statut : Inactif <hr>
+                            </h5>
+                            <iframe width="560" height="315" src="https://youtu.be/yruaGbh5W04" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
                        </div>
                    </div>
                   

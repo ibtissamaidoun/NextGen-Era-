@@ -15,8 +15,10 @@ import HorairesAdmin from "../views/Admin/HorairesAdmin.vue";
 import EditerOffre from "@/views/components/Editoffre.vue";
 import Offres from "../views/Admin/offres.vue";
 import Activites from "../views/Admin/Activites.vue";
+import Editeractivite from "../views/components/Editactivites.vue";
 import DetailsActivites from "@/views/components/DetailsActivites.vue";
 import Demandes from "../views/Admin/Demandes.vue";
+import DemandePayment from "../views/components/DemandePayement.vue"
 import Profile from "../views/Admin/Profile.vue";
 import Enfants from "@/views/Parent/Enfants.vue";
 import DetailsEnfants from "@/views/components/DetailsEnfants.vue"
@@ -50,10 +52,15 @@ import Offresparents from "@/views/Parent/offresParents.vue";
 import Programmation from "../views/Description/Programmation.vue";
 import IA from "../views/Description/IA.vue";
 import Robotique from "../views/Description/Robotique.vue";
+import RobotiqueAvance from "@/views/Description/RobotiqueAvance.vue";
 import CalculMental from "../views/Description/CalculMental.vue";
+import CalculMentalAvance from "@/views/Description/CalculMentalAvance.vue";
 import LabChimie from "../views/Description/LabChimie.vue";
 import LabBiologie from "../views/Description/LabBiologie.vue";
 import Echecs from "../views/Description/Echecs.vue";
+import EchecsAvance from "../views/Description/EchecsAvance.vue";
+
+
 import store from '@/store'
 
 function requireAuth(role) {
@@ -95,7 +102,7 @@ const routes = [
   },
 
   {
-    path: "/dashboard-admin/Administrateurs/Details",
+    path: '/dashboard-admin/admins/details/:adminId',
     name: "DetailsAdmin",
     component: DetailsAdmin,
    // beforeEnter: requireAuth('admin')
@@ -107,7 +114,7 @@ const routes = [
    // beforeEnter: requireAuth('admin')
   },
   {
-    path: "/dashboard-admin/Animateurs/Details",
+    path: "/dashboard-admin/animateurs/details/:animateurId",
     name: "DetailsAnim",
     component: DetailsAnim,
     //beforeEnter: requireAuth('admin')
@@ -119,7 +126,7 @@ const routes = [
     //beforeEnter: requireAuth('admin')
   },
   {
-    path: "/dashboard-admin/Parents/Details",
+    path: "/dashboard-admin/parents/details/:parentId",
     name: "DetailsParents",
     component: DetailsParents,
    // beforeEnter: requireAuth('admin')
@@ -131,7 +138,7 @@ const routes = [
    // beforeEnter: requireAuth('admin')
   },
   {
-    path: "/dashboard-admin/Horaires/Editer",
+    path: "/dashboard-admin/Horaires/Editer/:heureId",
     name: "EditerHoraires",
     component: EditerHoraires,
   },
@@ -155,15 +162,28 @@ const routes = [
    // beforeEnter: requireAuth('admin')
   },
   {
-  path: "/dashboard-admin/Activites/Details",
-  name: "DetailsActivites",
-  component: DetailsActivites,
+    path: "/dashboard-admin/Activites/Editer",
+    name: "Editeractivite",
+    component: Editeractivite,
+   // beforeEnter: requireAuth('admin')
+  },
+  {
+    path: "/dashboard-admin/Activites/Details/:id",
+    name: "DetailsActivites",
+    component: DetailsActivites,
+    props: true  // Assurez-vous que props est true pour passer l'ID comme prop
  // beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Demandes",
     name: "Demandes",
     component: Demandes,
+   // beforeEnter: requireAuth('admin')
+  },
+  { path: "/dashboard-admin/Demandes/:demandeId/paye",
+    name: "DemandePayment",
+    component: DemandePayment,
+    props: true
    // beforeEnter: requireAuth('admin')
   },
   {
@@ -179,7 +199,7 @@ const routes = [
    // beforeEnter: requireAuth('admin')
   },
   {
-    path: "/dashboard-admin/Enfants/Details",
+    path: "/dashboard-admin/enfants/details/:enfantId",
     name: "DetailsEnfants",
     component: DetailsEnfants,
    // beforeEnter: requireAuth('admin')
@@ -231,9 +251,19 @@ const routes = [
     component:Robotique,
   },
   {
+    path:"/RobotiqueAvance",
+    name:"RobotiqueAvance",
+    component:RobotiqueAvance,
+  },
+  {
     path:"/CalculMental",
     name:"CalculMental",
     component:CalculMental,
+  },
+  {
+    path:"/CalculMentalAvance",
+    name:"CalculMentalAvance",
+    component:CalculMentalAvance,
   },
   {
     path:"/LabChimie",
@@ -249,6 +279,11 @@ const routes = [
     path:"/Echecs",
     name:"Echecs",
     component:Echecs,
+  },
+  {
+    path:"/EchecsAvance",
+    name:"EchecsAvance",
+    component:EchecsAvance,
   },
   //dashboard-animateurs:
   {

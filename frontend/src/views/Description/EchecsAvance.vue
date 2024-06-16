@@ -39,8 +39,6 @@ onBeforeUnmount(() => {
             <span class="nav-item">
                 <router-link to="/login" class="btn-solid-sm">Connexion</router-link>
             </span>
-    
-           
         </div>
     </div>
 </nav>
@@ -49,8 +47,8 @@ onBeforeUnmount(() => {
    <div class="container">
        <div class="row">
            <div class="col-xl-12">
-               <h2 class="h2-heading">Atelier de Calcul Mental pour les débutants</h2>
-               <p class="p-heading">Cet atelier propose une série d'exercices et de jeux interactifs adaptés à différents niveaux de compétence, encourageant les enfants à résoudre des problèmes mathématiques de manière rapide et précise, tout en favorisant un environnement positif et encourageant.</p>
+               <h2 class="h2-heading">Jeux d'Échecs avancé</h2>
+               <p class="p-heading">Description : Notre atelier avancé de jeu d'échecs offre aux enfants âgés de 9 à 11 ans une immersion dans un monde passionnant où la stratégie règne en maître ! À travers des leçons interactives et des parties stimulantes, les participants exploreront les subtilités du jeu, perfectionneront leurs compétences et découvriront de nouvelles stratégies pour maîtriser l'échiquier.</p>
            </div> 
        </div>   
        <div class="row">
@@ -64,7 +62,7 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingOne">
                         <h5>   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                              Domaine d'activité :  Éducation / Développement personnel
+                              Domaine d'activité : Jeux / Stratégie
                            </button></h5>
                        </div>
                       <!-- <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -92,7 +90,7 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingThree">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            Renforcer les capacités des enfants à effectuer des calculs mentaux rapides et précis, adaptés à leur niveau d'âge.                           </button></h5>
+                            Approfondir la connaissance des règles et des stratégies du jeu d'échecs.                           </button></h5>
                        </div>
                        
                    </div>
@@ -105,44 +103,47 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingFour">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                            Encourager les enfants à maintenir leur concentration tout en développant leur capacité à résoudre des problèmes mathématiques rapidement et efficacement.                           </button></h5>
+                            Renforcer la pensée stratégique, la concentration et la prise de décision chez les enfants.                           </button></h5>
                        </div>
                        
                    </div>
+
                    <div class="accordion-item">
                        <div class="accordion-icon orange">
                            <span class="fas fa-flag"></span>
                        </div> 
                        <div class="accordion-header" id="headingFour">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                            	Favoriser un environnement positif où les enfants se sentent encouragés à relever des défis mathématiques. </button></h5>                       </div>
+                            Encourager le jeu collectif et respectueux, en favorisant l'esprit sportif et la camaraderie.              </button></h5>
+                                 </div>
                        
                    </div>
-                   
+
                    <div class="accordion-item">
                        <div class="accordion-icon blue">
                            <span class="fas fa-info"></span>
                        </div> 
                        <div class="accordion-header" id="headingTwo" style="color:white">
                              <h5>
-                              Age maximum: 9 <hr>
-                              Age minimum: 6 <hr>
-                              Nombre de séance par semaine:1 <hr>
-                              Effectif maximum : 10 <hr>
-                                Effectif minimum : 8 <hr>
+                              Age maximum: 11 <hr>
+                              Age minimum: 9 <hr>
+                              Nombre de séance par semaine:2 <hr>
+                              Effectif maximum : 16 <hr>
+                                Effectif minimum : 12 <hr>
                                 Effectif actuel :10 <hr>
-                                Tarif : 500 MAD <hr>
-                                Statut : Actif <hr>
+                                Tarif : 400 MAD <hr>
+                                Statut : Inactif <hr>
                             </h5>
-                            <iframe width="560" height="315" src="https://youtu.be/FGdiuHTYHQg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe width="560" height="315" src="https://youtu.be/djqFTj9Cxmc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
                        </div>
                    </div>
+                  
                </div> 
            </div> 
            <div class="col-xl-7">
                <div class="image-container">
-                   <img class="img-fluid" src="assets/images/CalculMental.png" alt="alternative"/>
+                   <img class="img-fluid" src="assets/images/chess.png" alt="alternative"/>
                </div> 
            </div> 
        </div>

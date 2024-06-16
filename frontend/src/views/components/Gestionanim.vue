@@ -25,109 +25,80 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(activity, index) in affectes" :key="index" class="p-4 mb-2 bg-gray-100 border-radius-lg">
+          <tr v-for="(animateur, index) in animateurs" :key="index" class="p-4 mb-2 bg-gray-100 border-radius-lg">
             <td>
-              <h6 class="mb-2 text-center">{{ activity.id }}</h6>
+              <h6 class="mb-2 text-center">{{ animateur.id }}</h6>
             </td> 
             <td class="text-center">  
-              <span class="text-s">{{ activity.nom }}</span>
+              <span class="text-s">{{ animateur.nom }}</span>
             </td> 
             <td class="text-center">  
-              <span class="text-s">{{ activity.prenom }}</span>
+              <span class="text-s">{{ animateur.prenom }}</span>
             </td> 
             <td class="text-center">  
-              <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
+              <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;" @click="deleteanimateur(animateur.id, index)">
                 <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
               </a>
             </td>
             <td class="text-center">  
-              <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
-                <argon-button><router-link to="/dashboard-admin/Animateurs/Details">Détails</router-link></argon-button>
-            </a>
+               <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">
+                 <argon-button>
+                    <router-link :to="`/dashboard-admin/animateurs/Details/${animateur.id}`">Détails</router-link>
+                </argon-button>
+              </a>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-
-    
   </div>
-
-
-
 </template>
+
 <script>
-/* eslint-disable */
-import ArgonButton from '@/components/ArgonButton.vue';
+import axiosInstance from '@/axios-instance'; // Assurez-vous que le chemin d'importation est correct
 
 export default {
+  name: 'animateurs',
   data() {
     return {
-      affectes: [
-        {
-          id: "1",
-          nom: "Oulad Maalem", 
-          prenom: "Ayoub",
-          email: "ayoub@example.com",
-          telPortable: "0612345678",
-          telFixe: "0123456789",
-          domaineCompetence: "Informatique",
-          horaire: "9h - 17h",
-        },
-        {
-          id: "4",
-          nom: "Naya", 
-          prenom: "Taha",
-          email: "taha@example.com",
-          telPortable: "0698765432",
-          telFixe: "0987654321",
-          domaineCompetence: "Finance",
-          horaire: "8h - 16h",
-        },
-        {
-          id: "1",
-          nom: "Oulad Maalem", 
-          prenom: "Ayoub",
-          email: "ayoub@example.com",
-          telPortable: "0612345678",
-          telFixe: "0123456789",
-          domaineCompetence: "Informatique",
-          horaire: "9h - 17h",
-        },
-        {
-          id: "4",
-          nom: "Naya", 
-          prenom: "Taha",
-          email: "taha@example.com",
-          telPortable: "0698765432",
-          telFixe: "0987654321",
-          domaineCompetence: "Finance",
-          horaire: "8h - 16h",
-        },
-        {
-          id: "1",
-          nom: "Oulad Maalem", 
-          prenom: "Ayoub",
-          email: "ayoub@example.com",
-          telPortable: "0612345678",
-          telFixe: "0123456789",
-          domaineCompetence: "Informatique",
-          horaire: "9h - 17h",
-        },
-        {
-          id: "4",
-          nom: "Naya", 
-          prenom: "Taha",
-          email: "taha@example.com",
-          telPortable: "0698765432",
-          telFixe: "0987654321",
-          domaineCompetence: "Finance",
-          horaire: "8h - 16h",
-        },
-      ],
+      animateurs: []
     };
   },
-  
+  mounted() {
+    this.getAnimateurs();
+  },
+  methods: {
+    getAnimateurs() {
+      axiosInstance.get('/dashboard-admin/animateurs')
+        .then(response => {
+          this.animateurs = response.data[0]; // Access the first element of the outer array
+          console.log('Animateurs chargés:', this.animateurs);
+        })
+        .catch(error => {
+          console.error('Erreur lors de la récupération des animateurs:', error);
+          alert('Erreur lors de la récupération des données: ' + (error.response ? error.response.data.message : error.message));
+        });
+    },
+    async deleteanimateur(animateur_id, index) {
+      const url =`/dashboard-admin/animateurs/${animateur_id}`;
+      console.log('Tentative de suppression à l\'URL:', url);
+      try {
+        const response = await axiosInstance.delete(url);
+        console.log('Réponse de suppression:', response);
+        this.animateurs.splice(index, 1);
+        console.log('Animateur supprimé');
+      } catch (error) {
+        console.error('Erreur lors de la suppression de l\'animateur:', error);
+        let errorMessage = 'Erreur inconnue'; // Message par défaut si l'erreur n'est pas structurée comme prévu
+        if (error.response && error.response.data) {
+          errorMessage = error.response.data.message || JSON.stringify(error.response.data);
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+        alert('Erreur lors de la suppression de l\'animateur: ' + errorMessage);
+      }
+    }
+  }
 }
 </script>
 
@@ -138,7 +109,7 @@ h4 {
 }
 
 th {
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', Verdana, sans-serif;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   color: #000080;
 }
 
@@ -146,6 +117,3 @@ span {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 </style>
-
-
-

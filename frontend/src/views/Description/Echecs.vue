@@ -47,8 +47,8 @@ onBeforeUnmount(() => {
    <div class="container">
        <div class="row">
            <div class="col-xl-12">
-               <h2 class="h2-heading">Jeux d'Échecs</h2>
-               <p class="p-heading">Apprenez les règles du jeu d'échecs et développez des compétences stratégiques et tactiques.</p>
+               <h2 class="h2-heading">Jeux d'Échecs pour les débutants</h2>
+               <p class="p-heading">Dans notre atelier de jeu d'échecs, les enfants âgés de 6 à 9 ans seront immergés dans un monde de défis et de découvertes ! Avec des leçons interactives et des parties passionnantes, ils acquerront des compétences stratégiques tout en s'amusant.</p>
            </div> 
        </div>   
        <div class="row">
@@ -90,8 +90,8 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingThree">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                          Enseigner aux participants les règles fondamentales du jeu d'échecs, ainsi que les stratégies de base pour contrôler le plateau et capturer les pièces adverses.
-                           </button></h5>
+                        Apprendre aux enfants les règles fondamentales du jeu d'échecs   
+                        </button></h5>
                        </div>
                        
                    </div>
@@ -104,28 +104,40 @@ onBeforeUnmount(() => {
                        </div> 
                        <div class="accordion-header" id="headingFour">
                         <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                          Développer les compétences cognitives des participants, telles que la concentration, la planification stratégique et la résolution de problèmes, à travers la pratique régulière du jeu d'échecs.
-                           </button></h5>
+                            Favoriser la pensée stratégique, la concentration et la prise de décision chez les enfants
+                        </button></h5>
+                       </div>
+                       
+                   </div>
+
+                   <div class="accordion-item">
+                       <div class="accordion-icon orange">
+                           <span class="fas fa-flag"></span>
+                       </div> 
+                       <div class="accordion-header" id="headingFour">
+                        <h5><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Encourager les enfants à jouer ensemble de manière amicale et respectueuse.                        </button></h5>
                        </div>
                        
                    </div>
 
                    <div class="accordion-item">
                        <div class="accordion-icon blue">
-                           <span class="fas fa-tools"></span>
+                           <span class="fas fa-info"></span>
                        </div> 
                        <div class="accordion-header" id="headingTwo" style="color:white">
-                        <!-- <h5> <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> -->
-                              Age maximum: 17 <hr>
-                              Age minimum: 14 <hr>
+                             <h5>
+                              Age maximum: 9 <hr>
+                              Age minimum: 6 <hr>
                               Nombre de séance par semaine:2 <hr>
-                              Effectif maximum : 15 <hr>
-                                Effectif minimum : 10 <hr>
-                                Effectif actuel :12 <hr>
-                                Tarif : 600 MAD <hr>
-                                Statut : Actif <hr>
-                                <!-- </button>
-                           </h5> -->
+                              Effectif maximum : 16 <hr>
+                                Effectif minimum : 12 <hr>
+                                Effectif actuel :10 <hr>
+                                Tarif : 400 MAD <hr>
+                                Statut : Inactif <hr>
+                            </h5>
+                            <iframe width="560" height="315" src="https://youtu.be/djqFTj9Cxmc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
                        </div>
                    </div>
                   

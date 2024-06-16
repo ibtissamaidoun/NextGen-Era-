@@ -189,12 +189,13 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
 // Routes réservées à l'admin
-Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboard-admin')->group(function () {
+// Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboard-admin')->group(function () {
+    Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboard-admin')->group(function () {
 
     /** --- ADMINS --- */
     Route::get('admins', [AdministrateurController::class, 'index']);
     Route::post('admins', [AdministrateurController::class, 'store']);
-    Route::get('admins/{admin}', [AdministrateurController::class, 'show']);
+    Route::get('admins/details/{admin}', [AdministrateurController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('admins/{admin}', [AdministrateurController::class, 'update']);
@@ -203,7 +204,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboar
     /** --- ANIMATEURS --- */
     Route::get('animateurs', [AnimateursController::class, 'index']);
     Route::post('animateurs', [AnimateursController::class, 'store']);
-    Route::get('animateurs/{animateur}', [AnimateursController::class, 'show']);
+    Route::get('animateurs/details/{animateur}', [AnimateursController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('animateurs/{animateur}', [AnimateursController::class, 'update']);
@@ -212,7 +213,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboar
     /** --- PARENTS --- */
     Route::get('parents', [ParentmodelController::class, 'index']);
     Route::post('parents', [ParentmodelController::class, 'store']);
-    Route::get('parents/{parent}', [ParentmodelController::class, 'show']);
+    Route::get('parents/details/{parent}', [ParentmodelController::class, 'show']);
 
     //i eliminate the capability of the admin to update any informations for the users
     //Route::put('parents/{parent}', [ParentmodelController::class, 'update']);
@@ -226,12 +227,11 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboar
 
 
     /** ---- ACTIVITÉES ---- */
-    Route::prefix('activities')->group(function ()
-    {
+    Route::prefix('Activites')->group(function () {
         Route::get('/', [ActiviteController::class, 'index']);
-    
+
         Route::post('/', [ActiviteController::class, 'store']);
-        Route::get('{activity}', [ActiviteController::class, 'show']);
+        Route::get('Details/{activity}', [ActiviteController::class, 'show']);
         Route::put('{activity}', [ActiviteController::class, 'update']); // need to be revised
         Route::delete('{activity}', [ActiviteController::class, 'destroy']);
     
@@ -255,15 +255,21 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ADMIN])->prefix('dashboar
 
 
     /** --- HORAIRES --- */
-    Route::apiResource('horaires', HoraireController::class);
-
+    // Route::apiResource('horaires', HoraireController::class);
+    Route::get('horaires', [HoraireController::class, 'index']);
+    Route::post('horaires', [HoraireController::class, 'store']);
+    Route::get('horaires/{horaire}', [HoraireController::class, 'show']);
+    Route::put('horaires/Editer/{heureId}', [HoraireController::class, 'update']);
+    Route::delete('horaires/{horaire}', [HoraireController::class, 'destroy']);
+    
     /** --- OFFRES --- */
     Route::apiResource('offres', offreController::class);
 
 
     /** --- CONSULTATION DES ENFANTS --- */
-    Route::apiResource('enfants', EnfantController::class)->only(['index', 'show']);
-
+    // Route::apiResource('enfants', EnfantController::class)->only(['index', 'show']);
+    Route::get('enfants/details/{enfant}', [EnfantController::class, 'show']);
+    Route::get('enfants', [EnfantController::class, 'index']);
     //these two route are disabled , no use , no value ,no logic
     // Define route for attaching activities to an offer
     //Route::put('/offers/{offerId}/attach-activities', [OffreController::class, 'attachActivities']);
