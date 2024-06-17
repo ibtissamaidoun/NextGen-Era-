@@ -20,23 +20,20 @@
         }
         .email-header {
             background: #FFA500; /* Orange */
-            color: #ffffff;
+            color: #000000; /* Changed to black */
             padding: 20px;
             text-align: center;
         }
         .email-body {
             padding: 30px;
             line-height: 1.6;
-            color: #070707;
+            color: #000000; /* Changed to black */
         }
         .email-body h1 {
-            font-size: 24px;
+            font-size: 20px; /* Reduced font size */
             margin-bottom: 20px;
         }
-        .email-body p {
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
+       
         .email-body strong {
             color: #FFA500;
         }
@@ -44,8 +41,8 @@
             text-align: center;
             padding: 20px;
             background: #f4f4f4;
-            color: #777777;
-            font-size: 14px;
+            color: #000000; /* Changed to black */
+            font-size: 12px; /* Reduced font size */
         }
     </style>
 </head>
