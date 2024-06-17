@@ -336,7 +336,7 @@ const routes = [
     component:edtenfants,
   },
   {
-    path:"/dashboard-parents/Enfants/Editer",
+    path:'/dashboard-parents/Enfants/Editer/:id',
     name:"Editenfant",
     component:Editenfant,
   },

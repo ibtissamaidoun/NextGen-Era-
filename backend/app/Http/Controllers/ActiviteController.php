@@ -24,7 +24,7 @@ class ActiviteController extends Controller
     public function index()
     {
         // Retrieve all activities
-        $activities = Activite::select('id','titre','type_activite','domaine_activite')->get();
+        $activities = Activite::select('id','titre','type_activite','domaine_activite','image_pub','tarif')->get();
         
         // Return JSON response with activities
         return response()->json($activities);

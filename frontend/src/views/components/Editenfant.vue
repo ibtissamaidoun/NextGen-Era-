@@ -1,19 +1,51 @@
 <script setup>
 /* eslint-disable */
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import ArgonButton from "@/components/ArgonButton.vue";
+import axiosInstance from '@/axios-instance';
+
+const route = useRoute();
+const enfantId = ref(route.params.id);
 
 const form = ref({
-  Nom:'',  
+ 
+  nom:'',  
   prenom: '',
   date_naissance: '',
-  neveau_etude: '',
+  niveau_etude: '',
+  
+});
+onMounted(async () => {
+  try {
+    let response = await axiosInstance.get(`dashboard-parents/Enfants/${enfantId.value}`);
+    const data = response.data;
+    form.value.nom = data.nom;
+    form.value.prenom = data.prenom;
+    form.value.date_naissance = data.date_naissance;
+    form.value.niveau_etude = data.niveau_etude;
+    console.log(response.data);
+  } catch (error) {
+    console.error('Erreur lors du chargement des données:', error);
+  }
 });
 
-const submitForm = () => {
-  console.log('Form data:', form.value);
+const submitForm = async () => {
+  try {
+    let response = await axiosInstance.put(`dashboard-parents/Enfants/${enfantId.value}`, {
+      nom: form.value.nom,
+      prenom: form.value.prenom,
+      date_de_naissance: form.value.date_naissance,
+      niveau_etude: form.value.niveau_etude
+    });
+    console.log('Réponse du serveur:', response.data);
+  } catch (error) {
+    console.error('Erreur:', error.response.data);
+  }
 };
+
+
 </script>
 
 <template>
@@ -21,10 +53,10 @@ const submitForm = () => {
     <div class="card-header pb-0 px-3"></div>
     
       <div class="col-12-end">
-        <input v-model="form.title" type="text" class="form-control" placeholder="NOM"><br/>
-        <input v-model="form.description" type="text" class="form-control" placeholder="PRENOM"><br/>
-        <input v-model="form.discount" type="text" class="form-control" placeholder="DATE DE NAISSANCE"><br/>
-        <input v-model="form.discount" type="text" class="form-control" placeholder="NIVEAU D'ETUDE"><br/>
+        <input v-model="form.nom" type="text" class="form-control" placeholder="NOM"><br/>
+        <input v-model="form.prenom" type="text" class="form-control" placeholder="PRENOM"><br/>
+        <input v-model="form.date_naissance" type="text" class="form-control" placeholder="DATE DE NAISSANCE"><br/>
+        <input v-model="form.niveau_etude" type="text" class="form-control" placeholder="NIVEAU D'ETUDE"><br/>
 
       </div>
       <div class="col-12-end text-end mt-2">

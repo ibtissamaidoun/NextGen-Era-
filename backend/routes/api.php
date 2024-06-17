@@ -58,10 +58,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 // Routes réservées aux parents
-Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->group(function () {
+Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-parents')->group(function () {
 
     /** ---- MANIPULATION DES ENFANTS ---- */
-    Route::apiResource('enfants', EnfantController::class);
+    Route::get('Enfants', [EnfantController::class, 'index']);
+    Route::post('Enfants', [EnfantController::class, 'store']);
+    Route::get('Enfants/{enfant}', [EnfantController::class, 'show']);
+    Route::put('Enfants/{enfant}', [EnfantController::class, 'update']);
+    Route::delete('Enfants/{enfant}', [EnfantController::class, 'destroy']);
     Route::prefix('enfants')->group(function ()
     {
         // EDT POUR UN ENFANT DONNÉE
@@ -87,6 +91,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     Route::post('offres/{offreid}/demande',[DeviController::class,'chooseofferAndGenerateDevis']); // + Devis
     
     /* ----- PANIER ----- */
+    Route::get('/Activites',[ActiviteController::class, 'index']);
     Route::post('activite/{activity_id}/add', [deviController::class,'addToPanier']);
     Route::prefix('panier')->group(function ()
     {

@@ -12,13 +12,9 @@ use App\Models\enfant;
 
 class AnimateurPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
     use HandlesAuthorization;
 
     /**
-     * Determine if the given user can manage heures of the given animateur.
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Animateur  $animateur
@@ -31,6 +27,7 @@ class AnimateurPolicy
     }
     public function viewOwnActivities(User $user, Animateur $animateur)
     {
+
         return $user->id === $animateur->user_id;
     }
 

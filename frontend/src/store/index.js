@@ -132,6 +132,7 @@ export default createStore({
     setRefreshToken(state, refreshToken) {
       state.refreshToken = refreshToken;
     },
+    
   },
   actions: {
     // Actions from the first store (none in the provided code)
