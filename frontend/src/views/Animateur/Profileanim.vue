@@ -76,7 +76,7 @@ onBeforeUnmount(() => {
             <div class="col-auto my-auto">
               <div class="h-100">
                 <h5 class="mb-1">{{ name }}</h5>
-                <p class="mb-0 font-weight-bold text-sm">administrateur</p>
+                <p class="mb-0 font-weight-bold text-sm">Animateur</p>
               </div>
             </div>
           </div>
@@ -120,7 +120,10 @@ onBeforeUnmount(() => {
                   <label for="landline" class="form-control-label">Téléphone fixe</label>
                   <argon-input type="text" v-model="landline" />
                 </div>
-                
+                <div class="col-md-6">
+                  <label for="domaine" class="form-control-label">Domaine de fonctionalité</label>
+                  <argon-input type="text" v-model="domaine" />
+                </div>
               </div>
             </div>
           </div>

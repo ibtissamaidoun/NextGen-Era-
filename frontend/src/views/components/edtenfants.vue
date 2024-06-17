@@ -1,7 +1,7 @@
 <template>
     <div class="card">
       <div class="card-header pb-0" >
-        <h4 class="text-center mb-4">Emploi des activités</h4>
+        <h4 class="text-center mb-4">Emploi du temps de mon enfant</h4>
       </div>
       <div class="card-body px-0 pt-0 pb-2" style="padding:100%">
         <div class="table-responsive p-0">
@@ -42,71 +42,20 @@
         hours: ["09:00-10:30", "10:30-12:00", "12:00-13:30", "13:30-15:00", "15:00-16:30", "16:30-18:00","18:00-19:30","19:30-21:00","21:00-22:30"],
         activities: [
           {
-            title: "cours de Programmation",
+            title: "Atelier de Programmation",
             domain: "informatique",
             day: "Lundi",
             Time: "10:30-12:00",
           },
-          {
-            title: "Laboratoire de chimie",
-            domain: "Sciences et éducation",
-            day: "Vendredi",
-            Time: "12:00-13:30",
-          },
-          {
-            title: "Atelier de Yoga",
-            domain: "Sportif",
-            day: "Jeudi",
-            Time: "09:00-10:30",
-          },
+          
           {
             title: "Laboratoire de chimie",
             domain: "Sciences et éducation",
             day: "Vendredi",
             Time: "15:00-16:30",
           },
-          {
-            title: "Atelier de Yoga",
-            domain: "Sportif",
-            day: "Lundi",
-            Time: "09:00-10:30",
-          },
-          {
-            title: "Atelier de tech",
-            domain: "Sportif",
-            day: "Mardi",
-            Time: "09:00-10:30",
-          },
-          {
-            title: "Atelier de foot",
-            domain: "Sportif",
-            day: "Samedi",
-            Time: "09:00-10:30",
-          },
-          {
-            title: "Atelier de samadi",
-            domain: "Sportif",
-            day: "Dimanche",
-            Time: "18:00-19:30",
-          },
-          {
-            title: "competitive programming",
-            domain: "informatique",
-            day: "Lundi",
-            Time: "18:00-19:30",
-          },
-          {
-            title: "exemple",
-            domain: "informatique",
-            day: "Mercredi",
-            Time: "21:00-22:30",
-          },
-          {
-            title: "exemple",
-            domain: "informatique",
-            day: "Mardi",
-            Time: "21:00-22:30",
-          },
+          
+          
         ]
       };
     }

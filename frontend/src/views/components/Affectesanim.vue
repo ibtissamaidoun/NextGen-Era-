@@ -1,178 +1,165 @@
 <template>
-    <div class="card ">
-      <div class="card-header pb-0 px-3">
-        <h4 class="mb-2 text-center">Les activités affectés à l'animateur</h4>
-      </div>
-      <div class="card-body  pt-4 p-3 text-center justify-content-center align-items-center"> 
-        <table class="table table-bordered align-items-center ">
-            <thead >
-              <tr>
-                <th
-                  class="text-uppercase text-secondary opacity-7"
-                >
-                  Atelier/Laboratoire
-                </th>
-                <th
-                  class="text-uppercase text-secondary opacity-7"
-                >
-                  Domaine d'activité
-                </th>
-                <th
-                  class="text-uppercase text-secondary opacity-7"
-                >
-                  Effectif actuel
-                </th>
-                <th
-                  class="text-center  text-secondary  opacity-7"
-                >
-                  Supprimer
-                </th>
-                
-                <th class="text-secondary opacity-7"> Editer</th>
-                
-              </tr>
-            </thead>
-            
-            
-            <tbody>
-                
-        <tr v-for="(activity, index) in affectes" :key="index"  class="  p-4 mb-2 bg-gray-100  border-radius-lg ">
-            <td >
-              <h6 class="mb-2 text-center"><router-link :to="activity.path" class="read-more no-line" style="color:#000080;" >{{activity.title}}</router-link></h6>
-              
-            </td> 
-            <td class="text-center">  
-              <span class=" text-s">
-                {{activity.domaine}}
-              </span>
-            </td> 
-            <td class="text-center">  
-              <span class=" text-s">
-                {{activity.Effectif}}
-              </span>
-            </td> 
-             <td class="text-center">  
-              <a
-                class="btn btn-link text-danger text-gradient px-3 mb-0"
-                href="javascript:;"
-              >
-                <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
-              </a>
-              </td>
-            
-              <td class="align-middle">
-            <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
-              <argon-button><router-link to="/dashboard-animateurs/Horaires/Editer"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
-              ></router-link></argon-button>
-            </a>
-            </td>
-        </tr>
-          </tbody>
-        </table>
-      </div>
+  <div class="card">
+    <div class="card-header pb-0 px-3">
+      <h4 class="mb-2 text-center">Les activités affectées à l'animateur</h4>
     </div>
-  </template>
-  <style scoped>
-  h4{
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    color:orange;
-  }
-  
-    
-  th{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    color:#000080;
-  }
-  span{
-    font-family:Georgia, 'Times New Roman', Times, serif;
-    
+    <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center">
+      <table class="table table-bordered align-items-center">
+        <thead>
+          <tr>
+            <th class="text-uppercase text-secondary opacity-7">Atelier/Laboratoire</th>
+            <th class="text-uppercase text-secondary opacity-7">Domaine d'activité</th>
+            <th class="text-uppercase text-secondary opacity-7">Effectif actuel</th>
+            <th class="text-secondary opacity-7">Détails</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(activity, index) in affectes" :key="index" class="p-4 mb-2 bg-gray-100 border-radius-lg">
+            <td>
+              <h6 class="mb-2 text-center">{{ activity.titre }}</h6>
+            </td>
+            <td class="text-center">
+              <span class="text-s">{{ activity.domaine }}</span>
+            </td>
+            <td class="text-center">
+              <span class="text-s">{{ activity.effectif_actuel }}</span>
+            </td>
+            <td class="text-center">
+              <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;" @click="showDetails(activity.id)">
+                <argon-button>Détails</argon-button>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  }
-  </style>
+    <argon-modal v-if="showModal" @close="closeModal">
+      <template #header>
+        <h5 class="modal-title">Détails de l'activité</h5>
+      </template>
+      <template #body>
+        <div v-if="selectedActivity">
+          <p><strong>ID:</strong> {{ selectedActivity.id }}</p>
+          <p><strong>Domaine d'activité:</strong> {{ selectedActivity.domaine }}</p>
+          <p><strong>Type d'activité:</strong> {{ selectedActivity.type }}</p>
+          <p><strong>Date de début:</strong> {{ selectedActivity.date_debut }}</p>
+          <p><strong>Date de fin:</strong> {{ selectedActivity.date_fin }}</p>
+          <p><strong>Statuts:</strong> {{ selectedActivity.statuts }}</p>
+          <p><strong>Âge max:</strong> {{ selectedActivity.age_max }}</p>
+          <p><strong>Âge min:</strong> {{ selectedActivity.age_min }}</p>
+          <p><strong>Effectif actuel:</strong> {{ selectedActivity.effectif_actuel }}</p>
+          <p><strong>Effectif minimale:</strong> {{ selectedActivity.effectif_min }}</p>
+          <p><strong>Effectif maximale:</strong> {{ selectedActivity.effectif_max }}</p>
+          <p><strong>Prix:</strong> {{ selectedActivity.prix }}</p>
+          <p><strong>Nombre de sessions par semaine:</strong> {{ selectedActivity.nombre_sessions }}</p>
+          <p><strong>Objectifs:</strong> {{ selectedActivity.objectifs }}</p>
+        </div>
+      </template>
+      <template #footer>
+        <button class="btn btn-secondary" @click="closeModal">Fermer</button>
+        <button class="btn btn-primary" @click="affecterAnimateur">Affecter</button>
+      </template>
+    </argon-modal>
+  </div>
+</template>
 
 <script>
+import ArgonModal from '@/components/ArgonModal.vue';
+
 export default {
+  name: 'Animateurs',
+  components: {
+    ArgonModal,
+  },
   data() {
     return {
       affectes: [
         {
-          path:"/Programmation",
-          title: "Atelier de Programmation",
-          domaine: "informatique ", 
-          Effectif: "10",
+          id: 1,
+          titre: 'programmation',
+          domaine: 'informatique',
+          type: 'Atelier',
+          date_debut: '2024-07-01',
+          date_fin: '2024-07-31',
+          statuts: 'Active',
+          age_max: 17,
+          age_min: 10,
+          effectif_actuel: 15,
+          effectif_min: 10,
+          effectif_max: 20,
+          prix: 600,
+          nombre_sessions: 3,
+          objectifs: 'Améliorer les compétences en programmation',
         },
         {
-          path:"/IA",
-          title: "Atelier d'intelligence",
-          domaine: "informatique ", 
-          Effectif: "15",
+          id: 2,
+          titre: 'Robotique',
+          domaine: 'technologie',
+          type: 'Atelier',
+          date_debut: '2024-08-01',
+          date_fin: '2024-08-31',
+          statuts: 'Inactive',
+          age_max: 15,
+          age_min: 8,
+          effectif_actuel: 10,
+          effectif_min: 5,
+          effectif_max: 15,
+          prix: 50,
+          nombre_sessions: 2,
+          objectifs: 'Développer les compétences en robotique',
         },
-        {
-          path:"/Robotique",
-          title: "Atelier de Robotique",
-          domaine: "technologique ", 
-          Effectif: "9",
-        },
-        {
-          path:"/CalculMental",
-          title: "Atelier de calcul mental",
-          domaine: "informatique ", 
-          Effectif: "20",
-        },
-        {
-          path:"/Labchimie",
-          title: "Laboratoire de chimie",
-          domaine: "informatique ", 
-          Effectif: "10",
-        },
-        {
-          path:"/LabBiologie",
-          title: "Laboratoire de biologie",
-          domaine: "Science ", 
-          Effectif: "10",
-        },
-        {
-          path:"/Echecs",
-          title: "Jeux d'échecs",
-          domaine: "informatique ", 
-          Effectif: "10",
-        },
-      
-
-      ]
+      ],
+      selectedActivity: null,
+      selectedAnimateurId: null,
+      showModal: false,
     };
-  }
-}; 
-//  <script>
-//    import axiosInstance from '@/main';
+  },
+  methods: {
+    showDetails(activityId) {
+      this.selectedActivity = this.affectes.find(activity => activity.id === activityId);
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+      this.selectedActivity = null;
+    },
+    affecterAnimateur() {
+      console.log(`Activité ${this.selectedActivity.id} affectée à l'animateur ${this.selectedAnimateurId}`);
+      this.closeModal();
+    },
+  },
+};
+</script>
 
-//     export default {
-//       data() {
-//         return {
-//           getActivites: []
-//         }},
-      
-//         async created(){
-//           try {
-//           let response = await axiosInstance.get("animateur/activites");
-//           this.getActivites= response.data;
-//           console.log(response.data);
-//         }
-//         catch (error) {
-//       console.error('Erreur lors de récupération des activites:', error);
-//     }
-//     },
-//     methods: {
-//     async deleteActivities(horaire_id, index) {
+<style scoped>
+h4 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: orange;
+}
 
-//       try {
-//         this.horaires.splice(index, 1); // Supprime l'entrée du tableau local
-//         await axiosInstance.delete("animateur/horaires/"+horaire_id); // Remplacez par l'URL correcte
-        
-//       } catch (error) {
-//         console.error('Erreur lors de la suppression de l\'animateur:', error);
-//       }}}}
-  
-   
-   
-//     </script>-->
+th {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: #000080;
+}
+
+span {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.alert {
+  padding: 15px;
+  margin: 10px 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+.small {
+  font-size: 0.8em;
+}
+</style>

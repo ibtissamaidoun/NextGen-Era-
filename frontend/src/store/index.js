@@ -5,11 +5,11 @@ import axios from 'axios';
 
 export default createStore({
   state: {
-    // State from the first store
+    // State related to the cart
     cart: [],
     cartTotal: 0,
 
-    // State from the second store
+    // Other state properties
     hideConfigButton: false,
     isPinned: false,
     showConfig: false,
@@ -32,7 +32,7 @@ export default createStore({
     userRole: null,
   },
   mutations: {
-    // Mutations from the first store
+    // Cart-related mutations
     async initialiseStore(state) {
       if (localStorage.getItem('cart')) {
         state.cart = JSON.parse(localStorage.getItem('cart'));
@@ -43,12 +43,16 @@ export default createStore({
       return true;
     },
     addRemoveCart(state, payload) {
-      // Add or remove item
-      payload.toAdd ?
-        state.cart.push(payload.product) :
-        state.cart = state.cart.filter(function (obj) {
-          return obj.id !== payload.product.id;
-        });
+      if (payload.toAdd) {
+        const existingProduct = state.cart.find(item => item.id === payload.product.id);
+        if (existingProduct) {
+          existingProduct.qty += payload.product.qty;
+        } else {
+          state.cart.push(payload.product);
+        }
+      } else {
+        state.cart = state.cart.filter(item => item.id !== payload.product.id);
+      }
 
       // Calculating the total
       state.cartTotal = state.cart.reduce((accumulator, object) => {
@@ -61,7 +65,10 @@ export default createStore({
     },
     updateCart(state, payload) {
       // Update quantity
-      state.cart.find(o => o.id === payload.product.id).qty = payload.product.qty;
+      const product = state.cart.find(o => o.id === payload.product.id);
+      if (product) {
+        product.qty = payload.product.qty;
+      }
 
       // Calculating the total
       state.cartTotal = state.cart.reduce((accumulator, object) => {
@@ -73,7 +80,7 @@ export default createStore({
       localStorage.setItem('cart', JSON.stringify(state.cart));
     },
 
-    // Mutations from the second store
+    // Other mutations
     toggleConfigurator(state) {
       state.showConfig = !state.showConfig;
     },
@@ -116,7 +123,7 @@ export default createStore({
     setUser(state, user) {
       console.log("Setting user in mutation:", user);
       state.user = user;
-      state.isAuthenticated =! user;
+      state.isAuthenticated = !!user;
     },
     setAuthentication(state, isAuthenticated) {
       console.log("Setting isAuthenticated in mutation:", isAuthenticated);
@@ -134,9 +141,9 @@ export default createStore({
     },
   },
   actions: {
-    // Actions from the first store (none in the provided code)
-    
-    // Actions from the second store
+    // Actions for the cart (none provided, but can be added if needed)
+
+    // Other actions
     toggleSidebarColor({ commit }, payload) {
       commit("sidebarType", payload);
     },
@@ -148,22 +155,22 @@ export default createStore({
       router.push(route);
     },
     async login({ commit }, authData) {
-      try{
-      const response = await axios.post('/api/login', authData);
-      console.log('API Response:', response.data);
-      if (response.data.token) {
-        console.log('Login successful: User and token are present');
-        commit('setUser', response.data.utilisateur ||{});
-        commit('setAuthentication', true);
-        commit('setUserRole', response.data.role);
-        commit('setToken', response.data.token);
-        commit('setRefreshToken', response.data.refresh_token);
-      }else {
-        throw new Error('Login failed: User or token are missing from the response');
-      }
-    } catch(error) {
-        console.error('Login failed:', error); 
-        throw error; 
+      try {
+        const response = await axios.post('/api/login', authData);
+        console.log('API Response:', response.data);
+        if (response.data.token) {
+          console.log('Login successful: User and token are present');
+          commit('setUser', response.data.utilisateur || {});
+          commit('setAuthentication', true);
+          commit('setUserRole', response.data.role);
+          commit('setToken', response.data.token);
+          commit('setRefreshToken', response.data.refresh_token);
+        } else {
+          throw new Error('Login failed: User or token are missing from the response');
+        }
+      } catch (error) {
+        console.error('Login failed:', error);
+        throw error;
       }
     },
     async logout({ commit }) {
@@ -178,17 +185,16 @@ export default createStore({
         console.error('Logout failed:', error);
       }
     }
-      // Assurez-vous de gérer la déconnexion côté serveur si nécessaire
+  },
+  getters: {
+    isAuthenticated(state) {
+      console.log("Getter isAuthenticated value:", state.isAuthenticated);
+      return state.isAuthenticated;
     },
-    getters: {
-      isAuthenticated(state) {
-        console.log("Getter isAuthenticated value:", state.isAuthenticated);
-        return state.isAuthenticated;
-      },
-      userRole(state) {
-        console.log("Getter userRole value:", state.userRole);
-        return state.userRole;
-      },
+    userRole(state) {
+      console.log("Getter userRole value:", state.userRole);
+      return state.userRole;
+    },
   },
   plugins: [createPersistedState()]
 });

@@ -3,10 +3,9 @@ import axios from 'axios';
 import store from "@/store/index.js";
 
 const axiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api', // URL de votre API backend
-  withCredentials: true // Assurez-vous que les cookies sont envoyés avec les requêtes
+  baseURL: 'http://127.0.0.1:8000/api', // URL de notre API backend
+  withCredentials: true 
 });
-//baseURL: 'http://127.0.0.1:8000/api', // URL de votre API backend
 
 // Ajouter un intercepteur de requête pour inclure le token d'authentification dans toutes les requêtes sortantes
 axiosInstance.interceptors.request.use(config => {

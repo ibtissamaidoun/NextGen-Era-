@@ -1,22 +1,27 @@
 <template>
     <div class="card">
       <div class="card-header pb-0 table-responsive p-6">
-        <h4 class="text-center mb-4">Tables des heures</h4>
+        <h4 class="text-center mb-4">Tables des horaires préférés</h4>
       </div>
       <div class="card-body px-0 pt-0 pb-2">
         <div class="table-responsive p-0" >
           <table class="table table-bordered align-items-center  mb-0">
             <thead>
               <tr>
-                <th  class="text-uppercase text-secondary opacity-7">Horaires disponibles </th>
+                <th  class="text-uppercase text-secondary opacity-7">Heure de début </th>
                 
                 <th
                   class="text-center  text-secondary  opacity-7"
                 >
-                  Choisir
+                  Heure de la fin
                 </th>
-                
-                <th class="text-secondary opacity-7"> Editer</th>
+                <th
+                  class="text-center  text-secondary  opacity-7"
+                >
+                 Jour de la semaine
+                </th>
+                <th class="text-secondary opacity-7">Editer</th>
+
                 <th class="text-secondary opacity-7">Supprimer</th>
               </tr>
             </thead>
@@ -24,33 +29,29 @@
               <tr v-for="(activity, index) in horaires" :key="index" class="bg-gray-100">
                 <td class="text-center">
                   <div>
-                    <h6>{{ activity.horairedispo }}</h6>
+                    <h6>{{ activity.Heuredebut }}</h6>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <div>
+                    <h6>{{ activity.Heurefin }}</h6>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <div>
+                    <h6>{{ activity.joursemaine }}</h6>
                   </div>
                 </td>
                 
-                <td class="align-middle text-center">
-                  <i class="ni ni-check-bold" style="color:orange"></i>
-                </td>
-
-           <!-- <td    class="align-middle">
-
-               <button
-                class="btn btn-link text-danger text-gradient px-3 mb-0"
-                 
-                >
-                <i class="fa fa-pencil" aria-hidden="true"></i>:env
                 
-              </button>
-              
-              </td> -->
-
                 <td class="align-middle">
-            <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
-              <argon-button><router-link to="/dashboard-animateurs/Horaires/Editer"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
-              ></router-link></argon-button>
-            </a>
-            </td>
-
+          <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
+            <argon-button>                  
+                <router-link :to="`/dashboard-animateurs/Horaires/Editer`"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
+                  ></router-link>
+            </argon-button>
+          </a>
+          </td>
                 <td class="align-middle">
                   <button
                   class="btn btn-link text-danger text-gradient px-3 mb-0"
@@ -87,20 +88,21 @@
         return {
           horaires: [
           { 
-          horairedispo:"9:00"
+          Heuredebut:"9:00",
+          Heurefin:"10:30",
+          joursemaine:"Lundi"
           },
           { 
-          horairedispo:"18:00"
+          Heuredebut:"18:00",
+          Heurefin:"19:30",
+          joursemaine:"Mercredi",
           },
           { 
-          horairedispo:"19:30"
+          Heuredebut:"10:30",
+          Heurefin:"12:30",
+          joursemaine:"Mercredi",
           },
-          { 
-          horairedispo:"10:30",
-          },
-          { 
-          horairedispo:"12:00",
-          },
+         
 
           ]
         }},

@@ -83,20 +83,22 @@
       return {
         request: {
           series: "ABC123",
-          date: "2024-06-12",
+          date: "2024-06-15",
           status: "En attente",
-          expiryDate: "2024-07-12",
-          offerTitle: "Pack Familial",
+          expiryDate: "2024-06-22",
+          offerTitle: "Pack MULTI-ACTIVITES",
           childActivities: [
             { child: "Ahmed", activity: "Programmation" },
-            { child: "Salima", activity: "Intelligence artificielle" }
+            { child: "Ahmed", activity: "Robotique" },
+            { child: "Ahmed", activity: "Calcul mental avancé" },
+
           ]
         },
         paymentInfo: {
           paymentOption: "Paiement Mensuel",
-          totalPrice: "648 DH",
+          totalPrice: "1697 DH",
           opPrice: "20 DH",
-          period: "12 mois"
+          period: "6 mois"
         }
       };
     },
