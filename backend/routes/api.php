@@ -64,6 +64,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
     Route::apiResource('Enfants', EnfantController::class);
     Route::apiResource('Activites', ActiviteController::class);
     Route::apiResource('Devis', deviController::class);
+    
 
 
     Route::prefix('enfants')->group(function ()
@@ -144,10 +145,10 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
 
 
 // Routes réservées à l'animateur
-Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('animateur')->group(function () 
+Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('dashboard-animateurs')->group(function () 
 {
     /** --- HORAIRES CRUD --- */
-    Route::prefix('horaires')->group(function ()
+    Route::prefix('Horaires')->group(function ()
     {
         Route::get('/', [AnimateurController::class, 'indexHeures'])->name('animateur.horaires.index');
         Route::post('/', [AnimateurController::class, 'storeHeure'])->name('animateur.horaires.store');
