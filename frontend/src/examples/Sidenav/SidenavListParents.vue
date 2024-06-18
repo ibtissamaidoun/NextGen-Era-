@@ -58,19 +58,7 @@ const getRoute = () => {
         </sidenav-item>
       </li>
 
-      <li class="nav-item">
-        <sidenav-item
-          to="/dashboard-parents/Devis"
-          :class="getRoute() === 'devis' ? 'active' : ''"
-          navText="Devis"
-        >
-          <template v-slot:icon>
-            <i
-              class="ni ni-badge text-warning text-sm opacity-10"
-            ></i>
-          </template>
-        </sidenav-item>
-      </li>
+      
       
 
      
@@ -82,7 +70,7 @@ const getRoute = () => {
         >
           <template v-slot:icon>
             <i
-              class="fa fa-star text-primary text-sm opacity-10"
+              class="fa fa-star text-warning text-sm opacity-10"
             ></i>
           </template>
         </sidenav-item>
