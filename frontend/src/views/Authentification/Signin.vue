@@ -6,7 +6,6 @@ import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
-// import ArgonButton from "@/components/ArgonButton.vue"; // Commented out if not used
 
 // Getting references to document body, router, and store
 const body = document.getElementsByTagName("body")[0];
@@ -115,17 +114,7 @@ async function submitLogin() {
                     <router-link to="/forget" class="forget-pass">Mot de passe oublié</router-link> 
                     <argon-switch id="rememberMe" name="remember-me">Remember me</argon-switch>
 
-                    <div class="text-center align-items-center">
-                      <!-- <button @click="submitLogin" class="text-white btn btn-primary font-weight-bolder " style="
-                        background-color: #000080;
-                        color: #fff;
-                        border: none;
-                        border-radius: 5px;
-                        margin-top: 5%;
-                        padding: 8px;
-                        display: flex;
-                        text-align: center;
-                      ">Se connecter</button> -->
+                    <div class="text-center align-items-center"> 
                       <button type="button" @click="submitLogin"   class="btn btn-dark mt-4" style="background-color: #000080; color">Se connceter</button>
                       <p v-if="error">{{ error }}</p>
                     </div>
@@ -142,21 +131,11 @@ async function submitLogin() {
             </div>
             <div
               class="top-0 my-auto text-center col-6 d-lg-flex d-none h-100 pe-0 position-absolute end-0 justify-content-center flex-column"
-       
                 style="
                   background-image: url('https://pairroxz.com/blog/wp-content/uploads/2023/06/What-is-edtech-games-1-1536x681.png');
                   background-size: border-box;
                   background-position: center;
-                "
-              >
-               <!-- <span class="mask bg-gradient-success opacity-6"></span>
-                <h4 class="mt-5 text-white font-weight-bolder position-relative">
-                  "The Next Generation Era"
-                </h4>
-                <p class="text-white position-relative">
-                  The Evolution of Innovation: Shaping Tomorrow's World
-                </p>-->
-              
+                ">              
             </div>
           </div>
         </div>

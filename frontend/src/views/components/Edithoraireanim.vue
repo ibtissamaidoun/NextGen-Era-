@@ -22,9 +22,9 @@ const submitForm = () => {
     <div class="card-header pb-0 px-3"></div>
     
       <div class="col-12-end">
-        <input v-model="form.title" type="text" class="form-control" placeholder="ATELIER/LABORATOIRE"><br/>
-        <input v-model="form.description" type="text" class="form-control" placeholder="DOMAINE D'ACTIVITÉ"><br/>
-        <input v-model="form.discount" type="text" class="form-control" placeholder="EFFECTIF ACTUEL"><br/>
+        <input v-model="form.title" type="text" class="form-control" placeholder="Heure de début"><br/>
+        <input v-model="form.description" type="text" class="form-control" placeholder="Heure de la fin"><br/>
+        <input v-model="form.discount" type="text" class="form-control" placeholder="Jour de semaine"><br/>
       </div>
       <div class="col-12-end text-end mt-2">
         <argon-button color="primary" variant="gradient" @click="submitForm">

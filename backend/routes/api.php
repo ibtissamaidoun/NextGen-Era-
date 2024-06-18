@@ -61,11 +61,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-parents')->group(function () {
 
     /** ---- MANIPULATION DES ENFANTS ---- */
-    Route::get('Enfants', [EnfantController::class, 'index']);
-    Route::post('Enfants', [EnfantController::class, 'store']);
-    Route::get('Enfants/{enfant}', [EnfantController::class, 'show']);
-    Route::put('Enfants/{enfant}', [EnfantController::class, 'update']);
-    Route::delete('Enfants/{enfant}', [EnfantController::class, 'destroy']);
+    Route::apiResource('Enfants', EnfantController::class);
+    Route::apiResource('Activites', ActiviteController::class);
+    Route::apiResource('Devis', deviController::class);
+
+
     Route::prefix('enfants')->group(function ()
     {
         // EDT POUR UN ENFANT DONNÉE
@@ -106,7 +106,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
     });
 
     /* ---- DEMANDE ---- */
-    Route::prefix('demandes')->group(function ()
+    Route::prefix('Demandes')->group(function ()
     {
         //the father can check the commandes he submitted that are en cours
         Route::get('/', [DemandeController::class, 'demandes']);
@@ -122,10 +122,10 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
         
         /* --- DEVIS (INCLU LES OFFRES) --- */
         Route::get('{demande}/overview',[DeviController::class,'overview']);
-        Route::get('{demande}/download-devis',[DeviController::class,'downloadDevis']);
+        Route::get('{demande}/download-Devis',[DeviController::class,'downloadDevis']);
         // Valider et refuser devis
-        Route::post('{demande}/devis/validate',[DeviController::class, 'validateDevis']); // + Génération de facture
-        Route::post('{demande}/devis/refuse', [deviController::class, 'refuseDevis']); // by Sakhri
+        Route::post('{demande}/Devis/validate',[DeviController::class, 'validateDevis']); // + Génération de facture
+        Route::post('{demande}/Devis/refuse', [DeviController::class, 'refuseDevis']); // by Sakhri
         // Motif au cas de refus
         Route::post('{demande}/devis/refuse/motif',[DeviController::class, 'motifRefuse']);
     
@@ -316,7 +316,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
 // ----- en test ----- //
-Route::apiResource('devis', deviController::class);
+Route::apiResource('Devis', deviController::class);
 Route::apiResource('demandes', DemandeController::class);
 
 

@@ -67,7 +67,7 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/dashboard-admin/profile"
+          to="/dashboard-animateurs/profile"
           :class="getRoute() === 'profile' ? 'active' : ''"
           navText="Profile"
         >

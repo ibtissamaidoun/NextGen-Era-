@@ -73,8 +73,10 @@
           
             <td class="align-middle">
           <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
-            <argon-button><router-link to="/dashboard-parents/Enfants/Editer/${enfant.id}" ><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
-            ></router-link></argon-button>
+          <argon-button>
+              <router-link :to="`/dashboard-parents/Enfants/Editer/${enfant.id}`" ><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
+            ></router-link>
+          </argon-button>
           </a>
           </td>
           <td class="text-center">  
@@ -116,12 +118,6 @@ span{
 import axiosInstance from '@/axios-instance';
 
 export default {
-  props: {
-    enfant: {
-      type: Object,
-      required: true
-    }
-  },
 data() {
   return {
     enfants: [],
@@ -141,7 +137,7 @@ mounted() {
 },
 methods: {
   deleteEnfant(enfantId) {
-    axiosInstance.delete('/dashboard-parents/Enfants/${enfantId}')
+    axiosInstance.delete(`/dashboard-parents/Enfants/${enfantId}`)
       .then(response => {
         console.log('Enfant supprimé:', response.data);
         this.enfants = this.enfants.filter(enfant => enfant.id !== enfantId);

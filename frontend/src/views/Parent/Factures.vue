@@ -1,7 +1,7 @@
 <template>
   <div class="card pb-8">
     <div class="card-header pb-3 px-3">
-      <h3 class="mb-2 text-center">Gestion du factures</h3>
+      <h3 class="mb-2 text-center">Factures</h3>
     </div>
     <div class="card-body pt-2 p-3">
       <div class="table-responsive">
@@ -43,9 +43,7 @@ import { ref } from "vue";
 
 
 const devisList = ref([
-  { id: 1, date:"17/09/2023"},
-  { id: 2, date:"12/12/2024"},
-  { id: 3, date:"12/12/2024"},
+  { id:2, date:"16/06/2024"},
   // Ajoutez d'autres devis ici
 ]);
 

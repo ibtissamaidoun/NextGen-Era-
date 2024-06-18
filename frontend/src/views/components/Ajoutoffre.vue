@@ -12,9 +12,9 @@ function toggleEmailInput() {
 </script>
 
 <template>
-  <div>
+ 
     <div class="row">
-      <div class="col-12-end text-end">
+      <div class="col-12-end text-right">
         <argon-button color="dark" variant="gradient" @click="toggleEmailInput">
           <i class="fas fa-plus"></i>
           Ajouter l'offre
@@ -39,5 +39,5 @@ function toggleEmailInput() {
         </div>
       </div>
     </div>
-  </div>
+   
 </template>

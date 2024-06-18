@@ -2,8 +2,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "../views/Admin/Dashboard.vue";
 import Dashboardanim from "../views/Animateur/DashboardAnim.vue";
 import Dashboardparents from "../views/Parent/DashboardParents.vue"
+
+//dashboard-admin
 import AvailablesActivites from "@/views/Admin/AvailableActivites.vue";
-//import utilisateurs from "../views/utilisateurs.vue";
 import Administrateurs from "../views/Admin/Administrateurs.vue";
 import DetailsAdmin from "@/views/components/DetailsAdmin.vue";
 import Animateurs from "../views/Admin/Animateurs.vue";
@@ -20,22 +21,24 @@ import DetailsActivites from "@/views/components/DetailsActivites.vue";
 import Demandes from "../views/Admin/Demandes.vue";
 import DemandePayment from "../views/components/DemandePayement.vue"
 import Profile from "../views/Admin/Profile.vue";
-import Enfants from "@/views/Parent/Enfants.vue";
 import DetailsEnfants from "@/views/components/DetailsEnfants.vue"
 
-
+//authentification
 import Signup from "../views/Authentification/Signup.vue";
 import Signin from "../views/Authentification/Signin.vue";
 import Home from "../Home.vue";
 import Forget from "../views/Authentification/Forget.vue";
 import Reset from "../views/Authentification/Reset.vue";
 
+//dashboard-anim
 import Horaires from "@/views/Animateur/Horaires.vue";
 import EditerHorairesanim from "@/views/components/Edithoraireanim.vue";
 import Edt from "@/views/Animateur/Edt.vue";
 import Activitesanim from "@/views/Animateur/Activitesanim.vue";
 import Editaffectsanim from "@/views/components/Editaffectsanim.vue";
+import Profileanim from "@/views/Animateur/Profileanim.vue";
 
+//dashboard-parent
 import EnfantsParents from "@/views/Parent/EnfantsParents.vue";
 import edtenfants from "@/views/components/edtenfants.vue";
 import Editenfant from "@/views/components/Editenfant.vue";
@@ -47,8 +50,12 @@ import devis from "@/views/Parent/Devis.vue";
 import facture from "@/views/Parent/Factures.vue";
 import overview from "@/views/Parent/overview.vue";
 import Offresparents from "@/views/Parent/offresParents.vue";
+import Enfants from "@/views/Parent/Enfants.vue";
+import Profileparent from "@/views/Parent/Profileparent.vue";
+import OffreDetails from "@/views/Parent/offredetails.vue";
+import AccessDenied from "@/views/components/AccessDenied";
 
-
+//description
 import Programmation from "../views/Description/Programmation.vue";
 import IA from "../views/Description/IA.vue";
 import Robotique from "../views/Description/Robotique.vue";
@@ -88,6 +95,11 @@ const routes = [
     component: Home,
   },
   {
+    path: '/access-denied',
+    name: 'AccessDenied',
+    component: AccessDenied,
+  },
+  {
     path: "/dashboard-admin",
     name: "Dashboard",
     component: Dashboard,
@@ -111,7 +123,7 @@ const routes = [
     path: "/dashboard-admin/Animateurs",
     name: "animateurs",
     component: Animateurs,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/animateurs/details/:animateurId",
@@ -285,6 +297,9 @@ const routes = [
     name:"EchecsAvance",
     component:EchecsAvance,
   },
+
+
+
   //dashboard-animateurs:
   {
     path:"/dashboard-animateurs",
@@ -316,6 +331,11 @@ const routes = [
     path:"/dashboard-animateurs/Activites/Editer",
     name:"Editaffectsanim",
     component:Editaffectsanim,
+  },
+  {
+    path: "/dashboard-animateurs/profile",
+    name: "Profileanim",
+    component: Profileanim,
   },
 
 
@@ -361,7 +381,7 @@ const routes = [
     component:pack,
   },
   {
-    path:"/dashboard-parents/Demandes/devis",
+    path:"/dashboard-parents/Devis",
     name:"devis",
     component:devis,
   },
@@ -379,6 +399,16 @@ const routes = [
     path:"/dashboard-parents/Offres",
     name:"Offresparents",
     component:Offresparents,
+  },
+  {
+    path: "/dashboard-parents/profile",
+    name: "Profileparent",
+    component: Profileparent,
+  },
+  {
+    path:"/dashboard-parents/Offres/:id",
+    name:" OffreDetails",
+    component: OffreDetails,
   },
   
 ];

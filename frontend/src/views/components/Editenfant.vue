@@ -2,11 +2,14 @@
 /* eslint-disable */
 
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute ,useRouter } from 'vue-router';
 import ArgonButton from "@/components/ArgonButton.vue";
 import axiosInstance from '@/axios-instance';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const route = useRoute();
+const router = useRouter();
 const enfantId = ref(route.params.id);
 
 const form = ref({
@@ -39,9 +42,17 @@ const submitForm = async () => {
       date_de_naissance: form.value.date_naissance,
       niveau_etude: form.value.niveau_etude
     });
+    toast.success('Modification effectuée avec succès!'); 
+    router.back();
     console.log('Réponse du serveur:', response.data);
   } catch (error) {
-    console.error('Erreur:', error.response.data);
+    if (error.response && error.response.data) {
+      console.error('Erreur:', error.response.data);
+      toast.error('Erreur lors de la modification: ' + JSON.stringify(error.response.data)); // Affichage du message d'erreur
+    } else {
+      console.error('Erreur:', error.message);
+      toast.error('Erreur lors de la modification'); // Affichage du message d'erreur
+    }
   }
 };
 
