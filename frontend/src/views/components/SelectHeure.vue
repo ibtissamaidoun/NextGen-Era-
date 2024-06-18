@@ -31,15 +31,10 @@
                 <td class="align-middle text-center">
                   <i class="ni ni-check-bold" style="color:orange"></i>
                 </td>
-<<<<<<< HEAD
+
                
                 
-<<<<<<< HEAD
-             <td    class="align-middle">
-=======
->>>>>>> 31e02bd86949edfbb381667db826cbcf38761d10
-=======
->>>>>>> e071be7b93f037fe7ad10a6f0b070e0e9aa8b7b1
+
 
            <!-- <td    class="align-middle">
 
@@ -51,26 +46,19 @@
                 
               </button>
               
-<<<<<<< HEAD
-<<<<<<< HEAD
-              </td>
-=======
-             // </td>
-=======
-              </td> -->
->>>>>>> c539887d89751138eb81d6f3ffd120a690275f13
 
->>>>>>> 31e02bd86949edfbb381667db826cbcf38761d10
+              </td>
+
+             // </td>
+
+              </td> -->
+
                 <td class="align-middle">
             <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;">
               <argon-button><router-link to="/dashboard-animateurs/Horaires/Editer"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i
               ></router-link></argon-button>
             </a>
             </td>
-<<<<<<< HEAD
-=======
-
->>>>>>> 31e02bd86949edfbb381667db826cbcf38761d10
                 <td class="align-middle">
                   <button
                   class="btn btn-link text-danger text-gradient px-3 mb-0"

@@ -116,31 +116,4 @@ th {
 span {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
-<<<<<<< HEAD
 </style>
-
-<!-- 
-<script setup>
-//import { ref } from "vue";
-import axiosInstance from '@/main';
-import { onBeforeMount } from 'vue';
-//const Animateurs= ref( [nom,prenom,email,telephone_fixe]); //ref pour creer var
-
-onBeforeMount(async() => {
-   let response= await axiosInstance.get('/admin/animateurs');
-   console.log(response);
-
- // code to DB
-}); -->
-
-<!-- 
-</script> 
-});
-
-
-</script>
--->
-
-=======
-</style>
->>>>>>> e071be7b93f037fe7ad10a6f0b070e0e9aa8b7b1

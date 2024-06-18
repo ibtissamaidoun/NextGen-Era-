@@ -48,12 +48,9 @@ export default {
                <li class="nav-item">
 
                    <a class="nav-link" href="#services">Activités</a>
-<<<<<<< HEAD
-=======
 
 
 
->>>>>>> c539887d89751138eb81d6f3ffd120a690275f13
                </li>
                <li class="nav-item">
                    <a class="nav-link" href="#contact">Contact Us</a>
