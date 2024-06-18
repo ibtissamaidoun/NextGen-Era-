@@ -139,6 +139,7 @@ export default createStore({
     setRefreshToken(state, refreshToken) {
       state.refreshToken = refreshToken;
     },
+    
   },
   actions: {
     // Actions for the cart (none provided, but can be added if needed)

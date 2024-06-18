@@ -1,4 +1,5 @@
 <script setup>
+
 import { ref } from 'vue';
 import { onBeforeMount, onMounted, onBeforeUnmount } from 'vue';
 import { useStore } from 'vuex';
@@ -6,20 +7,51 @@ import setNavPills from '@/assets/js/nav-pills.js';
 import setTooltip from '@/assets/js/tooltip.js';
 import ArgonInput from '@/components/ArgonInput.vue';
 import ArgonModal from '@/components/ArgonModal.vue';
+import { useForm, useField } from 'vee-validate';
+import * as yup from 'yup';
 
 const body = document.getElementsByTagName('body')[0];
 const store = useStore();
+const { handleSubmit} = useForm({
+     initialValues: {
+       email: '',
+       phoneNumber: ''
+     }
+   });
+const { value: email, errorMessage: emailError } = useField(
+  'email',
+  yup.string().required('L\'email est obligatoire').email('L\'email doit être valide')
+);
+const { value: phoneNumber, errorMessage: phoneNumberError } = useField(
+  'phoneNumber',
+  yup.string().required('Le numéro de téléphone est obligatoire').matches(/^0[67][0-9]{8}$/, 'Le numéro de téléphone doit commencer par 06 ou 07 et suivre de 8 chiffres')
+);
+const { value: landline, errorMessage: landlineError } = useField(
+  'landline',
+  yup.string().required('Le téléphone fixe est obligatoire').matches(/^05[0-9]{8}$/, 'Le téléphone fixe doit commencer par 05 et suivre de 8 chiffres')
+);
+const { value: firstName, errorMessage: firstNameError } = useField(
+  'firstName',
+  yup.string().required('Le nom est obligatoire')
+);
 
+const { value: lastName, errorMessage: lastNameError } = useField(
+  'lastName',
+  yup.string().required('Le prénom est obligatoire')
+);
+const onSubmit = handleSubmit((values) => {
+   console.log(values);
+});
 const showModal = ref(false);
 const showPasswordModal = ref(false);
 const profileImage = ref(null);
 const name = ref('Oulad Maalem Ayoub');
 const id = ref('1');
-const email = ref('ouladmaalem.ayoub@gmail.com');
-const firstName = ref('Oulad Maalem');
-const lastName = ref('Ayoub');
-const phoneNumber = ref('0682968795');
-const landline = ref('');
+//const email = ref('ouladmaalem.ayoub@gmail.com');
+//const userFirstName = ref('Oulad Maalem');
+//const userlastName = ref('Ayoub');
+//const phoneNumber = ref('0682968795');
+//const landlineref = ref('');
 const currentPassword = ref('');
 const newPassword = ref('');
 
@@ -95,6 +127,7 @@ onBeforeUnmount(() => {
               </div>
             </div>
             <div class="card-body">
+              <form @submit.prevent="onSubmit">
               <div class="row">
                 <div class="col-md-6">
                   <label for="id" class="form-control-label">Id</label>
@@ -103,25 +136,30 @@ onBeforeUnmount(() => {
                 <div class="col-md-6">
                   <label for="email" class="form-control-label">Email </label>
                   <argon-input type="email" v-model="email" />
+                  <span>{{ emailError }}</span>
                 </div>
                 <div class="col-md-6">
                   <label for="firstName" class="form-control-label">Nom</label>
                   <argon-input type="text" v-model="firstName" />
+                  <span>{{ firstNameError }}</span>
                 </div>
                 <div class="col-md-6">
                   <label for="lastName" class="form-control-label">Prénom</label>
                   <argon-input type="text" v-model="lastName" />
+                  <span>{{ lastNameError }}</span>
                 </div>
                 <div class="col-md-6">
                   <label for="phoneNumber" class="form-control-label">Téléphone portable</label>
                   <argon-input type="text" v-model="phoneNumber" />
+                  <span>{{ phoneNumberError }}</span>
                 </div>
                 <div class="col-md-6">
                   <label for="landline" class="form-control-label">Téléphone fixe</label>
                   <argon-input type="text" v-model="landline" />
-                </div>
-                
+                  <span>{{ landlineError }}</span>
+                </div> 
               </div>
+             </form> 
             </div>
           </div>
         </div>
@@ -134,6 +172,7 @@ onBeforeUnmount(() => {
       <h5 class="modal-title">Editer le profil</h5>
     </template>
     <template #body>
+      <form @submit.prevent="onSubmit">
       <div class="form-group">
         <label for="id" class="form-control-label">Id</label>
         <argon-input type="text" v-model="id" />
@@ -141,23 +180,29 @@ onBeforeUnmount(() => {
       <div class="form-group">
         <label for="email" class="form-control-label">Email address</label>
         <argon-input type="email" v-model="email" />
+        <span>{{ emailError }}</span>
       </div>
       <div class="form-group">
         <label for="firstName" class="form-control-label">First name</label>
         <argon-input type="text" v-model="firstName" />
+        <span>{{ firstNameError }}</span>
       </div>
       <div class="form-group">
         <label for="lastName" class="form-control-label">Last name</label>
         <argon-input type="text" v-model="lastName" />
+        <span>{{ lastNameError }}</span>
       </div>
       <div class="form-group">
         <label for="phoneNumber" class="form-control-label">Téléphone portable</label>
         <argon-input type="text" v-model="phoneNumber" />
+        <span>{{ phoneNumberError }}</span>
       </div>
       <div class="form-group">
         <label for="landline" class="form-control-label">Téléphone fixe</label>
         <argon-input type="text" v-model="landline" />
+        <span>{{ landlineError }}</span>
       </div>
+    </form>
     </template>
     <template #footer>
       <button class="btn btn-secondary" @click="showModal = false">Fermer</button>

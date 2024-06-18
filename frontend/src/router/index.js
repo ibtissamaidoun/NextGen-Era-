@@ -52,8 +52,8 @@ import overview from "@/views/Parent/overview.vue";
 import Offresparents from "@/views/Parent/offresParents.vue";
 import Enfants from "@/views/Parent/Enfants.vue";
 import Profileparent from "@/views/Parent/Profileparent.vue";
-import OffreDetails from "@/views/Parent/offredetails.vue"
-
+import OffreDetails from "@/views/Parent/offredetails.vue";
+import AccessDenied from "@/views/components/AccessDenied";
 
 //description
 import Programmation from "../views/Description/Programmation.vue";
@@ -95,6 +95,11 @@ const routes = [
     component: Home,
   },
   {
+    path: '/access-denied',
+    name: 'AccessDenied',
+    component: AccessDenied,
+  },
+  {
     path: "/dashboard-admin",
     name: "Dashboard",
     component: Dashboard,
@@ -118,7 +123,7 @@ const routes = [
     path: "/dashboard-admin/Animateurs",
     name: "animateurs",
     component: Animateurs,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/animateurs/details/:animateurId",

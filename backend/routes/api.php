@@ -92,6 +92,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
     Route::post('offres/{offreid}/demande',[DeviController::class,'chooseofferAndGenerateDevis']); // + Devis
     
     /* ----- PANIER ----- */
+    Route::get('/Activites',[ActiviteController::class, 'index']);
     Route::post('activite/{activity_id}/add', [deviController::class,'addToPanier']);
     Route::prefix('panier')->group(function ()
     {
@@ -251,11 +252,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('dash
         Route::delete('{activity}/horaires/{horaires}', [ActiviteController::class, 'detachhoraire']);
         Route::post('{activity}/horaires', [ActiviteController::class, 'choosehoraire']);
         
-        /** --- AVAILABLE ACTIVITIES --- */       // remember that we need also to filter with domaine competence
-        //check for the activity with two horaires 
-        Route::get('/available', [ActiviteController::class, 'getAvailableActivities']);
-        Route::get('/available/{activity_id}/available-animators', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
-        Route::post('/available/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
+     
     });
 
 
@@ -284,9 +281,9 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('dash
 
     //available-activities with available animators, remember that we need also to filter with domaine competence
     //check for the activity with two horaires
-    Route::get('/available-activities', [ActiviteController::class, 'getAvailableActivities']);
-    Route::get('/available-activities/{activity_id}/available-animators', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
-    Route::post('/available-activities/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
+   Route::get('AvailablesActivites', [ActiviteController::class, 'getAvailableActivities']);
+    Route::get('AvailablesActivites/{activity_id}', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
+    Route::post('AvailablesActivites/{activity_id}/{animator_id}', [ActiviteController::class, 'assignAnimatorToActivity']);
 
 
     //i need to adjust theese function to generate motife for refuse
