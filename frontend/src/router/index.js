@@ -308,7 +308,7 @@ const routes = [
     component:Horaires,
   },
   {
-    path:"/dashboard-animateurs/Horaires/Editer",
+    path: "/dashboard-animateurs/Horaires/Editer/:heureId",
     name:"EditerHorairesanim",
     component:EditerHorairesanim,
   },
