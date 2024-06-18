@@ -376,7 +376,7 @@ const routes = [
     component:pack,
   },
   {
-    path:"/dashboard-parents/Devis",
+    path:"/dashboard-parents/Demandes/Devis",
     name:"devis",
     component:devis,
   },
