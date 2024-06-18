@@ -3,10 +3,9 @@ import axios from 'axios';
 import store from "@/store/index.js";
 
 const axiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api', // URL de votre API backend
-  withCredentials: true // Assurez-vous que les cookies sont envoyés avec les requêtes
+  baseURL: 'http://127.0.0.1:8000/api', // URL de notre API backend
+  withCredentials: true 
 });
-//baseURL: 'http://127.0.0.1:8000/api', // URL de votre API backend
 
 // Ajouter un intercepteur de requête pour inclure le token d'authentification dans toutes les requêtes sortantes
 axiosInstance.interceptors.request.use(config => {
@@ -31,13 +30,19 @@ axiosInstance.interceptors.response.use(
       try {
         const refresh_token = store.state.refreshToken;
         const user = store.state.user;
-        await axiosInstance.post('/refresh-token',{user: user},{headers: {
-          'Authorization': `Bearer ${refresh_token}`}
+        const response = await axiosInstance.post('/refresh-token', { user: user }, {
+          headers: {
+            'Authorization': `Bearer ${refresh_token}`
+          }
         });
-        return axiosInstance(originalRequest);
+        // Mettre à jour le token dans le store et dans l'en-tête de la requête originale
+        store.commit('updateToken', response.data.newToken);  // Assurez-vous que cette méthode existe et fonctionne correctement
+        originalRequest.headers['Authorization'] = `Bearer ${response.data.newToken}`;
+        return axiosInstance.request(originalRequest);
       } catch (err) {
         console.error('Refresh token failed', err);
         // Gérer la déconnexion si nécessaire
+        // Par exemple : store.dispatch('logout');
       }
     }
     return Promise.reject(error);

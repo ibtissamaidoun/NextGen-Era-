@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
     <div class="card">
       <div class="card-header pb-0 table-responsive p-6">
         <h4 class="text-center mb-4">Tables des heures</h4>
@@ -72,70 +73,104 @@
           </table>
         </div>
       </div>
+=======
+  <div class="card">
+    <div class="card-header pb-0 px-3">
+      <h4 class="mb-2 text-center">La gestion des heures</h4>
+>>>>>>> 23a36710e0da7c83ac859edfbd27677404503280
     </div>
-  </template>
+    <div class="card-body pt-4 p-3 text-center">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th class="text-uppercase text-secondary opacity-7">Heure début</th>
+            <th class="text-uppercase text-secondary opacity-7">Heure fin</th>
+            <th class="text-uppercase text-secondary opacity-7">Jour de semaine</th>
+            <th class="text-uppercase text-secondary opacity-7">Supprimer</th>
+            <th class="text-uppercase text-secondary opacity-7">Editer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(horaire, index) in horaires" :key="index" class="p-4 mb-2 bg-gray-100 border-radius-lg">
+            <td>
+              <h6 class="mb-2 text-center">{{ horaire.heure_debut }}</h6>
+            </td>
+            <td>
+              <h6 class="mb-2 text-center">{{ horaire.heure_fin }}</h6>
+            </td>
+            <td>
+              <h6 class="mb-2 text-center">{{ horaire.jour_semaine }}</h6>
+            </td>
+            <td>
+              <button class="btn btn-link text-danger text-gradient px-3 mb-0" @click="deleteHoraire(horaire.id, index)">
+                <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
+              </button>
+            </td>
+            <td>
+              <router-link :to="`/dashboard-animateurs/Horaires/Editer/${horaire.id}`" class="btn btn-link text-dark px-3 mb-0">
+                <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>
+              </router-link>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
 
-  <style scoped>
-  h4{
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    color:orange;
-  }
-  h6{
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    color:#000080;
-  }
+<script>
+import axiosInstance from '@/axios-instance';
 
-  </style>
-    <script>
-    /* eslint-disable */ 
-    import axiosInstance from '@/main';
-
-    export default {
-      data() {
-        return {
-          horaires: [
-          { 
-          horairedispo:"9:00"
-          },
-          { 
-          horairedispo:"18:00"
-          },
-          { 
-          horairedispo:"19:30"
-          },
-          { 
-          horairedispo:"10:30",
-          },
-          { 
-          horairedispo:"12:00",
-          },
-
-          ]
-        }},
-      
-        async created(){
-          try {
-          let response = await axiosInstance.get("animateur/horaires");
+export default {
+  name: 'Horaires',
+  data() {
+    return {
+      horaires: [],
+    };
+  },
+  mounted() {
+    this.getHoraires();
+  },
+  methods: {
+    getHoraires() {
+      axiosInstance.get('/dashboard-animateurs/Horaires')
+        .then(response => {
           this.horaires = response.data;
-          console.log(response.data);
-        }
-        catch (error) {
-      console.error('Erreur lors de la récupération des horaires:', error);
-    }
+        })
+        .catch(error => {
+          console.error('Erreur lors de la récupération des horaires:', error);
+          alert('Erreur lors de la récupération des données: ' + (error.response ? error.response.data.message : error.message));
+        });
     },
-    
-        
-    methods: {
-    async deleteAnimateur(horaire_id, index) {
-
+    async deleteHoraire(horaireId, index) {
       try {
-        this.horaires.splice(index, 1); // Supprime l'entrée du tableau local
-        await axiosInstance.delete("animateur/horaires/"+horaire_id); // Remplacez par l'URL correcte
-        
+        await axiosInstance.delete(`/dashboard-animateurs/Horaires/${horaireId}`);
+        this.horaires.splice(index, 1);
       } catch (error) {
-        console.error('Erreur lors de la suppression de l\'animateur:', error);
-      }}}}
-  
-   
-   
-    </script>
+        console.error('Erreur lors de la suppression du horaire:', error);
+        alert('Erreur lors de la suppression du horaire: ' + (error.response ? error.response.data.message : error.message));
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+h4 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: orange;
+}
+
+h6 {
+  color: #000080;
+}
+
+th {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: #000080;
+}
+
+span {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+</style>

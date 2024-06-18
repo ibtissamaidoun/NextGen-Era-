@@ -57,6 +57,8 @@ const getRoute = () => {
           </template>
         </sidenav-item>
       </li>
+
+      
       
 
      
@@ -84,7 +86,7 @@ const getRoute = () => {
 
       <li class="nav-item">
         <sidenav-item
-          to="/profile"
+          to="/dashboard-parents/profile"
           :class="getRoute() === 'profile' ? 'active' : ''"
           navText="Profile"
         >

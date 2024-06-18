@@ -46,7 +46,6 @@ Route::post('/refresh-token', [AuthController::class, 'refreshToken'])->middlewa
 ]);
 Route::get('/get-nonce', function () {
     $nonce = app(NonceGenerator::class)->generate();
-
     return response()->json([
         'nonce' => $nonce,
     ]);
@@ -59,10 +58,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 // Routes réservées aux parents
-Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->group(function () {
+Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-parents')->group(function () {
 
     /** ---- MANIPULATION DES ENFANTS ---- */
-    Route::apiResource('enfants', EnfantController::class);
+    Route::apiResource('Enfants', EnfantController::class);
+    Route::apiResource('Activites', ActiviteController::class);
+    Route::apiResource('Devis', deviController::class);
+
+
+
     Route::prefix('enfants')->group(function ()
     {
         // EDT POUR UN ENFANT DONNÉE
@@ -88,6 +92,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     Route::post('offres/{offreid}/demande',[DeviController::class,'chooseofferAndGenerateDevis']); // + Devis
 
     /* ----- PANIER ----- */
+    Route::get('/Activites',[ActiviteController::class, 'index']);
     Route::post('activite/{activity_id}/add', [deviController::class,'addToPanier']);
     Route::prefix('panier')->group(function ()
     {
@@ -102,7 +107,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
     });
 
     /* ---- DEMANDE ---- */
-    Route::prefix('demandes')->group(function ()
+    Route::prefix('Demandes')->group(function ()
     {
         //the father can check the commandes he submitted that are en cours
         Route::get('/', [DemandeController::class, 'demandes']);
@@ -118,10 +123,10 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
 
         /* --- DEVIS (INCLU LES OFFRES) --- */
         Route::get('{demande}/overview',[DeviController::class,'overview']);
-        Route::get('{demande}/download-devis',[DeviController::class,'downloadDevis']);
+        Route::get('{demande}/download-Devis',[DeviController::class,'downloadDevis']);
         // Valider et refuser devis
-        Route::post('{demande}/devis/validate',[DeviController::class, 'validateDevis']); // + Génération de facture
-        Route::post('{demande}/devis/refuse', [deviController::class, 'refuseDevis']); // by Sakhri
+        Route::post('{demande}/Devis/validate',[DeviController::class, 'validateDevis']); // + Génération de facture
+        Route::post('{demande}/Devis/refuse', [DeviController::class, 'refuseDevis']); // by Sakhri
         // Motif au cas de refus
         Route::post('{demande}/devis/refuse/motif',[DeviController::class, 'motifRefuse']);
 
@@ -140,10 +145,10 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('parent')->g
 
 
 // Routes réservées à l'animateur
-Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('animateur')->group(function ()
+Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('dashboard-animateurs')->group(function ()
 {
     /** --- HORAIRES CRUD --- */
-    Route::prefix('horaires')->group(function ()
+    Route::prefix('Horaires')->group(function ()
     {
         Route::get('/', [AnimateurController::class, 'indexHeures'])->name('animateur.horaires.index');
         Route::post('/', [AnimateurController::class, 'storeHeure'])->name('animateur.horaires.store');
@@ -247,11 +252,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
         Route::delete('{activity}/horaires/{horaires}', [ActiviteController::class, 'detachhoraire']);
         Route::post('{activity}/horaires', [ActiviteController::class, 'choosehoraire']);
 
-        /** --- AVAILABLE ACTIVITIES --- */       // remember that we need also to filter with domaine competence
-        //check for the activity with two horaires
-        Route::get('/available', [ActiviteController::class, 'getAvailableActivities']);
-        Route::get('/available/{activity_id}/available-animators', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
-        Route::post('/available/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
+
     });
 
 
@@ -280,9 +281,9 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
     //available-activities with available animators, remember that we need also to filter with domaine competence
     //check for the activity with two horaires
-    Route::get('/available-activities', [ActiviteController::class, 'getAvailableActivities']);
-    Route::get('/available-activities/{activity_id}/available-animators', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
-    Route::post('/available-activities/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
+   Route::get('AvailablesActivites', [ActiviteController::class, 'getAvailableActivities']);
+    Route::get('AvailablesActivites/{activity_id}', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
+    Route::post('AvailablesActivites/{activity_id}/{animator_id}', [ActiviteController::class, 'assignAnimatorToActivity']);
 
 
     //i need to adjust theese function to generate motife for refuse
@@ -312,7 +313,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('anim
 
 
 // ----- en test ----- //
-Route::apiResource('devis', deviController::class);
+Route::apiResource('Devis', deviController::class);
 Route::apiResource('demandes', DemandeController::class);
 
 
