@@ -62,7 +62,7 @@ app.mount("#app");
 //     return config;
 // });
 // Exporter l'instance Axios configurée
-//export default axiosInstance;
+export default axiosInstance;
 
 
 // const app = createApp(App);
@@ -70,4 +70,5 @@ app.mount("#app");
 // app.use(router);
 // app.use(ArgonDashboard);
 // app.config.globalProperties.$axios = axiosInstance;
+// app.mount("#app");
 // app.mount("#app");

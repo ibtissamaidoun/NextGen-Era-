@@ -105,7 +105,7 @@ const getRoute = () => {
           <template v-slot:icon>
             <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
           </template>
-        </sidenav-item>
+        </sidenav-item> -->
       </li>
 
       
