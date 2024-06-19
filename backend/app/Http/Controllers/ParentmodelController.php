@@ -191,17 +191,25 @@ public function update(Request $request, $id)
 
 
     //taha partie 
-    public function getoffers()
+   public function getoffers()
     {
-        $offers = offre::select('titre','id')->get();
-        return response()->json(['offres'=>$offers]);
+        $user = Auth::user();
+        $offers = offre::all();
+        $enfant = $user->parentmodel->enfants;
+     
+        return response()->json(['offres'=>$offers, 'enfant'=>$enfant]);
     
     }
 
-    public function showoffer($id)
+   public function showoffer($id)
     {
+        $user = Auth::user();
         $offer = offre::findorfail($id);
-        return response()->json([$offer]);
+        $enfant = $user->parentmodel->enfants;
+        $paiement = $offer->paiement;
+        $activities = $offer->activites;
+        $horaires = $activities->pluck('horaires')->flatten();
+        return response()->json(['offres'=>$offer, 'enfant'=>$enfant, 'paiement'=>$paiement, 'activities'=>$activities, 'horaires'=>$horaires]);
     }
 
     /**

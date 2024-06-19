@@ -17,7 +17,7 @@ class OffreControllerTest extends TestCase
     public function testDeleteUnsuccessfully()
     {
         $nonExistentId = 999;
-        $response = $this->deleteJson("/api/admin/offres/{$nonExistentId}");
+        $response = $this->deleteJson("/api/dashboard-admin/offres/{$nonExistentId}");
         $response->assertStatus(404);
         $response->assertJson(['message' => 'Offre non trouvée']);
     }
@@ -32,7 +32,7 @@ class OffreControllerTest extends TestCase
             'paiement_id' => $paiement->id,
         ]);
 
-        $response = $this->actingAs($user)->deleteJson("/api/admin/offres/{$offre->id}");
+        $response = $this->actingAs($user)->deleteJson("/api/dashboard-admin/offres/{$offre->id}");
         $response->assertStatus(204);
         $this->assertDatabaseMissing('offres', ['id' => $offre->id]);
     }
@@ -40,7 +40,7 @@ class OffreControllerTest extends TestCase
     public function testStoreInvalidData()
     {
         $user = User::factory()->create();
-        $response = $this->actingAs($user)->postJson('/api/admin/offres', [
+        $response = $this->actingAs($user)->postJson('/api/dashboard-admin/offres', [
             'titre' => '',
             'description' => '',
             'date_debut' => '',
@@ -69,7 +69,8 @@ class OffreControllerTest extends TestCase
         'activites' => [['id' => $activite->id]]
     ];
 
-    $response = $this->actingAs($user)->postJson('/api/admin/offres', $validData);
+    $response = $this->actingAs($user)->postJson('/api/dashboard-admin/offres/', $validData);
+    dump($response);
     $response->assertStatus(201);
     $response->assertJson([
         'message' => 'Offer created successfully',
@@ -94,7 +95,7 @@ class OffreControllerTest extends TestCase
     public function testUpdateOffreNotFound()
     {
         $user = User::factory()->create();
-        $response = $this->actingAs($user)->putJson('/api/admin/offres/999', []);
+        $response = $this->actingAs($user)->putJson('/api/dashboard-admin/offres/999', []);
         $response->assertStatus(404);
     }
 
@@ -108,7 +109,7 @@ class OffreControllerTest extends TestCase
             'paiement_id' => $paiement->id,
         ]);
 
-        $response = $this->actingAs($user)->putJson("/api/admin/offres/{$offre->id}", [
+        $response = $this->actingAs($user)->putJson("/api/dashboard-admin/offres/{$offre->id}", [
             'titre' => 123,
             'description' => 456,
             'date_debut' => 'invalid-date',
@@ -135,11 +136,6 @@ class OffreControllerTest extends TestCase
             'activites.0.id'
         ]);
     }
-
-
-
-
-
     public function testUpdateValidData()
     {
         $user = User::factory()->create();
@@ -161,7 +157,7 @@ class OffreControllerTest extends TestCase
             'activites' => [['id' => $activite->id]]
         ];
 
-        $response = $this->actingAs($user)->putJson("/api/admin/offres/{$offre->id}", $validData);
+        $response = $this->actingAs($user)->putJson("/api/dashboard-admin/offres/{$offre->id}", $validData);
         $response->assertStatus(200);
         $response->assertJson([
             'message' => 'Offer updated successfully',

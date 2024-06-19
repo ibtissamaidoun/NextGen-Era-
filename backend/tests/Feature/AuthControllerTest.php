@@ -144,7 +144,6 @@ class AuthControllerTest extends TestCase
     {
         $email = "test1111@gmail.com";
         $mot_de_passe = "testing";
-
         $response = $this->post('/api/login', [
             'email' => $email,
             'mot_de_passe' => $mot_de_passe,
@@ -159,7 +158,7 @@ class AuthControllerTest extends TestCase
         ])->post('/api/logout');
         $response->assertStatus(200)
             ->assertExactJson(['message' => 'Logged out successfully']);
-            
+
     }
 
     public function tearDown(): void

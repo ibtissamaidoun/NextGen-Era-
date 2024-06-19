@@ -46,5 +46,6 @@ services:
       - ./frontend:/usr/share/nginx/html  
     ports:
       - "80:80" 
+      -"443:443"
 volumes:
   db-data:

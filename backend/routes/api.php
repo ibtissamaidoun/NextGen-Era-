@@ -22,6 +22,7 @@ use App\Http\Controllers\AnimateursController;
 use App\Http\Controllers\ParentmodelController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AdministrateurController;
+use App\Http\Controllers\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +46,6 @@ Route::post('/refresh-token', [AuthController::class, 'refreshToken'])->middlewa
 ]);
 Route::get('/get-nonce', function () {
     $nonce = app(NonceGenerator::class)->generate();
-
     return response()->json([
         'nonce' => $nonce,
     ]);
@@ -64,7 +64,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
     Route::apiResource('Enfants', EnfantController::class);
     Route::apiResource('Activites', ActiviteController::class);
     Route::apiResource('Devis', deviController::class);
-    
+
 
 
     Route::prefix('enfants')->group(function ()
@@ -72,25 +72,25 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
         // EDT POUR UN ENFANT DONNÉE
         Route::get('{enfant_id}/edt',[ParentmodelController::class,'EDT']);
     });
- 
+
     /** ---- NOTIFICATIONS ---- */
     Route::apiResource('notifications', NotificationController::class);
-     
+
     /** ---- PROFILE ---- */
     Route::prefix('profile')->group(function ()
     {
         Route::get('/', [ProfileController::class, 'getprofileparent']); // working
         Route::put('/', [ProfileController::class, 'updateparent']); // working
         Route::put('update/password', [ProfileController::class, 'updatePassword']); // working
-        Route::post('update/photo', [ProfileController::class, 'updatePhoto']); 
+        Route::post('update/photo', [ProfileController::class, 'updatePhoto']);
         Route::delete('/', [ProfileController::class, 'deleteprofile']);
     });
-    
+
     /** ---- PROCÉDURE DE CRÉATION D'UNE DEMANDE AVEC UNE OFFRE ---- */
     Route::get('offres', [ParentmodelController::class, 'getoffers']);
     Route::get('offres/{id}', [ParentmodelController::class, 'showoffer']);
     Route::post('offres/{offreid}/demande',[DeviController::class,'chooseofferAndGenerateDevis']); // + Devis
-    
+
     /* ----- PANIER ----- */
     Route::get('/Activites',[ActiviteController::class, 'index']);
     Route::post('activite/{activity_id}/add', [deviController::class,'addToPanier']);
@@ -98,7 +98,7 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
     {
         Route::put('activite/{activity_id}/enfants/{enfant_id}', [deviController::class,'modifyPanier']);
         Route::get('show', [DeviController::class, 'showPanier']);
-        
+
         /* --- SUPPRIMER UNE ACTIVITÉE DE PANIER --- */
         Route::delete('activites/{activite}', [DeviController::class, 'deleteActiviteFromPanier']);
 
@@ -113,14 +113,14 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
         Route::get('/', [DemandeController::class, 'demandes']);
 
         Route::delete('{demande}/delete', [DemandeController::class , 'deleteDemande']);
-        
+
         /** --- PROCÉDURE DE CRÉATION D'UNE DEMANDE AVEC UN PACK ---- */
         Route::get('{demande}/check', [DemandeController::class, 'checkDemandeAndGeneratePacks']);
         Route::post('{demande}/pack',[DemandeController::class, 'chosePack']);
         Route::post('{demande}/OP',[DemandeController::class, 'choseOP']);
         Route::post('{demande}/submit',[DemandeController::class, 'finishDemande']); // + Devis
-        
-        
+
+
         /* --- DEVIS (INCLU LES OFFRES) --- */
         Route::get('{demande}/overview',[DeviController::class,'overview']);
         Route::get('{demande}/download-Devis',[DeviController::class,'downloadDevis']);
@@ -129,12 +129,12 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
         Route::post('{demande}/Devis/refuse', [DeviController::class, 'refuseDevis']); // by Sakhri
         // Motif au cas de refus
         Route::post('{demande}/devis/refuse/motif',[DeviController::class, 'motifRefuse']);
-    
+
         /* --- FACTURE  (INCLU LES OFFRES)--- */
         //Route::get('{demande}/facture',[DeviController::class, 'createFacture']);
         Route::get('{demande}/download-facture', [DeviController::class, 'downloadFacture']);
 
-        /** --- SUUPRIMER LES PDFs ---- TYPE = 'DEVIS' OR 'FACTURE' ---- */  
+        /** --- SUUPRIMER LES PDFs ---- TYPE = 'DEVIS' OR 'FACTURE' ---- */
         Route::delete('{demande}/{type}/delete',[DeviController::class, 'deletePDF']);
     });
 
@@ -145,17 +145,17 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
 
 
 // Routes réservées à l'animateur
-Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('dashboard-animateurs')->group(function () 
+Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('dashboard-animateurs')->group(function ()
 {
     /** --- HORAIRES CRUD --- */
     Route::prefix('Horaires')->group(function ()
     {
         Route::get('/', [AnimateurController::class, 'indexHeures'])->name('animateur.horaires.index');
         Route::post('/', [AnimateurController::class, 'storeHeure'])->name('animateur.horaires.store');
-    
+        Route::get('getHoraires', [AnimateurController::class, 'getHeures'])->name('animateur.horaires.get');
         Route::put('{horaire}', [AnimateurController::class, 'updateHeure'])->name('animateur.horaires.update');
         Route::patch('{horaire}', [AnimateurController::class, 'updateHeure'])->name('animateur.horaires.update');
-    
+
         Route::delete('{horaire}', [AnimateurController::class, 'destroyHeure'])->name('animateur.horaires.destroy');
     });
 
@@ -175,7 +175,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('dash
         Route::put('update/password', [ProfileController::class, 'updatePassword'])->name('animateur.profile.update-password');
         Route::post('update/photo', [ProfileController::class, 'updatePhoto'])->name('animateur.profile.update-photo');
         Route::delete('/', [ProfileController::class, 'deleteprofile'])->name('animateur.profile.delete-profile');
-        
+
     });
 
 
@@ -240,23 +240,19 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('dash
         Route::get('Details/{activity}', [ActiviteController::class, 'show']);
         Route::put('{activity}', [ActiviteController::class, 'update']); // need to be revised
         Route::delete('{activity}', [ActiviteController::class, 'destroy']);
-    
+
         /** --- OPTIONS DE PAIMENTS ASSOCIER AVEC UNE ACTIVITÉE */
         Route::post('{activity}/paiements', [ActiviteController::class, 'storeOP']);
         Route::put('{activity}/paiements/{paiement}', [ActiviteController::class, 'updateOP']);
         Route::delete('{activity}/paiements/{paiement}', [ActiviteController::class, 'destroyOP']);
-    
+
         /** --- HORAIRES ASSOCIER AVEC UNE ACTIVITÉE */
         Route::get('{activity}/horaires/{horaires}', [ActiviteController::class, 'showhoraire']);
         Route::get('{activity}/horaires', [ActiviteController::class, 'indexhoraires']);
         Route::delete('{activity}/horaires/{horaires}', [ActiviteController::class, 'detachhoraire']);
         Route::post('{activity}/horaires', [ActiviteController::class, 'choosehoraire']);
-        
-        /** --- AVAILABLE ACTIVITIES --- */       // remember that we need also to filter with domaine competence
-        //check for the activity with two horaires 
-        Route::get('/available', [ActiviteController::class, 'getAvailableActivities']);
-        Route::get('/available/{activity_id}/available-animators', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
-        Route::post('/available/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
+
+
     });
 
 
@@ -267,7 +263,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('dash
     Route::get('horaires/{horaire}', [HoraireController::class, 'show']);
     Route::put('horaires/Editer/{heureId}', [HoraireController::class, 'update']);
     Route::delete('horaires/{horaire}', [HoraireController::class, 'destroy']);
-    
+
     /** --- OFFRES --- */
     Route::apiResource('offres', offreController::class);
 
@@ -285,9 +281,9 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('dash
 
     //available-activities with available animators, remember that we need also to filter with domaine competence
     //check for the activity with two horaires
-    Route::get('/available-activities', [ActiviteController::class, 'getAvailableActivities']);
-    Route::get('/available-activities/{activity_id}/available-animators', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
-    Route::post('/available-activities/{activity_id}/available-animators/{animator_id}/assign-animators', [ActiviteController::class, 'assignAnimatorToActivity']);
+   Route::get('AvailablesActivites', [ActiviteController::class, 'getAvailableActivities']);
+    Route::get('AvailablesActivites/{activity_id}', [ActiviteController::class, 'getAvailableAnimatorsForActivity']);
+    Route::post('AvailablesActivites/{activity_id}/{animator_id}', [ActiviteController::class, 'assignAnimatorToActivity']);
 
 
     //i need to adjust theese function to generate motife for refuse

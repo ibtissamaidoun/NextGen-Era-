@@ -361,8 +361,8 @@ const routes = [
     component:Editenfant,
   },
   {
-    path:"/dashboard-parents/Activites",
-    name:"ActivitesParents",  
+    path:"/dashboard-parents/Activites/:id",
+    name:"ActiviteDetail",
     component:ActivitesParents,
   },
   {
@@ -381,7 +381,7 @@ const routes = [
     component:pack,
   },
   {
-    path:"/dashboard-parents/Devis",
+    path:"/dashboard-parents/Demandes/Devis",
     name:"devis",
     component:devis,
   },

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Offre;
 use App\Models\Activite;
 use App\Models\Administrateur;
@@ -22,8 +21,7 @@ class OffreController extends Controller
         $offres= offre::select('id','titre','remise','date_debut','date_fin')->get();
         return response()->json(['offre'=>$offres]);
 
-         $offres = Offre::select('id', 'titre', 'remise', 'date_debut', 'date_fin')->get();
-         return response()->json(['offre' => $offres]);
+        
 
     }
 
