@@ -11,7 +11,7 @@ import ArgonDashboard from "./argon-dashboard";
 import axios from 'axios'; // Assurez-vous d'importer axios
 
 // Récupérer le nonce depuis le backend
-axios.get('/get-nonce')
+    axios.get('/get-nonce')
     .then(response => {
         const nonce = response.data.nonce;
 
@@ -19,7 +19,7 @@ axios.get('/get-nonce')
         const scripts = document.querySelectorAll('script');
         scripts.forEach(script => {
             script.setAttribute('nonce', nonce);
-        });
+    });
 
         // Initialiser votre application Vue.js avec le nonce disponible
         const app = createApp(App);

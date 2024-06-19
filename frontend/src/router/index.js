@@ -155,13 +155,13 @@ const routes = [
     component: EditerHoraires,
   },
   {
-    path: "/dashboard-admin/Offres",
+    path: "/dashboard-admin/offres",
     name: "Offres",
     component: Offres,
     beforeEnter: requireAuth('admin')
   },
   {
-    path: "/dashboard-admin/Offres/Editer",
+    path: "/dashboard-admin/offres/Editer/:id",
     name: "EditerOffre",
     component: EditerOffre,
    // beforeEnter: requireAuth('admin')
