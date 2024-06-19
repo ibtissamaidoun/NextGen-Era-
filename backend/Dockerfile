@@ -36,8 +36,8 @@ RUN chown -R www-data:www-data /var/www/html \
 EXPOSE 8000
 
 # Entrypoint
-<<<<<<< HEAD
+# <<<<<<< HEAD
 CMD ["php", "artisan", "serve", "--host=10.0.2.15", "--port=8000"]
-=======
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
->>>>>>> 084354b7f14022652e7691ab43da68b9f3637a52
+#=======
+# CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# >>>>>>> 084354b7f14022652e7691ab43da68b9f3637a52
