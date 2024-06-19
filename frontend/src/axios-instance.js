@@ -10,11 +10,12 @@ const axiosInstance = axios.create({
 // Ajouter un intercepteur de requête pour inclure le token d'authentification dans toutes les requêtes sortantes
 axiosInstance.interceptors.request.use(config => {
   // Récupérer le token d'authentification de votre source appropriée (local storage, Vuex, etc.)
-  const token = store.state.refreshToken; // Remplacez par la méthode appropriée pour récupérer le token
-
+ // const token = store.state.refreshToken; // Remplacez par la méthode appropriée pour récupérer le token
+   const accessToken = store.state.token;
+   console.log("Token utilisé pour la requête:", accessToken); 
   // Vérifier si le token est disponible et ajouter l'en-tête d'authentification
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
   return config;
 }, error => {

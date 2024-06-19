@@ -161,7 +161,7 @@ const routes = [
     beforeEnter: requireAuth('admin')
   },
   {
-    path: "/dashboard-admin/Offres/Editer",
+    path: "/dashboard-admin/offres/Editer/:id",
     name: "EditerOffre",
     component: EditerOffre,
    // beforeEnter: requireAuth('admin')
@@ -361,8 +361,8 @@ const routes = [
     component:Editenfant,
   },
   {
-    path:"/dashboard-parents/Activites",
-    name:"ActivitesParents",  
+    path:"/dashboard-parents/Activites/:id",
+    name:"ActiviteDetail",
     component:ActivitesParents,
   },
   {
