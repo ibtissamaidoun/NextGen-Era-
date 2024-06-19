@@ -106,7 +106,7 @@ jobs:
       - name: Run integration tests
         run: |
           cd "backend"
-          #php artisan test --testsuite=Feature
+          php artisan test --testsuite=Feature
 
   frontend-setup:
     runs-on: ubuntu-latest
