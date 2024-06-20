@@ -1,5 +1,4 @@
 <template>
-  
   <div class="card pb-8">
     <div class="alert alert-success" v-if="showSuccessMessage">
       <p>{{ successMessage }}</p>
@@ -28,27 +27,27 @@
         </div>
       </div>
       <!-- Section pour choisir l'option de paiement -->
-      <div v-if="selectedPack"> <h2 class="mb-2 text-center">option de paiement:</h2>
-        
-        <div v-for="(Op, index) in OPs" :key="index" class="row justify-content-center mt-4">
-          <div class="col-lg-6 mb-4 pt-2 d-flex">
-            <div class="card pack-card flex-fill" @click="selectPayment(Op.id)">
-              <div class="card-body">
-                <h5 class="card-title pack-title">{{ Op.option_paiement }}</h5>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Affichage du bouton Valider seulement si un pack est sélectionné -->
-        <div v-if="selectedPayment">
-          <div class="row justify-content-center mt-4">
-            <div class="d-grid gap-2"> 
-              <!-- to="/dashboard-parents/Demandes/overview" -->
-              <button class="btn btn-primary" @click="nextStep()">Suivant</button>
-            </div>
-          </div>
+      <div v-if="selectedPack">
+  <h2 class="mb-2 text-center">Option de paiement:</h2>
+  <div v-for="(Op, index) in OPs" :key="index" class="row justify-content-center mt-4">
+    <div class="col-lg-6 mb-4 pt-2 d-flex">
+      <div class="card pack-card flex-fill" @click="selectPayment(Op.id)">
+        <div class="card-body">
+          <h5 class="card-title pack-title">{{ Op.option_paiement }}</h5>
         </div>
       </div>
+    </div>
+  </div>
+  <!-- Affichage du bouton Valider seulement si un pack est sélectionné -->
+  <div v-if="selectedPayment">
+    <div class="row justify-content-center mt-4">
+      <div class="d-grid gap-2">
+        <!-- to="/dashboard-parents/Demandes/overview" -->
+        <button class="btn btn-primary" @click="nextStep()">Suivant</button>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
   </div>
 </template>
@@ -64,74 +63,85 @@ export default {
       OPs: [],
       selectedPack: null,
       selectedPayment: null,
-
       showSuccessMessage: false,
       successMessage: ''
     };
   },
   computed: {
-    demandeId (){
-            return this.$route.params.demandeId;
-            
-        }
-        
+    demandeId() {
+      return this.$route.params.demandeId;
+    }
   },
   created() {
     this.getData();
-
   },
   methods: {
-
     async getData() {
-      try {
-      const validation = await axiosInstance.get(`dashboard-parents/Demandes/${this.demandeId}/check`);
-      this.packIds = validation.data.packPoussible;
+  try {
+    const validation = await axiosInstance.get(`dashboard-parents/Demandes/${this.demandeId}/check`);
+    this.packIds = validation.data.packPoussible;
 
-      const response1 = await axiosInstance.get('dashboard-parents/packs');
-      this.packs = response1.data;
-      this.packs = this.packs.filter(pack => this.packIds.some(idObj => idObj.id === pack.id));
-      
-      const response2 = await axiosInstance.get('dashboard-parents/paiements');
-      this.OPs = response2.data;
+    const response1 = await axiosInstance.get('dashboard-parents/packs');
+    this.packs = response1.data;
+    this.packs = this.packs.filter(pack => this.packIds.some(idObj => idObj.id === pack.id));
 
-      } catch(error) {
-        console.log(error);
-      }
-    },
+    const response2 = await axiosInstance.get('dashboard-parents/paiements');
+    this.OPs = response2.data;
+    console.log("Payment Options:", this.OPs); // Add this line
+  } catch (error) {
+    console.log(error);
+  }
+},
+
 
     displaySuccessMessage(message) {
-      try {
-        
-        this.successMessage = message;
-        this.showSuccessMessage = true;
-        setTimeout(() => {
-          this.showSuccessMessage = false;
-        }, 3000); // hide the message after 3 seconds
-      }
-      catch(error)
-      {
-        console.log(error);
-      }
-  },
-
-
-    async selectPack(id) {
-      const response = await axiosInstance.post(`dashboard-parents/Demandes/${this.demandeId}/pack`,{ pack: id });
-      this.displaySuccessMessage(response.data.message);
-      this.selectedPack = true;
+      this.successMessage = message;
+      this.showSuccessMessage = true;
+      setTimeout(() => {
+        this.showSuccessMessage = false;
+      }, 3000); // hide the message after 3 seconds
     },
 
-    async selectPayment(id) {
-      const response = await axiosInstance.post(`dashboard-parents/Demandes/${this.demandeId}/OP`,{ optionPaiement: id });
-      this.displaySuccessMessage(response.data.message);
-      this.selectedPayment = true;
+    async selectPack(id) {
+    try {
+    const response = await axiosInstance.post(`dashboard-parents/Demandes/${this.demandeId}/pack`, { pack: id });
+    this.displaySuccessMessage(response.data.message);
+    this.selectedPack = id; // Ensure selectedPack is set to the pack id
+    console.log("Selected Pack:", this.selectedPack); // Add this line
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+    ,async selectPayment(id) {
+      try {
+        const response = await axiosInstance.post(`dashboard-parents/Demandes/${this.demandeId}/OP`, { optionPaiement: id });
+        this.displaySuccessMessage(response.data.message);
+        this.selectedPayment = id; // Ensure selectedPayment is set to the payment id
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     async nextStep() {
-      const res = await axiosInstance.post(`dashboard-parents/Demandes/${this.demandeId}/submit`);
-      this.displaySuccessMessage(res.data.message);
-      this.$router.push({ name: 'devis' , params: {demandeId: this.demandeId}});
-      
+      try {
+        const res = await axiosInstance.post(`dashboard-parents/Demandes/${this.demandeId}/submit`);
+        this.displaySuccessMessage(res.data.message);
+        this.$router.push({ name: 'devis', params: { demandeId: this.demandeId } });
+      } catch (error) {
+        console.error('Error submitting request:', error);
+        if (error.response && error.response.data && error.response.data.message) {
+          this.displayErrorMessage(error.response.data.message);
+        } else {
+          this.displayErrorMessage('An error occurred while submitting the request. Please try again.');
+        }
+      }
+    },
+
+    displayErrorMessage(message) {
+      // Implement a method to display error messages
+      alert(message);
     }
   }
 };

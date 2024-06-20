@@ -23,6 +23,7 @@
               <li><strong>End Date:</strong> {{ activite.date_fin_etud }}</li>
               <li><strong>Activity Type:</strong> {{ activite.type_activite }}</li>
               <li><strong>Activity Domain:</strong> {{ activite.domaine_activite }}</li>
+              
             </ul>
           </div>
           <div v-else>
