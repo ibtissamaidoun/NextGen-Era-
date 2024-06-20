@@ -1,4 +1,4 @@
-name: CI-CD-Final
+name: CI/CD-Final
 
 on:
   push:
