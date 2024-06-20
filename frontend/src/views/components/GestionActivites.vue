@@ -13,7 +13,6 @@
             <th class="text-center text-primary opacity-7">Domaine d'activité</th>
             <th class="text-center text-primary opacity-7">Détails</th>
             <th class="text-center text-primary opacity-7">Supprimer</th>
-            <th class="text-center text-primary opacity-7">Editer</th>
           </tr>
         </thead>
         <tbody>
@@ -40,12 +39,8 @@
                 <i class="far fa-trash-alt me-2" aria-hidden="true"></i>
               </button>
             </td>
-            <td class="align-middle">
-              <!-- <router-link class="btn btn-link text-dark px-3 mb-0" :to="{ name: 'EditerOffre', params: { id: offre.id }}"> -->
-                <router-link to="/dashboard-admin/Activites/Editer" class="btn btn-link text-dark px-3 mb-0">
-                <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>
-              </router-link>
-            </td>
+            
+           
           </tr>
         </tbody>
       </table>
