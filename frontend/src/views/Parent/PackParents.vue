@@ -61,6 +61,7 @@ export default {
       packIds: [],
       packs: [],
       OPs: [],
+      paiements:[],
       selectedPack: null,
       selectedPayment: null,
       showSuccessMessage: false,
@@ -87,6 +88,9 @@ export default {
 
     const response2 = await axiosInstance.get('dashboard-parents/paiements');
     this.OPs = response2.data;
+    this.paiements = this.OPs.map(option => ({
+          option_id: option.id,
+          option_paiement: option.option_paiement}));
     console.log("Payment Options:", this.OPs); // Add this line
   } catch (error) {
     console.log(error);

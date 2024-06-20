@@ -59,8 +59,6 @@ export default {
   border-radius: 10px;
 }
 .card-header {
-  
- 
   border-radius: 10px 10px 0 0;
 }
 .card-body {
