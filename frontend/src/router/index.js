@@ -29,6 +29,7 @@ import Signin from "../views/Authentification/Signin.vue";
 import Home from "../Home.vue";
 import Forget from "../views/Authentification/Forget.vue";
 import Reset from "../views/Authentification/Reset.vue";
+import Conditions from "../views/Authentification/Conditions.vue";
 
 //dashboard-anim
 import Horaires from "@/views/Animateur/Horaires.vue";
@@ -54,7 +55,7 @@ import overview from "@/views/Parent/overview.vue";
 import Offresparents from "@/views/Parent/offresParents.vue";
 import Enfants from "@/views/Parent/Enfants.vue";
 import Profileparent from "@/views/Parent/Profileparent.vue";
-import OffreDetails from "@/views/Parent/OffreDetails.vue";
+import OffreDetails from "@/views/Parent/offreDetails.vue";
 import AccessDenied from "@/views/components/AccessDenied";
 
 //description
@@ -248,6 +249,15 @@ const routes = [
     name:"reset",
     component: Reset,
   },
+  {
+    path:"/Conditions",
+    name:"Conditions",
+    component: Conditions,
+  },
+
+
+
+
   
   {
     path:"/Programmation",
