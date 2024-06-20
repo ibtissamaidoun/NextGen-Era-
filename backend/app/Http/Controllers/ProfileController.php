@@ -17,39 +17,34 @@ class ProfileController extends Controller
 
     public function updateanimateur(Request $request)
     {
-       try{
-        $user_id = auth::user()->id;
-        $user = User::find($user_id);
+        try{ 
+            $user_id = auth::user()->id;
+            $user = User::find($user_id);
 
+            $request->validate([
+                'nom' => 'sometimes|required|string',
+                'prenom' => 'sometimes|required|string',
+                'email' => [
+                    'sometimes',
+                    'required',
+                    'email',
+                    'unique:users,email,' . $user->id,
+                    'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i', // format validation
+                ],
+                'telephone_portable' => [
+                    'sometimes',
+                    'required',
+                    'regex:/^(06|07)[0-9]{8}$/i', // format validation
+                ],
+                'telephone_fixe' => [
+                    'sometimes',
+                    'nullable',
+                    'regex:/^05[0-9]{8}$/i', // format validation
+                ],
+                'domaine_competence' => 'sometimes|required|string'
+            ]);
 
-    //public function updateanimateur(Request $request, $id){
-    //$user = User::where('role', 'animateur')->findOrFail($id);
-
-
-        $request->validate([
-            'nom' => 'sometimes|required|string',
-            'prenom' => 'sometimes|required|string',
-            'email' => [
-                'sometimes',
-                'required',
-                'email',
-                'unique:users,email,' . $user->id,
-                'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i', // format validation
-            ],
-            'telephone_portable' => [
-                'sometimes',
-                'required',
-                'regex:/^(06|07)[0-9]{8}$/i', // format validation
-            ],
-            'telephone_fixe' => [
-                'sometimes',
-                'nullable',
-                'regex:/^05[0-9]{8}$/i', // format validation
-            ],
-            'domaine_competence' => 'sometimes|required|string'
-        ]);
-
-        DB::beginTransaction();
+            DB::beginTransaction();
 
             // Update user information
             $userData = $request->only(['nom', 'prenom', 'email', 'telephone_portable', 'telephone_fixe']);
@@ -74,20 +69,21 @@ class ProfileController extends Controller
 
     public function updateParent(Request $request)
     {
-    try {
-        $user_id = auth::user()->id;
-        $user = User::find($user_id);
+      
 
-        $request->validate([
-            'nom' => 'sometimes|required|string',
-            'prenom' => 'sometimes|required|string',
-            'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
-            'telephone_portable' => 'sometimes|required|regex:/^(06|07)[0-9]{8}$/i',
-            'telephone_fixe' => 'sometimes|nullable|regex:/^05[0-9]{8}$/i',
-            'fonction' => 'sometimes|nullable|string'
-        ]);
+        try {
+            $user_id = auth::user()->id;
+            $user = User::find($user_id);
 
-        DB::beginTransaction();
+            $request->validate([
+                'nom' => 'sometimes|required|string',
+                'prenom' => 'sometimes|required|string',
+                'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+                'telephone_portable' => 'sometimes|required',
+                'telephone_fixe' => 'sometimes|nullable',
+                'fonction' => 'sometimes|nullable|string'
+            ]);
+            DB::beginTransaction();
 
             $userData = $request->only(['nom', 'prenom', 'email', 'telephone_portable', 'telephone_fixe']);
             $user->update($userData);
@@ -111,21 +107,22 @@ class ProfileController extends Controller
             $user_id = auth::user()->id;
             $user = User::find($user_id);
 
+            $request->validate([
+                'nom' => 'sometimes|required|string',
+                'prenom' => 'sometimes|required|string',
+                'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+                'telephone_portable' => 'sometimes|',
+                'telephone_fixe' => 'sometimes|'
+            ]);
+           
 
-        $request->validate([
-            'nom' => 'sometimes|required|string',
-            'prenom' => 'sometimes|required|string',
-            'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
-            'telephone_portable' => 'sometimes|required|regex:/^(06|07)[0-9]{8}$/i',
-            'telephone_fixe' => 'sometimes|nullable|regex:/^05[0-9]{8}$/i'
-        ]);
-
-        DB::beginTransaction();
+            DB::beginTransaction();
 
             $userData = $request->only(['nom', 'prenom', 'email', 'telephone_portable', 'telephone_fixe']);
             $user->update($userData);
 
             DB::commit();
+//dd($user);
             return response()->json(['user' => $user, 'message' => 'Admin updated successfully']);
         } catch (\Exception $e) {
             DB::rollback();
@@ -134,48 +131,48 @@ class ProfileController extends Controller
     }
 
     public function updatePhoto(Request $request)
-{
-    try {
-    // Retrieve the authenticated user
-    $user = $request->user();
+    {
+        try {
+            // Retrieve the authenticated user
+            $user = $request->user();
 
-    // Validate the photo input
-    $request->validate([
-        'photo' => 'required|image|max:2048', // Ensure the uploaded file is an image and within size limits
-    ]);
+            // Validate the photo input
+            $request->validate([
+                'photo' => 'required|image|max:2048', // Ensure the uploaded file is an image and within size limits
+            ]);
 
-    DB::beginTransaction();
+            DB::beginTransaction();
 
-        // Handle photo upload
-        if ($request->hasFile('photo')) {
-            if ($user->photo_path) {
-                // Delete the old photo if it exists to free up storage space
-                Storage::delete($user->photo_path);
+            // Handle photo upload
+            if ($request->hasFile('photo')) {
+                if ($user->photo_path) {
+                    // Delete the old photo if it exists to free up storage space
+                    Storage::disk('public')->delete($user->photo_path);
+                }
+
+                // Store the new photo in the public/photos directory and update the user's photo path
+                $photoPath = $request->file('photo')->store('public/photos', 'public');
+
+                // Update the user's photo path in the database
+                $user->update(['photo_path' => $photoPath]);
             }
 
-            // Store the new photo in the public/photos directory and update the user's photo path
-            $photoPath = $request->file('photo')->store('public/photos');
+            // Commit the changes
+            DB::commit();
 
-            // Update the user's photo path in the database
-            $user->update(['photo_path' => $photoPath]);
+            // Return a success response with the user's new photo URL
+            return response()->json([
+                'message' => 'Photo updated successfully',
+                'photo_url' => Storage::url($user->photo_path)
+            ]);
+        } catch (\Exception $e) {
+            // Roll back any changes in case of an error
+            DB::rollback();
+
+            // Return an error response
+            return response()->json(['message' => 'Failed to update photo: ' . $e->getMessage()], 409);
         }
-
-        // Commit the changes
-        DB::commit();
-
-        // Return a success response with the user's new photo URL
-        return response()->json([
-            'message' => 'Photo updated successfully',
-            'photo_url' => Storage::url($user->photo_path)
-        ]);
-    } catch (\Exception $e) {
-        // Roll back any changes in case of an error
-        DB::rollback();
-
-        // Return an error response
-        return response()->json(['message' => 'Failed to update photo: ' . $e->getMessage()], 409);
     }
-}
 
     public function updatePassword(Request $request)
     {
@@ -183,15 +180,15 @@ class ProfileController extends Controller
             $user_id = auth::user()->id;
             $user = User::find($user_id);
 
+            $request->validate([
+                'mot_de_passe_old' => 'required|string|min:6',
+                'mot_de_passe_new' => 'required|string|min:6',
+            ]);
 
-        $request->validate([
-            'mot_de_passe' => 'required|string|min:8|confirmed',
-        ]);
-
-        DB::beginTransaction();
+            DB::beginTransaction();
 
             $user->update([
-                'mot_de_passe' => Hash::make($request->mot_de_passe),
+                'mot_de_passe' => Hash::make($request->mot_de_passe_new),
             ]);
 
             DB::commit();
@@ -206,7 +203,7 @@ class ProfileController extends Controller
 
     public function getprofileanimateurs(Request $request)
     {
-        $user = auth()->user(); // Get the authenticated user, great work from me :)
+        $user = auth()->user(); // Get the authenticated user
 
         $profileData = [
             'id' => $user->id,
@@ -256,7 +253,6 @@ class ProfileController extends Controller
 
         return response()->json(['profile' => $profileData]);
     }
-
 
     //delete for all types of users
     public function deleteprofile()

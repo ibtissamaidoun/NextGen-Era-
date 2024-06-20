@@ -30,7 +30,7 @@
               </button>
             </td>
             <td class="align-middle">
-              <router-link class="btn btn-link text-dark px-3 mb-0" :to="{ name: 'EditerOffre', params: { id: offre.id }}">
+              <router-link class="btn btn-link text-dark px-3 mb-0" :to="`/dashboard-admin/offres/Editer/${offre.id}`">
                 <i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>
               </router-link>
             </td>

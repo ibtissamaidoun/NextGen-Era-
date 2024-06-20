@@ -9,126 +9,66 @@
           <tr>
             <th class="text-uppercase text-secondary opacity-7">Atelier/Laboratoire</th>
             <th class="text-uppercase text-secondary opacity-7">Domaine d'activité</th>
-            <th class="text-uppercase text-secondary opacity-7">Effectif actuel</th>
+            <th class="text-uppercase text-secondary opacity-7">Titre</th>
             <th class="text-secondary opacity-7">Détails</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(activity, index) in affectes" :key="index" class="p-4 mb-2 bg-gray-100 border-radius-lg">
             <td>
-              <h6 class="mb-2 text-center">{{ activity.titre }}</h6>
+              <h6 class="mb-2 text-center">{{ activity.type_activite }}</h6>
             </td>
             <td class="text-center">
-              <span class="text-s">{{ activity.domaine }}</span>
+              <span class="text-s">{{ activity.domaine_activite }}</span>
             </td>
             <td class="text-center">
-              <span class="text-s">{{ activity.effectif_actuel }}</span>
+              <span class="text-s">{{ activity.titre }}</span>
             </td>
             <td class="text-center">
-              <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;" @click="showDetails(activity.id)">
-                <argon-button>Détails</argon-button>
-              </a>
+              <router-link :to="`/dashboard-animateurs/Activites/details/${activity.id}`">
+                <i class="fas fa-info-circle text-info"></i> Voir détails
+              </router-link>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-
-    <argon-modal v-if="showModal" @close="closeModal">
-      <template #header>
-        <h5 class="modal-title">Détails de l'activité</h5>
-      </template>
-      <template #body>
-        <div v-if="selectedActivity">
-          <p><strong>ID:</strong> {{ selectedActivity.id }}</p>
-          <p><strong>Domaine d'activité:</strong> {{ selectedActivity.domaine }}</p>
-          <p><strong>Type d'activité:</strong> {{ selectedActivity.type }}</p>
-          <p><strong>Date de début:</strong> {{ selectedActivity.date_debut }}</p>
-          <p><strong>Date de fin:</strong> {{ selectedActivity.date_fin }}</p>
-          <p><strong>Statuts:</strong> {{ selectedActivity.statuts }}</p>
-          <p><strong>Âge max:</strong> {{ selectedActivity.age_max }}</p>
-          <p><strong>Âge min:</strong> {{ selectedActivity.age_min }}</p>
-          <p><strong>Effectif actuel:</strong> {{ selectedActivity.effectif_actuel }}</p>
-          <p><strong>Effectif minimale:</strong> {{ selectedActivity.effectif_min }}</p>
-          <p><strong>Effectif maximale:</strong> {{ selectedActivity.effectif_max }}</p>
-          <p><strong>Prix:</strong> {{ selectedActivity.prix }}</p>
-          <p><strong>Nombre de sessions par semaine:</strong> {{ selectedActivity.nombre_sessions }}</p>
-          <p><strong>Objectifs:</strong> {{ selectedActivity.objectifs }}</p>
-        </div>
-      </template>
-      <template #footer>
-        <button class="btn btn-secondary" @click="closeModal">Fermer</button>
-        <button class="btn btn-primary" @click="affecterAnimateur">Affecter</button>
-      </template>
-    </argon-modal>
   </div>
 </template>
 
 <script>
-import ArgonModal from '@/components/ArgonModal.vue';
+import axiosInstance from '@/axios-instance'; // Ajustez le chemin si nécessaire
 
 export default {
-  name: 'Animateurs',
-  components: {
-    ArgonModal,
-  },
   data() {
     return {
-      affectes: [
-        {
-          id: 1,
-          titre: 'programmation',
-          domaine: 'informatique',
-          type: 'Atelier',
-          date_debut: '2024-07-01',
-          date_fin: '2024-07-31',
-          statuts: 'Active',
-          age_max: 17,
-          age_min: 10,
-          effectif_actuel: 15,
-          effectif_min: 10,
-          effectif_max: 20,
-          prix: 600,
-          nombre_sessions: 3,
-          objectifs: 'Améliorer les compétences en programmation',
-        },
-        {
-          id: 2,
-          titre: 'Robotique',
-          domaine: 'technologie',
-          type: 'Atelier',
-          date_debut: '2024-08-01',
-          date_fin: '2024-08-31',
-          statuts: 'Inactive',
-          age_max: 15,
-          age_min: 8,
-          effectif_actuel: 10,
-          effectif_min: 5,
-          effectif_max: 15,
-          prix: 50,
-          nombre_sessions: 2,
-          objectifs: 'Développer les compétences en robotique',
-        },
-      ],
-      selectedActivity: null,
-      selectedAnimateurId: null,
-      showModal: false,
+      affectes: []
     };
   },
-  methods: {
-    showDetails(activityId) {
-      this.selectedActivity = this.affectes.find(activity => activity.id === activityId);
-      this.showModal = true;
-    },
-    closeModal() {
-      this.showModal = false;
-      this.selectedActivity = null;
-    },
-    affecterAnimateur() {
-      console.log(`Activité ${this.selectedActivity.id} affectée à l'animateur ${this.selectedAnimateurId}`);
-      this.closeModal();
-    },
+  async mounted() {
+    this.fetchActivities();
   },
+  methods: {
+    async fetchActivities() {
+      try {
+        const response = await axiosInstance.get("dashboard-animateurs/activites");
+        console.log(response.data.data); // Ajoutez cette ligne pour voir les données reçues
+        this.affectes = response.data.data;
+      } catch (error) {
+        console.error('Erreur lors de la récupération des activités:', error);
+      }
+    },
+    async deleteActivity(id, index) {
+      try {
+        await axiosInstance.delete(`dashboard-animateurs/activites/${id}`);
+        this.affectes.splice(index, 1);
+        alert('Activité supprimée avec succès');
+      } catch (error) {
+        console.error('Erreur lors de la suppression de l\'activité:', error);
+        alert('Erreur lors de la suppression de l\'activité');
+      }
+    }
+  }
 };
 </script>
 
@@ -145,21 +85,5 @@ th {
 
 span {
   font-family: Georgia, 'Times New Roman', Times, serif;
-}
-
-.alert {
-  padding: 15px;
-  margin: 10px 0;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
-
-.success {
-  background-color: #d4edda;
-  color: #155724;
-  border-color: #c3e6cb;
-}
-.small {
-  font-size: 0.8em;
 }
 </style>

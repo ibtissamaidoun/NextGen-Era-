@@ -21,6 +21,8 @@ class OffreController extends Controller
         $offres= offre::select('id','titre','remise','date_debut','date_fin')->get();
         return response()->json(['offre'=>$offres]);
 
+        
+
     }
 
     public function show($id)
@@ -85,6 +87,7 @@ public function detachActivity(Request $request, $offerId)
 
 public function store(Request $request)
 {
+    Log::info('Received data:', $request->all());
     try {
         $validated = $request->validate([
             'titre' => 'required|string|max:255',

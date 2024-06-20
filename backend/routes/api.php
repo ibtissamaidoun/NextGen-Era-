@@ -64,6 +64,11 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
     Route::apiResource('Enfants', EnfantController::class);
     Route::apiResource('Activites', ActiviteController::class);
     Route::apiResource('Devis', deviController::class);
+     /** --- PACKS --- */
+     Route::apiResource('packs', PackController::class)->only('index');
+
+     /** --- O. DE PAIEMENTS --- */      // j'ai elimine la poussibilité de l'admin a manipuler les option de paiements directement
+     Route::apiResource('paiements',paiementController::class)->only('index');
 
 
 
@@ -87,13 +92,13 @@ Route::middleware(['check.role' . ':' . User::ROLE_PARENT])->prefix('dashboard-p
     });
 
     /** ---- PROCÉDURE DE CRÉATION D'UNE DEMANDE AVEC UNE OFFRE ---- */
-    Route::get('offres', [ParentmodelController::class, 'getoffers']);
-    Route::get('offres/{id}', [ParentmodelController::class, 'showoffer']);
-    Route::post('offres/{offreid}/demande',[DeviController::class,'chooseofferAndGenerateDevis']); // + Devis
+    Route::get('Offres', [ParentmodelController::class, 'getoffers']);
+    Route::get('Offres/{id}', [ParentmodelController::class, 'showoffer']);
+    Route::post('Offres/{offreid}',[DeviController::class,'chooseofferAndGenerateDevis']); // + Devis
 
     /* ----- PANIER ----- */
     Route::get('/Activites',[ActiviteController::class, 'index']);
-    Route::post('activite/{activity_id}/add', [deviController::class,'addToPanier']);
+    Route::post('Activite/{activity_id}/add', [deviController::class,'addToPanier']);
     Route::prefix('panier')->group(function ()
     {
         Route::put('activite/{activity_id}/enfants/{enfant_id}', [deviController::class,'modifyPanier']);

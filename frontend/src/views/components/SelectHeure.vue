@@ -40,7 +40,8 @@
       </table>
     </div>
   </div>
-</template>
+  </template>
+   
 
 <script>
 import axiosInstance from '@/axios-instance';

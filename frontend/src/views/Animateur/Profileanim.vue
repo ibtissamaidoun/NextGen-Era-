@@ -6,20 +6,127 @@ import setNavPills from '@/assets/js/nav-pills.js';
 import setTooltip from '@/assets/js/tooltip.js';
 import ArgonInput from '@/components/ArgonInput.vue';
 import ArgonModal from '@/components/ArgonModal.vue';
-
+import { useForm, useField } from 'vee-validate';
+import * as yup from 'yup';
+import axiosInstance from '@/axios-instance';
 const body = document.getElementsByTagName('body')[0];
 const store = useStore();
+const userProfile = ref({});
+const id = ref(''); // Assurez-vous que cette initialisation est correcte
+const email = ref('');
+const phoneNumber = ref('');
+const firstName = ref('');
+const lastName = ref('');
+const landline = ref('');
+const domaine = ref('');
+onMounted(async () => {
+  try {
+    const response = await axiosInstance.get('/user-profile');
+    console.log("Réponse de l'API:", response.data);
+    userProfile.value = response.data;
+    id.value = userProfile.value.id;
+    email.value = userProfile.value.email;
+    phoneNumber.value = userProfile.value.telephone_portable;
+    firstName.value = userProfile.value.nom;
+    lastName.value = userProfile.value.prenom;
+    landline.value = userProfile.value.telephone_fixe;
+    domaine.value = userProfile.value.domaine_competence;
 
+    // emailValue.value = userProfile.value.email;
+    // phoneNumberValue.value = userProfile.value.telephone_portable;
+    // firstNameValue.value = userProfile.value.nom;
+    // lastNameValue.value = userProfile.value.prenom;
+    // landlineValue.value = userProfile.value.telephone_fixe;
+  } catch (error) {
+    console.error('Failed to fetch user profile:', error);
+  }
+});
+
+const { handleSubmit} = useForm({
+     initialValues: {
+       id: '',
+       email: '',
+       phoneNumber: '',
+       firstName: '',
+       lastName: '',
+       landline: '',
+       domaine: '',
+      
+     }
+   });
+   const { value: emailValue, errorMessage: emailError } = useField(
+  'email',
+  yup.string().required('L\'email est obligatoire').email('L\'email doit être valide')
+);
+const { value: phoneNumberValue, errorMessage: phoneNumberError } = useField(
+  'phoneNumber',
+  yup.string().required('Le numéro de téléphone est obligatoire').matches(/^0[67][0-9]{8}$/, 'Le numéro de téléphone doit commencer par 06 ou 07 et suivre de 8 chiffres')
+);
+const { value: landlineValue, errorMessage: landlineError } = useField(
+  'landline',
+  yup.string().required('Le téléphone fixe est obligatoire').matches(/^05[0-9]{8}$/, 'Le téléphone fixe doit commencer par 05 et suivre de 8 chiffres')
+);
+const { value: firstNameValue, errorMessage: firstNameError } = useField(
+  'firstName',
+  yup.string().required('Le nom est obligatoire')
+);
+
+const { value: lastNameValue, errorMessage: lastNameError } = useField(
+  'lastName',
+  yup.string().required('Le prénom est obligatoire')
+);
+const onSubmit = handleSubmit(async () => {
+  try {
+    const response = await axiosInstance.put('dashboard-animateurs/profile/', {
+      id: id.value,
+      email: emailValue.value,
+      telephone_portable: phoneNumberValue.value,
+      nom: firstNameValue.value,
+      prenom: lastNameValue.value,
+      telephone_fixe: landlineValue.value,
+      domaine_competence: domaine.value
+    });
+    console.log('Update Response:', response);
+    alert('Profil mis à jour avec succès!');
+  } catch (error) {
+    console.error('Failed to update profile:', error);
+    alert('Échec de la mise à jour du profil.');
+  }
+});
+const updatePassword = async () => {
+  try {
+    const response = await axiosInstance.put('dashboard-animateurs/profile/update/password', {
+      mot_de_passe_old: currentPassword.value,
+      mot_de_passe_new: newPassword.value
+    });
+    console.log('Password Update Response:', response);
+    alert('Mot de passe mis à jour avec succès!');
+  } catch (error) {
+    console.error('Failed to update password:', error);
+    alert('Échec de la mise à jour du mot de passe.');
+  }
+};
+const deleteProfile = async () => {
+  try {
+    const response = await axiosInstance.delete('dashboard-animateurs/profile/');
+    console.log('Delete Response:', response);
+    alert('Profil supprimé avec succès!');
+    // Rediriger l'utilisateur ou actualiser la page si nécessaire
+  } catch (error) {
+    console.error('Failed to delete profile:', error);
+    alert('Échec de la suppression du profil.');
+  }
+};
 const showModal = ref(false);
 const showPasswordModal = ref(false);
 const profileImage = ref(null);
-const name = ref('Oulad Maalem Ayoub');
-const id = ref('1');
-const email = ref('ouladmaalem.ayoub@gmail.com');
-const firstName = ref('Oulad Maalem');
-const lastName = ref('Ayoub');
-const phoneNumber = ref('0682968795');
-const landline = ref('');
+//const name = ref('Oulad Maalem Ayoub');
+// const id = ref('1');
+// const email = ref('ouladmaalem.ayoub@gmail.com');
+// const firstName = ref('Oulad Maalem');
+// const lastName = ref('Ayoub');
+// const phoneNumber = ref('0682968795');
+// const landline = ref('');
 const currentPassword = ref('');
 const newPassword = ref('');
 
@@ -75,7 +182,7 @@ onBeforeUnmount(() => {
             </div>
             <div class="col-auto my-auto">
               <div class="h-100">
-                <h5 class="mb-1">{{ name }}</h5>
+                <h5 class="mb-1">{{ firstName }} {{ lastName }}</h5>
                 <p class="mb-0 font-weight-bold text-sm">Animateur</p>
               </div>
             </div>
@@ -91,7 +198,7 @@ onBeforeUnmount(() => {
               <div class="d-flex align-items-center">
                 <button class="btn btn-dark" @click="showModal = true" style="background-color: navy;">Editer</button>
                 <button class="btn btn-danger ms-3" @click="showPasswordModal = true">Modifier le mot de passe</button>
-                <button class="btn btn-danger ms-3">Supprimer le profil</button>
+                <button class="btn btn-danger ms-3" @click="deleteProfile">Supprimer le profil</button>
               </div>
             </div>
             <div class="card-body">
@@ -143,28 +250,34 @@ onBeforeUnmount(() => {
       </div>
       <div class="form-group">
         <label for="email" class="form-control-label">Email address</label>
-        <argon-input type="email" v-model="email" />
+        <argon-input type="email" v-model="emailValue" />
+        <span>{{ emailError }}</span>
       </div>
       <div class="form-group">
         <label for="firstName" class="form-control-label">First name</label>
-        <argon-input type="text" v-model="firstName" />
+        <argon-input type="text" v-model="firstNameValue" />
+        <span>{{ firstNameError }}</span>
       </div>
       <div class="form-group">
         <label for="lastName" class="form-control-label">Last name</label>
-        <argon-input type="text" v-model="lastName" />
+        <argon-input type="text" v-model="lastNameValue" />
+        <span>{{ lastNameError }}</span>
+
       </div>
       <div class="form-group">
         <label for="phoneNumber" class="form-control-label">Téléphone portable</label>
-        <argon-input type="text" v-model="phoneNumber" />
+        <argon-input type="text" v-model="phoneNumberValue" />
+        <span>{{ phoneNumberError }}</span>
       </div>
       <div class="form-group">
         <label for="landline" class="form-control-label">Téléphone fixe</label>
-        <argon-input type="text" v-model="landline" />
+        <argon-input type="text" v-model="landlineValue" />
+        <span>{{ landlineError }}</span>
       </div>
     </template>
     <template #footer>
       <button class="btn btn-secondary" @click="showModal = false">Fermer</button>
-      <button class="btn btn-primary" @click="showModal = false">Enregistrer</button>
+      <button class="btn btn-primary" @click="onSubmit">Enregistrer</button>
     </template>
   </argon-modal>
 
@@ -184,7 +297,7 @@ onBeforeUnmount(() => {
     </template>
     <template #footer>
       <button class="btn btn-secondary" @click="showPasswordModal = false">Fermer</button>
-      <button class="btn btn-primary" @click="showPasswordModal = false">Enregistrer</button>
+      <button class="btn btn-primary" @click="updatePassword">Enregistrer</button>
     </template>
   </argon-modal>
 </template>
