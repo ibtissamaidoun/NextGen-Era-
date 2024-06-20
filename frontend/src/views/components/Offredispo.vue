@@ -4,8 +4,7 @@
       <h4 class="mb-2 text-center">Les offres disponibles</h4>
     </div>
     <div class="card-body pt-4 p-3 text-center justify-content-center align-items-center">
-      <table class="table table-responsive align-middle">
-        <thead>
+      <table class="table table-bordered align-items-center">        <thead>
           <tr>
             <th class="text-uppercase text-primary opacity-7">id</th>
             <th class="text-uppercase text-primary opacity-7">Titre</th>
