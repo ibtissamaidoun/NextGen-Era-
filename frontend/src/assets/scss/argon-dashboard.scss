@@ -1,0 +1,39 @@
+// Bootstrap Functions
+@import "argon-dashboard/bootstrap/functions";
+
+// Custom Variables
+@import "argon-dashboard/custom/variables";
+
+// Theme Variables
+@import "argon-dashboard/variables";
+
+// Bootstrap Core
+@import "argon-dashboard/bootstrap/bootstrap";
+
+// Theme Core
+@import "argon-dashboard/theme-pro";
+
+// Custom Styles
+@import "argon-dashboard/custom/styles";
+
+// Additional adjustments based on warnings
+
+// Replace color-adjust with print-color-adjust
+:root {
+  --color-adjust: print-color-adjust;
+}
+
+// Add units to $weight variable
+$weight: 2%;
+
+// Update division operations
+// For example:
+// $result: math.div($spacer, 2);
+// or
+// $result: calc(#{$spacer} / 2);
+
+// Update operations with abs() function
+// For example:
+// $result: math.abs(40%);
+// or
+// $result: abs(#{40%});

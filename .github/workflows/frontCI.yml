@@ -1,0 +1,29 @@
+name: Frontend CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:     
+  frontend-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          cd frontend  # Change directory to the frontend folder
+          npm install
+          
+      - name: Build project
+        run: |
+          cd frontend
+          npm run build 

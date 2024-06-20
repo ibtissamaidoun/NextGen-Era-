@@ -1,0 +1,483 @@
+name: Final DevSecOps CI/CD pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  setup-backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: ${{ secrets.DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.DB_DATABASE }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP with extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_pgsql
+          tools: composer:v2, phpunit
+
+      - name: Install PHP dependencies
+        run: |
+          cd "backend"
+          composer update
+      - name: Copy .env file
+        run: |
+          cd "backend"
+          cp .env.example .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+      - name: Generate key
+        run: |
+          cd "backend"
+          php artisan key:generate
+      - name: Run migration
+        run: |
+          cd "backend"
+          php artisan migrate
+  unit-tests:
+    runs-on: ubuntu-latest
+    needs: setup-backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP with extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_pgsql
+          tools: composer:v2, phpunit
+      - name: Install PHP dependencies
+        run: |
+          cd "backend"
+          composer update
+      - name: Run unit tests
+        run: |
+          cd "backend"
+          #php artisan test --testsuite=Unit
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: setup-backend
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: ${{ secrets.DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.DB_DATABASE }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP with extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_pgsql
+          tools: composer:v2, phpunit
+      - name: Install PHP dependencies
+        run: |
+          cd "backend"
+          composer update
+      - name: Copy .env example
+        run: |
+          cd "backend"
+          cp .env.example .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+      - name: Generate key
+        run: |
+          cd "backend"
+          php artisan key:generate
+      - name: Run integration tests
+        run: |
+          cd "backend"
+          #php artisan test --testsuite=Feature
+  frontend-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+      - name: Lint code
+        run: |
+          cd frontend
+          npm run lint
+      - name: Build project
+        run: |
+          cd frontend
+          npm run build
+  # security-check:
+  #   runs-on: ubuntu-latest
+  #   needs: [unit-tests, integration-tests]
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+
+  #     - name: Set up PHP with extensions
+  #       uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: '8.2'
+  #     - name: Install PHP dependencies
+  #       run: |
+  #         cd "backend"
+  #         composer update
+  #     - name: Run PHP security check
+  #       run: |
+  #         cd "backend"
+  #         composer audit
+
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: '16'
+      
+  #     - name: Install Node.js dependencies
+  #       run: |
+  #         cd "frontend"
+  #         npm install
+      
+  #     - name: Run VueJS security check
+  #       run: |
+  #         cd "frontend"
+  #         npm audit --audit-level=critical 
+
+  Trivy-fileSystem-backend-scan:
+    runs-on: ubuntu-latest
+    needs: [frontend-setup, unit-tests, integration-tests]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Run Trivy vulnerability scanner in fs mode 
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs' 
+          scan-ref: 'backend' 
+          trivy-config: trivy.yaml
+          
+  Trivy-fileSystem-frontend-scan:
+    runs-on: ubuntu-latest
+    needs:  [frontend-setup, unit-tests, integration-tests]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Run Trivy vulnerability scanner in fs mode 
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs' 
+          scan-ref: 'frontend' 
+          trivy-config: trivy.yaml
+
+  build-and-push-Docker:
+    runs-on: ubuntu-latest
+    #needs:  [frontend-setup, unit-tests, integration-tests, security-check]
+    needs: [Trivy-fileSystem-backend-scan, Trivy-fileSystem-frontend-scan]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker Build and Push Frontend
+        uses: docker/build-push-action@v3
+        with:
+          context: frontend/
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version
+          file: frontend/Dockerfile
+
+      - name: Docker Build and Push Backend
+        uses: docker/build-push-action@v3
+        with:
+          context: backend/
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version1
+          file: backend/Dockerfile
+
+      - name: Docker Build and Push Database
+        uses: docker/build-push-action@v3
+        with:
+          context: backend/DB
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version2
+  
+ 
+
+  Trivy-container-scan-Backend:
+    runs-on: ubuntu-latest
+    needs:  build-and-push-Docker
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+           image-ref: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version1
+           format: 'table'
+           exit-code: '0'
+           ignore-unfixed: true
+           vuln-type: 'os,library'
+           severity: 'CRITICAL,HIGH'
+ 
+          
+  Trivy-container-scan-Frontend:
+    runs-on: ubuntu-latest
+    needs:  build-and-push-Docker
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+        
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+          
+        - name: Login to Docker Hub
+          uses: docker/login-action@v2
+          with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
+        
+        - name: Run Trivy vulnerability scanner
+          uses: aquasecurity/trivy-action@master
+          with:
+             image-ref: ${{ secrets.DOCKER_USERNAME }}/nextgenera:version
+             format: 'table'
+             exit-code: '0'
+             ignore-unfixed: true
+             vuln-type: 'os,library'
+             severity: 'CRITICAL,HIGH'
+
+  build-and-package-backend:
+    name:   build-and-package-backend
+    runs-on: ubuntu-latest
+    needs: [frontend-setup, unit-tests, integration-tests]
+    outputs:
+      deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Compile CSS and JavaScript
+        run: |
+          npm install
+          npm run prod
+        working-directory: backend
+
+      - name: Configure PHP 8.2
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 8.2
+          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
+
+      - name: Install Composer Dependencies
+        run: |
+          composer update
+          composer install --no-dev --no-interaction --prefer-dist
+        working-directory: backend
+
+      - name: Create deployment artifact 
+        run: |
+          cd "backend"
+          tar -czf myAPP.tar.gz --exclude=*.git --exclude=node_modules *
+      - name: Store artifact for distribution
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-build
+          path: backend/myAPP.tar.gz
+
+      - name: Export deployment matrix
+        id: export-deployment-matrix
+        run: |
+          JSON="$(cat ./deployment-config.json)"
+          JSON="${JSON//'%'/'%25'}"
+          JSON="${JSON//$'\n'/'%0A'}"
+          JSON="${JSON//$'\r'/'%0D'}"
+          echo "::set-output name=deployment-matrix::$JSON"
+        working-directory: backend
+
+  deploy-backend-cloud:
+    runs-on: ubuntu-latest
+    needs:  build-and-package-backend
+    strategy:
+      matrix:
+        server: ${{ fromJson(needs.build-and-package-backend.outputs.deployment-matrix) }}
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: app-build
+      - name: Upload
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          key: ${{ secrets.SSH_KEY }}
+          #password: ${{ matrix.server.password }}
+          port: ${{ matrix.server.port }}
+          source: myAPP.tar.gz
+          target: ${{ matrix.server.path }}/artifacts
+      - name: Extract archive and create directories
+        uses: appleboy/ssh-action@master
+        #env: 
+          #GITHUB_SHA: ${{ github.sha }}
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ matrix.server.port }}
+          #envs: GITHUB_SHA
+          script: |
+            mkdir -p "${{ matrix.server.path }}/releases/myApp"
+            tar xzf ${{ matrix.server.path }}/artifacts/myAPP.tar.gz -C "${{ matrix.server.path }}/releases/myApp"
+      - name: Run before hooks and Run before hooks and setup application on VM
+        uses: appleboy/ssh-action@master
+        env:
+              RELEASE_PATH: $${{ matrix.server.path }}/releases/myApp/
+              ACTIVE_RELEASE_PATH: $${{ matrix.server.path }}/current
+              STORAGE_PATH: $${{ matrix.server.path }}/storage
+              BASE_PATH: ${{ matrix.server.path }}
+        with:
+              host: ${{ matrix.server.ip }}
+              username: ${{ matrix.server.username }}
+              key: ${{ secrets.SSH_KEY }}
+              port: ${{ matrix.server.port }}
+              script: |
+                ${{ matrix.server.beforeHooks }}          
+       
+
+  build-and-package-frontend:
+    runs-on: ubuntu-latest
+    needs: [frontend-setup, unit-tests, integration-tests]
+    outputs:
+      deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install Dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: Build Vue.js Application
+        run: npm run build
+        working-directory: frontend
+      
+      - name: Sync files to a temporary directory
+        run: |
+          mkdir -p temp
+          rsync -avh --delete frontend/dist/ temp/
+        working-directory: .
+      
+      - name: Create deployment artifact for frontend
+        run: |
+          tar -czf myVueApp.tar.gz -C temp/ .
+        working-directory: .
+      
+      - name: Clean up temporary directory
+        run: rm -rf temp
+        working-directory: .
+
+      - name: Store frontend artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: vue-app-build
+          path: myVueApp.tar.gz
+
+      - name: Export deployment matrix
+        id: export-deployment-matrix
+        run: |
+          JSON="$(cat ./deployment-config.json)"
+          JSON="${JSON//'%'/'%25'}"
+          JSON="${JSON//$'\n'/'%0A'}"
+          JSON="${JSON//$'\r'/'%0D'}"
+          echo "::set-output name=deployment-matrix::$JSON"
+        working-directory: frontend
+
+  deploy-frontend-cloud:
+    runs-on: ubuntu-latest
+    needs: build-and-package-frontend
+    strategy:
+      matrix:
+        server: ${{ fromJson(needs.build-and-package-frontend.outputs.deployment-matrix) }}
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: vue-app-build
+
+      - name: Upload and Deploy Frontend
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ matrix.server.port }}
+          source: myVueApp.tar.gz
+          target: ${{ matrix.server.path }}/artifacts
+
+      - name: Extract and Setup Frontend
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ matrix.server.ip }}
+          username: ${{ matrix.server.username }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ matrix.server.port }}
+          script: |
+            mkdir -p "${{ matrix.server.path }}/releases/myVueApp"
+            tar xzf ${{ matrix.server.path }}/artifacts/myVueApp.tar.gz -C "${{ matrix.server.path }}/releases/myVueApp"
