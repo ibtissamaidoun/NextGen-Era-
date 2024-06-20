@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="loading" class="loading-bar">Loading...</div>  <!-- Loading bar -->
+    <div v-if="loading" class="loading-bar">Loading...</div>
     <div v-else-if="offer" class="card shadow-lg">
       <div class="card-header">
         <h3>{{ offer.titre }}</h3>
@@ -162,63 +162,59 @@
 </style>
 
 <script>
-  import axiosInstance from '@/axios-instance'; // Ensure axios is correctly imported
-  
-  export default {
-    data() {
-      return {
-        offer: null,
-        enfants: [],
-        selectedChildren: [],
-        offerId: null,
-        loading: false,
-        submitting: false  // Add this line to track submission state
-      };
-    },
-    methods: {
-      fetchOfferDetails() {
-        this.loading = true;  // Set loading to true when fetch starts
-        this.offerId = this.$route.params.id;  // Set offerId from route parameters
-        axiosInstance.get(`dashboard-parents/offres/${this.offerId}`)
-          .then(response => {
-            console.log('API Response:', response); // Log the entire response object
-            this.offer = response.data.offres; // Ensure 'offres' is the correct property
-            this.enfants = response.data.enfant; // Ensure 'enfant' is the correct property
-            // Initialize showDetails for each activity
-            if (this.offer && this.offer.activites) {
-              this.offer.activites.forEach(activity => {
-                this.$set(activity, 'showDetails', false);
-              });
-            }
-            this.loading = false;  // Set loading to false when fetch completes
-          })
-          .catch(error => {
-            console.error('Error fetching offer details:', error);
-            this.loading = false;  // Ensure loading is set to false on error
-          });
-      },
-      submitSelection() {
-        this.submitting = true;  // Set submitting to true when submission starts
-        axiosInstance.post(`/dashboard-parents/offres/${this.offerId}`, {  // Use offerId here
-          enfants: this.selectedChildren
-        })
-        .then(() => {
-          this.$router.push({ name: 'DemandesP' });
-          this.submitting = false;  // Set submitting to false when submission completes
+import axiosInstance from '@/axios-instance'; // Ensure axios is correctly imported
+
+export default {
+  data() {
+    return {
+      offer: null,
+      enfants: [],
+      selectedChildren: [],
+      offerId: null,
+      loading: false,
+      submitting: false  // Add this line to track submission state
+    };
+  },
+  methods: {
+    fetchOfferDetails() {
+      this.loading = true;  // Set loading to true when fetch starts
+      this.offerId = this.$route.params.id;  // Set offerId from route parameters
+      axiosInstance.get(`dashboard-parents/Offres/${this.offerId}`)
+        .then(response => {
+          console.log('API Response:', response); // Log the entire response object
+          this.offer = response.data.offres; // Ensure 'offres' is the correct property
+          this.enfants = response.data.enfant; // Ensure 'enfant' is the correct property
+          // Initialize showDetails for each activity
+          if (this.offer && this.offer.activites) {
+            this.offer.activites.forEach(activity => {
+              this.$set(activity, 'showDetails', false);
+            });
+          }
+          this.loading = false;  // Set loading to false when fetch completes
         })
         .catch(error => {
-          console.error('Failed to submit offer:', error);
-          alert('Failed to submit offer: ' + error.response.data.message);
-          this.submitting = false;  // Ensure submitting is set to false on error
+          console.error('Error fetching offer details:', error);
+          this.loading = false;  // Ensure loading is set to false on error
         });
-      },
-      showActivityDetails(activity) {
-        // Toggle the showDetails property
-        activity.showDetails = !activity.showDetails;
-      }
     },
-    created() {
-      this.fetchOfferDetails();
+    submitSelection() {
+      this.submitting = true;  // Set submitting to true when submission starts
+      axiosInstance.post(`/dashboard-parents/Offres/${this.offerId}`, {  // Use offerId here
+        enfants: this.selectedChildren
+      })
+      .then(() => {
+        this.$router.push({ name: 'DemandesP' });
+        this.submitting = false;  // Set submitting to false when submission completes
+      })
+      .catch(error => {
+        console.error('Failed to submit offer:', error);
+        alert('Failed to submit offer: ' + error.response.data.message);
+        this.submitting = false;  // Ensure submitting is set to false on error
+      });
     }
-  };
+  },
+  created() {
+    this.fetchOfferDetails();
+  }
+};
 </script>

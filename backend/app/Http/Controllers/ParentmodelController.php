@@ -191,7 +191,7 @@ public function update(Request $request, $id)
 
 
     //taha partie 
-   public function getoffers()
+    public function getoffers()
     {
         $user = Auth::user();
         $offers = offre::all();
@@ -201,7 +201,7 @@ public function update(Request $request, $id)
     
     }
 
-   public function showoffer($id)
+    public function showoffer($id)
     {
         $user = Auth::user();
         $offer = offre::findorfail($id);

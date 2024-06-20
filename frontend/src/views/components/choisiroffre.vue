@@ -12,7 +12,7 @@
           </div>
           <div class="card-body pt-2">
             <p>{{ offer.description }}</p>
-            <router-link :to="{ name: 'OfferDetails', params: { id: offer.id } }" class="btn btn-success mt-3">Détails</router-link>
+            <router-link :to="{ name: 'OffreDetails', params: { id: offer.id } }" class="btn btn-success mt-3">Détails</router-link>
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     fetchAllData() {
-      axiosInstance.get('dashboard-parents/offres')
+      axiosInstance.get('dashboard-parents/Offres')
         .then(response => {
           this.offres = response.data.offres;
         })

@@ -21,7 +21,7 @@ import DetailsActivites from "@/views/components/DetailsActivites.vue";
 import Demandes from "../views/Admin/Demandes.vue";
 import DemandePayment from "../views/components/DemandePayement.vue"
 import Profile from "../views/Admin/Profile.vue";
-import DetailsEnfants from "@/views/components/DetailsEnfants.vue"
+import DetailsEnfants from "@/views/components/DetailsEnfants.vue";
 
 //authentification
 import Signup from "../views/Authentification/Signup.vue";
@@ -37,6 +37,8 @@ import Edt from "@/views/Animateur/Edt.vue";
 import Activitesanim from "@/views/Animateur/Activitesanim.vue";
 import Editaffectsanim from "@/views/components/Editaffectsanim.vue";
 import Profileanim from "@/views/Animateur/Profileanim.vue";
+import ActiviteParent from "@/views/Parent/ActiviteParent.vue";
+import Activitedetails from "@/views/components/Activitedetails.vue";
 
 //dashboard-parent
 import EnfantsParents from "@/views/Parent/EnfantsParents.vue";
@@ -52,7 +54,7 @@ import overview from "@/views/Parent/overview.vue";
 import Offresparents from "@/views/Parent/offresParents.vue";
 import Enfants from "@/views/Parent/Enfants.vue";
 import Profileparent from "@/views/Parent/Profileparent.vue";
-import OffreDetails from "@/views/Parent/offredetails.vue";
+import OffreDetails from "@/views/Parent/OffreDetails.vue";
 import AccessDenied from "@/views/components/AccessDenied";
 
 //description
@@ -328,6 +330,11 @@ const routes = [
     component:Activitesanim,
   },
   {
+    path:"/dashboard-animateurs/Details/:id",
+    name:"Activitedetails",
+    component:Activitedetails,
+  },
+  {
     path:"/dashboard-animateurs/Activites/Editer",
     name:"Editaffectsanim",
     component:Editaffectsanim,
@@ -361,9 +368,14 @@ const routes = [
     component:Editenfant,
   },
   {
+    path:"/dashboard-parents/Activites",
+    name:"ActivitesParents",
+    component:ActivitesParents,
+  },
+  {
     path:"/dashboard-parents/Activites/:id",
     name:"ActiviteDetail",
-    component:ActivitesParents,
+    component:ActiviteParent,
   },
   {
     path:"/dashboard-parents/Demandes",
@@ -376,17 +388,17 @@ const routes = [
     component:Cart,
   },
   {
-    path:"/dashboard-parents/Demandes/pack",
+    path:"/dashboard-parents/Demandes/:demandeId/pack",
     name:"pack",
     component:pack,
   },
   {
-    path:"/dashboard-parents/Demandes/Devis",
+    path:"/dashboard-parents/Demandes/:demandeId/Devis",
     name:"devis",
     component:devis,
   },
   {
-    path:"/dashboard-parents/Demandes/facture",
+    path:"/dashboard-parents/Demandes/:demandeId/facture",
     name:"facture",
     component:facture,
   },
@@ -407,8 +419,9 @@ const routes = [
   },
   {
     path:"/dashboard-parents/Offres/:id",
-    name:" OffreDetails",
+    name:"OffreDetails",
     component: OffreDetails,
+    props: true
   },
   
 ];
