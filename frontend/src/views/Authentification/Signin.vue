@@ -115,7 +115,7 @@ async function submitLogin() {
                     <argon-switch id="rememberMe" name="remember-me">Remember me</argon-switch>
 
                     <div class="text-center align-items-center"> 
-                      <button type="button" @click="submitLogin"   class="btn btn-dark mt-4" style="background-color: #000080; color">Se connceter</button>
+                      <button type="button" @click="submitLogin"   class="btn btn-dark mt-4" style="background-color: #000080; color">Se connecter</button>
                       <p v-if="error">{{ error }}</p>
                     </div>
                   </form>
