@@ -107,10 +107,12 @@ export default {
     const response = await axiosInstance.post(`dashboard-parents/Demandes/${this.demandeId}/pack`, { pack: id });
     this.displaySuccessMessage(response.data.message);
     this.selectedPack = id; // Ensure selectedPack is set to the pack id
+
     console.log("Selected Pack:", this.selectedPack); // Add this line
   } catch (error) {
     console.log(error);
   }
+  
 }
 
 
@@ -119,6 +121,8 @@ export default {
         const response = await axiosInstance.post(`dashboard-parents/Demandes/${this.demandeId}/OP`, { optionPaiement: id });
         this.displaySuccessMessage(response.data.message);
         this.selectedPayment = id; // Ensure selectedPayment is set to the payment id
+        console.log("Payment Options:", this.OPs); // Add this line
+
       } catch (error) {
         console.log(error);
       }

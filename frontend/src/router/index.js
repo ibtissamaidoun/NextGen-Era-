@@ -330,8 +330,8 @@ const routes = [
     component:Activitesanim,
   },
   {
-    path:"/dashboard-animateurs/Details/:id",
-    name:"Activitedetails",
+    path:"/dashboard-animateurs/Activites/Details/:id",
+        name:"Activitedetails",
     component:Activitedetails,
   },
   {

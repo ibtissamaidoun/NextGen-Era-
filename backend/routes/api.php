@@ -171,6 +171,7 @@ Route::middleware([CheckRole::class . ':' . User::ROLE_ANIMATEUR])->prefix('dash
     Route::get('activites', [AnimateurController::class, 'indexActivite'])->name('animateur.activites');
     Route::get('activites/{activite}', [AnimateurController::class, 'showActivite'])->name('animateur.activites.show');
     Route::get('activites/{activite}/etudiants/{etudiant}', [AnimateurController::class, 'showEtudiant'])->name('animateur.activites.show');
+    Route::get('activites/details/{activite}', [AnimateursController::class, 'show']);
 
     /** --- PROFILE --- */
     Route::prefix('profile')->group(function ()
