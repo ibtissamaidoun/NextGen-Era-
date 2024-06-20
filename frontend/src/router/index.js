@@ -54,7 +54,7 @@ import overview from "@/views/Parent/overview.vue";
 import Offresparents from "@/views/Parent/offresParents.vue";
 import Enfants from "@/views/Parent/Enfants.vue";
 import Profileparent from "@/views/Parent/Profileparent.vue";
-import OffreDetails from "@/views/Parent/OffreDetails.vue";
+import OffreDetails from "@/views/Parent/offreDetails.vue";
 import AccessDenied from "@/views/components/AccessDenied";
 
 //description
