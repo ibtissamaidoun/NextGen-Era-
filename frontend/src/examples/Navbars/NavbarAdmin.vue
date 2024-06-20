@@ -65,7 +65,7 @@ const closeMenu = () => {
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item d-flex align-items-center">
             <router-link
-              to="dashboard-admin/profile"
+              :to="{ name: 'Profile' }"
               class="px-0 nav-link font-weight-bold text-dark"
               target="_blank"
             >

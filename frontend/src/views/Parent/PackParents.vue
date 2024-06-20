@@ -61,6 +61,7 @@ export default {
       packIds: [],
       packs: [],
       OPs: [],
+      paiements:[],
       selectedPack: null,
       selectedPayment: null,
       showSuccessMessage: false,
@@ -87,6 +88,9 @@ export default {
 
     const response2 = await axiosInstance.get('dashboard-parents/paiements');
     this.OPs = response2.data;
+    this.paiements = this.OPs.map(option => ({
+          option_id: option.id,
+          option_paiement: option.option_paiement}));
     console.log("Payment Options:", this.OPs); // Add this line
   } catch (error) {
     console.log(error);
@@ -107,10 +111,12 @@ export default {
     const response = await axiosInstance.post(`dashboard-parents/Demandes/${this.demandeId}/pack`, { pack: id });
     this.displaySuccessMessage(response.data.message);
     this.selectedPack = id; // Ensure selectedPack is set to the pack id
+
     console.log("Selected Pack:", this.selectedPack); // Add this line
   } catch (error) {
     console.log(error);
   }
+  
 }
 
 
@@ -119,6 +125,8 @@ export default {
         const response = await axiosInstance.post(`dashboard-parents/Demandes/${this.demandeId}/OP`, { optionPaiement: id });
         this.displaySuccessMessage(response.data.message);
         this.selectedPayment = id; // Ensure selectedPayment is set to the payment id
+        console.log("Payment Options:", this.OPs); // Add this line
+
       } catch (error) {
         console.log(error);
       }

@@ -34,7 +34,6 @@
             </td>
             <td class="text-center">
               <button class="btn btn-success" @click="validateDemande(demande.id)">Valider</button>
-              <button class="btn btn-danger" @click="refuseDemande(demande.id)">Refuser</button>
             </td>
           </tr>
         </tbody>
@@ -89,9 +88,7 @@ export default {
           alert('Erreur lors de la validation de la demande: ' + (error.response ? error.response.data.message : error.message));
         });
     },
-    // refuseDemande(demandeId) {
-    //   // Add your refusal logic here
-    // }
+    
   }
 }
 </script>

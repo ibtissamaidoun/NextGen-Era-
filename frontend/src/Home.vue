@@ -59,9 +59,9 @@ export default {
                    <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Plus d'infos</a>
                    <ul class="dropdown-menu" aria-labelledby="dropdown01">
                        
-                       <li><a class="dropdown-item" href="#">Conditions Générales</a></li>
+                       <li><router-link to="/Conditions"> <a class="dropdown-item" href="#">Conditions Générales</a></router-link></li>
                        <li><div class="dropdown-divider"></div></li>
-                       <li><a class="dropdown-item" href="#">Politique de Confidentialité</a></li>
+                       
                    </ul>
                </li>
            </ul>
