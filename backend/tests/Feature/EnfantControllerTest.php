@@ -18,7 +18,7 @@ class EnfantControllerTest extends TestCase
         $user = User::factory()->create(['role' => 'parent']);
         $parent = Parentmodel::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user)->postJson("/api/parent/enfants", [
+        $response = $this->actingAs($user)->postJson("/api/dashboard-parents/Enfants", [
             'nom' => 123,
             'prenom' => 123,
             'date_de_naissance' => 'testNotDate',
@@ -37,7 +37,7 @@ class EnfantControllerTest extends TestCase
 
     public function testStoreDataValideUserNonAuthentifier()
     {
-        $response = $this->postJson('/api/parent/enfants', [
+        $response = $this->postJson('/api/dashboard-parents/Enfants', [
             'nom' => 'test',
             'prenom' => 'testtesting',
             'date_de_naissance' => '2010-04-01',
@@ -57,7 +57,7 @@ class EnfantControllerTest extends TestCase
             'parentmodel_id' => $parent->id
         ]);
 
-        $response = $this->actingAs($user)->postJson('/api/parent/enfants', [
+        $response = $this->actingAs($user)->postJson('/api/dashboard-parents/Enfants', [
             'nom' => 'test99',
             'prenom' => 'testtesting99',
             'date_de_naissance' => '2010-04-01',
@@ -74,7 +74,7 @@ class EnfantControllerTest extends TestCase
         $parent = Parentmodel::factory()->create(['user_id' => $user->id]);
         $enfant = Enfant::factory()->create(['parentmodel_id' => $parent->id]);
 
-        $response = $this->actingAs($user)->putJson("/api/parent/enfants/{$enfant->id}", [
+        $response = $this->actingAs($user)->putJson("/api/dashboard-parents/Enfants/{$enfant->id}", [
             'nom' => 1234,
             'prenom' => 123456,
             'date_de_naissance' => 'NotDate',
@@ -93,7 +93,7 @@ class EnfantControllerTest extends TestCase
         $user = User::factory()->create(['role' => 'parent']);
         $parent = Parentmodel::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user)->putJson("/api/parent/enfants/99999", [
+        $response = $this->actingAs($user)->putJson("/api/dashboard-parents/Enfants/99999", [
             'nom' => 'testNotExistnom',
             'prenom' => 'testNotExistprenom',
             'date_de_naissance' => now()->subYears(10)->toDateString(),
@@ -113,7 +113,7 @@ class EnfantControllerTest extends TestCase
         $parent = Parentmodel::factory()->create(['user_id' => $user->id]);
         $enfant = Enfant::factory()->create(['parentmodel_id' => $parent->id, 'nom' => 'testFirst']);
 
-        $response = $this->actingAs($user)->putJson("/api/parent/enfants/{$enfant->id}", [
+        $response = $this->actingAs($user)->putJson("/api/dashboard-parents/Enfants/{$enfant->id}", [
             'nom' => 'testsecond',
             'prenom' => 'testsecond',
             'date_de_naissance' => '2010-04-01',
@@ -157,7 +157,7 @@ class EnfantControllerTest extends TestCase
             'niveau_etude' => 'Primaire'
         ]);
 
-        $response = $this->actingAs($user)->putJson("/api/parent/enfants/{$enfant1->id}", [
+        $response = $this->actingAs($user)->putJson("/api/dashboard-parents/Enfants/{$enfant1->id}", [
             'nom' => 'testConflit',
             'prenom' => 'UniquePrenom2',
             'date_de_naissance' => '2010-04-01',
