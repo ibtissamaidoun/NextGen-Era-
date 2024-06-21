@@ -112,7 +112,7 @@ const routes = [
       path: "/dashboard-admin/admins",
       name: "administrateurs",
       component: Administrateurs,
-    //  beforeEnter: requireAuth('admin')
+      beforeEnter: requireAuth('admin')
     
   },
 
@@ -120,7 +120,7 @@ const routes = [
     path: '/dashboard-admin/admins/details/:adminId',
     name: "DetailsAdmin",
     component: DetailsAdmin,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Animateurs",
@@ -132,25 +132,25 @@ const routes = [
     path: "/dashboard-admin/animateurs/details/:animateurId",
     name: "DetailsAnim",
     component: DetailsAnim,
-    //beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Parents",
     name: "parents",
     component: Parents,
-    //beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/parents/details/:parentId",
     name: "DetailsParents",
     component: DetailsParents,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Horaires",
     name: "HorairesAdmin",
     component: HorairesAdmin,
-   // beforeEnter: requireAuth('admin')
+   beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Horaires/Editer/:heureId",
@@ -167,57 +167,57 @@ const routes = [
     path: "/dashboard-admin/offres/Editer/:id",
     name: "EditerOffre",
     component: EditerOffre,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
 
   {
     path: "/dashboard-admin/Activites",
     name: "Activites",
     component: Activites,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Activites/Editer",
     name: "Editeractivite",
     component: Editeractivite,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Activites/Details/:id",
     name: "DetailsActivites",
     component: DetailsActivites,
     props: true  // Assurez-vous que props est true pour passer l'ID comme prop
- // beforeEnter: requireAuth('admin')
+  beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Demandes",
     name: "Demandes",
     component: Demandes,
-   // beforeEnter: requireAuth('admin')
+   beforeEnter: requireAuth('admin')
   },
   { path: "/dashboard-admin/Demandes/:demandeId/paye",
     name: "DemandePayment",
     component: DemandePayment,
     props: true
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/AvailablesActivites",
     name: "AvailablesActivites",
     component: AvailablesActivites,
-  //  beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/Enfants",
     name: "Enfants",
     component: Enfants,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/dashboard-admin/enfants/details/:enfantId",
     name: "DetailsEnfants",
     component: DetailsEnfants,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   
 
@@ -227,7 +227,7 @@ const routes = [
     path: "/dashboard-admin/profile",
     name: "Profile",
     component: Profile,
-   // beforeEnter: requireAuth('admin')
+    beforeEnter: requireAuth('admin')
   },
   {
     path: "/login",
@@ -317,7 +317,7 @@ const routes = [
     path:"/dashboard-animateurs",
     name:"Dashboardanim",
     component:Dashboardanim,
-   // beforeEnter: requireAuth('animateur')
+    beforeEnter: requireAuth('animateur')
   },
   {
     path:"/dashboard-animateurs/Horaires",
